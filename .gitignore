@@ -1,0 +1,5 @@
+raw_discs/
+full_archive/
+dicom_inventory.xlsx
+inventory.xlsx
+.DS_Store
