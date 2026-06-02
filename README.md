@@ -201,6 +201,23 @@ It does not interpret images, segment lesions, perform volumetric measurements, 
 
 It also does not anonymize. If you're sharing data with a research group or posting publicly, you'll need an anonymization tool — `pydicom` has utilities for this, and tools like DicomCleaner provide a UI.
 
+## Development
+
+The three commands are now thin shims over the `mia.core` package, which holds
+the same logic in a UI-agnostic form (each worker reports progress through a
+callback and can be cancelled) so it can drive both the CLI and the upcoming
+GUI. The standalone usage above is unchanged.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"   # installs pydicom, openpyxl, pytest
+pytest                    # run the test suite
+```
+
+Console entry points are also installed: `mia-rip`, `mia-inventory`, `mia-build`.
+See `internal notes` for the cross-platform distribution roadmap.
+
 ## License and reuse
 
 Use freely for personal medical record management. No warranty, no liability — if a critical study fails to import on the receiving end, that's between you and the radiologist's IT team.

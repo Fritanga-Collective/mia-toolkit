@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mia-toolkit"
+version = "0.0.1"
+description = "Consolidate hospital imaging CDs into a single DICOM archive"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+    "pydicom>=3.0",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+mia-rip = "mia.core.ripper:main"
+mia-inventory = "mia.core.inventory:main"
+mia-build = "mia.core.dicomdir:main"
+
+[tool.setuptools.packages.find]
+include = ["mia*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

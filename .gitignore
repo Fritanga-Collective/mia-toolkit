@@ -1,5 +1,17 @@
+# Patient data — never commit (this repo will be public)
 raw_discs/
 full_archive/
+Archive/
 dicom_inventory.xlsx
 inventory.xlsx
+*.xlsx
 .DS_Store
+
+# Python / build artifacts
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
