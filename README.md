@@ -216,7 +216,22 @@ pytest                    # run the test suite
 ```
 
 Console entry points are also installed: `mia-rip`, `mia-inventory`, `mia-build`.
-See `internal notes` for the cross-platform distribution roadmap.
+
+### Desktop app
+
+A Tkinter GUI wraps the same three actions for non-technical users (macOS for
+now). Launch it with:
+
+```bash
+python -m mia.gui        # or the installed `mia` command
+```
+
+It shows a launcher with three buttons — Rip a CD, Build Inventory, Build
+Archive — each with a live plain-language log, an expandable technical-details
+pane, and a saved session log. Ripping runs as an auto-looping session: insert
+a disc, it copies and ejects, then waits for the next. All UI strings are
+`gettext`-wrapped (English ships today; see `mia/i18n/locale/README.md` to add
+Spanish). See `internal notes` for the cross-platform distribution roadmap.
 
 ## License and reuse
 

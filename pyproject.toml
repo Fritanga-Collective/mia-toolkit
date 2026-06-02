@@ -20,6 +20,7 @@ dev = [
 ]
 
 [project.scripts]
+mia = "mia.gui.app:main"
 mia-rip = "mia.core.ripper:main"
 mia-inventory = "mia.core.inventory:main"
 mia-build = "mia.core.dicomdir:main"
