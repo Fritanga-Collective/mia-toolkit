@@ -12,8 +12,23 @@ website/
 ├── soporte.html    # Español support page
 ├── styles.css      # shared styles
 ├── download.js     # OS detection + download config (version, asset URLs)
-└── support.js      # geo fair-trade suggestion + Lemon Squeezy checkout config
+├── support.js      # geo fair-trade suggestion + Lemon Squeezy checkout config
+└── img/
+    ├── hero.png    # source illustration (large; not served)
+    └── hero.jpg    # optimized web version used by the pages (~115 KB)
 ```
+
+### Hero image
+
+The pages load `img/hero.jpg`, an optimized export of the source `hero.png`.
+Regenerate it after editing the source (keeps the page under the 1-second budget):
+
+```bash
+sips -s format jpeg -s formatOptions 80 -Z 1600 img/hero.png --out img/hero.jpg
+```
+
+`hero.png` is kept only as the source; you can delete it from the repo if you
+don't need it — only `hero.jpg` is referenced.
 
 ## Run it locally
 

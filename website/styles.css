@@ -17,7 +17,7 @@
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0;
   margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -44,7 +44,10 @@ header { border-bottom: 1px solid var(--border); }
 .lang span { color: var(--border); margin: 0 6px; }
 
 /* Hero */
-.hero { padding: 56px 0 32px; text-align: center; }
+.hero { padding: 40px 0 32px; text-align: center; }
+.hero-img { display: block; width: 100%; height: auto; max-width: 620px;
+  margin: 0 auto 22px; border-radius: 12px; border: 1px solid var(--border); }
+.hero .cta { margin-bottom: 26px; }
 .hero h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 14px; }
 .hero p.lead { font-size: 1.25rem; color: var(--muted); margin: 0 auto;
   max-width: 620px; }
