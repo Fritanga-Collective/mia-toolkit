@@ -50,22 +50,12 @@
       <section>
         <h2>Apoya el proyecto</h2>
         <div class="support-box">
-          <p>Elige tu región para ver una sugerencia de comercio justo:</p>
-          <label for="region" class="visually-hidden">Tu región</label>
-          <select id="region">
-            <option value="high">Estados Unidos, Canadá, Europa Occidental, Australia</option>
-            <option value="upper">México, Brasil, Turquía (ingreso medio-alto)</option>
-            <option value="lower">India, Indonesia, Filipinas (ingreso medio-bajo)</option>
-            <option value="free">Ahora mismo no puedo pagar</option>
-            <option value="other">En otro lugar / yo elijo</option>
-          </select>
-          <p class="suggestion" id="suggestion"
-             data-tmpl="Aportación justa sugerida: ${amount}"
-             data-tmpl-free="Descárgala gratis — apoya después si algún día puedes."></p>
+          <p>Elige tu país para ver una sugerencia de comercio justo:</p>
+          <label for="region" class="visually-hidden">Tu país</label>
+          <select id="region"><option value="">— Elige tu país —</option></select>
+          <p class="suggestion" id="suggestion"></p>
           <a class="btn" id="support-btn"
-             href="https://github.com/luis-rodriguez/mia-toolkit"
-             data-tmpl="Apoyar — ${amount}"
-             data-tmpl-free="Apoya si puedes">Apoyar el proyecto</a>
+             href="https://github.com/luis-rodriguez/mia-toolkit">Apoyar el proyecto</a>
           <p class="free-line">¿Ahora no?
             <a id="free-dl" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">Solo descárgala gratis →</a>
           </p>
@@ -73,17 +63,17 @@
       </section>
 
       <section>
-        <h2>Bandas de precio de comercio justo</h2>
-        <p>Los precios son sugerencias, ajustadas a lo que es accesible donde
-          vives. El monto local exacto se muestra al pagar. Paga más si quieres
-          patrocinar a alguien que no puede.</p>
+        <h2>Precio de comercio justo</h2>
+        <p>Las sugerencias se ajustan al costo de vida de tu país — elige el tuyo
+          arriba para ver tu monto. Algunos ejemplos:</p>
         <table class="bands">
-          <tr><th>Región</th><th>Aportación sugerida</th></tr>
-          <tr><td>Ingreso alto (EE. UU., Canadá, Europa Occ., Australia)</td><td>$19</td></tr>
-          <tr><td>Ingreso medio-alto (México, Brasil, Turquía)</td><td>$7</td></tr>
-          <tr><td>Ingreso medio-bajo (India, Indonesia, Filipinas)</td><td>$3</td></tr>
-          <tr><td>Para quien aun así sea demasiado</td><td>Gratis</td></tr>
+          <tr><th>País</th><th>Aportación sugerida</th></tr>
+          <tr><td>Estados Unidos</td><td>$19</td></tr>
+          <tr><td>México</td><td>$7</td></tr>
+          <tr><td>India</td><td>$3</td></tr>
+          <tr><td>Si aun así es demasiado</td><td>Gratis</td></tr>
         </table>
+        <p>Paga más si quieres patrocinar a alguien que no puede.</p>
       </section>
 
       <section>

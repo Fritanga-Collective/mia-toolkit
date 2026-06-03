@@ -47,22 +47,12 @@
       <section>
         <h2>Support the project</h2>
         <div class="support-box">
-          <p>Choose your region for a fair-trade suggestion:</p>
-          <label for="region" class="visually-hidden">Your region</label>
-          <select id="region">
-            <option value="high">United States, Canada, Western Europe, Australia</option>
-            <option value="upper">Mexico, Brazil, Turkey (upper-middle income)</option>
-            <option value="lower">India, Indonesia, Philippines (lower-middle)</option>
-            <option value="free">I can't pay right now</option>
-            <option value="other">Somewhere else / I'll choose</option>
-          </select>
-          <p class="suggestion" id="suggestion"
-             data-tmpl="Suggested fair-trade amount: ${amount}"
-             data-tmpl-free="Download it free — pay later if you ever can."></p>
+          <p>Choose your country for a fair-trade suggestion:</p>
+          <label for="region" class="visually-hidden">Your country</label>
+          <select id="region"><option value="">— Select your country —</option></select>
+          <p class="suggestion" id="suggestion"></p>
           <a class="btn" id="support-btn"
-             href="https://github.com/luis-rodriguez/mia-toolkit"
-             data-tmpl="Support — ${amount}"
-             data-tmpl-free="Support if you can">Support the project</a>
+             href="https://github.com/luis-rodriguez/mia-toolkit">Support the project</a>
           <p class="free-line">Not now?
             <a id="free-dl" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">Just download it free →</a>
           </p>
@@ -70,17 +60,17 @@
       </section>
 
       <section>
-        <h2>Fair-trade price bands</h2>
-        <p>Prices are suggestions, adjusted for what's affordable where you live.
-          The exact local amount is shown at checkout. Pay more if you'd like to
-          sponsor someone who can't.</p>
+        <h2>Fair-trade pricing</h2>
+        <p>Suggestions are adjusted to the cost of living in your country —
+          choose yours above to see your amount. A few examples:</p>
         <table class="bands">
-          <tr><th>Region</th><th>Suggested support</th></tr>
-          <tr><td>Higher-income (US, Canada, W. Europe, Australia)</td><td>$19</td></tr>
-          <tr><td>Upper-middle income (Mexico, Brazil, Turkey)</td><td>$7</td></tr>
-          <tr><td>Lower-middle income (India, Indonesia, Philippines)</td><td>$3</td></tr>
-          <tr><td>Anyone for whom that's still too much</td><td>Free</td></tr>
+          <tr><th>Country</th><th>Suggested support</th></tr>
+          <tr><td>United States</td><td>$19</td></tr>
+          <tr><td>Mexico</td><td>$7</td></tr>
+          <tr><td>India</td><td>$3</td></tr>
+          <tr><td>If that's still too much</td><td>Free</td></tr>
         </table>
+        <p>Pay more if you'd like to sponsor someone who can't.</p>
       </section>
 
       <section>
