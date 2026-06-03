@@ -226,12 +226,20 @@ now). Launch it with:
 python -m mia.gui        # or the installed `mia` command
 ```
 
-It shows a launcher with three buttons — Rip a CD, Build Inventory, Build
-Archive — each with a live plain-language log, an expandable technical-details
-pane, and a saved session log. Ripping runs as an auto-looping session: insert
-a disc, it copies and ejects, then waits for the next. All UI strings are
-`gettext`-wrapped (English ships today; see `mia/i18n/locale/README.md` to add
-Spanish). See `internal notes` for the cross-platform distribution roadmap.
+The home screen offers **Guided Setup** — a step-by-step wizard (Welcome → Rip →
+Review inventory → Build & deliver → Done) that auto-manages a single project
+folder under `~/Documents/MedicalArchive` and only asks for the USB drive at the
+end — plus the three individual tools (Rip a CD, Build Inventory, Build Archive)
+for people who already know the flow.
+
+Every screen has a live plain-language log, an expandable technical-details
+pane, and a saved session log. Ripping runs as an auto-looping session: insert a
+disc, it copies and ejects, then waits for the next. The finished archive is
+copied to the USB with a **verified, resumable copy** (per-file retry + size/
+optional-SHA-256 verification) — robust on slow, flaky USB media without
+depending on rsync. All UI strings are `gettext`-wrapped (English ships today;
+see `mia/i18n/locale/README.md` to add Spanish). See `internal notes` for the
+cross-platform distribution roadmap.
 
 ## License and reuse
 

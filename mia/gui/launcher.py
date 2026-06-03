@@ -19,13 +19,21 @@ class Launcher(ttk.Frame):
                   font=("", 22, "bold")).grid(row=0, column=0, pady=(0, 4))
         ttk.Label(self, foreground="#555",
                   text=_("Organize your imaging CDs into one archive for your "
-                         "doctor.")).grid(row=1, column=0, pady=(0, 22))
+                         "doctor.")).grid(row=1, column=0, pady=(0, 18))
 
-        self._card(2, _("1.   Rip a CD"),
+        # The path most people should take.
+        self._card(2, _("✨  Guided Setup"),
+                   _("Walk me through it, step by step (recommended)."),
+                   app.show_wizard)
+
+        ttk.Label(self, foreground="#888",
+                  text=_("Or use a single tool:")).grid(row=3, column=0,
+                                                        sticky="w", pady=(16, 4))
+        self._card(4, _("Rip a CD"),
                    _("Copy a disc onto your computer."), app.show_rip)
-        self._card(3, _("2.   Build Inventory"),
+        self._card(5, _("Build Inventory"),
                    _("List every study in a spreadsheet."), app.show_inventory)
-        self._card(4, _("3.   Build Archive for Doctor"),
+        self._card(6, _("Build Archive for Doctor"),
                    _("Combine everything onto a USB drive."), app.show_archive)
 
     def _card(self, row: int, title: str, subtitle: str,

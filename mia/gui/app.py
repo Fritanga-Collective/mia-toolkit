@@ -35,6 +35,10 @@ class App:
         from .launcher import Launcher
         self._swap(lambda parent: Launcher(parent, self))
 
+    def show_wizard(self) -> None:
+        from .wizard import WizardView
+        self._swap(lambda parent: WizardView(parent, self))
+
     def show_rip(self) -> None:
         from .rip_view import RipView
         self._swap(lambda parent: RipView(parent, self))

@@ -1,6 +1,7 @@
 # Patient data — never commit (this repo will be public)
 raw_discs/
 full_archive/
+full_archive_gui_test/
 Archive/
 dicom_inventory.xlsx
 inventory.xlsx
