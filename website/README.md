@@ -83,7 +83,7 @@ suggestion by region. The download is always free and one click away.
   inside `support.js` (it points at the GitHub repo until then).
 - For IP-accurate regional discounts you can add ParityDeals/Parity Kit, but that
   introduces a third-party geolocation script — weigh it against the no-tracking
-  promise. See `internal notes`.
+  promise.
 
 ## Privacy-respecting stats (optional)
 

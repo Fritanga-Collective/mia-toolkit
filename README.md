@@ -238,8 +238,7 @@ disc, it copies and ejects, then waits for the next. The finished archive is
 copied to the USB with a **verified, resumable copy** (per-file retry + size/
 optional-SHA-256 verification) — robust on slow, flaky USB media without
 depending on rsync. All UI strings are `gettext`-wrapped (English ships today;
-see `mia/i18n/locale/README.md` to add Spanish). See `internal notes` for the
-cross-platform distribution roadmap.
+see `mia/i18n/locale/README.md` to add Spanish).
 
 ## License and reuse
 
