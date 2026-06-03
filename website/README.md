@@ -6,11 +6,27 @@ no cookies, no analytics. It loads in well under a second.
 
 ```
 website/
-├── index.html     # English
-├── es.html        # Español (Mexico)
-├── styles.css     # shared styles
-└── download.js    # OS detection + download config (version, asset URLs)
+├── index.html      # English landing page
+├── es.html         # Español (Mexico) landing page
+├── support.html    # English support page (manifesto + fair-trade bands)
+├── soporte.html    # Español support page
+├── styles.css      # shared styles
+├── download.js     # OS detection + download config (version, asset URLs)
+└── support.js      # geo fair-trade suggestion + Lemon Squeezy checkout config
 ```
+
+## Run it locally
+
+No build step — just serve the folder over HTTP (opening the files with `file://`
+also works, but a server matches production behavior):
+
+```bash
+cd website
+python3 -m http.server 8000
+# then open http://localhost:8000/  (and /support.html, /es.html, /soporte.html)
+```
+
+Any static server works equally well, e.g. `npx serve` or `php -S localhost:8000`.
 
 ## Deploy (GitHub Pages via Actions)
 
@@ -39,6 +55,20 @@ version: "0.2.0",
 macUrl: ".../releases/download/v0.2.0/MIA-Toolkit-0.2.0-universal.dmg",
 winUrl: ".../releases/download/v0.2.0/MIA-Toolkit-Setup-0.2.0.exe",
 ```
+
+## Support page (voluntary funding)
+
+`support.html` / `soporte.html` open with a manifesto on owning your own
+records, then offer a **Pay-What-You-Want** contribution with a fair-trade
+suggestion by region. The download is always free and one click away.
+
+- The region suggestion is **client-side only** (browser time zone → band) — no
+  IP lookup, no network, no tracking. The visitor can always change it.
+- Set your **Lemon Squeezy** Pay-What-You-Want checkout URL in `CONFIG.checkout`
+  inside `support.js` (it points at the GitHub repo until then).
+- For IP-accurate regional discounts you can add ParityDeals/Parity Kit, but that
+  introduces a third-party geolocation script — weigh it against the no-tracking
+  promise. See `internal notes`.
 
 ## Privacy-respecting stats (optional)
 
