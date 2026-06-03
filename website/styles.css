@@ -101,10 +101,6 @@ footer { color: var(--muted); font-size: 0.85rem; text-align: center;
 .support-box .suggestion { font-size: 1.15rem; margin: 8px 0 16px; }
 .free-line { margin-top: 14px; font-size: 0.95rem; }
 .free-line a { color: var(--accent); font-weight: 600; }
-.bands { width: 100%; border-collapse: collapse; margin: 8px 0; }
-.bands th, .bands td { text-align: left; padding: 8px 10px;
-  border-bottom: 1px solid var(--border); }
-.bands th { color: var(--muted); font-weight: 600; }
 .sponsor { background: var(--panel); border: 1px solid var(--border);
   border-radius: 12px; padding: 20px 24px; }
 
