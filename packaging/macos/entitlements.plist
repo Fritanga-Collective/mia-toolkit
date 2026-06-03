@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Hardened-runtime entitlements for the notarized build.
+
+  A PyInstaller-frozen Python app loads code and maps memory in ways the
+  hardened runtime restricts, so these are commonly required for it to launch
+  under notarization. Start with this set; once it launches and notarizes,
+  try trimming (each removed entitlement is a small security win). Do NOT add
+  entitlements you don't need.
+-->
+<plist version="1.0">
+<dict>
+  <!-- Python/ctypes map writable+executable memory. -->
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <!-- Some bundled interpreters JIT small trampolines. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <!-- PyInstaller sets DYLD_* to locate bundled libs at launch. -->
+  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+  <true/>
+  <!-- Allow loading the bundled (Developer-ID-signed) dylibs/.so files. -->
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+</dict>
+</plist>
