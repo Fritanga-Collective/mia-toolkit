@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Any, Callable
 
-from .i18n import _
+from .i18n import LANGUAGES, _, current_language
 
 # Buttons share one fixed width (in characters) so the cards are uniform and
 # centered, rather than stretching to the full window width.
@@ -23,7 +23,8 @@ class Launcher(ttk.Frame):
         self.columnconfigure(2, weight=1)
         self._row = 0
 
-        self._heading(_("Medical Imaging Archiver"), ("", 22, "bold"), (0, 4))
+        self._language_bar()
+        self._heading(_("MIA Toolkit"), ("", 22, "bold"), (0, 4))
         self._heading(_("Organize your imaging CDs into one archive for your "
                         "doctor."), ("", 12), (0, 18), color="#555")
 
@@ -40,6 +41,22 @@ class Launcher(ttk.Frame):
                    _("List every study in a spreadsheet."), app.show_inventory)
         self._card(_("Build Archive for Doctor"),
                    _("Combine everything onto a USB drive."), app.show_archive)
+
+    def _language_bar(self) -> None:
+        bar = ttk.Frame(self)
+        bar.grid(row=self._row, column=0, columnspan=3, sticky="e",
+                 pady=(0, 10))
+        self._row += 1
+        ttk.Label(bar, text=_("Language:"),
+                  foreground="#666").pack(side="left", padx=(0, 6))
+        self._names_to_code = {name: code for code, name in LANGUAGES.items()}
+        combo = ttk.Combobox(bar, state="readonly", width=12,
+                             values=list(LANGUAGES.values()))
+        combo.set(LANGUAGES.get(current_language(), "English"))
+        combo.bind("<<ComboboxSelected>>",
+                   lambda e: self.app.set_language(
+                       self._names_to_code[combo.get()]))
+        combo.pack(side="left")
 
     def _heading(self, text: str, font, pady, color: str = "") -> None:
         lbl = ttk.Label(self, text=text, font=font, justify="center")

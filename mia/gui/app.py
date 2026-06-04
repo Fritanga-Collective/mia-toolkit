@@ -12,7 +12,7 @@ from .i18n import _, install
 class App:
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.root.title(_("Medical Imaging Archiver"))
+        self.root.title(_("MIA Toolkit"))
         self.root.minsize(660, 580)
 
         self.container = ttk.Frame(self.root)
@@ -47,6 +47,13 @@ class App:
     def show_archive(self) -> None:
         from .archive_view import ArchiveView
         self._swap(lambda parent: ArchiveView(parent, self))
+
+    def set_language(self, lang: str) -> None:
+        """Switch UI language and re-render (the selector lives on the launcher)."""
+        from .i18n import set_language
+        set_language(lang)
+        self.root.title(_("MIA Toolkit"))
+        self.show_launcher()
 
     def run(self) -> None:
         self.root.mainloop()

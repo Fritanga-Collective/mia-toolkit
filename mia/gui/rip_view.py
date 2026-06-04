@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from tkinter import ttk
 
-from .i18n import _
+from .i18n import N_, _
 from .rip_session import RipSessionController
 from .task_view import TaskView
 from .widgets import FolderPicker, default_dir
 
 
 class RipView(TaskView):
-    title = _("Rip a CD")
+    title = N_("Rip a CD")
 
     def build_controls(self, parent: ttk.Frame) -> None:
         ttk.Label(parent, text=_(
