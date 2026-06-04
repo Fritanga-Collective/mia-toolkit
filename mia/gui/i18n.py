@@ -6,9 +6,10 @@ extraction without translating immediately; they're translated at *use* time so
 a language switch re-renders them.
 
 Catalogs live in ``mia/i18n/locale/<lang>/LC_MESSAGES/mia.mo``. English is the
-source language (no catalog needed — gettext falls back to the original text).
-The chosen language is remembered in a small JSON config so it persists across
-launches. No network, no telemetry.
+source language; the shipped ``en`` catalog is an identity mapping (each msgstr
+equals its msgid), so falling back to it changes nothing. The chosen language is
+remembered in a small JSON config so it persists across launches. No network,
+no telemetry.
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ from __future__ import annotations
 import gettext as _gettext
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
@@ -29,9 +31,19 @@ _translation: _gettext.NullTranslations = _gettext.NullTranslations()
 _current: str = "en"
 
 
+def _config_dir() -> Path:
+    """Per-OS user config location (the app ships for macOS and Windows too)."""
+    if sys.platform == "win32":
+        base = os.environ.get("APPDATA") or os.path.expanduser("~\\AppData\\Roaming")
+    elif sys.platform == "darwin":
+        base = os.path.expanduser("~/Library/Application Support")
+    else:
+        base = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
+    return Path(base) / "mia-toolkit"
+
+
 def _config_path() -> Path:
-    base = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
-    return Path(base) / "mia-toolkit" / "config.json"
+    return _config_dir() / "config.json"
 
 
 def _load_pref() -> Optional[str]:

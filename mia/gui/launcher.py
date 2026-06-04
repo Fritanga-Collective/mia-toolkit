@@ -24,7 +24,7 @@ class Launcher(ttk.Frame):
         self._row = 0
 
         self._language_bar()
-        self._heading(_("Medical Imaging Archiver"), ("", 22, "bold"), (0, 4))
+        self._heading(_("MIA Toolkit"), ("", 22, "bold"), (0, 4))
         self._heading(_("Organize your imaging CDs into one archive for your "
                         "doctor."), ("", 12), (0, 18), color="#555")
 

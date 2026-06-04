@@ -239,7 +239,7 @@ msgid "Something went wrong. See the technical details below."
 msgstr "Something went wrong. See the technical details below."
 
 #: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
-msgid "Medical Imaging Archiver"
+msgid "MIA Toolkit"
 msgstr "MIA Toolkit"
 
 #: mia/gui/launcher.py:28
