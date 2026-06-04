@@ -38,7 +38,7 @@ class TaskView(ttk.Frame):
         self.back_btn = ttk.Button(header, text=_("‹ Back"),
                                    command=self._on_back)
         self.back_btn.grid(row=0, column=0, sticky="w")
-        ttk.Label(header, text=self.title,
+        ttk.Label(header, text=_(self.title),
                   font=("", 16, "bold")).grid(row=0, column=1, sticky="w",
                                               padx=12)
 

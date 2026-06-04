@@ -8,11 +8,11 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Any, Optional
 
-from ..i18n import _
+from ..i18n import N_, _
 from ..project import Project
 
-STEP_TITLES = [_("Welcome"), _("Rip discs"), _("Review"),
-               _("Build & deliver"), _("Done")]
+STEP_TITLES = [N_("Welcome"), N_("Rip discs"), N_("Review"),
+               N_("Build & deliver"), N_("Done")]
 LAST = len(STEP_TITLES) - 1
 
 
@@ -89,7 +89,7 @@ class WizardView(ttk.Frame):
         self.index = i
         step.enter()
         self.crumb.configure(text=_("Step {n} of {m}:  {t}").format(
-            n=i + 1, m=LAST + 1, t=STEP_TITLES[i]))
+            n=i + 1, m=LAST + 1, t=_(STEP_TITLES[i])))
         self.refresh_nav()
 
     def goto(self, i: int) -> None:

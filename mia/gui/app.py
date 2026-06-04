@@ -48,6 +48,13 @@ class App:
         from .archive_view import ArchiveView
         self._swap(lambda parent: ArchiveView(parent, self))
 
+    def set_language(self, lang: str) -> None:
+        """Switch UI language and re-render (the selector lives on the launcher)."""
+        from .i18n import set_language
+        set_language(lang)
+        self.root.title(_("Medical Imaging Archiver"))
+        self.show_launcher()
+
     def run(self) -> None:
         self.root.mainloop()
 

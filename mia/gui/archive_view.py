@@ -7,13 +7,13 @@ from tkinter import ttk
 from typing import Any
 
 from mia.core import dicomdir
-from .i18n import _
+from .i18n import N_, _
 from .task_view import TaskView, reveal
 from .widgets import FolderPicker, default_dir
 
 
 class ArchiveView(TaskView):
-    title = _("Build Archive for Doctor")
+    title = N_("Build Archive for Doctor")
 
     def build_controls(self, parent: ttk.Frame) -> None:
         ttk.Label(parent, text=_(
