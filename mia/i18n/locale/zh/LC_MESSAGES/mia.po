@@ -600,3 +600,18 @@ msgstr "第 {n} 步，共 {m} 步：  {t}"
 #: mia/gui/wizard/view.py:131
 msgid "Finish"
 msgstr "完成"
+
+#: mia/gui/launcher.py:0
+msgid ""
+"This software helps you organize and deliver your own medical images. It "
+"does not interpret images, is not a medical device, and does not replace "
+"professional radiological review. No warranty."
+msgstr "本软件帮助你整理并交付你自己的医学影像。它不解读影像，不是医疗器械，也不能替代专业的放射科判读。不提供任何担保。"
+
+#: mia/gui/launcher.py:0
+msgid "Open source · Private by design · No tracking"
+msgstr "开源 · 隐私优先 · 无追踪"
+
+#: mia/gui/launcher.py:0
+msgid "Made with ♥ by Fritanga"
+msgstr "由 Fritanga 用 ♥ 打造"

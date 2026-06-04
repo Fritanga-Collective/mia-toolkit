@@ -42,6 +42,31 @@ class Launcher(ttk.Frame):
         self._card("💾", _("Build Archive for Doctor"),
                    _("Combine everything onto a USB drive."), app.show_archive)
 
+        self._footer()
+
+    def _footer(self) -> None:
+        ttk.Separator(self, orient="horizontal").grid(
+            row=self._row, column=0, columnspan=3, sticky="ew", pady=(26, 12))
+        self._row += 1
+        # Same disclaimer + ethos lines as the website footer.
+        ttk.Label(
+            self,
+            text=_("This software helps you organize and deliver your own "
+                   "medical images. It does not interpret images, is not a "
+                   "medical device, and does not replace professional "
+                   "radiological review. No warranty."),
+            foreground="#888", font=("", 10), wraplength=460, justify="center",
+        ).grid(row=self._row, column=1, pady=(0, 8))
+        self._row += 1
+        ttk.Label(self, foreground="#888", font=("", 10),
+                  text=_("Open source · Private by design · No tracking")).grid(
+            row=self._row, column=1)
+        self._row += 1
+        ttk.Label(self, foreground="#888", font=("", 10),
+                  text=_("Made with ♥ by Fritanga")).grid(
+            row=self._row, column=1, pady=(2, 0))
+        self._row += 1
+
     def _language_bar(self) -> None:
         bar = ttk.Frame(self)
         bar.grid(row=self._row, column=0, columnspan=3, sticky="e",

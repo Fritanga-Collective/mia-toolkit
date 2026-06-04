@@ -3,7 +3,7 @@
 #
 #     pyinstaller packaging/macos/mia.spec --noconfirm
 #
-# Produces dist/Medical Imaging Archiver.app (then sign + notarize with
+# Produces dist/MIA Toolkit.app (then sign + notarize with
 # packaging/macos/sign_notarize.sh).
 #
 # Universal binary: building a true universal2 app requires a universal2 Python
@@ -67,13 +67,13 @@ coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="mia")
 
 app = BUNDLE(
     coll,
-    name="Medical Imaging Archiver.app",
+    name="MIA Toolkit.app",
     icon=None,  # add packaging/macos/app.icns later
     bundle_identifier="com.fritanga.miatoolkit",
     version=VERSION,
     info_plist={
-        "CFBundleName": "Medical Imaging Archiver",
-        "CFBundleDisplayName": "Medical Imaging Archiver",
+        "CFBundleName": "MIA Toolkit",
+        "CFBundleDisplayName": "MIA Toolkit",
         "CFBundleShortVersionString": VERSION,
         "CFBundleVersion": VERSION,
         "LSMinimumSystemVersion": "12.0",

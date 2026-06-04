@@ -109,8 +109,8 @@ jobs:
         if: env.MIA_SIGN_ID == ''
         run: |
           VER="${MIA_VERSION:-${GITHUB_REF_NAME#v}}"
-          hdiutil create -volname "Medical Imaging Archiver" \
-            -srcfolder "dist/Medical Imaging Archiver.app" \
+          hdiutil create -volname "MIA Toolkit" \
+            -srcfolder "dist/MIA Toolkit.app" \
             -ov -format UDZO "dist/MIA-Toolkit-${VER}.dmg"
 
       - uses: actions/upload-artifact@v4

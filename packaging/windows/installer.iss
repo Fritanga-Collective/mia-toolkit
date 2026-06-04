@@ -3,14 +3,14 @@
 ;     ISCC.exe packaging\windows\installer.iss
 ; Output: dist\MIA-Toolkit-Setup-<version>.exe  (per-user, no admin required).
 
-#define AppName "Medical Imaging Archiver"
+#define AppName "MIA Toolkit"
 ; Version comes from the MIA_VERSION env var (set by CI from the tag); falls
 ; back to a default for local builds.
 #define AppVer GetEnv("MIA_VERSION")
 #if AppVer == ""
   #define AppVer "0.1.0"
 #endif
-#define ExeName "Medical Imaging Archiver.exe"
+#define ExeName "MIA Toolkit.exe"
 #define Publisher "Fritanga"
 
 [Setup]

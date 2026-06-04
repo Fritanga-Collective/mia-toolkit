@@ -43,7 +43,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="Medical Imaging Archiver",
+    name="MIA Toolkit",
     debug=False,
     strip=False,
     upx=False,

@@ -20,11 +20,11 @@
 #   packaging/macos/sign_notarize.sh
 set -euo pipefail
 
-APP="dist/Medical Imaging Archiver.app"
+APP="dist/MIA Toolkit.app"
 VERSION="${VERSION:-0.1.0}"   # CI passes the tag version; defaults to 0.1.0
 DMG="dist/MIA-Toolkit-${VERSION}.dmg"
 ENTITLEMENTS="packaging/macos/entitlements.plist"
-VOLNAME="Medical Imaging Archiver"
+VOLNAME="MIA Toolkit"
 
 : "${MIA_SIGN_ID:?Set MIA_SIGN_ID to 'Developer ID Application: NAME (TEAMID)'}"
 : "${MIA_NOTARY_PROFILE:?Set MIA_NOTARY_PROFILE to your notarytool keychain profile}"
