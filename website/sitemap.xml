@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/es.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/es.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/es.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/zh.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/es.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/support.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/support.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/soporte.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/support-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/support.html"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/soporte.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/support.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/soporte.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/support-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/support.html"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/support-zh.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/support.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/soporte.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/support-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/support.html"/>
+  </url>
+</urlset>
