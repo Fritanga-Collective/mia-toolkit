@@ -13,11 +13,12 @@
     <div class="wrap topbar">
       <a class="brand" href="zh.html">MIA Toolkit</a>
       <nav class="lang">
-        <a href="support.html">English</a>
-        <span>·</span>
-        <a href="soporte.html">Español</a>
-        <span>·</span>
-        <a href="support-zh.html" aria-current="true">中文</a>
+        <select class="langsel" aria-label="语言"
+                onchange="if(this.value)location.href=this.value">
+          <option value="support.html">English</option>
+          <option value="soporte.html">Español</option>
+          <option value="support-zh.html" selected>中文</option>
+        </select>
       </nav>
     </div>
   </header>
