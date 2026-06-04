@@ -21,7 +21,7 @@
 set -euo pipefail
 
 APP="dist/Medical Imaging Archiver.app"
-VERSION="0.1.0"
+VERSION="${VERSION:-0.1.0}"   # CI passes the tag version; defaults to 0.1.0
 DMG="dist/MIA-Toolkit-${VERSION}.dmg"
 ENTITLEMENTS="packaging/macos/entitlements.plist"
 VOLNAME="Medical Imaging Archiver"

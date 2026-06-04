@@ -1,0 +1,151 @@
+name: Release
+
+# On a version tag (v1.2.3): test on all OSes, build the macOS .dmg and the
+# Windows installer .exe, and attach both to the GitHub Release.
+#
+# macOS signing/notarization runs only when the signing secrets are present
+# (MACOS_SIGN_ID + cert + Apple creds); otherwise an UNSIGNED .dmg is built so
+# the pipeline still produces a downloadable artifact today. Windows is unsigned
+# for v1 (SmartScreen "unknown publisher" until a cert is added).
+#
+# Required secrets for signed macOS builds (optional until you have a cert):
+#   MACOS_SIGN_ID         e.g. "Developer ID Application: NAME (TEAMID)"
+#   MACOS_CERT_P12        base64 of the exported .p12 certificate
+#   MACOS_CERT_PASSWORD   password for the .p12
+#   APPLE_ID              Apple ID email (for notarytool)
+#   APPLE_TEAM_ID         10-char Team ID
+#   APPLE_APP_PASSWORD    app-specific password
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  macos:
+    name: Build macOS (.dmg)
+    needs: test
+    runs-on: macos-latest
+    env:
+      MIA_SIGN_ID: ${{ secrets.MACOS_SIGN_ID }}
+      MIA_NOTARY_PROFILE: mia-notary
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[build]"
+
+      - name: Build .app
+        run: pyinstaller packaging/macos/mia.spec --noconfirm
+
+      - name: Import signing certificate & notary credentials
+        if: env.MIA_SIGN_ID != ''
+        env:
+          CERT_B64: ${{ secrets.MACOS_CERT_P12 }}
+          CERT_PW: ${{ secrets.MACOS_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_PW: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN="$RUNNER_TEMP/build.keychain"
+          security create-keychain -p actions "$KEYCHAIN"
+          security default-keychain -s "$KEYCHAIN"
+          security unlock-keychain -p actions "$KEYCHAIN"
+          security set-keychain-settings -lut 3600 "$KEYCHAIN"
+          echo "$CERT_B64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KEYCHAIN" -P "$CERT_PW" \
+            -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k actions "$KEYCHAIN" >/dev/null
+          xcrun notarytool store-credentials "mia-notary" \
+            --apple-id "$APPLE_ID" --team-id "$TEAM_ID" --password "$APP_PW" \
+            --keychain "$KEYCHAIN"
+          rm -f "$RUNNER_TEMP/cert.p12"
+
+      - name: Sign + notarize + staple
+        if: env.MIA_SIGN_ID != ''
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: |
+          export VERSION="${VERSION#v}"
+          packaging/macos/sign_notarize.sh
+
+      - name: Build unsigned .dmg (no cert configured)
+        if: env.MIA_SIGN_ID == ''
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          hdiutil create -volname "Medical Imaging Archiver" \
+            -srcfolder "dist/Medical Imaging Archiver.app" \
+            -ov -format UDZO "dist/MIA-Toolkit-${VER}.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-dmg
+          path: dist/*.dmg
+
+  windows:
+    name: Build Windows (.exe)
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[build]"
+
+      - name: Build app (PyInstaller)
+        run: pyinstaller packaging/windows/mia-windows.spec --noconfirm
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer (Inno Setup)
+        shell: pwsh
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\installer.iss"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: dist/*.exe
+
+  release:
+    name: Publish GitHub Release
+    needs: [macos, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create/Update release with artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" artifacts/*.dmg artifacts/*.exe \
+            --repo "$GITHUB_REPOSITORY" --title "$TAG" \
+            --notes "Automated release $TAG." \
+          || gh release upload "$TAG" artifacts/*.dmg artifacts/*.exe \
+            --repo "$GITHUB_REPOSITORY" --clobber
