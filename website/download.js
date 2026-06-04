@@ -5,13 +5,13 @@
   "use strict";
 
   var CONFIG = {
-    version: "0.1.1",
+    version: "0.1.2",
     releasesLatest:
       "https://github.com/luis-rodriguez/mia-toolkit/releases/latest",
     macUrl:
-      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.1/MIA-Toolkit-0.1.1.dmg",
+      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.2/MIA-Toolkit-0.1.2.dmg",
     winUrl:
-      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.1/MIA-Toolkit-Setup-0.1.1.exe",
+      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.2/MIA-Toolkit-Setup-0.1.2.exe",
   };
 
   function detectOS() {
