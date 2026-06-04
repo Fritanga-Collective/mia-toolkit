@@ -160,3 +160,53 @@ jobs:
             --notes "Automated release $TAG." \
           || gh release upload "$TAG" artifacts/*.dmg artifacts/*.exe \
             --repo "$GITHUB_REPOSITORY" --clobber
+
+  sync-website:
+    name: Sync website download version
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set version + asset URLs in website/download.js
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VER="${TAG#v}"
+          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          # Resolve the real asset names from the release (robust to naming).
+          MAC_NAME=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --json assets --jq '.assets[].name' | grep -i '\.dmg$' | head -n1 || true)
+          WIN_NAME=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --json assets --jq '.assets[].name' | grep -i '\.exe$' | head -n1 || true)
+          MAC_URL=""; WIN_URL=""
+          [ -n "$MAC_NAME" ] && MAC_URL="$BASE/$MAC_NAME"
+          [ -n "$WIN_NAME" ] && WIN_URL="$BASE/$WIN_NAME"
+          python3 - "$VER" "$MAC_URL" "$WIN_URL" <<'PY'
+          import re, sys, pathlib
+          ver, mac, win = sys.argv[1], sys.argv[2], sys.argv[3]
+          p = pathlib.Path("website/download.js"); s = p.read_text()
+          s = re.sub(r'(version:\s*")[^"]*(")',
+                     lambda m: m.group(1) + ver + m.group(2), s, count=1)
+          s = re.sub(r'(macUrl:\s*\n?\s*")[^"]*(")',
+                     lambda m: m.group(1) + mac + m.group(2), s, count=1)
+          s = re.sub(r'(winUrl:\s*\n?\s*")[^"]*(")',
+                     lambda m: m.group(1) + win + m.group(2), s, count=1)
+          p.write_text(s)
+          PY
+      - name: Commit if changed
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- website/download.js; then
+            echo "download.js already in sync with $TAG"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add website/download.js
+          git commit -m "Website: sync download to ${TAG} (CI)"
+          git push origin HEAD:main

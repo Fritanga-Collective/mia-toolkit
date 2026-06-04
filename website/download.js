@@ -1,15 +1,17 @@
 // Download configuration + OS detection. No tracking, no external calls.
-// CI updates VERSION / MAC_URL / WIN_URL on each signed release; until those
-// assets exist, the buttons fall back to the GitHub Releases page.
+// The release workflow (.github/workflows/release.yml) auto-updates version /
+// macUrl / winUrl on each tagged release and commits this file back to main.
 (function () {
   "use strict";
 
   var CONFIG = {
-    version: "0.1.0",
+    version: "0.1.1",
     releasesLatest:
       "https://github.com/luis-rodriguez/mia-toolkit/releases/latest",
-    macUrl: "", // e.g. ".../releases/download/v0.1.0/MIA-Toolkit-0.1.0-universal.dmg"
-    winUrl: "", // e.g. ".../releases/download/v0.1.0/MIA-Toolkit-Setup-0.1.0.exe"
+    macUrl:
+      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.1/MIA-Toolkit-0.1.1.dmg",
+    winUrl:
+      "https://github.com/luis-rodriguez/mia-toolkit/releases/download/v0.1.1/MIA-Toolkit-Setup-0.1.1.exe",
   };
 
   function detectOS() {
