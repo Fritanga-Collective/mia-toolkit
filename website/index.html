@@ -17,12 +17,12 @@
       <a class="brand" href="index.html">MIA Toolkit</a>
       <nav class="lang">
         <a href="support.html">Support</a>
-        <span>·</span>
-        <a href="index.html" aria-current="true">English</a>
-        <span>·</span>
-        <a href="es.html">Español</a>
-        <span>·</span>
-        <a href="zh.html">中文</a>
+        <select class="langsel" aria-label="Language"
+                onchange="if(this.value)location.href=this.value">
+          <option value="index.html" selected>English</option>
+          <option value="es.html">Español</option>
+          <option value="zh.html">中文</option>
+        </select>
       </nav>
     </div>
   </header>
