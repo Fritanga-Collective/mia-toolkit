@@ -254,10 +254,6 @@ msgstr "MIA Toolkit"
 msgid "Organize your imaging CDs into one archive for your doctor."
 msgstr "Organiza tus discos de estudios en un solo archivo para tu médico."
 
-#: mia/gui/launcher.py:32
-msgid "✨  Guided Setup"
-msgstr "✨  Configuración guiada"
-
 #: mia/gui/launcher.py:33
 msgid "Walk me through it, step by step (recommended)."
 msgstr "Guíame paso a paso (recomendado)."

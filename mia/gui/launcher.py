@@ -29,17 +29,17 @@ class Launcher(ttk.Frame):
                         "doctor."), ("", 12), (0, 18), color="#555")
 
         # The path most people should take.
-        self._card(_("✨  Guided Setup"),
+        self._card("✨", _("Guided Setup"),
                    _("Walk me through it, step by step (recommended)."),
                    app.show_wizard)
 
         self._heading(_("Or use a single tool:"), ("", 11), (16, 4),
                       color="#888")
-        self._card(_("Rip a CD"),
+        self._card("💿", _("Rip a CD"),
                    _("Copy a disc onto your computer."), app.show_rip)
-        self._card(_("Build Inventory"),
+        self._card("📋", _("Build Inventory"),
                    _("List every study in a spreadsheet."), app.show_inventory)
-        self._card(_("Build Archive for Doctor"),
+        self._card("💾", _("Build Archive for Doctor"),
                    _("Combine everything onto a USB drive."), app.show_archive)
 
     def _language_bar(self) -> None:
@@ -65,17 +65,19 @@ class Launcher(ttk.Frame):
         lbl.grid(row=self._row, column=1, pady=pady)
         self._row += 1
 
-    def _card(self, title: str, subtitle: str,
+    def _card(self, emoji: str, title: str, subtitle: str,
               command: Callable[[], None]) -> None:
         card = ttk.Frame(self)
         # No sticky -> the card keeps its natural (content) width and is
         # centered within the weighted middle column.
         card.grid(row=self._row, column=1, pady=7)
         self._row += 1
+        # Emoji is kept out of the translatable string (it's language-neutral)
+        # and prefixed here so every card reads "<emoji>  <label>" uniformly.
         # A classic tk.Button so the vertical padding (padx/pady) sits *inside*
         # the button and the pill actually grows with the larger text — the
         # native ttk (aqua) button on macOS won't do that.
-        tk.Button(card, text=title, command=command, font=("", 15),
+        tk.Button(card, text=f"{emoji}  {title}", command=command, font=("", 15),
                   width=BUTTON_WIDTH, padx=18, pady=16, relief="solid",
                   borderwidth=1, bg="white", activebackground="#eef2f7",
                   highlightthickness=0, cursor="hand2").grid(

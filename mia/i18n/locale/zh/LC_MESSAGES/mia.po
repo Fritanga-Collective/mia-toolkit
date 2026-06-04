@@ -240,10 +240,6 @@ msgstr "医学影像归档工具 (MIA Toolkit)"
 msgid "Organize your imaging CDs into one archive for your doctor."
 msgstr "把你的影像光盘整理成一个归档，交给你的医生。"
 
-#: mia/gui/launcher.py:32
-msgid "✨  Guided Setup"
-msgstr "✨  向导设置"
-
 #: mia/gui/launcher.py:33
 msgid "Walk me through it, step by step (recommended)."
 msgstr "一步步引导我（推荐）。"
