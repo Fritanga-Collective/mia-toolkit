@@ -50,12 +50,18 @@ class Launcher(ttk.Frame):
 
     def _card(self, title: str, subtitle: str,
               command: Callable[[], None]) -> None:
-        card = ttk.Frame(self, relief="solid", borderwidth=1, padding=16)
+        card = ttk.Frame(self)
         # No sticky -> the card keeps its natural (content) width and is
         # centered within the weighted middle column.
         card.grid(row=self._row, column=1, pady=7)
         self._row += 1
-        ttk.Button(card, text=title, command=command, style="Big.TButton",
-                   width=BUTTON_WIDTH).grid(row=0, column=0)
+        # A classic tk.Button so the vertical padding (padx/pady) sits *inside*
+        # the button and the pill actually grows with the larger text — the
+        # native ttk (aqua) button on macOS won't do that.
+        tk.Button(card, text=title, command=command, font=("", 15),
+                  width=BUTTON_WIDTH, padx=18, pady=16, relief="solid",
+                  borderwidth=1, bg="white", activebackground="#eef2f7",
+                  highlightthickness=0, cursor="hand2").grid(
+            row=0, column=0)
         ttk.Label(card, text=subtitle, foreground="#666", wraplength=WRAP,
                   justify="center").grid(row=1, column=0, pady=(6, 0))

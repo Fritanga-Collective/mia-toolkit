@@ -15,11 +15,6 @@ class App:
         self.root.title(_("Medical Imaging Archiver"))
         self.root.minsize(660, 580)
 
-        style = ttk.Style()
-        # Extra vertical padding (top/bottom > left/right) gives the launcher
-        # buttons better proportions than a flat, wide bar.
-        style.configure("Big.TButton", font=("", 15), padding=(14, 18))
-
         self.container = ttk.Frame(self.root)
         self.container.pack(fill="both", expand=True)
         self._current: tk.Widget | None = None
