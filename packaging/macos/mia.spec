@@ -1,0 +1,86 @@
+# -*- mode: python ; coding: utf-8 -*-
+# PyInstaller spec for the macOS .app. Run from the repo root:
+#
+#     pyinstaller packaging/macos/mia.spec --noconfirm
+#
+# Produces dist/Medical Imaging Archiver.app (then sign + notarize with
+# packaging/macos/sign_notarize.sh).
+#
+# Universal binary: building a true universal2 app requires a universal2 Python
+# (the python.org installer). On an arm64-only interpreter (e.g. pyenv/Homebrew)
+# this builds arm64-only — fine for local testing. Set MIA_TARGET_ARCH=universal2
+# in the environment once a universal2 interpreter is in use.
+
+import os
+
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+
+# Resolve the repo root from the spec's location so the build works no matter
+# the current directory.
+try:
+    SPEC_DIR = SPECPATH  # injected by PyInstaller when running a .spec
+except NameError:
+    SPEC_DIR = os.getcwd()
+REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
+
+TARGET_ARCH = os.environ.get("MIA_TARGET_ARCH") or None  # 'universal2' when ready
+# CI sets MIA_VERSION from the release tag so the bundle's Info.plist matches.
+VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
+
+# pydicom/openpyxl pull some submodules dynamically; gather them explicitly.
+hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")
+datas = collect_data_files("pydicom") + [
+    (os.path.join(REPO, "mia/i18n/locale"), "mia/i18n/locale"),
+]
+
+a = Analysis(
+    [os.path.join(REPO, "packaging/macos/launch.py")],
+    pathex=[REPO],
+    binaries=[],
+    datas=datas,
+    hiddenimports=hidden,
+    hookspath=[],
+    runtime_hooks=[],
+    # Keep the bundle pure-Python (no arch-specific wheels) so universal2 stays
+    # achievable. Our flows never touch pixel arrays, so numpy isn't needed.
+    excludes=["numpy", "pytest", "PIL"],
+    noarchive=False,
+)
+pyz = PYZ(a.pure)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    [],
+    exclude_binaries=True,
+    name="mia",
+    debug=False,
+    strip=False,
+    upx=False,
+    console=False,
+    target_arch=TARGET_ARCH,
+    codesign_identity=None,   # signing is done afterwards by sign_notarize.sh
+    entitlements_file=None,
+)
+
+coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="mia")
+
+app = BUNDLE(
+    coll,
+    name="Medical Imaging Archiver.app",
+    icon=None,  # add packaging/macos/app.icns later
+    bundle_identifier="com.fritanga.miatoolkit",
+    version=VERSION,
+    info_plist={
+        "CFBundleName": "Medical Imaging Archiver",
+        "CFBundleDisplayName": "Medical Imaging Archiver",
+        "CFBundleShortVersionString": VERSION,
+        "CFBundleVersion": VERSION,
+        "LSMinimumSystemVersion": "12.0",
+        "NSHighResolutionCapable": True,
+        "LSApplicationCategoryType": "public.app-category.medical",
+        # The app reads removable volumes (CDs/USB); explain the access prompt.
+        "NSRemovableVolumesUsageDescription":
+            "Access removable drives to copy imaging discs and write the archive.",
+    },
+)

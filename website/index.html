@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Medical Imaging Archiver — one USB for all your scans</title>
+  <meta name="description" content="A free, private desktop app that turns a
+    stack of hospital imaging CDs into one organized archive your radiologist
+    can open from a single USB drive.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- No tracking, no cookies, no analytics. To add privacy-respecting,
+       cookieless stats later, uncomment a GoatCounter/Plausible tag here. -->
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="index.html">MIA Toolkit</a>
+      <nav class="lang">
+        <a href="support.html">Support</a>
+        <span>·</span>
+        <a href="index.html" aria-current="true">English</a>
+        <span>·</span>
+        <a href="es.html">Español</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <img class="hero-img" src="img/hero.jpg" width="1600" height="872"
+             alt="A stack of imaging CDs becomes one organized folder with a
+                  checklist, then a single USB drive.">
+        <a class="btn cta" href="#download">Download — free ↓</a>
+        <h1>All your imaging scans, on one USB drive for your doctor.</h1>
+        <p class="lead">A free desktop app that turns a stack of hospital CDs
+          into a single, organized medical-imaging archive any radiologist can
+          open — without the technical headaches.</p>
+      </section>
+
+      <section class="why">
+        <h2>Why this exists</h2>
+        <p>If you or a family member has collected imaging CDs over the years —
+          MRIs, CTs, X-rays from different hospitals — you know the problem: each
+          disc is on its own, the discs are slowly degrading, and any doctor
+          trying to compare studies across time has to juggle twenty different
+          viewers. Important history gets lost in a drawer.</p>
+        <p>This tool brings it all together. It copies each CD onto your
+          computer, makes a plain-language inventory of every study, and builds
+          one standards-compliant DICOM archive on a USB drive. Hand that single
+          drive to your radiologist and everything loads at once — into any PACS
+          or viewer.</p>
+        <p>It is built for patients and the families helping them, for
+          longitudinal review and second opinions. Your data never leaves your
+          computer: there is no account, no cloud, no tracking, and no internet
+          connection required to use it. It is not a diagnostic tool and does not
+          replace professional radiological review.</p>
+      </section>
+
+      <section>
+        <h2>Three simple steps</h2>
+        <ul class="steps">
+          <li><b>1 · Rip</b>Insert each CD; it copies and ejects, then waits for
+            the next one.</li>
+          <li><b>2 · Review</b>See a clear spreadsheet of every study found
+            across all your discs.</li>
+          <li><b>3 · Deliver</b>Build one archive and copy it, verified, to a USB
+            drive for your doctor.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="download" id="download">
+      <div class="wrap">
+        <h2>Download — free</h2>
+        <a id="dl-primary" class="btn" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest"
+           data-label-mac="Download for Mac"
+           data-label-win="Download for Windows"
+           data-label-other="Download">
+          <span class="label">Download</span>
+          <small>Version <span class="version">0.1.0</span></small>
+        </a>
+        <p class="alt">
+          Or choose your system:
+          <a id="dl-mac" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">macOS (.dmg)</a>
+          ·
+          <a id="dl-win" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">Windows (.exe)</a>
+        </p>
+        <p class="reqs">macOS 12 or newer · Windows 10 or 11 (64-bit)</p>
+        <p class="note">Signed installers arrive with the first full release. For
+          now this links to the source preview on GitHub.</p>
+        <p class="alt">Free, forever. If it helped you,
+          <a href="support.html">consider supporting the project →</a></p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="links">
+        <a href="https://github.com/luis-rodriguez/mia-toolkit">View the source on GitHub</a>
+        <a href="https://github.com/luis-rodriguez/mia-toolkit/blob/main/README.md">Read the story</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="disclaimer">This software helps you organize and deliver your own
+        medical images. It does not interpret images, is not a medical device,
+        and does not replace professional radiological review. No warranty.</p>
+      <p>Open source · Private by design · No tracking</p>
+    </div>
+  </footer>
+
+  <script src="download.js"></script>
+</body>
+</html>

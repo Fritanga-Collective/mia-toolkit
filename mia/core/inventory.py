@@ -1,52 +1,50 @@
-#!/usr/bin/env python3
+"""Build a master Excel inventory of all DICOM studies under a directory.
+
+Wrapped from the original ``dicom_inventory.py``. The scanning, sequence-type
+heuristics (English + Spanish keywords), study/series grouping, and three-sheet
+spreadsheet are unchanged. The scan now collects its candidate file list first
+so it can report real progress, and checks a cancel token between files.
 """
-DICOM Inventory Script
-======================
 
-Walks a directory tree, finds all DICOM files (with or without .dcm extension),
-groups them by study and series, and outputs an Excel inventory.
-
-Designed for compiling years of hospital imaging CDs into one master view.
-
-Usage:
-    python3 dicom_inventory.py /path/to/raw_discs
-    python3 dicom_inventory.py /path/to/raw_discs -o my_inventory.xlsx
-    python3 dicom_inventory.py /path/to/raw_discs -v   (verbose progress)
-
-Output:
-    An .xlsx file with three sheets:
-      1. Studies      - one row per study (date, modality, sequences present)
-      2. Series Detail - one row per series (T1, T2, FLAIR, etc.)
-      3. Consistency Check - lists all patient names/IDs/birthdates found,
-         to flag if studies from different patients got mixed in
-
-Install requirements:
-    pip install pydicom openpyxl --break-system-packages
-"""
+from __future__ import annotations
 
 import argparse
 import os
 import re
 import sys
+import time
 from collections import defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Dict, List, Optional
+
+from .common import (
+    Cancelled,
+    CancelToken,
+    ConsoleProgress,
+    Progress,
+    ProgressCallback,
+    check_cancel,
+    emit,
+    is_dicom_file,
+)
 
 try:
     import pydicom
     from pydicom.errors import InvalidDicomError
-except ImportError:
+except ImportError:  # pragma: no cover
     print("ERROR: pydicom not installed.")
-    print("Run: pip install pydicom --break-system-packages")
-    sys.exit(1)
+    print("Run: pip install pydicom")
+    raise
 
 try:
     from openpyxl import Workbook
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
-except ImportError:
+except ImportError:  # pragma: no cover
     print("ERROR: openpyxl not installed.")
-    print("Run: pip install openpyxl --break-system-packages")
-    sys.exit(1)
+    print("Run: pip install openpyxl")
+    raise
 
 
 # Patterns to detect MR/CT sequence type from SeriesDescription.
@@ -70,8 +68,33 @@ SEQUENCE_PATTERNS = {
     "Reformat":[r"REFORMAT", r"\bMPR\b", r"REFORMATED", r"RECON"],
 }
 
+# File extensions to skip without opening
+SKIP_EXTENSIONS = {
+    ".exe", ".dll", ".htm", ".html", ".jpg", ".jpeg", ".png", ".gif",
+    ".pdf", ".txt", ".ini", ".inf", ".bat", ".css", ".js", ".xml",
+    ".doc", ".docx", ".zip", ".log", ".db", ".plist",
+}
+SKIP_FILENAMES = {"DICOMDIR", "AUTORUN.INF", "README.TXT", "INDEX.HTM",
+                  "INDEX.HTML", ".DS_STORE"}
+SKIP_DIRS = {"viewer", "osirix", "autorun", "$recycle.bin", "system volume information"}
 
-def detect_sequence(series_desc):
+
+@dataclass
+class InventoryResult:
+    """Outcome of an inventory scan."""
+
+    studies: Dict[str, dict]
+    files_seen: int
+    dicoms_read: int
+    errors: int
+    output_path: Optional[str] = None
+
+    @property
+    def study_count(self) -> int:
+        return len(self.studies)
+
+
+def detect_sequence(series_desc: str) -> str:
     """Identify MR/CT sequence types from a series description string."""
     if not series_desc:
         return "Unknown"
@@ -91,7 +114,7 @@ def detect_sequence(series_desc):
     return ", ".join(matches) if matches else "Other"
 
 
-def safe_get(ds, attr, default=""):
+def safe_get(ds, attr: str, default: str = "") -> str:
     """Safely read a DICOM attribute; return default if missing/None."""
     val = getattr(ds, attr, default)
     if val is None or val == "":
@@ -99,24 +122,14 @@ def safe_get(ds, attr, default=""):
     return str(val).strip()
 
 
-def format_date(date_str):
+def format_date(date_str: str) -> str:
     """Convert DICOM date YYYYMMDD -> YYYY-MM-DD."""
     if not date_str or len(date_str) < 8:
         return date_str
     return f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
 
 
-def is_dicom_file(filepath):
-    """Quick magic-byte check: real DICOM files have 'DICM' at offset 128."""
-    try:
-        with open(filepath, "rb") as f:
-            f.seek(128)
-            return f.read(4) == b"DICM"
-    except (OSError, IOError):
-        return False
-
-
-def has_contrast(ds):
+def has_contrast(ds) -> str:
     """Detect contrast administration from DICOM tags."""
     agent = safe_get(ds, "ContrastBolusAgent")
     if agent:
@@ -127,114 +140,118 @@ def has_contrast(ds):
     return ""
 
 
-# File extensions to skip without opening
-SKIP_EXTENSIONS = {
-    ".exe", ".dll", ".htm", ".html", ".jpg", ".jpeg", ".png", ".gif",
-    ".pdf", ".txt", ".ini", ".inf", ".bat", ".css", ".js", ".xml",
-    ".doc", ".docx", ".zip", ".log", ".db", ".plist",
-}
-SKIP_FILENAMES = {"DICOMDIR", "AUTORUN.INF", "README.TXT", "INDEX.HTM",
-                  "INDEX.HTML", ".DS_STORE"}
-SKIP_DIRS = {"viewer", "osirix", "autorun", "$recycle.bin", "system volume information"}
-
-
-def scan_directory(root_dir, verbose=False):
-    """Walk root_dir, parse DICOM headers, group by StudyInstanceUID."""
-    studies = {}
-    files_seen = 0
-    dicoms_read = 0
-    errors = 0
-
-    print(f"Scanning {root_dir} ...")
-    print("(this can take several minutes for large libraries)\n")
-
+def _collect_candidates(root_dir: str) -> List[str]:
+    """Walk the tree and return paths worth opening (cheap filters only)."""
+    candidates: List[str] = []
     for dirpath, dirnames, filenames in os.walk(root_dir):
-        # Prune hidden and obviously-non-DICOM directories in-place
         dirnames[:] = [
             d for d in dirnames
             if not d.startswith(".") and d.lower() not in SKIP_DIRS
         ]
-
         for filename in filenames:
-            files_seen += 1
-
             if filename.startswith(".") or filename.upper() in SKIP_FILENAMES:
                 continue
             if Path(filename).suffix.lower() in SKIP_EXTENSIONS:
                 continue
+            candidates.append(os.path.join(dirpath, filename))
+    return candidates
 
-            filepath = os.path.join(dirpath, filename)
 
-            if not is_dicom_file(filepath):
-                continue
+def scan_directory(
+    root_dir: str,
+    *,
+    verbose: bool = False,
+    progress: Optional[ProgressCallback] = None,
+    cancel: Optional[CancelToken] = None,
+) -> InventoryResult:
+    """Walk root_dir, parse DICOM headers, group by StudyInstanceUID."""
+    studies: Dict[str, dict] = {}
+    dicoms_read = 0
+    errors = 0
 
+    emit(progress, Progress(0, 0, kind="info", note=f"Scanning {root_dir} ..."))
+    candidates = _collect_candidates(root_dir)
+    files_seen = len(candidates)
+    total = files_seen
+    start = time.time()
+
+    for i, filepath in enumerate(candidates, 1):
+        check_cancel(cancel)
+
+        if is_dicom_file(filepath):
             try:
                 ds = pydicom.dcmread(
                     filepath, stop_before_pixels=True, force=True
                 )
             except (InvalidDicomError, Exception):
                 errors += 1
-                continue
+                ds = None
 
-            dicoms_read += 1
+            if ds is not None:
+                dicoms_read += 1
+                study_uid = safe_get(ds, "StudyInstanceUID")
+                series_uid = safe_get(ds, "SeriesInstanceUID")
+                if study_uid and series_uid:
+                    if study_uid not in studies:
+                        studies[study_uid] = {
+                            "study_date": format_date(safe_get(ds, "StudyDate")),
+                            "study_time": safe_get(ds, "StudyTime")[:6],
+                            "study_description": safe_get(ds, "StudyDescription"),
+                            "modality": safe_get(ds, "Modality"),
+                            "accession": safe_get(ds, "AccessionNumber"),
+                            "patient_name": safe_get(ds, "PatientName"),
+                            "patient_id": safe_get(ds, "PatientID"),
+                            "patient_birth": format_date(
+                                safe_get(ds, "PatientBirthDate")
+                            ),
+                            "patient_sex": safe_get(ds, "PatientSex"),
+                            "patient_age": safe_get(ds, "PatientAge"),
+                            "institution": safe_get(ds, "InstitutionName"),
+                            "manufacturer": safe_get(ds, "Manufacturer"),
+                            "model": safe_get(ds, "ManufacturerModelName"),
+                            "field_strength": safe_get(ds, "MagneticFieldStrength"),
+                            "kvp": safe_get(ds, "KVP"),
+                            "series": {},
+                            "source_path": os.path.dirname(filepath),
+                        }
 
-            study_uid = safe_get(ds, "StudyInstanceUID")
-            series_uid = safe_get(ds, "SeriesInstanceUID")
-            if not study_uid or not series_uid:
-                continue
+                    if series_uid not in studies[study_uid]["series"]:
+                        series_desc = safe_get(ds, "SeriesDescription")
+                        studies[study_uid]["series"][series_uid] = {
+                            "series_number": safe_get(ds, "SeriesNumber"),
+                            "series_description": series_desc,
+                            "modality": safe_get(ds, "Modality"),
+                            "sequence_type": detect_sequence(series_desc),
+                            "body_part": safe_get(ds, "BodyPartExamined"),
+                            "contrast": has_contrast(ds),
+                            "slice_thickness": safe_get(ds, "SliceThickness"),
+                            "pixel_spacing": safe_get(ds, "PixelSpacing"),
+                            "image_count": 0,
+                            "source_path": os.path.dirname(filepath),
+                        }
 
-            if study_uid not in studies:
-                studies[study_uid] = {
-                    "study_date": format_date(safe_get(ds, "StudyDate")),
-                    "study_time": safe_get(ds, "StudyTime")[:6],
-                    "study_description": safe_get(ds, "StudyDescription"),
-                    "modality": safe_get(ds, "Modality"),
-                    "accession": safe_get(ds, "AccessionNumber"),
-                    "patient_name": safe_get(ds, "PatientName"),
-                    "patient_id": safe_get(ds, "PatientID"),
-                    "patient_birth": format_date(
-                        safe_get(ds, "PatientBirthDate")
-                    ),
-                    "patient_sex": safe_get(ds, "PatientSex"),
-                    "patient_age": safe_get(ds, "PatientAge"),
-                    "institution": safe_get(ds, "InstitutionName"),
-                    "manufacturer": safe_get(ds, "Manufacturer"),
-                    "model": safe_get(ds, "ManufacturerModelName"),
-                    "field_strength": safe_get(ds, "MagneticFieldStrength"),
-                    "kvp": safe_get(ds, "KVP"),
-                    "series": {},
-                    "source_path": dirpath,
-                }
+                    studies[study_uid]["series"][series_uid]["image_count"] += 1
 
-            if series_uid not in studies[study_uid]["series"]:
-                series_desc = safe_get(ds, "SeriesDescription")
-                studies[study_uid]["series"][series_uid] = {
-                    "series_number": safe_get(ds, "SeriesNumber"),
-                    "series_description": series_desc,
-                    "modality": safe_get(ds, "Modality"),
-                    "sequence_type": detect_sequence(series_desc),
-                    "body_part": safe_get(ds, "BodyPartExamined"),
-                    "contrast": has_contrast(ds),
-                    "slice_thickness": safe_get(ds, "SliceThickness"),
-                    "pixel_spacing": safe_get(ds, "PixelSpacing"),
-                    "image_count": 0,
-                    "source_path": dirpath,
-                }
+        elapsed = time.time() - start
+        rate = i / elapsed if elapsed > 0 else 0
+        eta = (total - i) / rate if rate > 0 else 0
+        emit(progress, Progress(i, total, elapsed=elapsed, rate=rate, eta=eta,
+                                phase="scan"))
 
-            studies[study_uid]["series"][series_uid]["image_count"] += 1
+    emit(progress, Progress(total, total, kind="info",
+                            note=(f"Scan complete: {files_seen} files examined, "
+                                  f"{dicoms_read} DICOM, {errors} read errors, "
+                                  f"{len(studies)} studies")))
 
-            if verbose and dicoms_read % 500 == 0:
-                print(f"  ... {dicoms_read} DICOM files processed")
-
-    print(f"\nScan complete:")
-    print(f"  Files examined : {files_seen}")
-    print(f"  DICOM files    : {dicoms_read}")
-    print(f"  Read errors    : {errors}")
-    print(f"  Studies found  : {len(studies)}")
-    return studies
+    return InventoryResult(
+        studies=studies,
+        files_seen=files_seen,
+        dicoms_read=dicoms_read,
+        errors=errors,
+    )
 
 
-def write_inventory_xlsx(studies, output_path):
+def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
     """Build the three-sheet Excel inventory."""
     wb = Workbook()
 
@@ -404,10 +421,31 @@ def write_inventory_xlsx(studies, output_path):
     ws3.column_dimensions["B"].width = 22
 
     wb.save(output_path)
-    print(f"\nInventory saved to: {output_path}")
 
 
-def print_summary(studies):
+def build_inventory(
+    root_dir: str,
+    output_path: str,
+    *,
+    verbose: bool = False,
+    progress: Optional[ProgressCallback] = None,
+    cancel: Optional[CancelToken] = None,
+) -> InventoryResult:
+    """Scan a directory and write the Excel inventory. High-level entry point."""
+    result = scan_directory(root_dir, verbose=verbose, progress=progress,
+                            cancel=cancel)
+    if result.studies:
+        # Write to a temp file then move into place, so an inventory left open
+        # in Excel (a common Windows file-lock) fails cleanly rather than
+        # half-writing the destination.
+        tmp = output_path + ".tmp"
+        write_inventory_xlsx(result.studies, tmp)
+        os.replace(tmp, output_path)
+        result.output_path = output_path
+    return result
+
+
+def print_summary(studies: Dict[str, dict]) -> None:
     """Console summary so the user gets immediate feedback."""
     if not studies:
         print("\nNo DICOM studies found.")
@@ -442,14 +480,14 @@ def print_summary(studies):
     print("=" * 72)
 
 
-def main():
+def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         description="Build a master inventory of all DICOM studies under a directory.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=("Examples:\n"
-                "  python3 dicom_inventory.py ~/Imaging_Master/raw_discs\n"
-                "  python3 dicom_inventory.py ~/Imaging_Master/raw_discs -o my_inventory.xlsx\n"
-                "  python3 dicom_inventory.py ~/Imaging_Master/raw_discs -v\n"),
+                "  mia-inventory ~/Imaging_Master/raw_discs\n"
+                "  mia-inventory ~/Imaging_Master/raw_discs -o my_inventory.xlsx\n"
+                "  mia-inventory ~/Imaging_Master/raw_discs -v\n"),
     )
     parser.add_argument("directory", help="Root directory to scan")
     parser.add_argument("-o", "--output", default="dicom_inventory.xlsx",
@@ -457,18 +495,25 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Show progress every 500 files")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     root = os.path.expanduser(args.directory)
     if not os.path.isdir(root):
         print(f"ERROR: {root} is not a directory")
-        sys.exit(1)
+        return 1
 
-    studies = scan_directory(root, verbose=args.verbose)
-    print_summary(studies)
-    if studies:
-        write_inventory_xlsx(studies, args.output)
+    try:
+        result = build_inventory(root, args.output, verbose=args.verbose,
+                                 progress=ConsoleProgress(verbose=args.verbose))
+    except Cancelled:
+        print("\nInterrupted.")
+        return 130
+
+    print_summary(result.studies)
+    if result.output_path:
+        print(f"\nInventory saved to: {result.output_path}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
