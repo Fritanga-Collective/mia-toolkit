@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MIA Toolkit — 你所有的影像，装进一个 U 盘</title>
+  <meta name="description" content="一款免费、注重隐私的桌面应用，把一摞医院影像光盘
+    整理成一个有序的归档，你的放射科医生用一个 U 盘就能打开。">
+  <link rel="stylesheet" href="styles.css">
+  <!-- 无追踪，无 Cookie，无分析。 -->
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="zh.html">MIA Toolkit</a>
+      <nav class="lang">
+        <a href="support-zh.html">支持</a>
+        <span>·</span>
+        <a href="index.html">English</a>
+        <span>·</span>
+        <a href="es.html">Español</a>
+        <span>·</span>
+        <a href="zh.html" aria-current="true">中文</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <img class="hero-img" src="img/hero.jpg" width="1600" height="872"
+             alt="一摞影像光盘变成一个带清单的有序文件夹，再变成一个 U 盘。">
+        <a class="btn cta" href="#download">免费下载 ↓</a>
+        <h1>你所有的影像检查，装进一个 U 盘交给医生。</h1>
+        <p class="lead">一款免费的桌面应用，把一摞医院光盘整理成一个有序的医学影像
+          归档，任何放射科医生都能打开——免去技术上的麻烦。</p>
+      </section>
+
+      <section class="why">
+        <h2>为什么会有这个工具</h2>
+        <p>如果你或家人多年来积攒了影像光盘——来自不同医院的核磁、CT、X 光——你一定
+          遇到过这个问题：每张光盘各自为政，光盘还在慢慢老化，任何想对比不同时间检查
+          的医生都得在二十个不同的查看器之间折腾。重要的病史就这样被遗忘在抽屉里。</p>
+        <p>这个工具把它们汇集到一起。它把每张光盘复制到你的电脑，为每项检查生成一份
+          通俗易懂的清单，并在 U 盘上构建一个符合标准的 DICOM 归档。把这一个 U 盘交给
+          放射科医生，所有内容一次全部载入——可用于任何 PACS 或查看器。</p>
+        <p>它是为患者和帮助他们的家人而做的，用于长期随访和第二诊疗意见。你的数据
+          永远不会离开你的电脑：没有账户、没有云、没有追踪，使用时也不需要联网。它不是
+          诊断工具，也不能替代专业的放射科判读。</p>
+      </section>
+
+      <section>
+        <h2>三个简单步骤</h2>
+        <ul class="steps">
+          <li><b>1 · 复制</b>插入每张光盘；它会自动复制并弹出，然后等待下一张。</li>
+          <li><b>2 · 查看</b>查看一份清晰的表格，列出在所有光盘中找到的每项检查。</li>
+          <li><b>3 · 交付</b>构建一个归档，经校验后复制到 U 盘，交给你的医生。</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="download" id="download">
+      <div class="wrap">
+        <h2>免费下载</h2>
+        <a id="dl-primary" class="btn" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest"
+           data-label-mac="下载 Mac 版"
+           data-label-win="下载 Windows 版"
+           data-label-other="下载">
+          <span class="label">下载</span>
+          <small>版本 <span class="version">0.1.0</span></small>
+        </a>
+        <p class="alt">
+          或选择你的系统：
+          <a id="dl-mac" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">macOS (.dmg)</a>
+          ·
+          <a id="dl-win" href="https://github.com/luis-rodriguez/mia-toolkit/releases/latest">Windows (.exe)</a>
+        </p>
+        <p class="reqs">macOS 12 或更高 · Windows 10 或 11（64 位）</p>
+        <p class="note">签名版安装程序将随第一个正式版本发布。目前此链接指向 GitHub
+          上的源代码预览。</p>
+        <p class="alt">永久免费。如果它帮到了你，
+          <a href="support-zh.html">欢迎支持这个项目 →</a></p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="links">
+        <a href="https://github.com/luis-rodriguez/mia-toolkit">在 GitHub 上查看源代码</a>
+        <a href="https://github.com/luis-rodriguez/mia-toolkit/blob/main/README.md">了解背后的故事</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="disclaimer">本软件帮助你整理并交付你自己的医学影像。它不解读影像，
+        不是医疗器械，也不能替代专业的放射科判读。不提供任何担保。</p>
+      <p>开源 · 隐私优先 · 无追踪</p>
+    </div>
+  </footer>
+
+  <script src="download.js"></script>
+</body>
+</html>
