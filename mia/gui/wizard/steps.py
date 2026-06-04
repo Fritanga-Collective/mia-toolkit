@@ -6,7 +6,12 @@ import os
 import shutil
 import time
 import tkinter as tk
+import webbrowser
 from tkinter import filedialog, messagebox, ttk
+
+# The tool and its installers are free. This opens the support page in the
+# user's browser (the only outbound link in the app — no telemetry, no calls).
+SUPPORT_URL = "https://mia-toolkit.fritanga.co/support.html"
 
 from mia.core import deliver, dicomdir, inventory
 from mia.core.common import format_bytes
@@ -341,6 +346,22 @@ class DoneStep(WizardStep):
                          "name, date of birth, a short history, and the specific "
                          "questions you want the radiologist to answer.")
                   ).grid(row=2, column=0, sticky="w", pady=(8, 0))
+
+        # Gentle, value-first support ask — shown only after everything worked.
+        support = ttk.Frame(self, relief="solid", borderwidth=1, padding=14)
+        support.grid(row=3, column=0, sticky="ew", pady=(18, 0))
+        support.columnconfigure(0, weight=1)
+        ttk.Label(support, wraplength=560, justify="left", font=("", 12), text=_(
+            "Was this useful? This tool is free and always will be. If it helped "
+            "you, you can buy the dev team a coffee — it keeps the project alive "
+            "and free for families who can't pay.")
+        ).grid(row=0, column=0, sticky="w")
+        ttk.Button(support, text=_("☕  Buy us a coffee"),
+                   command=self._donate).grid(row=1, column=0, sticky="w",
+                                              pady=(8, 0))
+
+    def _donate(self) -> None:
+        webbrowser.open(SUPPORT_URL)
 
     def enter(self) -> None:
         dp = self.wizard.delivered_path

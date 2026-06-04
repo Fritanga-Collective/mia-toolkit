@@ -240,6 +240,42 @@ optional-SHA-256 verification) — robust on slow, flaky USB media without
 depending on rsync. All UI strings are `gettext`-wrapped (English ships today;
 see `mia/i18n/locale/README.md` to add Spanish).
 
+## Download (no build needed)
+
+Pre-built installers are attached to every
+[GitHub Release](https://github.com/luis-rodriguez/mia-toolkit/releases/latest):
+a macOS `.dmg` and a Windows `.exe` (Windows 10/11, 64-bit). They are currently
+**unsigned** — macOS: right-click the app → Open the first time; Windows: on the
+SmartScreen prompt choose "More info → Run anyway".
+
+## Build the installers from source
+
+PyInstaller can't cross-compile, so build the macOS app **on macOS** and the
+Windows installer **on Windows**. Both reuse the same Python entry point.
+
+**macOS** — produces `dist/Medical Imaging Archiver.app`:
+
+```bash
+pip install -e ".[build]"
+pyinstaller packaging/macos/mia.spec --noconfirm
+open "dist/Medical Imaging Archiver.app"
+```
+
+Signing + notarizing into a distributable `.dmg` (needs an Apple Developer
+certificate) is documented in `packaging/macos/README.md`.
+
+**Windows** — produces `dist/MIA-Toolkit-Setup-<ver>.exe` (per-user, no admin):
+
+```powershell
+pip install -e ".[build]"
+pyinstaller packaging\windows\mia-windows.spec --noconfirm
+# Inno Setup (install via: choco install innosetup)
+& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss
+```
+
+Details in `packaging/windows/README.md`. CI builds **both** automatically on a
+`v*.*.*` tag (`.github/workflows/release.yml`) and attaches them to the Release.
+
 ## License and reuse
 
 Use freely for personal medical record management. No warranty, no liability — if a critical study fails to import on the receiving end, that's between you and the radiologist's IT team.
