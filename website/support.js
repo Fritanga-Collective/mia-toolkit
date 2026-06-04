@@ -16,9 +16,9 @@
     // a dedicated product/variant buy-link to override (e.g. once a real monthly
     // *subscription* product exists — a URL param can't make PWYW recurring).
     tiers: [
-      { id: "coffee", amount: 5, url: "" },
-      { id: "supporter", amount: 15, url: "" },
-      { id: "patron", amount: 50, url: "" },
+      { id: "coffee", amount: 5.99, url: "" },
+      { id: "supporter", amount: 15.99, url: "" },
+      { id: "patron", amount: 50.99, url: "" },
       { id: "monthly", amount: 5, url: "", recurring: true },
     ],
   };
@@ -96,7 +96,9 @@
       var a = document.createElement("a");
       a.className = "tier" + (tier.recurring ? " tier-monthly" : "");
       a.href = checkoutUrl(tier);
-      var price = "$" + tier.amount + (tier.recurring ? t.permo : "");
+      var amt = tier.amount % 1 === 0
+        ? "$" + tier.amount : "$" + tier.amount.toFixed(2);
+      var price = amt + (tier.recurring ? t.permo : "");
       a.innerHTML =
         '<span class="tier-price">' + price + "</span>" +
         '<span class="tier-name">' + (t.names[tier.id] || tier.id) + "</span>";

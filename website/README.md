@@ -86,8 +86,8 @@ winUrl: ".../releases/download/v0.2.0/MIA-Toolkit-Setup-0.2.0.exe",
 ## Support page (voluntary funding)
 
 `support.html` / `soporte.html` / `support-zh.html` open with a manifesto on
-owning your own records, then offer **fixed donation tiers** (Coffee $5 /
-Supporter $15 / Patron $50 + Monthly $5/mo + a custom amount), the same for
+owning your own records, then offer **fixed donation tiers** (Coffee $5.99 /
+Supporter $15.99 / Patron $50.99 + Monthly $5/mo + a custom amount), the same for
 everyone. The download is always free and one click away.
 
 - **No tracking, no geolocation** — the tiers are static and identical
