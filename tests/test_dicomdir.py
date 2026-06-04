@@ -5,7 +5,7 @@ from pydicom.fileset import FileSet
 
 from mia.core import dicomdir
 from mia.core.common import Cancelled
-from tests.conftest import CancelNow
+from tests.helpers import CancelNow
 
 
 def test_build_dedups_and_repairs(dataset_dir, tmp_path):

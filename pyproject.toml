@@ -34,3 +34,6 @@ include = ["mia*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+# Put the repo root on sys.path so `from tests.helpers import ...` resolves
+# under the bare `pytest` command (CI), not just `python -m pytest`.
+pythonpath = ["."]

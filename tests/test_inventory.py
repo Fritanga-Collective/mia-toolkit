@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 
 from mia.core import inventory
 from mia.core.common import Cancelled
-from tests.conftest import CancelNow
+from tests.helpers import CancelNow
 
 
 @pytest.mark.parametrize("desc,expected", [

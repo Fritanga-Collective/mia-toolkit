@@ -4,7 +4,7 @@ import pytest
 
 from mia.core.common import Cancelled
 from mia.core import ripper
-from tests.conftest import CancelNow
+from tests.helpers import CancelNow
 
 
 def test_sanitize_label():

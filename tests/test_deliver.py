@@ -4,7 +4,7 @@ import pytest
 
 from mia.core import deliver
 from mia.core.common import Cancelled
-from tests.conftest import CancelNow
+from tests.helpers import CancelNow
 
 
 def _tree(root):

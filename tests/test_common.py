@@ -4,7 +4,7 @@ from mia.core.common import (
     format_duration,
     is_dicom_file,
 )
-from tests.conftest import make_dicom
+from tests.helpers import make_dicom
 from pydicom.uid import generate_uid
 
 
