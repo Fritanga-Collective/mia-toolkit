@@ -7,13 +7,14 @@
   var CONFIG = {
     freeDownload:
       "https://github.com/luis-rodriguez/mia-toolkit/releases/latest",
-    // Lemon Squeezy "Pay What You Want" checkout — used as the fallback for any
-    // tier whose own product/URL hasn't been created yet, and for "custom".
+    // The single Pay-What-You-Want product. We preset the amount per tier with
+    // Lemon Squeezy's `checkout[custom_price]` URL param (value in CENTS), so
+    // one product drives every fixed tier; the bare URL lets the buyer choose.
     pwyw:
       "https://mia-tools.lemonsqueezy.com/checkout/buy/7bb51bbe-d566-480d-9a44-cbde6fc871cc",
-    // One fixed-price checkout per tier. Create these in Lemon Squeezy (the
-    // first three as one-time, "monthly" as a subscription) and paste each
-    // buy-link here. Empty string ⇒ falls back to the PWYW checkout above.
+    // Per tier: `amount` (USD) → preset via custom_price on `pwyw`. Set `url` to
+    // a dedicated product/variant buy-link to override (e.g. once a real monthly
+    // *subscription* product exists — a URL param can't make PWYW recurring).
     tiers: [
       { id: "coffee", amount: 5, url: "" },
       { id: "supporter", amount: 15, url: "" },
@@ -21,6 +22,15 @@
       { id: "monthly", amount: 5, url: "", recurring: true },
     ],
   };
+
+  // Build a checkout URL for a tier: a dedicated product URL if set, otherwise
+  // the PWYW product with the amount preset (Lemon Squeezy custom_price = cents).
+  function checkoutUrl(tier) {
+    if (tier && tier.url) return tier.url;
+    if (!tier || !tier.amount) return CONFIG.pwyw; // bare = buyer chooses
+    return CONFIG.pwyw +
+      "?checkout%5Bcustom_price%5D=" + Math.round(tier.amount * 100);
+  }
 
   var STR = {
     en: {
@@ -85,7 +95,7 @@
     CONFIG.tiers.forEach(function (tier) {
       var a = document.createElement("a");
       a.className = "tier" + (tier.recurring ? " tier-monthly" : "");
-      a.href = tier.url || CONFIG.pwyw;
+      a.href = checkoutUrl(tier);
       var price = "$" + tier.amount + (tier.recurring ? t.permo : "");
       a.innerHTML =
         '<span class="tier-price">' + price + "</span>" +

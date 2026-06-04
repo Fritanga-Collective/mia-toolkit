@@ -10,11 +10,13 @@ under a second.
 website/
 ├── index.html      # English landing page
 ├── es.html         # Español (Mexico) landing page
-├── support.html    # English support page (manifesto + fair-trade bands)
+├── support.html    # English support page (manifesto + donation tiers)
 ├── soporte.html    # Español support page
+├── zh.html         # 简体中文 landing page
+├── support-zh.html # 简体中文 support page
 ├── styles.css      # shared styles
 ├── download.js     # OS detection + download config (version, asset URLs)
-├── support.js      # geo fair-trade suggestion + Lemon Squeezy checkout config
+├── support.js      # donation tiers + Lemon Squeezy checkout config
 └── img/
     ├── hero.png    # source illustration (large; not served)
     └── hero.jpg    # optimized web version used by the pages (~115 KB)
@@ -83,17 +85,20 @@ winUrl: ".../releases/download/v0.2.0/MIA-Toolkit-Setup-0.2.0.exe",
 
 ## Support page (voluntary funding)
 
-`support.html` / `soporte.html` open with a manifesto on owning your own
-records, then offer a **Pay-What-You-Want** contribution with a fair-trade
-suggestion by region. The download is always free and one click away.
+`support.html` / `soporte.html` / `support-zh.html` open with a manifesto on
+owning your own records, then offer **fixed donation tiers** (Coffee $5 /
+Supporter $15 / Patron $50 + Monthly $5/mo + a custom amount), the same for
+everyone. The download is always free and one click away.
 
-- The region suggestion is **client-side only** (browser time zone → band) — no
-  IP lookup, no network, no tracking. The visitor can always change it.
-- Set your **Lemon Squeezy** Pay-What-You-Want checkout URL in `CONFIG.checkout`
-  inside `support.js` (it points at the GitHub repo until then).
-- For IP-accurate regional discounts you can add ParityDeals/Parity Kit, but that
-  introduces a third-party geolocation script — weigh it against the no-tracking
-  promise.
+- **No tracking, no geolocation** — the tiers are static and identical
+  everywhere; everything is client-side.
+- One **Lemon Squeezy** Pay-What-You-Want product drives every fixed tier: we
+  preset the amount with the `checkout[custom_price]` URL param (in cents), built
+  in `support.js` → `CONFIG.pwyw` + each tier's `amount`. The bare URL (the
+  "custom amount" link) lets the buyer choose.
+- To use a **dedicated product** for a tier (e.g. a real monthly *subscription* —
+  a URL param can't make PWYW recurring), set that tier's `url` in `CONFIG.tiers`
+  to override the preset link.
 
 ## Privacy-respecting stats (optional)
 
