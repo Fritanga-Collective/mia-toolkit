@@ -16,5 +16,5 @@ __pycache__/
 build/
 dist/
 .pytest_cache/
-# Obsidian-linked notes (symlink) — never track
+# Local notes symlink (untracked) — never commit
 /int-docs
