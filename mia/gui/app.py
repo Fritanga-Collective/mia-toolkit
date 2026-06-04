@@ -16,7 +16,9 @@ class App:
         self.root.minsize(660, 580)
 
         style = ttk.Style()
-        style.configure("Big.TButton", font=("", 15), padding=12)
+        # Extra vertical padding (top/bottom > left/right) gives the launcher
+        # buttons better proportions than a flat, wide bar.
+        style.configure("Big.TButton", font=("", 15), padding=(14, 18))
 
         self.container = ttk.Frame(self.root)
         self.container.pack(fill="both", expand=True)
