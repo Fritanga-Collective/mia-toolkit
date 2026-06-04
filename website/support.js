@@ -6,9 +6,10 @@
   "use strict";
 
   var CONFIG = {
-    // Lemon Squeezy "Pay What You Want" checkout URL (replace when the store
-    // exists). Until then the button points at the GitHub repo.
-    checkout: "https://github.com/luis-rodriguez/mia-toolkit",
+    // Lemon Squeezy "Pay What You Want" checkout (the visitor sets the amount;
+    // we only suggest one). Merchant of Record handles tax/receipts.
+    checkout:
+      "https://mia-tools.lemonsqueezy.com/checkout/buy/7bb51bbe-d566-480d-9a44-cbde6fc871cc",
     freeDownload:
       "https://github.com/luis-rodriguez/mia-toolkit/releases/latest",
   };
