@@ -49,12 +49,14 @@ class Launcher(ttk.Frame):
         self._row += 1
         ttk.Label(bar, text=_("Language:"),
                   foreground="#666").pack(side="left", padx=(0, 6))
-        self.lang_var = tk.StringVar(value=current_language())
-        for code, name in LANGUAGES.items():
-            ttk.Radiobutton(
-                bar, text=name, value=code, variable=self.lang_var,
-                command=lambda: self.app.set_language(self.lang_var.get())
-            ).pack(side="left", padx=2)
+        self._names_to_code = {name: code for code, name in LANGUAGES.items()}
+        combo = ttk.Combobox(bar, state="readonly", width=12,
+                             values=list(LANGUAGES.values()))
+        combo.set(LANGUAGES.get(current_language(), "English"))
+        combo.bind("<<ComboboxSelected>>",
+                   lambda e: self.app.set_language(
+                       self._names_to_code[combo.get()]))
+        combo.pack(side="left")
 
     def _heading(self, text: str, font, pady, color: str = "") -> None:
         lbl = ttk.Label(self, text=text, font=font, justify="center")

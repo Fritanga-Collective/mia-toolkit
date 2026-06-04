@@ -4,15 +4,18 @@ The GUI wraps every user-facing string in `_()`, and strings bound at import
 time (class/module constants) in `N_()` (deferred — translated at use, so a
 runtime language switch re-renders them).
 
-Shipped languages: **English** (source — no catalog needed) and **Spanish**
-(`es/LC_MESSAGES/mia.mo`). The in-app **Language** selector (top of the home
+Shipped languages: **English** (`en`), **Spanish** (`es`), and **Simplified
+Chinese** (`zh`). Each has an editable `.po` (so translations are easy to update)
+and a committed compiled `.mo`. English is also the source language, so its
+catalog is an identity mapping. The in-app **Language** dropdown (top of the home
 screen) switches at runtime and remembers the choice.
 
 ```
 locale/
-└── es/LC_MESSAGES/
-    ├── mia.po   # source translations (edit these)
-    └── mia.mo   # compiled catalog (loaded at runtime — must be committed)
+├── en/LC_MESSAGES/{mia.po, mia.mo}   # identity (source)
+├── es/LC_MESSAGES/{mia.po, mia.mo}
+└── zh/LC_MESSAGES/{mia.po, mia.mo}
+    # .po: edit these   ·   .mo: compiled, loaded at runtime — must be committed
 ```
 
 ## Updating / adding a language

@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2026-06-03 23:45-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Español (Mexico)\n"
-"Language: es\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,140 +19,135 @@ msgstr ""
 
 #: mia/gui/rip_session.py:53
 msgid "Please choose a folder to save copies to."
-msgstr "Elige una carpeta donde guardar las copias."
+msgstr "Please choose a folder to save copies to."
 
 #: mia/gui/rip_session.py:58
 msgid "Couldn't create that folder. Choose another."
-msgstr "No se pudo crear esa carpeta. Elige otra."
+msgstr "Couldn't create that folder. Choose another."
 
 #: mia/gui/rip_session.py:66
 msgid "Insert a disc…"
-msgstr "Inserta un disco…"
+msgstr "Insert a disc…"
 
 #: mia/gui/rip_session.py:67
 msgid "Ripping session started. Insert your first disc."
-msgstr "Sesión de copiado iniciada. Inserta tu primer disco."
+msgstr "Ripping session started. Insert your first disc."
 
 #: mia/gui/rip_session.py:75 mia/gui/task_view.py:112
 msgid "Stopping…"
-msgstr "Deteniendo…"
+msgstr "Stopping…"
 
 #: mia/gui/rip_session.py:86
 #, python-brace-format
 msgid "Ripping session ended. {n} disc(s) copied."
-msgstr "Sesión de copiado terminada. {n} disco(s) copiado(s)."
+msgstr "Ripping session ended. {n} disc(s) copied."
 
 #: mia/gui/rip_session.py:100
 msgid "Insert a disc… (waiting)"
-msgstr "Inserta un disco… (esperando)"
+msgstr "Insert a disc… (waiting)"
 
 #: mia/gui/rip_session.py:117
 #, python-brace-format
 msgid "Ripping disc {n}: {name}…"
-msgstr "Copiando disco {n}: {name}…"
+msgstr "Ripping disc {n}: {name}…"
 
 #: mia/gui/rip_session.py:118
 #, python-brace-format
 msgid "Found disc “{name}”. Copying…"
-msgstr "Disco encontrado «{name}». Copiando…"
+msgstr "Found disc “{name}”. Copying…"
 
 #: mia/gui/rip_session.py:134 mia/gui/task_view.py:99
 msgid "Stopped."
-msgstr "Detenido."
+msgstr "Stopped."
 
 #: mia/gui/rip_session.py:140
 msgid "Couldn't rip this disc. Remove it and insert another, or press Stop."
-msgstr ""
-"No se pudo copiar este disco. Sácalo e inserta otro, o presiona Detener."
+msgstr "Couldn't rip this disc. Remove it and insert another, or press Stop."
 
 #: mia/gui/rip_session.py:146
 #, python-brace-format
 msgid "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
-msgstr ""
-"✓ Disco copiado: {c} archivos correctos, {r} recuperados, {f} no se pudieron"
-" leer."
+msgstr "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
 
 #: mia/gui/rip_session.py:153
 #, python-brace-format
 msgid "✓ Disc {n} done. Insert the next disc…"
-msgstr "✓ Disco {n} listo. Inserta el siguiente disco…"
+msgstr "✓ Disc {n} done. Insert the next disc…"
 
 #: mia/gui/rip_session.py:162
 msgid "Choose a disc"
-msgstr "Elige un disco"
+msgstr "Choose a disc"
 
 #: mia/gui/rip_session.py:166
 msgid "More than one drive looks like a disc. Which one should I copy?"
-msgstr "Hay más de una unidad que parece un disco. ¿Cuál copio?"
+msgstr "More than one drive looks like a disc. Which one should I copy?"
 
 #: mia/gui/rip_session.py:180
 msgid "Rip this one"
-msgstr "Copiar este"
+msgstr "Rip this one"
 
 #: mia/gui/rip_session.py:182
 msgid "Skip for now"
-msgstr "Omitir por ahora"
+msgstr "Skip for now"
 
 #: mia/gui/task_view.py:38 mia/gui/wizard/view.py:58
 msgid "‹ Back"
-msgstr "‹ Atrás"
+msgstr "‹ Back"
 
 #: mia/gui/task_view.py:54
 msgid "Stop"
-msgstr "Detener"
+msgstr "Stop"
 
 #: mia/gui/task_view.py:97
 msgid "Stopped on an error."
-msgstr "Se detuvo por un error."
+msgstr "Stopped on an error."
 
 #: mia/gui/task_view.py:100
 msgid "Stopped by you."
-msgstr "Detenido por ti."
+msgstr "Stopped by you."
 
 #: mia/gui/widgets.py:32
 msgid "Choose…"
-msgstr "Elegir…"
+msgstr "Choose…"
 
 #: mia/gui/progress_panel.py:40
 msgid "Ready."
-msgstr "Listo."
+msgstr "Ready."
 
 #: mia/gui/progress_panel.py:62 mia/gui/progress_panel.py:205
 msgid "▸ Show technical details"
-msgstr "▸ Mostrar detalles técnicos"
+msgstr "▸ Show technical details"
 
 #: mia/gui/progress_panel.py:79
 msgid "Save log…"
-msgstr "Guardar registro…"
+msgstr "Save log…"
 
 #: mia/gui/progress_panel.py:81
 msgid "Open log folder"
-msgstr "Abrir carpeta del registro"
+msgstr "Open log folder"
 
 #: mia/gui/progress_panel.py:91
 msgid "Writing the archive… this can take several minutes."
-msgstr "Escribiendo el archivo… esto puede tardar varios minutos."
+msgstr "Writing the archive… this can take several minutes."
 
 #: mia/gui/progress_panel.py:92
 msgid "Writing the archive now. This can take several minutes — please wait…"
-msgstr ""
-"Escribiendo el archivo ahora. Esto puede tardar varios minutos — por favor "
-"espera…"
+msgstr "Writing the archive now. This can take several minutes — please wait…"
 
 #: mia/gui/progress_panel.py:134
 #, python-brace-format
 msgid "files {done}/{total}"
-msgstr "archivos {done}/{total}"
+msgstr "files {done}/{total}"
 
 #: mia/gui/progress_panel.py:137
 #, python-brace-format
 msgid "elapsed {t}"
-msgstr "transcurrido {t}"
+msgstr "elapsed {t}"
 
 #: mia/gui/progress_panel.py:139
 #, python-brace-format
 msgid "ETA {t}"
-msgstr "faltan {t}"
+msgstr "ETA {t}"
 
 #: mia/gui/progress_panel.py:141
 #, python-brace-format
@@ -161,241 +156,236 @@ msgstr "{r:.0f}/s"
 
 #: mia/gui/progress_panel.py:196
 msgid "▾ Hide technical details"
-msgstr "▾ Ocultar detalles técnicos"
+msgstr "▾ Hide technical details"
 
 #: mia/gui/progress_panel.py:209
 msgid "Save technical log"
-msgstr "Guardar registro técnico"
+msgstr "Save technical log"
 
 #: mia/gui/rip_view.py:14 mia/gui/launcher.py:38
 msgid "Rip a CD"
-msgstr "Copiar un CD"
+msgstr "Rip a CD"
 
 #: mia/gui/rip_view.py:18
 msgid ""
 "Insert a CD. The app copies it to your computer, ejects it, and waits for "
 "the next one. Keep inserting discs — you don't need to restart between them."
 msgstr ""
-"Inserta un CD. La app lo copia a tu computadora, lo expulsa y espera el "
-"siguiente. Sigue insertando discos — no necesitas reiniciar entre uno y "
-"otro."
+"Insert a CD. The app copies it to your computer, ejects it, and waits for "
+"the next one. Keep inserting discs — you don't need to restart between them."
 
 #: mia/gui/rip_view.py:23
 msgid "Save copies to:"
-msgstr "Guardar copias en:"
+msgstr "Save copies to:"
 
 #: mia/gui/rip_view.py:27 mia/gui/wizard/steps.py:132
 msgid "Start ripping"
-msgstr "Empezar a copiar"
+msgstr "Start ripping"
 
 #: mia/gui/messages.py:61
 msgid "Recovered a file after a retry."
-msgstr "Se recuperó un archivo tras un reintento."
+msgstr "Recovered a file after a retry."
 
 #: mia/gui/messages.py:63
 msgid "⚠ Could not read a file (see technical details)."
-msgstr "⚠ No se pudo leer un archivo (ver detalles técnicos)."
+msgstr "⚠ Could not read a file (see technical details)."
 
 #: mia/gui/messages.py:69
 #, python-brace-format
 msgid "Copying file {done} of {total}…"
-msgstr "Copiando archivo {done} de {total}…"
+msgstr "Copying file {done} of {total}…"
 
 #: mia/gui/messages.py:71
 #, python-brace-format
 msgid "Scanning file {done} of {total}…"
-msgstr "Revisando archivo {done} de {total}…"
+msgstr "Scanning file {done} of {total}…"
 
 #: mia/gui/messages.py:73
 #, python-brace-format
 msgid "Indexing image {done} of {total}…"
-msgstr "Indexando imagen {done} de {total}…"
+msgstr "Indexing image {done} of {total}…"
 
 #: mia/gui/messages.py:75
 #, python-brace-format
 msgid "Working… {done} of {total}"
-msgstr "Trabajando… {done} de {total}"
+msgstr "Working… {done} of {total}"
 
 #: mia/gui/messages.py:82
 msgid ""
 "Permission denied. The destination may be read-only or locked. Try a "
 "different folder, or check the drive isn't write-protected."
 msgstr ""
-"Permiso denegado. El destino puede ser de solo lectura o estar bloqueado. "
-"Prueba con otra carpeta o revisa que la unidad no esté protegida contra "
-"escritura."
+"Permission denied. The destination may be read-only or locked. Try a "
+"different folder, or check the drive isn't write-protected."
 
 #: mia/gui/messages.py:85
 msgid ""
 "A needed file or folder was not found. A disc may have been ejected too "
 "early, or a folder was moved."
 msgstr ""
-"No se encontró un archivo o carpeta necesario. Tal vez se expulsó un disco "
-"demasiado pronto o se movió una carpeta."
+"A needed file or folder was not found. A disc may have been ejected too "
+"early, or a folder was moved."
 
 #: mia/gui/messages.py:88
 msgid "The disk is full. Free up space or choose a drive with more room."
-msgstr ""
-"El disco está lleno. Libera espacio o elige una unidad con más espacio."
+msgstr "The disk is full. Free up space or choose a drive with more room."
 
 #: mia/gui/messages.py:90
 msgid "That location is read-only. Choose a different destination folder."
-msgstr "Esa ubicación es de solo lectura. Elige otra carpeta de destino."
+msgstr "That location is read-only. Choose a different destination folder."
 
 #: mia/gui/messages.py:91
 msgid "Something went wrong. See the technical details below."
-msgstr "Algo salió mal. Consulta los detalles técnicos abajo."
+msgstr "Something went wrong. See the technical details below."
 
 #: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
 msgid "Medical Imaging Archiver"
-msgstr "Archivador de Imágenes Médicas"
+msgstr "Medical Imaging Archiver"
 
 #: mia/gui/launcher.py:28
 msgid "Organize your imaging CDs into one archive for your doctor."
-msgstr "Organiza tus discos de estudios en un solo archivo para tu médico."
+msgstr "Organize your imaging CDs into one archive for your doctor."
 
 #: mia/gui/launcher.py:32
 msgid "✨  Guided Setup"
-msgstr "✨  Configuración guiada"
+msgstr "✨  Guided Setup"
 
 #: mia/gui/launcher.py:33
 msgid "Walk me through it, step by step (recommended)."
-msgstr "Guíame paso a paso (recomendado)."
+msgstr "Walk me through it, step by step (recommended)."
 
 #: mia/gui/launcher.py:36
 msgid "Or use a single tool:"
-msgstr "O usa una sola herramienta:"
+msgstr "Or use a single tool:"
 
 #: mia/gui/launcher.py:39
 msgid "Copy a disc onto your computer."
-msgstr "Copia un disco a tu computadora."
+msgstr "Copy a disc onto your computer."
 
 #: mia/gui/launcher.py:40 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
-msgstr "Crear inventario"
+msgstr "Build Inventory"
 
 #: mia/gui/launcher.py:41
 msgid "List every study in a spreadsheet."
-msgstr "Lista todos los estudios en una hoja de cálculo."
+msgstr "List every study in a spreadsheet."
 
 #: mia/gui/launcher.py:42 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
-msgstr "Crear archivo para el médico"
+msgstr "Build Archive for Doctor"
 
 #: mia/gui/launcher.py:43
 msgid "Combine everything onto a USB drive."
-msgstr "Combina todo en una memoria USB."
+msgstr "Combine everything onto a USB drive."
 
 #: mia/gui/launcher.py:50
 msgid "Language:"
-msgstr "Idioma:"
+msgstr "Language:"
 
 #: mia/gui/inventory_view.py:21
 msgid ""
 "Pick the folder of ripped discs. A spreadsheet of every study will be "
 "created inside it and opened for you."
 msgstr ""
-"Elige la carpeta con los discos copiados. Se creará dentro una hoja de "
-"cálculo con todos los estudios y se abrirá para ti."
+"Pick the folder of ripped discs. A spreadsheet of every study will be "
+"created inside it and opened for you."
 
 #: mia/gui/inventory_view.py:25 mia/gui/archive_view.py:24
 msgid "Ripped discs folder:"
-msgstr "Carpeta de discos copiados:"
+msgstr "Ripped discs folder:"
 
 #: mia/gui/inventory_view.py:29
 msgid "Build inventory"
-msgstr "Crear inventario"
+msgstr "Build inventory"
 
 #: mia/gui/inventory_view.py:41
 msgid "Please choose a valid folder first."
-msgstr "Primero elige una carpeta válida."
+msgstr "Please choose a valid folder first."
 
 #: mia/gui/inventory_view.py:44
 msgid "Scanning…"
-msgstr "Revisando…"
+msgstr "Scanning…"
 
 #: mia/gui/inventory_view.py:45
 #, python-brace-format
 msgid "Looking through {f} for studies…"
-msgstr "Buscando estudios en {f}…"
+msgstr "Looking through {f} for studies…"
 
 #: mia/gui/inventory_view.py:57
 msgid "No DICOM studies found in that folder."
-msgstr "No se encontraron estudios DICOM en esa carpeta."
+msgstr "No DICOM studies found in that folder."
 
 #: mia/gui/inventory_view.py:58
 msgid "No studies found. Is this the folder with your ripped discs?"
-msgstr ""
-"No se encontraron estudios. ¿Es esta la carpeta con tus discos copiados?"
+msgstr "No studies found. Is this the folder with your ripped discs?"
 
 #: mia/gui/inventory_view.py:61
 #, python-brace-format
 msgid "Done — {n} studies."
-msgstr "Listo — {n} estudios."
+msgstr "Done — {n} studies."
 
 #: mia/gui/inventory_view.py:62
 #, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
-msgstr "✓ Se encontraron {n} estudios. Abriendo la hoja de cálculo…"
+msgstr "✓ Found {n} studies. Opening the spreadsheet…"
 
 #: mia/gui/archive_view.py:20
 msgid ""
 "Combine all your ripped discs into one archive the radiologist can open. "
 "Choose where to save it — a USB drive is ideal."
 msgstr ""
-"Combina todos tus discos copiados en un solo archivo que el radiólogo pueda "
-"abrir. Elige dónde guardarlo — una memoria USB es lo ideal."
+"Combine all your ripped discs into one archive the radiologist can open. "
+"Choose where to save it — a USB drive is ideal."
 
 #: mia/gui/archive_view.py:28
 msgid "Save archive to:"
-msgstr "Guardar archivo en:"
+msgstr "Save archive to:"
 
 #: mia/gui/archive_view.py:32
 msgid "Build archive"
-msgstr "Crear archivo"
+msgstr "Build archive"
 
 #: mia/gui/archive_view.py:45
 msgid "Please choose a valid ripped-discs folder."
-msgstr "Elige una carpeta de discos copiados válida."
+msgstr "Please choose a valid ripped-discs folder."
 
 #: mia/gui/archive_view.py:48
 msgid "Please choose where to save the archive."
-msgstr "Elige dónde guardar el archivo."
+msgstr "Please choose where to save the archive."
 
 #: mia/gui/archive_view.py:51
 msgid "That destination already has files in it."
-msgstr "Ese destino ya tiene archivos."
+msgstr "That destination already has files in it."
 
 #: mia/gui/archive_view.py:52
 msgid ""
 "⚠ The destination folder isn't empty. Choose an empty folder (or a new one) "
 "so the archive stays clean."
 msgstr ""
-"⚠ La carpeta de destino no está vacía. Elige una carpeta vacía (o una nueva)"
-" para que el archivo quede limpio."
+"⚠ The destination folder isn't empty. Choose an empty folder (or a new one) "
+"so the archive stays clean."
 
 #: mia/gui/archive_view.py:59
 msgid "Scanning for images…"
-msgstr "Buscando imágenes…"
+msgstr "Scanning for images…"
 
 #: mia/gui/archive_view.py:60
 #, python-brace-format
 msgid "Looking for all DICOM images under {f}…"
-msgstr "Buscando todas las imágenes DICOM en {f}…"
+msgstr "Looking for all DICOM images under {f}…"
 
 #: mia/gui/archive_view.py:73
 msgid "No DICOM images found in that folder."
-msgstr "No se encontraron imágenes DICOM en esa carpeta."
+msgstr "No DICOM images found in that folder."
 
 #: mia/gui/archive_view.py:74
 msgid "No images found. Is this the folder with your ripped discs?"
-msgstr ""
-"No se encontraron imágenes. ¿Es esta la carpeta con tus discos copiados?"
+msgstr "No images found. Is this the folder with your ripped discs?"
 
 #: mia/gui/archive_view.py:78
 #, python-brace-format
 msgid "Archive ready — {s} studies, {n} images."
-msgstr "Archivo listo — {s} estudios, {n} imágenes."
+msgstr "Archive ready — {s} studies, {n} images."
 
 #: mia/gui/archive_view.py:80
 #, python-brace-format
@@ -403,8 +393,8 @@ msgid ""
 "✓ Archive complete: {s} studies, {n} images. Copy this folder to the USB "
 "drive and hand it to the doctor."
 msgstr ""
-"✓ Archivo completo: {s} estudios, {n} imágenes. Copia esta carpeta a la "
-"memoria USB y entrégala al médico."
+"✓ Archive complete: {s} studies, {n} images. Copy this folder to the USB "
+"drive and hand it to the doctor."
 
 #: mia/gui/archive_view.py:84
 #, python-brace-format
@@ -413,7 +403,7 @@ msgstr "README: {p}"
 
 #: mia/gui/wizard/steps.py:74 mia/gui/wizard/steps.py:291
 msgid "Not enough space"
-msgstr "Espacio insuficiente"
+msgstr "Not enough space"
 
 #: mia/gui/wizard/steps.py:75
 #, python-brace-format
@@ -421,28 +411,28 @@ msgid ""
 "This drive may not have enough room (need about {n}). Move your project to "
 "another drive with more space?"
 msgstr ""
-"Puede que esta unidad no tenga suficiente espacio (se necesitan unos {n}). "
-"¿Mover tu proyecto a otra unidad con más espacio?"
+"This drive may not have enough room (need about {n}). Move your project to "
+"another drive with more space?"
 
 #: mia/gui/wizard/steps.py:78
 msgid "Cancelled — not enough space."
-msgstr "Cancelado — espacio insuficiente."
+msgstr "Cancelled — not enough space."
 
 #: mia/gui/wizard/steps.py:81
 msgid "Choose a drive or folder with more space"
-msgstr "Elige una unidad o carpeta con más espacio"
+msgstr "Choose a drive or folder with more space"
 
 #: mia/gui/wizard/steps.py:83
 msgid "Cancelled."
-msgstr "Cancelado."
+msgstr "Cancelled."
 
 #: mia/gui/wizard/steps.py:94
 msgid "Could not move the project. Try another drive."
-msgstr "No se pudo mover el proyecto. Prueba con otra unidad."
+msgstr "Could not move the project. Try another drive."
 
 #: mia/gui/wizard/steps.py:102
 msgid "This will help you, step by step:"
-msgstr "Esto te ayudará, paso a paso:"
+msgstr "This will help you, step by step:"
 
 #: mia/gui/wizard/steps.py:105
 msgid ""
@@ -450,54 +440,53 @@ msgid ""
 "2.  Review everything we found\n"
 "3.  Build one archive and copy it to a USB drive for your doctor"
 msgstr ""
-"1.  Copiar tus CDs a esta computadora\n"
-"2.  Revisar todo lo que encontramos\n"
-"3.  Crear un solo archivo y copiarlo a una memoria USB para tu médico"
+"1.  Copy your CDs onto this computer\n"
+"2.  Review everything we found\n"
+"3.  Build one archive and copy it to a USB drive for your doctor"
 
 #: mia/gui/wizard/steps.py:111
 msgid "Skip to building the archive"
-msgstr "Saltar a crear el archivo"
+msgstr "Skip to building the archive"
 
 #: mia/gui/wizard/steps.py:118
 #, python-brace-format
 msgid ""
 "Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
 msgstr ""
-"Bienvenido de nuevo — ya tienes {n} disco(s) copiado(s). Continúa con "
-"Siguiente, o:"
+"Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
 
 #: mia/gui/wizard/steps.py:129
 msgid ""
 "Insert each CD. It copies onto your computer, ejects, and waits for the next"
 " one. When you've done all your discs, click Next."
 msgstr ""
-"Inserta cada CD. Se copia a tu computadora, se expulsa y espera el "
-"siguiente. Cuando termines todos tus discos, haz clic en Siguiente."
+"Insert each CD. It copies onto your computer, ejects, and waits for the next"
+" one. When you've done all your discs, click Next."
 
 #: mia/gui/wizard/steps.py:145
 msgid "Ready. Insert a disc, then click Start ripping."
-msgstr "Listo. Inserta un disco y luego haz clic en Empezar a copiar."
+msgstr "Ready. Insert a disc, then click Start ripping."
 
 #: mia/gui/wizard/steps.py:172
 msgid "Re-scan"
-msgstr "Volver a revisar"
+msgstr "Re-scan"
 
 #: mia/gui/wizard/steps.py:174
 msgid "Open spreadsheet"
-msgstr "Abrir hoja de cálculo"
+msgstr "Open spreadsheet"
 
 #: mia/gui/wizard/steps.py:183
 msgid "No discs copied yet — you can skip this step."
-msgstr "Aún no hay discos copiados — puedes omitir este paso."
+msgstr "No discs copied yet — you can skip this step."
 
 #: mia/gui/wizard/steps.py:191
 msgid "Looking through your discs…"
-msgstr "Revisando tus discos…"
+msgstr "Looking through your discs…"
 
 #: mia/gui/wizard/steps.py:207
 #, python-brace-format
 msgid "We found {n} studies across your discs."
-msgstr "Encontramos {n} estudios en tus discos."
+msgstr "We found {n} studies across your discs."
 
 #: mia/gui/wizard/steps.py:217
 msgid ""
@@ -505,63 +494,60 @@ msgid ""
 "‘Consistency Check’ to be sure a stranger's disc wasn't mixed in (often it's"
 " just the same person registered differently)."
 msgstr ""
-"⚠ Aparece más de un paciente en estos discos. Abre la hoja «Consistency "
-"Check» (verificación de consistencia) para asegurarte de que no se mezcló el"
-" disco de un desconocido (a menudo es la misma persona registrada de forma "
-"distinta)."
+"⚠ More than one patient appears across these discs. Open the spreadsheet's "
+"‘Consistency Check’ to be sure a stranger's disc wasn't mixed in (often it's"
+" just the same person registered differently)."
 
 #: mia/gui/wizard/steps.py:233
 msgid "Build the archive"
-msgstr "Crear el archivo"
+msgstr "Build the archive"
 
 #: mia/gui/wizard/steps.py:236
 msgid "Choose USB & copy"
-msgstr "Elegir USB y copiar"
+msgstr "Choose USB & copy"
 
 #: mia/gui/wizard/steps.py:244
 msgid "No discs to build from. Go back and rip some discs first."
-msgstr ""
-"No hay discos para crear el archivo. Regresa y copia algunos discos primero."
+msgstr "No discs to build from. Go back and rip some discs first."
 
 #: mia/gui/wizard/steps.py:250
 msgid "Archive already built. Choose a USB drive to copy it to."
-msgstr "El archivo ya está creado. Elige una memoria USB para copiarlo."
+msgstr "Archive already built. Choose a USB drive to copy it to."
 
 #: mia/gui/wizard/steps.py:254
 msgid "Ready to combine your discs into one archive."
-msgstr "Listo para combinar tus discos en un solo archivo."
+msgstr "Ready to combine your discs into one archive."
 
 #: mia/gui/wizard/steps.py:280
 #, python-brace-format
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
-msgstr ""
-"Archivo creado: {s} estudios, {n} imágenes. Ahora cópialo a una memoria USB."
+msgstr "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 
 #: mia/gui/wizard/steps.py:285
 msgid "Choose your USB drive"
-msgstr "Elige tu memoria USB"
+msgstr "Choose your USB drive"
 
 #: mia/gui/wizard/steps.py:292
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
-msgstr "Esa unidad no tiene espacio para el archivo (se necesitan unos {n})."
+msgstr "That drive doesn't have room for the archive (need about {n})."
 
 #: mia/gui/wizard/steps.py:323
 msgid "✓ Copied to the USB and verified. Click Next to finish."
-msgstr "✓ Copiado a la USB y verificado. Haz clic en Siguiente para terminar."
+msgstr "✓ Copied to the USB and verified. Click Next to finish."
 
 #: mia/gui/wizard/steps.py:326
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
-msgstr "Copiado con {f} archivo(s) con problemas — ver detalles técnicos."
+msgstr "Copied with {f} problem file(s) — see technical details."
 
 #: mia/gui/wizard/steps.py:338
 msgid "Show the files on the USB"
-msgstr "Mostrar los archivos en la USB"
+msgstr "Show the files on the USB"
 
 #: mia/gui/wizard/steps.py:341
 msgid "Open the inventory"
-msgstr "Abrir el inventario"
+msgstr "Open the inventory"
 
 #: mia/gui/wizard/steps.py:345
 msgid ""
@@ -569,9 +555,9 @@ msgid ""
 " short history, and the specific questions you want the radiologist to "
 "answer."
 msgstr ""
-"Consejo: incluye una nota de una página con el nombre del paciente, la fecha"
-" de nacimiento, un breve historial y las preguntas específicas que quieres "
-"que responda el radiólogo."
+"Tip: include a one-page cover note with the patient's name, date of birth, a"
+" short history, and the specific questions you want the radiologist to "
+"answer."
 
 #: mia/gui/wizard/steps.py:355
 msgid ""
@@ -579,13 +565,13 @@ msgid ""
 " can buy the dev team a coffee — it keeps the project alive and free for "
 "families who can't pay."
 msgstr ""
-"¿Te resultó útil? Esta herramienta es gratuita y siempre lo será. Si te "
-"ayudó, puedes invitarle un café al equipo — eso mantiene el proyecto vivo y "
-"gratis para las familias que no pueden pagar."
+"Was this useful? This tool is free and always will be. If it helped you, you"
+" can buy the dev team a coffee — it keeps the project alive and free for "
+"families who can't pay."
 
 #: mia/gui/wizard/steps.py:359
 msgid "☕  Buy us a coffee"
-msgstr "☕  Invítanos un café"
+msgstr "☕  Buy us a coffee"
 
 #: mia/gui/wizard/steps.py:370
 #, python-brace-format
@@ -595,52 +581,52 @@ msgid ""
 "\n"
 "You can now hand it to your doctor."
 msgstr ""
-"¡Listo! Tu archivo está en la memoria USB en:\n"
+"All done! Your archive is on the USB drive at:\n"
 "{p}\n"
 "\n"
-"Ya puedes entregárselo a tu médico."
+"You can now hand it to your doctor."
 
 #: mia/gui/wizard/steps.py:374
 msgid "All done."
-msgstr "¡Listo!"
+msgstr "All done."
 
 #: mia/gui/wizard/view.py:14
 msgid "Welcome"
-msgstr "Bienvenida"
+msgstr "Welcome"
 
 #: mia/gui/wizard/view.py:14
 msgid "Rip discs"
-msgstr "Copiar discos"
+msgstr "Rip discs"
 
 #: mia/gui/wizard/view.py:14
 msgid "Review"
-msgstr "Revisar"
+msgstr "Review"
 
 #: mia/gui/wizard/view.py:15
 msgid "Build & deliver"
-msgstr "Crear y entregar"
+msgstr "Build & deliver"
 
 #: mia/gui/wizard/view.py:15
 msgid "Done"
-msgstr "Listo"
+msgstr "Done"
 
 #: mia/gui/wizard/view.py:41
 msgid "Guided Setup"
-msgstr "Configuración guiada"
+msgstr "Guided Setup"
 
 #: mia/gui/wizard/view.py:53
 msgid "Exit to Home"
-msgstr "Salir al inicio"
+msgstr "Exit to Home"
 
 #: mia/gui/wizard/view.py:56 mia/gui/wizard/view.py:131
 msgid "Next ›"
-msgstr "Siguiente ›"
+msgstr "Next ›"
 
 #: mia/gui/wizard/view.py:91
 #, python-brace-format
 msgid "Step {n} of {m}:  {t}"
-msgstr "Paso {n} de {m}:  {t}"
+msgstr "Step {n} of {m}:  {t}"
 
 #: mia/gui/wizard/view.py:131
 msgid "Finish"
-msgstr "Finalizar"
+msgstr "Finish"

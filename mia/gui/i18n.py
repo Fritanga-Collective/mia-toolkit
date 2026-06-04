@@ -22,8 +22,8 @@ from typing import Optional, Sequence
 DOMAIN = "mia"
 LOCALE_DIR = Path(__file__).resolve().parent.parent / "i18n" / "locale"
 
-# code -> display name (shown in the language selector)
-LANGUAGES = {"en": "English", "es": "Español"}
+# code -> display name (shown, in its own language, in the language selector)
+LANGUAGES = {"en": "English", "es": "Español", "zh": "中文"}
 
 _translation: _gettext.NullTranslations = _gettext.NullTranslations()
 _current: str = "en"
@@ -64,6 +64,11 @@ def install(languages: Optional[Sequence[str]] = None) -> None:
         languages=list(languages) if languages else None, fallback=True)
     if languages:
         _current = languages[0]
+    else:
+        # OS-default path: report whichever catalog gettext actually loaded, so
+        # the selector stays in sync with what's rendered.
+        loaded = (_translation.info().get("language") or "").split("_")[0].lower()
+        _current = loaded if loaded in LANGUAGES else "en"
 
 
 def set_language(lang: str) -> None:
