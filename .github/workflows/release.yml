@@ -54,6 +54,12 @@ jobs:
           python-version: "3.12"
       - run: pip install -e ".[build]"
 
+      - name: Derive version from tag
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            echo "MIA_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          fi
+
       - name: Build .app
         run: pyinstaller packaging/macos/mia.spec --noconfirm
 
@@ -85,15 +91,13 @@ jobs:
       - name: Sign + notarize + staple
         if: env.MIA_SIGN_ID != ''
         env:
-          VERSION: ${{ github.ref_name }}
-        run: |
-          export VERSION="${VERSION#v}"
-          packaging/macos/sign_notarize.sh
+          VERSION: ${{ env.MIA_VERSION }}
+        run: packaging/macos/sign_notarize.sh
 
       - name: Build unsigned .dmg (no cert configured)
         if: env.MIA_SIGN_ID == ''
         run: |
-          VER="${GITHUB_REF_NAME#v}"
+          VER="${MIA_VERSION:-${GITHUB_REF_NAME#v}}"
           hdiutil create -volname "Medical Imaging Archiver" \
             -srcfolder "dist/Medical Imaging Archiver.app" \
             -ov -format UDZO "dist/MIA-Toolkit-${VER}.dmg"
@@ -113,6 +117,13 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[build]"
+
+      - name: Derive version from tag
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_TYPE -eq 'tag') {
+            "MIA_VERSION=$($env:GITHUB_REF_NAME -replace '^v','')" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
 
       - name: Build app (PyInstaller)
         run: pyinstaller packaging/windows/mia-windows.spec --noconfirm

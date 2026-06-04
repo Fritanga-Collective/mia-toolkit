@@ -62,14 +62,27 @@ class Project:
     def relocate(self, new_root: str, *, progress=None, cancel=None):
         """Point the project at a new drive, moving existing data if present.
 
-        Returns a DeliverResult when data was moved, else None.
+        Moves the ripped discs **and** the built archive and inventory
+        spreadsheet, so the new root is complete and later steps don't see them
+        as missing. Returns the DeliverResult for the discs (or None).
         """
+        from mia.core.ripper import copy_with_retry
+
         new_root = os.path.abspath(os.path.expanduser(new_root))
         result = None
         if os.path.isdir(self.raw_discs_dir) and self.has_discs():
             result = deliver.copy_tree_verified(
                 self.raw_discs_dir, os.path.join(new_root, "raw_discs"),
                 progress=progress, cancel=cancel)
+        if self.has_archive():
+            deliver.copy_tree_verified(
+                self.archive_dir, os.path.join(new_root, "Archive"),
+                progress=progress, cancel=cancel)
+        if os.path.exists(self.inventory_path):
+            os.makedirs(new_root, exist_ok=True)
+            copy_with_retry(
+                self.inventory_path,
+                os.path.join(new_root, os.path.basename(self.inventory_path)))
         self.root = new_root
         self.ensure_dirs()
         return result

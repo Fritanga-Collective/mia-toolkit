@@ -242,10 +242,11 @@ def rip_disc(
                 emit(progress, Progress(i, total_files, kind="retry",
                                         note=f"[{i}/{total_files}] {rel}  ({note})"))
         else:
+            reason = note or "unreadable"
             failed += 1
-            failures.append((rel, note or ""))
+            failures.append((rel, reason))
             emit(progress, Progress(i, total_files, kind="fail",
-                                    note=f"[{i}/{total_files}] {rel}  ({note})"))
+                                    note=f"[{i}/{total_files}] {rel}  ({reason})"))
 
         elapsed = time.time() - start
         rate = i / elapsed if elapsed > 0 else 0

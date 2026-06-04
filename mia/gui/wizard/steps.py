@@ -295,7 +295,14 @@ class ArchiveStep(PanelStep):
                 src, os.path.join(dest, "Archive"), progress=emit, cancel=cancel)
             if os.path.exists(inv):
                 os.makedirs(dest, exist_ok=True)
-                copy_with_retry(inv, os.path.join(dest, os.path.basename(inv)))
+                dst_inv = os.path.join(dest, os.path.basename(inv))
+                ok, note = copy_with_retry(inv, dst_inv)
+                if not (ok and os.path.exists(dst_inv)):
+                    # Fold a failed inventory copy into the result so the UI
+                    # doesn't report a clean delivery while the file is missing.
+                    result.failed += 1
+                    result.failures.append(
+                        (os.path.basename(inv), note or "could not copy inventory"))
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root)

@@ -17,7 +17,8 @@ except NameError:
     SPEC_DIR = os.getcwd()
 REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
 
-VERSION = "0.1.0"
+# CI sets MIA_VERSION from the release tag.
+VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
 
 hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")
 datas = collect_data_files("pydicom") + [

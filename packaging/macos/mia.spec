@@ -24,7 +24,8 @@ except NameError:
 REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
 
 TARGET_ARCH = os.environ.get("MIA_TARGET_ARCH") or None  # 'universal2' when ready
-VERSION = "0.1.0"
+# CI sets MIA_VERSION from the release tag so the bundle's Info.plist matches.
+VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
 
 # pydicom/openpyxl pull some submodules dynamically; gather them explicitly.
 hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")

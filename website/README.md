@@ -1,8 +1,10 @@
 # Website
 
-A single static landing page — vanilla HTML + one CSS file + ~40 lines of
-dependency-free JS for OS detection. No framework, no build step, no web fonts,
-no cookies, no analytics. It loads in well under a second.
+A small static site — landing pages (English + Spanish) and support pages,
+vanilla HTML + one CSS file + two small dependency-free JS files (OS detection
+for downloads, and the country/time-zone support suggestion). No framework, no
+build step, no web fonts, no cookies, no analytics. Each page loads in well
+under a second.
 
 ```
 website/
