@@ -16,8 +16,12 @@
 
   function detectOS() {
     var ua = (navigator.userAgent || "") + " " +
-      ((navigator.userAgentData && navigator.userAgentData.platform) || "");
-    if (/Mac|iPhone|iPad|iPod/i.test(ua)) return "mac";
+      ((navigator.userAgentData && navigator.userAgentData.platform) ||
+        navigator.platform || "");
+    // iOS/iPadOS can't run the desktop app — treat as "other" (some iPads even
+    // report as "Mac", but there's no harm in routing them to the general page).
+    if (/iPhone|iPad|iPod/i.test(ua)) return "other";
+    if (/Mac/i.test(ua)) return "mac";
     if (/Win/i.test(ua)) return "win";
     return "other";
   }
@@ -43,7 +47,11 @@
     var label = primary.getAttribute("data-label-" + os) ||
       primary.getAttribute("data-label-other");
     primary.querySelector(".label").textContent = label;
-    primary.href = os === "win" ? winHref() : macHref();
+    // Default the primary button to the detected OS's installer; anything that
+    // isn't clearly macOS or Windows goes to the general Releases page.
+    primary.href = os === "mac" ? macHref()
+      : os === "win" ? winHref()
+      : CONFIG.releasesLatest;
 
     var ver = document.querySelectorAll(".version");
     for (var i = 0; i < ver.length; i++) ver[i].textContent = CONFIG.version;
