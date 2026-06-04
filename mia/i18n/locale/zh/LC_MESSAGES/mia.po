@@ -234,7 +234,7 @@ msgstr "出了点问题。请查看下方的技术详情。"
 
 #: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
 msgid "Medical Imaging Archiver"
-msgstr "医学影像归档工具"
+msgstr "医学影像归档工具 (MIA Toolkit)"
 
 #: mia/gui/launcher.py:28
 msgid "Organize your imaging CDs into one archive for your doctor."

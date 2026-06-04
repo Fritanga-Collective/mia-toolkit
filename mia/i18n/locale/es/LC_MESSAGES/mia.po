@@ -248,7 +248,7 @@ msgstr "Algo salió mal. Consulta los detalles técnicos abajo."
 
 #: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
 msgid "Medical Imaging Archiver"
-msgstr "Archivador de Imágenes Médicas"
+msgstr "MIA Toolkit"
 
 #: mia/gui/launcher.py:28
 msgid "Organize your imaging CDs into one archive for your doctor."
