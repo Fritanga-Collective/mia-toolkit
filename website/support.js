@@ -134,6 +134,33 @@
       btn: "Apoyar — $AMOUNT",
       btnFree: "Apoya si puedes",
     },
+    zh: {
+      placeholder: "— 选择你的国家 —",
+      other: "其他地方 / 我自己选",
+      cant: "我现在无法支付",
+      prompt: "选择你的国家以查看建议金额。",
+      suggest: "建议金额：$AMOUNT 美元",
+      free: "免费下载——以后有能力再支持。",
+      choose: "按你所在地觉得合适的金额支付。",
+      btn: "支持 — $AMOUNT",
+      btnFree: "力所能及地支持",
+    },
+  };
+
+  // Chinese country names (separate map so the COUNTRIES rows stay 4-field).
+  var ZH_NAMES = {
+    US: "美国", CA: "加拿大", GB: "英国", IE: "爱尔兰", DE: "德国", FR: "法国",
+    ES: "西班牙", IT: "意大利", NL: "荷兰", BE: "比利时", CH: "瑞士",
+    AT: "奥地利", SE: "瑞典", NO: "挪威", DK: "丹麦", PT: "葡萄牙",
+    AU: "澳大利亚", NZ: "新西兰", JP: "日本", KR: "韩国", SG: "新加坡",
+    AE: "阿联酋", IL: "以色列", MX: "墨西哥", BR: "巴西", AR: "阿根廷",
+    CL: "智利", CO: "哥伦比亚", PE: "秘鲁", EC: "厄瓜多尔", CR: "哥斯达黎加",
+    PA: "巴拿马", UY: "乌拉圭", DO: "多米尼加共和国", GT: "危地马拉",
+    TR: "土耳其", CN: "中国", MY: "马来西亚", TH: "泰国", ZA: "南非",
+    PL: "波兰", RO: "罗马尼亚", IN: "印度", ID: "印度尼西亚", PH: "菲律宾",
+    PK: "巴基斯坦", BD: "孟加拉国", VN: "越南", NG: "尼日利亚", EG: "埃及",
+    KE: "肯尼亚", MA: "摩洛哥", UA: "乌克兰", BO: "玻利维亚", HN: "洪都拉斯",
+    SV: "萨尔瓦多", NI: "尼加拉瓜", VE: "委内瑞拉",
   };
 
   function ready(fn) {
@@ -167,15 +194,15 @@
       return o;
     }
 
+    function cname(c) {
+      if (lang === "zh") return ZH_NAMES[c[0]] || c[1];
+      return lang === "es" ? c[2] : c[1];
+    }
     sel.innerHTML = "";
     add("", t.placeholder);
     COUNTRIES.slice()
-      .sort(function (a, b) {
-        var na = lang === "es" ? a[2] : a[1];
-        var nb = lang === "es" ? b[2] : b[1];
-        return na.localeCompare(nb);
-      })
-      .forEach(function (c) { add(c[0], lang === "es" ? c[2] : c[1], c[3]); });
+      .sort(function (a, b) { return cname(a).localeCompare(cname(b)); })
+      .forEach(function (c) { add(c[0], cname(c), c[3]); });
     add("__other", t.other, -1);
     add("__cant", t.cant, 0);
 
