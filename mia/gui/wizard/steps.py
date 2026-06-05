@@ -13,7 +13,15 @@ from tkinter import filedialog, messagebox, ttk
 # the only outbound links in the app (no telemetry, no background calls).
 SUPPORT_URL = "https://mia-toolkit.fritanga.co/support.html"
 BLOG_URL = "https://fritangacollective.substack.com/"
-INSTITUTIONS_URL = "https://mia-toolkit.fritanga.co/support.html#institutions"
+
+
+def institutions_url() -> str:
+    """The institutional section in the app's current language — linking the
+    language page directly avoids the website's auto-redirect entirely."""
+    from ..i18n import current_language
+    lang = current_language()
+    prefix = "" if lang == "en" else f"{lang}/"
+    return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
 
 from mia.core import deliver, dicomdir, inventory
 from mia.core.common import format_bytes
@@ -422,7 +430,7 @@ class DoneStep(WizardStep):
             font=("", 11, "underline"),
             text=_("Deploying at a clinic or hospital? Institutional licenses "
                    "fund free access for patients →"))
-        inst.bind("<Button-1>", lambda e: webbrowser.open(INSTITUTIONS_URL))
+        inst.bind("<Button-1>", lambda e: webbrowser.open(institutions_url()))
         inst.grid(row=2, column=0, sticky="w", pady=(10, 0))
 
     def _donate(self) -> None:

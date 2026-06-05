@@ -63,6 +63,8 @@
   if (pathLang() !== "en") return;
   var pref = remembered() || fromBrowser();
   if (pref && pref !== "en" && EXTRA.indexOf(pref) >= 0) {
-    location.replace(urlFor(pref, pageName()));
+    // Preserve ?query and #fragment (e.g. /support.html#institutions must
+    // land on /{lang}/support.html#institutions, not the top of the page).
+    location.replace(urlFor(pref, pageName()) + location.search + location.hash);
   }
 })();
