@@ -16,16 +16,14 @@ name: Release
 #   APPLE_TEAM_ID         10-char Team ID
 #   APPLE_APP_PASSWORD    app-specific password
 #
-# Required secrets for signed Windows builds via Microsoft Trusted Signing
-# (cloud, RSA, no hardware token — the gate is AZURE_CLIENT_ID):
-#   AZURE_TENANT_ID            service-principal tenant
-#   AZURE_CLIENT_ID            service-principal app id (signing gate)
-#   AZURE_CLIENT_SECRET        service-principal secret
-#   TRUSTED_SIGNING_ENDPOINT   e.g. https://eus.codesigning.azure.net
-#   TRUSTED_SIGNING_ACCOUNT    Trusted Signing account name
-#   TRUSTED_SIGNING_PROFILE    certificate profile name
-# The service principal needs the "Trusted Signing Certificate Profile Signer"
-# role on the account. Verify the azure/trusted-signing-action version pin.
+# Windows signing via SignPath Foundation (free OSS code signing; publisher
+# shows "SignPath Foundation"). Microsoft Trusted Signing is region-blocked for
+# Mexico — dormant runbook in int-docs/AZURE-TRUSTED-SIGNING.md.
+# Required once the SignPath application is approved:
+#   secret  SIGNPATH_API_TOKEN   CI user API token (this is the signing gate)
+#   var     SIGNPATH_ORG_ID      SignPath organization id
+# Project/policy slugs below must match the SignPath project (mia-toolkit /
+# release-signing). Verify the signpath action version pin at approval time.
 
 on:
   push:
@@ -122,11 +120,11 @@ jobs:
     name: Build Windows (.exe)
     needs: test
     runs-on: windows-latest
-    # Signing runs only when Trusted Signing secrets are present; otherwise an
+    # Signing runs only when the SignPath token is present; otherwise an
     # UNSIGNED installer is built (SmartScreen "unknown publisher" until then),
     # mirroring the macOS job's signing gate.
     env:
-      TS_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      SIGNPATH_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -144,26 +142,6 @@ jobs:
       - name: Build app (PyInstaller)
         run: pyinstaller packaging/windows/mia-windows.spec --noconfirm
 
-      # Sign the bundled application executable first (the launcher users run),
-      # before it's packed into the installer. Microsoft Trusted Signing =
-      # cloud-based, RSA (Smart App Control accepts it), no hardware token.
-      - name: Sign app executable (Trusted Signing)
-        if: env.TS_CLIENT_ID != ''
-        uses: azure/trusted-signing-action@v0.5.1
-        with:
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          endpoint: ${{ secrets.TRUSTED_SIGNING_ENDPOINT }}
-          trusted-signing-account-name: ${{ secrets.TRUSTED_SIGNING_ACCOUNT }}
-          certificate-profile-name: ${{ secrets.TRUSTED_SIGNING_PROFILE }}
-          files-folder: ${{ github.workspace }}\dist\MIAToolkit
-          files-folder-filter: exe
-          files-folder-recurse: true
-          file-digest: SHA256
-          timestamp-rfc3161: http://timestamp.acs.microsoft.com
-          timestamp-digest: SHA256
-
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
 
@@ -172,29 +150,35 @@ jobs:
         run: |
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\installer.iss"
 
-      # Sign the final installer (top-level dist\*.exe only; no recurse so we
-      # don't re-sign the already-signed app exe under dist\MIAToolkit).
-      - name: Sign installer (Trusted Signing)
-        if: env.TS_CLIENT_ID != ''
-        uses: azure/trusted-signing-action@v0.5.1
+      # SignPath flow: upload the unsigned installer as a GitHub artifact,
+      # submit a signing request to SignPath Foundation, then replace the
+      # installer with the signed result. (The release job filters artifacts by
+      # name, so this unsigned intermediate is never published.)
+      - name: Upload unsigned installer (SignPath input)
+        if: env.SIGNPATH_TOKEN != ''
+        id: unsigned
+        uses: actions/upload-artifact@v4
         with:
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          endpoint: ${{ secrets.TRUSTED_SIGNING_ENDPOINT }}
-          trusted-signing-account-name: ${{ secrets.TRUSTED_SIGNING_ACCOUNT }}
-          certificate-profile-name: ${{ secrets.TRUSTED_SIGNING_PROFILE }}
-          files-folder: ${{ github.workspace }}\dist
-          files-folder-filter: exe
-          files-folder-recurse: false
-          file-digest: SHA256
-          timestamp-rfc3161: http://timestamp.acs.microsoft.com
-          timestamp-digest: SHA256
+          name: windows-unsigned-DO-NOT-SHIP
+          path: dist/*.exe
 
-      - name: Verify installer signature
-        if: env.TS_CLIENT_ID != ''
+      - name: Sign installer (SignPath Foundation)
+        if: env.SIGNPATH_TOKEN != ''
+        uses: signpath/github-action-submit-signing-request@v1.2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORG_ID }}
+          project-slug: mia-toolkit
+          signing-policy-slug: release-signing
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: dist-signed
+
+      - name: Replace installer with signed build + verify
+        if: env.SIGNPATH_TOKEN != ''
         shell: pwsh
         run: |
+          Copy-Item dist-signed\*.exe dist\ -Force
           $sig = Get-AuthenticodeSignature (Get-ChildItem dist\*.exe)[0].FullName
           Write-Host "Signature status: $($sig.Status)"
           if ($sig.Status -ne 'Valid') { exit 1 }
@@ -213,6 +197,8 @@ jobs:
         with:
           path: artifacts
           merge-multiple: true
+          # Only the final artifacts — never the unsigned SignPath intermediate.
+          pattern: "{macos-dmg,windows-exe}"
       - name: Create/Update release with artifacts
         env:
           GH_TOKEN: ${{ github.token }}
