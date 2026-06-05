@@ -1,6 +1,18 @@
-# Medical Imaging Archive Toolkit
+# MIA Toolkit
 
-A small set of Python scripts for compiling years of medical imaging CDs into a single, radiologist-friendly archive on macOS.
+**All your imaging scans, on one USB drive for your doctor.**
+
+MIA Toolkit is a free, open-source, offline desktop app (macOS + Windows) — plus
+the original command-line scripts — that compiles years of medical imaging CDs
+into a single, radiologist-friendly DICOM archive.
+
+🌐 [Website](https://mia-toolkit.fritanga.co) ·
+📦 [Download — free](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest) ·
+❤️ [Support the project](https://mia-toolkit.fritanga.co/support.html) ·
+🔒 [Privacy](https://mia-toolkit.fritanga.co/privacy.html)
+
+Private by design: no account, no cloud, no telemetry — your data never leaves
+your machine.
 
 ## What this is for
 
@@ -9,6 +21,110 @@ If you (or a family member) have accumulated a stack of imaging CDs — MRIs, CT
 The workflow is three steps: **rip** each CD to disk, **inventory** what you have, **build** a unified DICOMDIR archive. The result is a single folder you copy to a USB drive and hand to the radiologist.
 
 This is for personal use, longitudinal review, and second-opinion consultations. It is not a diagnostic tool, does not interpret images, and does not replace professional radiological review.
+
+## Download (no build needed)
+
+Pre-built installers are attached to every
+[GitHub Release](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest):
+a macOS `.dmg` and a Windows installer `.exe` (Windows 10/11, 64-bit). They are
+currently **unsigned** — macOS: right-click the app → Open the first time;
+Windows: on the SmartScreen prompt choose "More info → Run anyway". (Signing and
+notarization are in progress.)
+
+## Build and run from source
+
+Works on macOS, Windows, and Linux. You need **Python 3.10+** and `git`.
+
+### 1. Get the code (all OSes)
+
+```bash
+git clone https://github.com/Fritanga-Collective/mia-toolkit.git
+cd mia-toolkit
+```
+
+### 2. Set up and run
+
+**macOS / Linux**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"      # pydicom, openpyxl, pytest
+python -m mia.gui            # launch the desktop app (or just: mia)
+pytest                       # run the test suite
+```
+
+**Windows (PowerShell)**
+
+```powershell
+py -3 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+python -m mia.gui            # launch the desktop app
+pytest
+```
+
+Notes:
+- The GUI uses Tkinter, which ships with the python.org installers. On
+  Debian/Ubuntu you may need `sudo apt install python3-tk`.
+- Disc auto-detection and eject are macOS-specific; on Windows/Linux point the
+  rip tool at the disc path manually.
+- Installed console entry points: `mia` (GUI), `mia-rip`, `mia-inventory`,
+  `mia-build`.
+- The app is trilingual (English · Español · 中文) — switch in-app; see
+  `mia/i18n/locale/README.md` to add a language.
+
+### 3. Build the installers (optional)
+
+PyInstaller can't cross-compile — build each installer on its own OS.
+
+**macOS** — produces `dist/MIA Toolkit.app`:
+
+```bash
+pip install -e ".[build]"
+pyinstaller packaging/macos/mia.spec --noconfirm
+open "dist/MIA Toolkit.app"
+```
+
+Signing + notarizing into a distributable `.dmg` (needs an Apple Developer
+certificate): see `packaging/macos/README.md`.
+
+**Windows** — produces `dist/MIA-Toolkit-Setup-<ver>.exe` (per-user, no admin):
+
+```powershell
+pip install -e ".[build]"
+pyinstaller packaging\windows\mia-windows.spec --noconfirm
+choco install innosetup      # once
+& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss
+```
+
+Code signing (SignPath): see `packaging/windows/README.md`.
+
+**Linux** — no packaged installer yet; run from source as above.
+
+CI builds both installers automatically on a `v*.*.*` tag
+(`.github/workflows/release.yml`) and attaches them to the GitHub Release.
+
+## The desktop app
+
+A Tkinter GUI wraps the same three actions for non-technical users. The home
+screen offers **Guided Setup** — a step-by-step wizard (Welcome → Rip → Review
+inventory → Build & deliver → Done) that auto-manages a project folder under
+`~/Documents/MedicalArchive` and only asks for the USB drive at the end — plus
+the three individual tools (Rip a CD, Build Inventory, Build Archive). Every
+screen has a live plain-language log, an expandable technical-details pane, and
+a saved session log. The finished archive is copied to the USB with a
+**verified, resumable copy** (per-file retry + size/optional-SHA-256
+verification) — robust on slow, flaky USB media.
+
+---
+
+## The command-line scripts
+
+Everything below documents the original three scripts (`rip_cd.py`,
+`dicom_inventory.py`, `build_dicomdir.py`) — thin shims over the same
+`mia.core` package the app uses. macOS gets the smoothest experience
+(auto-detect + eject); Linux works for most things; on Windows prefer the app.
 
 ## Requirements
 
@@ -201,81 +317,17 @@ It does not interpret images, segment lesions, perform volumetric measurements, 
 
 It also does not anonymize. If you're sharing data with a research group or posting publicly, you'll need an anonymization tool — `pydicom` has utilities for this, and tools like DicomCleaner provide a UI.
 
-## Development
+## Architecture note
 
-The three commands are now thin shims over the `mia.core` package, which holds
-the same logic in a UI-agnostic form (each worker reports progress through a
-callback and can be cancelled) so it can drive both the CLI and the upcoming
-GUI. The standalone usage above is unchanged.
+The CLI scripts and the desktop app are thin shims over the `mia.core` package,
+which holds the same logic in a UI-agnostic form: each worker reports progress
+through a callback and can be cancelled, so it drives the CLI, the GUI, and the
+tests identically.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"   # installs pydicom, openpyxl, pytest
-pytest                    # run the test suite
-```
+## License
 
-Console entry points are also installed: `mia-rip`, `mia-inventory`, `mia-build`.
+[MIT](LICENSE) © Fritanga and MIA Toolkit contributors.
 
-### Desktop app
-
-A Tkinter GUI wraps the same three actions for non-technical users (macOS for
-now). Launch it with:
-
-```bash
-python -m mia.gui        # or the installed `mia` command
-```
-
-The home screen offers **Guided Setup** — a step-by-step wizard (Welcome → Rip →
-Review inventory → Build & deliver → Done) that auto-manages a single project
-folder under `~/Documents/MedicalArchive` and only asks for the USB drive at the
-end — plus the three individual tools (Rip a CD, Build Inventory, Build Archive)
-for people who already know the flow.
-
-Every screen has a live plain-language log, an expandable technical-details
-pane, and a saved session log. Ripping runs as an auto-looping session: insert a
-disc, it copies and ejects, then waits for the next. The finished archive is
-copied to the USB with a **verified, resumable copy** (per-file retry + size/
-optional-SHA-256 verification) — robust on slow, flaky USB media without
-depending on rsync. All UI strings are `gettext`-wrapped (English ships today;
-see `mia/i18n/locale/README.md` to add Spanish).
-
-## Download (no build needed)
-
-Pre-built installers are attached to every
-[GitHub Release](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest):
-a macOS `.dmg` and a Windows `.exe` (Windows 10/11, 64-bit). They are currently
-**unsigned** — macOS: right-click the app → Open the first time; Windows: on the
-SmartScreen prompt choose "More info → Run anyway".
-
-## Build the installers from source
-
-PyInstaller can't cross-compile, so build the macOS app **on macOS** and the
-Windows installer **on Windows**. Both reuse the same Python entry point.
-
-**macOS** — produces `dist/Medical Imaging Archiver.app`:
-
-```bash
-pip install -e ".[build]"
-pyinstaller packaging/macos/mia.spec --noconfirm
-open "dist/Medical Imaging Archiver.app"
-```
-
-Signing + notarizing into a distributable `.dmg` (needs an Apple Developer
-certificate) is documented in `packaging/macos/README.md`.
-
-**Windows** — produces `dist/MIA-Toolkit-Setup-<ver>.exe` (per-user, no admin):
-
-```powershell
-pip install -e ".[build]"
-pyinstaller packaging\windows\mia-windows.spec --noconfirm
-# Inno Setup (install via: choco install innosetup)
-& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss
-```
-
-Details in `packaging/windows/README.md`. CI builds **both** automatically on a
-`v*.*.*` tag (`.github/workflows/release.yml`) and attaches them to the Release.
-
-## License and reuse
-
-Use freely for personal medical record management. No warranty, no liability — if a critical study fails to import on the receiving end, that's between you and the radiologist's IT team.
+This software helps you organize and deliver your own medical images. It does
+not interpret images, is not a medical device, and does not replace
+professional radiological review. No warranty — see the license.
