@@ -46,13 +46,20 @@
         <p>{{support.where_p}}</p>
       </section>
 
-      <section>
+      <section id="institutions">
         <h2>{{support.org_h2}}</h2>
         <div class="sponsor">
           <p>{{support.org_p}}</p>
-          <p>{{support.org_contact}}
-            <a href="mailto:mia-tools@fritanga.co?subject=MIA%20Toolkit%20sponsorship">mia-tools@fritanga.co</a>
-          </p>
+          <table class="inst-tiers">
+            <tr><th>{{inst.tier}}</th><th>{{inst.scope}}</th><th>{{inst.price}}</th></tr>
+            <tr><td>{{inst.clinic}}</td><td>{{inst.clinic_scope}}</td><td>$99 USD{{inst.per_year}}</td></tr>
+            <tr><td>{{inst.hospital}}</td><td>{{inst.hospital_scope}}</td><td>$499 USD{{inst.per_year}}</td></tr>
+            <tr><td>{{inst.network}}</td><td>{{inst.network_scope}}</td><td>$1,499 USD{{inst.per_year}}</td></tr>
+            <tr><td>{{inst.public}}</td><td>{{inst.public_scope}}</td><td>{{inst.free_sponsored}}</td></tr>
+          </table>
+          <p>{{inst.includes}}</p>
+          <p><a class="btn" href="mailto:mia-tools@fritanga.co?subject=MIA%20Toolkit%20Institutional%20License">{{inst.cta}}</a></p>
+          <p class="note">{{inst.note}}</p>
         </div>
       </section>
 

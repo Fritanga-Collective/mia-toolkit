@@ -748,3 +748,11 @@ msgstr "No medical images were found in this import."
 #: mia/gui:0
 msgid "✓ Import done. Add another source or continue."
 msgstr "✓ Import done. Add another source or continue."
+
+#: mia/gui/wizard/steps.py:0
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"

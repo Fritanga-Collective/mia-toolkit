@@ -3,9 +3,7 @@
   "_lang_name": "Bahasa Melayu",
   "_og_locale": "ms_SG",
   "_selector_label": "Bahasa",
-
   "nav.support": "Sokongan",
-
   "index.title": "MIA Toolkit — satu USB untuk semua imbasan anda",
   "index.meta_desc": "Aplikasi desktop yang percuma dan peribadi, menukar timbunan CD imej hospital menjadi satu arkib teratur yang boleh dibuka oleh pakar radiologi anda daripada satu pemacu USB sahaja.",
   "index.og_title": "MIA Toolkit — semua imbasan imej anda dalam satu USB untuk doktor anda",
@@ -34,7 +32,6 @@
   "index.note": "Pemasang yang ditandatangani akan tiba dengan keluaran penuh pertama. Buat masa ini, pautan ini menuju ke pratonton sumber di GitHub.",
   "index.free_pre": "Percuma, selamanya. Jika ia membantu anda,",
   "index.free_link": "pertimbangkan untuk menyokong projek ini →",
-
   "support.title": "Sokongan — MIA Toolkit",
   "support.meta_desc": "Mengapa kami percaya rekod perubatan anda adalah milik anda, dan bagaimana sokongan yang adil memastikan alat ini kekal percuma untuk semua orang.",
   "support.og_title": "Sokong MIA Toolkit — sejarah perubatan anda adalah milik anda",
@@ -51,7 +48,6 @@
   "support.org_p": "Anda boleh <strong>menaja akses percuma</strong> untuk sesebuah komuniti, membiayai terjemahan bahasa baharu, atau menyokong pelancaran serantau. Penajaan institusi inilah yang memastikan alat ini kekal percuma untuk pesakit individu di mana-mana sahaja.",
   "support.org_contact": "Hubungi kami:",
   "support.back": "← Kembali ke laman utama",
-
   "privacy.title": "Dasar Privasi — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit dibina supaya kami tidak dapat melihat data anda: aplikasi luar talian, tiada akaun, tiada telemetri, tiada kuki, tiada penjejakan.",
   "privacy.h1": "Dasar Privasi",
@@ -76,14 +72,28 @@
   "privacy.changes_p": "Jika dasar ini berubah, versi baharu akan disiarkan di sini dengan tarikh berkuat kuasa yang dikemas kini.",
   "privacy.contact_h2": "Hubungi",
   "privacy.back": "← Kembali ke laman utama",
-
   "links.source": "Lihat sumber di GitHub",
   "links.story": "Baca kisahnya",
   "links.blog": "Baca blog",
-
   "footer.disclaimer": "Perisian ini membantu anda mengatur dan menghantar imej perubatan anda sendiri. Ia tidak mentafsir imej, bukan peranti perubatan, dan tidak menggantikan semakan radiologi profesional. Tiada jaminan.",
   "footer.ethos": "Sumber terbuka · Peribadi secara reka bentuk · Tiada penjejakan",
   "footer.privacy": "Dasar privasi",
   "footer.made_by_pre": "Dibuat dengan ♥ oleh ",
-  "footer.made_by_post": ""
+  "footer.made_by_post": "",
+  "inst.tier": "Lesen",
+  "inst.scope": "Skop",
+  "inst.price": "Setahun",
+  "inst.clinic": "Klinik",
+  "inst.clinic_scope": "Satu lokasi, sehingga 10 stesen kerja",
+  "inst.hospital": "Hospital",
+  "inst.hospital_scope": "Satu lokasi, stesen kerja tanpa had",
+  "inst.network": "Rangkaian",
+  "inst.network_scope": "Sehingga 10 lokasi",
+  "inst.public": "Kesihatan awam & NGO",
+  "inst.public_scope": "Program komuniti",
+  "inst.free_sponsored": "Percuma / ditaja",
+  "inst.per_year": "/tahun",
+  "inst.includes": "Setiap lesen merangkumi sijil lesen, invois untuk perolehan, sokongan e-mel keutamaan, panduan pemasangan IT dan ringkasan keselamatan — dan ia membiayai akses percuma untuk pesakit di mana-mana.",
+  "inst.cta": "Minta invois atau sebut harga",
+  "inst.note": "Individu tidak perlu membayar. Perisian ini serupa dan berlesen MIT; lesen institusi ialah pakej pematuhan dan sokongan tambahan."
 }

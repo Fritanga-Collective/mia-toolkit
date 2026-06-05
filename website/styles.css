@@ -121,6 +121,12 @@ footer p a { color: var(--muted); text-decoration: underline; }
 .free-line a { color: var(--accent); font-weight: 600; }
 .sponsor { background: var(--panel); border: 1px solid var(--border);
   border-radius: 12px; padding: 20px 24px; }
+.inst-tiers { width: 100%; border-collapse: collapse; margin: 14px 0;
+  font-size: 0.95rem; }
+.inst-tiers th, .inst-tiers td { text-align: left; padding: 8px 10px;
+  border-bottom: 1px solid var(--border); }
+.inst-tiers th { color: var(--muted); font-weight: 600; }
+.inst-tiers td:last-child { white-space: nowrap; font-weight: 600; }
 
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.7rem; }

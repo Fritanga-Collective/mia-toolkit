@@ -3,9 +3,7 @@
   "_lang_name": "Español",
   "_og_locale": "es_MX",
   "_selector_label": "Idioma",
-
   "nav.support": "Apoyar",
-
   "index.title": "MIA Toolkit — todos tus estudios en una USB",
   "index.meta_desc": "Una aplicación gratuita y privada que convierte tus discos de estudios médicos en un solo archivo organizado que tu radiólogo puede abrir desde una memoria USB.",
   "index.og_title": "MIA Toolkit — todos tus estudios en una sola USB",
@@ -34,7 +32,6 @@
   "index.note": "Los instaladores firmados llegan con la primera versión completa. Por ahora, esto enlaza a la vista previa del código en GitHub.",
   "index.free_pre": "Gratis, para siempre. Si te sirvió,",
   "index.free_link": "considera apoyar el proyecto →",
-
   "support.title": "Apoyar — MIA Toolkit",
   "support.meta_desc": "Por qué creemos que tus estudios médicos te pertenecen, y cómo el apoyo de comercio justo mantiene esta herramienta gratuita para todos.",
   "support.og_title": "Apoyar MIA Toolkit — tu historia médica te pertenece",
@@ -51,7 +48,6 @@
   "support.org_p": "Puedes <strong>patrocinar el acceso gratuito</strong> para una comunidad, financiar la traducción a un nuevo idioma o apoyar el despliegue en una región. El patrocinio institucional es lo que mantiene la herramienta gratis para los pacientes en todas partes.",
   "support.org_contact": "Escríbenos:",
   "support.back": "← Volver a la página principal",
-
   "privacy.title": "Política de privacidad — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit está hecho para que no podamos ver tus datos: app sin conexión, sin cuenta, sin telemetría, sin cookies, sin rastreo.",
   "privacy.h1": "Política de privacidad",
@@ -76,14 +72,28 @@
   "privacy.changes_p": "Si esta política cambia, la nueva versión se publicará aquí con una fecha de vigencia actualizada.",
   "privacy.contact_h2": "Contacto",
   "privacy.back": "← Volver a la página principal",
-
   "links.source": "Ver el código en GitHub",
   "links.story": "Leer la historia",
   "links.blog": "Lee el blog",
-
   "footer.disclaimer": "Este software te ayuda a organizar y entregar tus propias imágenes médicas. No interpreta imágenes, no es un dispositivo médico y no sustituye la revisión profesional de un radiólogo. Sin garantía.",
   "footer.ethos": "Código abierto · Privado por diseño · Sin rastreo",
   "footer.privacy": "Política de privacidad",
   "footer.made_by_pre": "Hecho con ♥ por ",
-  "footer.made_by_post": ""
+  "footer.made_by_post": "",
+  "inst.tier": "Licencia",
+  "inst.scope": "Alcance",
+  "inst.price": "Por año",
+  "inst.clinic": "Clínica",
+  "inst.clinic_scope": "Una sede, hasta 10 equipos",
+  "inst.hospital": "Hospital",
+  "inst.hospital_scope": "Una sede, equipos ilimitados",
+  "inst.network": "Red",
+  "inst.network_scope": "Hasta 10 sedes",
+  "inst.public": "Salud pública y ONGs",
+  "inst.public_scope": "Programas comunitarios",
+  "inst.free_sponsored": "Gratis / patrocinada",
+  "inst.per_year": "/año",
+  "inst.includes": "Cada licencia incluye un certificado de licencia, factura para el área de compras, soporte prioritario por correo, una guía de despliegue de TI y un resumen de seguridad — y financia el acceso gratuito de los pacientes en todas partes.",
+  "inst.cta": "Solicitar factura o cotización",
+  "inst.note": "Las personas nunca pagan. El software es idéntico y con licencia MIT; la licencia institucional es el paquete de cumplimiento y soporte adicional."
 }

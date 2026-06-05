@@ -762,3 +762,11 @@ msgstr "No se encontraron imágenes médicas en esta importación."
 #: mia/gui:0
 msgid "✓ Import done. Add another source or continue."
 msgstr "✓ Importación lista. Agrega otra fuente o continúa."
+
+#: mia/gui/wizard/steps.py:0
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr ""
+"¿Lo usarán en una clínica u hospital? Las licencias institucionales "
+"financian el acceso gratuito de los pacientes →"

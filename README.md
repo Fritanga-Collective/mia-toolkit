@@ -15,6 +15,10 @@ into a single, radiologist-friendly DICOM archive.
 Private by design: no account, no cloud, no telemetry — your data never leaves
 your machine.
 
+**Free for personal use — forever.** Organizations deploying MIA Toolkit are
+invited to purchase an [Institutional License](https://mia-toolkit.fritanga.co/support.html#institutions) — the
+compliance-and-support package that keeps the tool free for patients.
+
 ## What this is for
 
 If you (or a family member) have accumulated a stack of imaging CDs — MRIs, CTs, X-rays from different hospitals over many years — you have a problem: each CD is on its own, the discs are slowly degrading, and any radiologist trying to compare studies across time has to juggle 20+ separate viewers. This toolkit consolidates everything into one standards-compliant DICOM archive that loads into any PACS as a single "CD."
