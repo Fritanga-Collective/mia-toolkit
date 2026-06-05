@@ -37,7 +37,7 @@ ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
 # emitted AND the privacy policy keeps its "no analytics" wording. Setting it
 # emits the cookieless beacon on every page and swaps in the privacy text that
 # names GoatCounter — the build keeps the policy honest automatically.
-GOATCOUNTER = ""
+GOATCOUNTER = "fritanga-collective"
 
 # Legacy flat URLs -> new locations (meta-refresh + canonical stubs).
 LEGACY = {
