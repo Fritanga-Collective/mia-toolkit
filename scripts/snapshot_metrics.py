@@ -15,14 +15,21 @@ OUT = os.path.join(os.path.dirname(__file__), "..", "website", "data",
                    "metrics.json")
 
 
-def gh(path):
-    return json.loads(subprocess.run(
-        ["gh", "api", path], capture_output=True, text=True, check=True).stdout)
+def gh(path, paginate=False):
+    cmd = ["gh", "api", path]
+    if paginate:
+        # --slurp wraps each page in an outer array; flatten below.
+        cmd += ["--paginate", "--slurp"]
+    out = json.loads(subprocess.run(cmd, capture_output=True, text=True,
+                                    check=True).stdout)
+    if paginate:
+        return [item for page in out for item in page]
+    return out
 
 
 def main():
     today = datetime.date.today().isoformat()
-    releases = gh(f"repos/{REPO}/releases")
+    releases = gh(f"repos/{REPO}/releases?per_page=100", paginate=True)
     rel = [{"tag": r["tag_name"],
             "assets": [{"name": a["name"], "count": a["download_count"]}
                        for a in r["assets"]]}

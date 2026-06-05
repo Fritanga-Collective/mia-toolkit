@@ -115,5 +115,7 @@
   "stats.referrers_h2": "Principales referencias",
   "stats.method": "Cómo se mide: GitHub cuenta las descargas y el tráfico del repositorio de forma agregada; un proceso diario copia esos contadores públicos a esta página. Nadie es rastreado, y la app en sí nunca envía nada.",
   "footer.stats": "Transparencia",
-  "privacy.site_li1_gc": "Un sitio estático <strong>sin cookies, sin rastreadores y sin anuncios</strong>. Usamos <strong>GoatCounter</strong>, un contador de código abierto y sin cookies, para contar visitas de forma agregada — no guarda datos personales, no crea perfiles y no rastrea entre sitios."
+  "privacy.site_li1_gc": "Un sitio estático <strong>sin cookies, sin rastreadores y sin anuncios</strong>. Usamos <strong>GoatCounter</strong>, un contador de código abierto y sin cookies, para contar visitas de forma agregada — no guarda datos personales, no crea perfiles y no rastrea entre sitios.",
+  "stats.col_referrer": "Origen",
+  "stats.col_count": "Conteo"
 }

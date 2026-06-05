@@ -13,6 +13,7 @@ Output: website/_site/  (deployed by .github/workflows/pages.yml)
 
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
@@ -221,22 +222,25 @@ def stats_chart_svg(snapshots, pending_text: str) -> str:
 
 
 def stats_blocks(metrics, s: dict) -> dict:
+    empty4 = '            <tr><td colspan="4">—</td></tr>'
+    empty2 = '            <tr><td colspan="2">—</td></tr>'
     if not metrics:
-        empty = '<tr><td colspan="4">—</td></tr>'
         return {"STATS_UPDATED": "—", "STATS_TOTAL": "—", "STATS_CHART": "",
-                "STATS_TABLE": empty, "STATS_VIEWS": "—", "STATS_UNIQUES": "—",
-                "STATS_REFERRERS": empty}
+                "STATS_TABLE": empty4, "STATS_VIEWS": "—", "STATS_UNIQUES": "—",
+                "STATS_REFERRERS": empty2}
     snaps = metrics.get("snapshots", [])
     latest = snaps[-1] if snaps else {}
     rows = []
     for r in metrics.get("releases", []):
         mac = sum(a["count"] for a in r["assets"] if a["name"].endswith(".dmg"))
         win = sum(a["count"] for a in r["assets"] if a["name"].endswith(".exe"))
-        rows.append(f'            <tr><td>{r["tag"]}</td><td>{mac:,}</td>'
+        rows.append(f'            <tr><td>{html.escape(r["tag"])}</td>'
+                    f'<td>{mac:,}</td>'
                     f'<td>{win:,}</td><td>{mac + win:,}</td></tr>')
-    refs = [f'            <tr><td>{r["referrer"]}</td><td>{r["count"]:,}</td></tr>'
-            for r in metrics.get("referrers", [])] or [
-            '            <tr><td>—</td><td>—</td></tr>']
+    rows = rows or [empty4]
+    refs = [f'            <tr><td>{html.escape(r["referrer"])}</td>'
+            f'<td>{r["count"]:,}</td></tr>'
+            for r in metrics.get("referrers", [])] or [empty2]
     return {
         "STATS_UPDATED": metrics.get("updated", "—"),
         "STATS_TOTAL": f'{latest.get("total", 0):,}',

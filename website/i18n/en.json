@@ -115,5 +115,7 @@
   "stats.referrers_h2": "Top referrers",
   "stats.method": "How this is measured: GitHub counts release downloads and repository traffic in aggregate; a daily job snapshots those public counters into this page. Nobody is tracked, and the app itself never sends anything.",
   "footer.stats": "Transparency",
-  "privacy.site_li1_gc": "A static site with <strong>no cookies, no trackers, and no ads</strong>. We use <strong>GoatCounter</strong>, an open-source, cookieless counter, for aggregate page-view counts — it stores no personal data, builds no profiles, and does no cross-site tracking."
+  "privacy.site_li1_gc": "A static site with <strong>no cookies, no trackers, and no ads</strong>. We use <strong>GoatCounter</strong>, an open-source, cookieless counter, for aggregate page-view counts — it stores no personal data, builds no profiles, and does no cross-site tracking.",
+  "stats.col_referrer": "Referrer",
+  "stats.col_count": "Count"
 }

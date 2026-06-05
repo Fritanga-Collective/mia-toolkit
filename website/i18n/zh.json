@@ -115,5 +115,7 @@
   "stats.referrers_h2": "主要来源",
   "stats.method": "统计方式：GitHub 以聚合方式统计发布版下载量和仓库访问量；每日任务把这些公开计数复制到本页面。没有任何人被追踪，应用本身也从不发送任何数据。",
   "footer.stats": "透明度",
-  "privacy.site_li1_gc": "静态网站，<strong>无 Cookie、无追踪器、无广告</strong>。我们使用开源、无 Cookie 的计数器 <strong>GoatCounter</strong> 统计聚合页面浏览量——它不存储个人数据、不建立画像、不做跨站追踪。"
+  "privacy.site_li1_gc": "静态网站，<strong>无 Cookie、无追踪器、无广告</strong>。我们使用开源、无 Cookie 的计数器 <strong>GoatCounter</strong> 统计聚合页面浏览量——它不存储个人数据、不建立画像、不做跨站追踪。",
+  "stats.col_referrer": "来源",
+  "stats.col_count": "次数"
 }

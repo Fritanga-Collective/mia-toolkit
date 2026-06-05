@@ -115,5 +115,7 @@
   "stats.referrers_h2": "Wichtigste Verweise",
   "stats.method": "So wird gemessen: GitHub zählt Release-Downloads und Repository-Zugriffe aggregiert; ein täglicher Job überträgt diese öffentlichen Zähler auf diese Seite. Niemand wird getrackt, und die App selbst sendet niemals etwas.",
   "footer.stats": "Transparenz",
-  "privacy.site_li1_gc": "Eine statische Website <strong>ohne Cookies, ohne Tracker und ohne Werbung</strong>. Für aggregierte Seitenaufruf-Zahlen nutzen wir <strong>GoatCounter</strong>, einen quelloffenen, cookielosen Zähler — er speichert keine personenbezogenen Daten, erstellt keine Profile und betreibt kein seitenübergreifendes Tracking."
+  "privacy.site_li1_gc": "Eine statische Website <strong>ohne Cookies, ohne Tracker und ohne Werbung</strong>. Für aggregierte Seitenaufruf-Zahlen nutzen wir <strong>GoatCounter</strong>, einen quelloffenen, cookielosen Zähler — er speichert keine personenbezogenen Daten, erstellt keine Profile und betreibt kein seitenübergreifendes Tracking.",
+  "stats.col_referrer": "Quelle",
+  "stats.col_count": "Anzahl"
 }
