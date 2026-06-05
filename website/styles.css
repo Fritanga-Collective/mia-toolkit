@@ -127,6 +127,10 @@ footer p a { color: var(--muted); text-decoration: underline; }
   border-bottom: 1px solid var(--border); }
 .inst-tiers th { color: var(--muted); font-weight: 600; }
 .inst-tiers td:last-child { white-space: nowrap; font-weight: 600; }
+.stats-total { font-size: 2.4rem; font-weight: 700; color: var(--accent);
+  margin: 0 0 8px; }
+.stats-chart { width: 100%; height: auto; background: var(--panel);
+  border: 1px solid var(--border); border-radius: 10px; }
 
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.7rem; }

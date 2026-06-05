@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{stats.title}}</title>
+  <meta name="description" content="{{stats.meta_desc}}">
+  <link rel="stylesheet" href="{{P}}styles.css">
+  <script src="{{P}}lang.js"></script>
+{{HEAD_SEO}}
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="index.html">MIA Toolkit</a>
+      <nav class="lang">
+{{LANGSEL}}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section>
+        <h1>{{stats.h1}}</h1>
+        <p>{{stats.intro}}</p>
+        <p class="note">{{stats.updated_label}} {{STATS_UPDATED}}</p>
+      </section>
+
+      <section>
+        <h2>{{stats.total_label}}</h2>
+        <p class="stats-total">{{STATS_TOTAL}}</p>
+        <h2>{{stats.chart_h2}}</h2>
+{{STATS_CHART}}
+      </section>
+
+      <section>
+        <h2>{{stats.by_release_h2}}</h2>
+        <table class="inst-tiers">
+          <thead>
+            <tr><th scope="col">{{stats.col_version}}</th>
+                <th scope="col">{{stats.col_mac}}</th>
+                <th scope="col">{{stats.col_windows}}</th>
+                <th scope="col">{{stats.col_total}}</th></tr>
+          </thead>
+          <tbody>
+{{STATS_TABLE}}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>{{stats.traffic_h2}}</h2>
+        <p>{{stats.views_label}} <strong>{{STATS_VIEWS}}</strong> ·
+           {{stats.uniques_label}} <strong>{{STATS_UNIQUES}}</strong></p>
+        <h2>{{stats.referrers_h2}}</h2>
+        <table class="inst-tiers">
+          <tbody>
+{{STATS_REFERRERS}}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <p class="note">{{stats.method}}</p>
+      </section>
+
+      <section class="links">
+        <a href="index.html">{{privacy.back}}</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>{{footer.ethos}} ·
+        <a href="privacy.html">{{footer.privacy}}</a> ·
+        <a href="stats.html">{{footer.stats}}</a></p>
+      <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
+    </div>
+  </footer>
+</body>
+</html>
