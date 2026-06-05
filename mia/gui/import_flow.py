@@ -41,7 +41,10 @@ def start_folder_import(root: Any, panel: Any, *,
         return None
 
     scan = importer.scan_folder(src)  # synchronous but capped (metadata only)
-    if not _has_room(scan.bytes, dest, parent):
+    # A capped scan only saw part of the tree — treat its size as an estimate
+    # and demand much larger headroom.
+    if not _has_room(scan.bytes, dest, parent,
+                     headroom=2.0 if scan.capped else 1.1):
         return None
     if scan.dicom_files == 0:
         if not messagebox.askyesno(
@@ -51,11 +54,12 @@ def start_folder_import(root: Any, panel: Any, *,
             return None
     else:
         files_txt = f"{scan.files:,}" + ("+" if scan.capped else "")
+        size_txt = format_bytes(scan.bytes) + ("+" if scan.capped else "")
         if not messagebox.askyesno(
                 _("Import"),
                 _("{files} files · {size}\n{dicom} medical images detected."
                   "\n\nCopy everything into your project?")
-                .format(files=files_txt, size=format_bytes(scan.bytes),
+                .format(files=files_txt, size=size_txt,
                         dicom=scan.dicom_files),
                 parent=parent):
             return None
@@ -85,8 +89,10 @@ def start_zip_import(root: Any, panel: Any, *,
             _("Import"), _("This doesn't look like a ZIP file."),
             parent=parent)
         return None
-    # Extraction needs temp space too, so ask for roughly double.
-    if not _has_room(scan.bytes * 2, dest, parent):
+    # Extraction (now on the project volume) needs temp space too, and nested
+    # zip-of-zips can expand beyond the outer ZIP's declared sizes — so demand
+    # double the bytes with double headroom (~4x the declared content).
+    if not _has_room(scan.bytes * 2, dest, parent, headroom=2.0):
         return None
     if not messagebox.askyesno(
             _("Import"),
@@ -127,9 +133,10 @@ def _outside_project(src: str, dest: str, parent) -> bool:
     return True
 
 
-def _has_room(need_bytes: int, dest: str, parent) -> bool:
+def _has_room(need_bytes: int, dest: str, parent, *,
+              headroom: float = 1.1) -> bool:
     free = deliver.free_space(dest)
-    if free >= int(need_bytes * 1.1):
+    if free >= int(need_bytes * headroom):
         return True
     messagebox.showerror(
         _("Import"),

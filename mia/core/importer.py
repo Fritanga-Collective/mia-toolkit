@@ -14,6 +14,7 @@ import tempfile
 import time
 import zipfile
 from dataclasses import dataclass
+from typing import Optional
 
 from .common import (
     CancelToken,
@@ -59,8 +60,8 @@ def scan_folder(
     *,
     cap_files: int = SCAN_CAP_FILES,
     cap_seconds: float = SCAN_CAP_SECONDS,
-    progress: ProgressCallback | None = None,
-    cancel: CancelToken | None = None,
+    progress: Optional[ProgressCallback] = None,
+    cancel: Optional[CancelToken] = None,
 ) -> ScanResult:
     """Count files/bytes and DICOM files under ``src`` (capped, cancellable)."""
     files = 0
@@ -109,7 +110,7 @@ def _count_dicom(root: str) -> int:
 
 
 def _finish(rip: RipResult, *, source_type: str,
-            source_note: str | None = None) -> ImportResult:
+            source_note: Optional[str] = None) -> ImportResult:
     """Wrap a RipResult, counting DICOM files and annotating the manifest."""
     dicom = _count_dicom(rip.disc_dir)
     try:
@@ -134,8 +135,8 @@ def import_folder(
     dest_root: str,
     num: int,
     *,
-    progress: ProgressCallback | None = None,
-    cancel: CancelToken | None = None,
+    progress: Optional[ProgressCallback] = None,
+    cancel: Optional[CancelToken] = None,
 ) -> ImportResult:
     """Copy a folder/USB tree into the project as a new numbered source."""
     source = os.path.abspath(source)
@@ -146,8 +147,8 @@ def import_folder(
 
 
 def _safe_extract(zf: zipfile.ZipFile, dest: str, *,
-                  progress: ProgressCallback | None,
-                  cancel: CancelToken | None) -> None:
+                  progress: Optional[ProgressCallback],
+                  cancel: Optional[CancelToken]) -> None:
     """Extract all members, refusing any path that escapes ``dest`` (zip-slip)."""
     dest_real = os.path.realpath(dest)
     members = zf.infolist()
@@ -164,8 +165,8 @@ def _safe_extract(zf: zipfile.ZipFile, dest: str, *,
 
 
 def _expand_nested_zips(root: str, *,
-                        progress: ProgressCallback | None,
-                        cancel: CancelToken | None) -> None:
+                        progress: Optional[ProgressCallback],
+                        cancel: Optional[CancelToken]) -> None:
     """Unpack zip-inside-zip up to ZIP_NEST_DEPTH levels (content replaces
     the container; a fake .zip that isn't a real archive is left as-is)."""
     for _depth in range(ZIP_NEST_DEPTH):
@@ -189,8 +190,8 @@ def import_zip(
     dest_root: str,
     num: int,
     *,
-    progress: ProgressCallback | None = None,
-    cancel: CancelToken | None = None,
+    progress: Optional[ProgressCallback] = None,
+    cancel: Optional[CancelToken] = None,
 ) -> ImportResult:
     """Extract a downloaded ZIP (portal-style, nested zips included) into a
     temp dir, then copy it into the project as a new numbered source."""
@@ -200,7 +201,14 @@ def import_zip(
         os.path.splitext(os.path.basename(zip_path))[0]) or "zip_import"
     emit(progress, Progress(0, 0, kind="info", phase="extract",
                             note=f"Extracting {os.path.basename(zip_path)}…"))
-    with tempfile.TemporaryDirectory(prefix="mia_zip_") as tmp:
+    # Extract on the same volume as the project (the system temp volume can be
+    # much smaller than an external project drive); fall back to system temp.
+    parent = os.path.dirname(os.path.abspath(dest_root))
+    try:
+        tmp_ctx = tempfile.TemporaryDirectory(prefix=".mia_zip_", dir=parent)
+    except OSError:
+        tmp_ctx = tempfile.TemporaryDirectory(prefix="mia_zip_")
+    with tmp_ctx as tmp:
         # Named after the zip so rip_disc derives the right folder label.
         extract_root = os.path.join(tmp, stem)
         os.makedirs(extract_root)
