@@ -214,6 +214,9 @@ jobs:
     name: Sync website download version
     needs: [release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push the download.js sync commit
+      actions: write    # dispatch pages.yml (token pushes don't auto-trigger)
     steps:
       - uses: actions/checkout@v4
         with:
@@ -246,9 +249,10 @@ jobs:
                      lambda m: m.group(1) + win + m.group(2), s, count=1)
           p.write_text(s)
           PY
-      - name: Commit if changed
+      - name: Commit if changed + deploy the site
         env:
           TAG: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           if git diff --quiet -- website/download.js; then
@@ -259,3 +263,7 @@ jobs:
           git add website/download.js
           git commit -m "Website: sync download to ${TAG} (CI)"
           git push origin HEAD:main
+          # Commits pushed with GITHUB_TOKEN never trigger other workflows
+          # (GitHub's recursion guard), so the Pages deploy must be dispatched
+          # explicitly or the live site keeps serving the old version.
+          gh workflow run pages.yml --ref main
