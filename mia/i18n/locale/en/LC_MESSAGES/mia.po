@@ -644,3 +644,7 @@ msgstr "Open source · Private by design · No tracking"
 #: mia/gui/launcher.py:0
 msgid "Made with ♥ by Fritanga"
 msgstr "Made with ♥ by Fritanga"
+
+#: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
+msgid "Read our blog"
+msgstr "Read our blog"

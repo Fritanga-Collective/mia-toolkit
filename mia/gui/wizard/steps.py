@@ -9,9 +9,10 @@ import tkinter as tk
 import webbrowser
 from tkinter import filedialog, messagebox, ttk
 
-# The tool and its installers are free. This opens the support page in the
-# user's browser (the only outbound link in the app — no telemetry, no calls).
+# The tool and its installers are free. These open in the user's browser —
+# the only outbound links in the app (no telemetry, no background calls).
 SUPPORT_URL = "https://mia-toolkit.fritanga.co/support.html"
+BLOG_URL = "https://fritangacollective.substack.com/"
 
 from mia.core import deliver, dicomdir, inventory
 from mia.core.common import format_bytes
@@ -356,12 +357,19 @@ class DoneStep(WizardStep):
             "you, you can buy the dev team a coffee — it keeps the project alive "
             "and free for families who can't pay.")
         ).grid(row=0, column=0, sticky="w")
-        ttk.Button(support, text=_("☕  Buy us a coffee"),
-                   command=self._donate).grid(row=1, column=0, sticky="w",
-                                              pady=(8, 0))
+        btns = ttk.Frame(support)
+        btns.grid(row=1, column=0, sticky="w", pady=(8, 0))
+        ttk.Button(btns, text=_("☕  Buy us a coffee"),
+                   command=self._donate).pack(side="left")
+        # Emoji outside the translatable string (language-neutral).
+        ttk.Button(btns, text=f"📰  {_('Read our blog')}",
+                   command=self._blog).pack(side="left", padx=(8, 0))
 
     def _donate(self) -> None:
         webbrowser.open(SUPPORT_URL)
+
+    def _blog(self) -> None:
+        webbrowser.open(BLOG_URL)
 
     def enter(self) -> None:
         dp = self.wizard.delivered_path

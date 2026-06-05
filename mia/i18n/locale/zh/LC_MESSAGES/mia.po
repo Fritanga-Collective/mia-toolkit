@@ -615,3 +615,7 @@ msgstr "开源 · 隐私优先 · 无追踪"
 #: mia/gui/launcher.py:0
 msgid "Made with ♥ by Fritanga"
 msgstr "由 Fritanga 用 ♥ 打造"
+
+#: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
+msgid "Read our blog"
+msgstr "阅读我们的博客"

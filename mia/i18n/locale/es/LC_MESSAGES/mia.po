@@ -658,3 +658,7 @@ msgstr "Código abierto · Privado por diseño · Sin rastreo"
 #: mia/gui/launcher.py:0
 msgid "Made with ♥ by Fritanga"
 msgstr "Hecho con ♥ por Fritanga"
+
+#: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
+msgid "Read our blog"
+msgstr "Lee nuestro blog"

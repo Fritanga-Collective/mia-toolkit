@@ -9,6 +9,7 @@ into a single, radiologist-friendly DICOM archive.
 🌐 [Website](https://mia-toolkit.fritanga.co) ·
 📦 [Download — free](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest) ·
 ❤️ [Support the project](https://mia-toolkit.fritanga.co/support.html) ·
+📰 [Blog](https://fritangacollective.substack.com/) ·
 🔒 [Privacy](https://mia-toolkit.fritanga.co/privacy.html)
 
 Private by design: no account, no cloud, no telemetry — your data never leaves

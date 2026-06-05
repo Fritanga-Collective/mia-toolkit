@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import tkinter as tk
+import webbrowser
 from tkinter import ttk
 from typing import Any, Callable
 
 from .i18n import LANGUAGES, _, current_language
+
+# Opens in the user's browser on click — outbound only on explicit user action.
+BLOG_URL = "https://fritangacollective.substack.com/"
 
 # Buttons share one fixed width (in characters) so the cards are uniform and
 # centered, rather than stretching to the full window width.
@@ -65,6 +69,12 @@ class Launcher(ttk.Frame):
         ttk.Label(self, foreground="#888", font=("", 10),
                   text=_("Made with ♥ by Fritanga")).grid(
             row=self._row, column=1, pady=(2, 0))
+        self._row += 1
+        # Clickable blog link (emoji outside the translatable string).
+        blog = ttk.Label(self, foreground="#2c5282", font=("", 10, "underline"),
+                         cursor="hand2", text=f"📰 {_('Read our blog')}")
+        blog.bind("<Button-1>", lambda e: webbrowser.open(BLOG_URL))
+        blog.grid(row=self._row, column=1, pady=(4, 0))
         self._row += 1
 
     def _language_bar(self) -> None:
