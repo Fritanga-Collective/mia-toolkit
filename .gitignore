@@ -18,3 +18,5 @@ dist/
 .pytest_cache/
 # Local notes symlink (untracked) — never commit
 /int-docs
+# Generated website output (built in CI by website/build.py)
+website/_site/

@@ -162,16 +162,6 @@ msgstr "▾ 隐藏技术详情"
 msgid "Save technical log"
 msgstr "保存技术日志"
 
-#: mia/gui/rip_view.py:14 mia/gui/launcher.py:38
-msgid "Rip a CD"
-msgstr "复制 CD"
-
-#: mia/gui/rip_view.py:18
-msgid ""
-"Insert a CD. The app copies it to your computer, ejects it, and waits for "
-"the next one. Keep inserting discs — you don't need to restart between them."
-msgstr "请插入 CD。应用会把它复制到电脑、弹出，并等待下一张。继续插入光盘——中间无需重新开始。"
-
 #: mia/gui/rip_view.py:23
 msgid "Save copies to:"
 msgstr "副本保存到："
@@ -247,10 +237,6 @@ msgstr "一步步引导我（推荐）。"
 #: mia/gui/launcher.py:36
 msgid "Or use a single tool:"
 msgstr "或使用单个工具："
-
-#: mia/gui/launcher.py:39
-msgid "Copy a disc onto your computer."
-msgstr "把光盘复制到电脑。"
 
 #: mia/gui/launcher.py:40 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
@@ -414,16 +400,6 @@ msgstr "无法移动项目。请尝试其他驱动器。"
 msgid "This will help you, step by step:"
 msgstr "这将一步步帮助你："
 
-#: mia/gui/wizard/steps.py:105
-msgid ""
-"1.  Copy your CDs onto this computer\n"
-"2.  Review everything we found\n"
-"3.  Build one archive and copy it to a USB drive for your doctor"
-msgstr ""
-"1.  把你的 CD 复制到这台电脑\n"
-"2.  查看我们找到的所有内容\n"
-"3.  生成一个归档并复制到 U 盘，交给你的医生"
-
 #: mia/gui/wizard/steps.py:111
 msgid "Skip to building the archive"
 msgstr "跳到生成归档"
@@ -433,12 +409,6 @@ msgstr "跳到生成归档"
 msgid ""
 "Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
 msgstr "欢迎回来——你已经复制了 {n} 张光盘。点击“下一步”继续，或："
-
-#: mia/gui/wizard/steps.py:129
-msgid ""
-"Insert each CD. It copies onto your computer, ejects, and waits for the next"
-" one. When you've done all your discs, click Next."
-msgstr "插入每一张 CD。它会复制到你的电脑、弹出并等待下一张。完成所有光盘后，点击“下一步”。"
 
 #: mia/gui/wizard/steps.py:145
 msgid "Ready. Insert a disc, then click Start ripping."
@@ -565,10 +535,6 @@ msgid "Welcome"
 msgstr "欢迎"
 
 #: mia/gui/wizard/view.py:14
-msgid "Rip discs"
-msgstr "复制光盘"
-
-#: mia/gui/wizard/view.py:14
 msgid "Review"
 msgstr "查看"
 
@@ -619,3 +585,133 @@ msgstr "由 Fritanga 用 ♥ 打造"
 #: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
 msgid "Read our blog"
 msgstr "阅读我们的博客"
+
+#: mia/gui:0
+msgid "Add your studies"
+msgstr "添加你的检查"
+
+#: mia/gui:0
+msgid "Add Your Studies"
+msgstr "添加你的检查"
+
+#: mia/gui:0
+msgid "Copy discs, USB folders, or ZIP downloads into your project."
+msgstr "把光盘、U 盘文件夹或下载的 ZIP 复制到你的项目中。"
+
+#: mia/gui:0
+msgid "From a folder or USB"
+msgstr "从文件夹或 U 盘"
+
+#: mia/gui:0
+msgid "From a ZIP file"
+msgstr "从 ZIP 文件"
+
+#: mia/gui:0
+msgid ""
+"Insert each CD — it copies and ejects automatically. You can also add "
+"studies from a USB drive, a folder, or a ZIP downloaded from a hospital "
+"portal. When everything's added, click Next."
+msgstr "插入每张光盘——它会自动复制并弹出。你也可以从 U 盘、文件夹或从医院门户下载的 ZIP 添加检查。全部添加完成后，点击“下一步”。"
+
+#: mia/gui:0
+msgid ""
+"Insert a CD — it copies and ejects automatically. You can also add studies "
+"from a USB drive, a folder, or a downloaded ZIP."
+msgstr "插入光盘——它会自动复制并弹出。你也可以从 U 盘、文件夹或下载的 ZIP 添加检查。"
+
+#: mia/gui:0
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  添加你的检查 —— 光盘、U 盘文件夹或 ZIP 下载\n"
+"2.  查看我们找到的所有内容\n"
+"3.  生成一个归档并复制到 U 盘交给医生"
+
+#: mia/gui:0
+msgid "Sources added so far: {n}"
+msgstr "已添加的来源：{n}"
+
+#: mia/gui:0
+msgid "Choose the folder or USB drive to import"
+msgstr "选择要导入的文件夹或 U 盘"
+
+#: mia/gui:0
+msgid "Choose the ZIP file to import"
+msgstr "选择要导入的 ZIP 文件"
+
+#: mia/gui:0
+msgid "Import"
+msgstr "导入"
+
+#: mia/gui:0
+msgid "All files"
+msgstr "所有文件"
+
+#: mia/gui:0
+msgid "No medical images were found here. Copy anyway?"
+msgstr "这里没有找到医学影像。仍要复制吗？"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size}\n"
+"{dicom} medical images detected.\n"
+"\n"
+"Copy everything into your project?"
+msgstr ""
+"{files} 个文件 · {size}\n"
+"检测到 {dicom} 个医学影像。\n"
+"\n"
+"要全部复制到你的项目中吗？"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size} inside the ZIP.\n"
+"Medical images are detected during the import.\n"
+"\n"
+"Import it into your project?"
+msgstr ""
+"ZIP 内有 {files} 个文件 · {size}。\n"
+"医学影像将在导入过程中检测。\n"
+"\n"
+"要导入到你的项目中吗？"
+
+#: mia/gui:0
+msgid "This doesn't look like a ZIP file."
+msgstr "这看起来不是一个 ZIP 文件。"
+
+#: mia/gui:0
+msgid ""
+"That folder is inside your project (or contains it). Choose a different "
+"folder."
+msgstr "该文件夹在你的项目内部（或包含你的项目）。请选择其他文件夹。"
+
+#: mia/gui:0
+msgid ""
+"Not enough space on the project drive (need about {need}, free {free})."
+msgstr "项目所在磁盘空间不足（约需 {need}，可用 {free}）。"
+
+#: mia/gui:0
+msgid "Importing “{name}”…"
+msgstr "正在导入“{name}”…"
+
+#: mia/gui:0
+msgid "Couldn't import this source."
+msgstr "无法导入此来源。"
+
+#: mia/gui:0
+msgid "✓ Imported: {c} files OK, {f} could not be read."
+msgstr "✓ 导入完成：{c} 个文件成功，{f} 个无法读取。"
+
+#: mia/gui:0
+msgid "⚠ No medical images were found in this import."
+msgstr "⚠ 此次导入未发现医学影像。"
+
+#: mia/gui:0
+msgid "No medical images were found in this import."
+msgstr "此次导入未发现医学影像。"
+
+#: mia/gui:0
+msgid "✓ Import done. Add another source or continue."
+msgstr "✓ 导入完成。可继续添加来源或进入下一步。"

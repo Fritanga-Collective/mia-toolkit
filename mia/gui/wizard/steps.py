@@ -18,6 +18,7 @@ from mia.core import deliver, dicomdir, inventory
 from mia.core.common import format_bytes
 from mia.core.ripper import copy_with_retry
 
+from .. import import_flow
 from ..i18n import _
 from ..jobs import run_job
 from ..messages import exception_detail, humanize_exception
@@ -103,7 +104,7 @@ class WelcomeStep(WizardStep):
         ttk.Label(self, text=_("This will help you, step by step:"),
                   font=("", 14, "bold")).grid(row=0, column=0, sticky="w")
         ttk.Label(self, justify="left", text=_(
-            "1.  Copy your CDs onto this computer\n"
+            "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
             "2.  Review everything we found\n"
             "3.  Build one archive and copy it to a USB drive for your doctor")
         ).grid(row=1, column=0, sticky="w", pady=(6, 16))
@@ -124,26 +125,43 @@ class WelcomeStep(WizardStep):
             self.skip_btn.grid_remove()
 
 
-class RipStep(PanelStep):
+class AddStudiesStep(PanelStep):
+    """Acquire studies from any local source: disc, folder/USB, or ZIP."""
+
     def build(self) -> None:
         ttk.Label(self, wraplength=580, justify="left", text=_(
-            "Insert each CD. It copies onto your computer, ejects, and waits "
-            "for the next one. When you've done all your discs, click Next.")
+            "Insert each CD — it copies and ejects automatically. You can "
+            "also add studies from a USB drive, a folder, or a ZIP downloaded "
+            "from a hospital portal. When everything's added, click Next.")
         ).grid(row=0, column=0, sticky="w")
-        self.start_btn = ttk.Button(self, text=_("Start ripping"),
+        # Emoji kept outside the translatable strings (language-neutral).
+        btns = ttk.Frame(self)
+        btns.grid(row=1, column=0, sticky="w", pady=(8, 4))
+        self.start_btn = ttk.Button(btns, text=f"💿  {_('Start ripping')}",
                                     command=self._start)
-        self.start_btn.grid(row=1, column=0, sticky="w", pady=(8, 8))
-        self.build_panel(2)
+        self.start_btn.pack(side="left")
+        self.folder_btn = ttk.Button(
+            btns, text=f"📁  {_('From a folder or USB')}",
+            command=self._import_folder)
+        self.folder_btn.pack(side="left", padx=(8, 0))
+        self.zip_btn = ttk.Button(btns, text=f"🗄  {_('From a ZIP file')}",
+                                  command=self._import_zip)
+        self.zip_btn.pack(side="left", padx=(8, 0))
+        self.count_lbl = ttk.Label(self, foreground="#0a7d28", text="")
+        self.count_lbl.grid(row=2, column=0, sticky="w", pady=(0, 6))
+        self.build_panel(3)
         self.controller = RipSessionController(
             self.wizard.app.root, self.panel,
             get_dest=lambda: self.project.raw_discs_dir,
             on_state_changed=self._state,
-            on_disc=lambda r: self.wizard.refresh_nav(),
+            on_disc=lambda r: self._added(),
             parent_widget=self)
+        self._import_cancel = None
 
     def enter(self) -> None:
         self.panel.set_status(
             _("Ready. Insert a disc, then click Start ripping."))
+        self._refresh_count()
 
     def _start(self) -> None:
         self.guard_space(1_000_000_000, self._begin)  # ~1 GB headroom
@@ -152,13 +170,45 @@ class RipStep(PanelStep):
         self.project.ensure_dirs()
         self.controller.start()
 
+    def _get_dest(self) -> str:
+        self.project.ensure_dirs()
+        return self.project.raw_discs_dir
+
+    def _import_folder(self) -> None:
+        self._import_cancel = import_flow.start_folder_import(
+            self.wizard.app.root, self.panel, get_dest=self._get_dest,
+            on_state=self._state, on_done=lambda r: self._added(),
+            parent=self)
+
+    def _import_zip(self) -> None:
+        self._import_cancel = import_flow.start_zip_import(
+            self.wizard.app.root, self.panel, get_dest=self._get_dest,
+            on_state=self._state, on_done=lambda r: self._added(),
+            parent=self)
+
+    def _added(self) -> None:
+        self._refresh_count()
+        self.wizard.refresh_nav()
+
+    def _refresh_count(self) -> None:
+        n = self.project.disc_count()
+        self.count_lbl.configure(
+            text=_("Sources added so far: {n}").format(n=n) if n else "")
+
     def _state(self, running: bool) -> None:
-        self.start_btn.configure(state="disabled" if running else "normal")
+        state = "disabled" if running else "normal"
+        for btn in (self.start_btn, self.folder_btn, self.zip_btn):
+            btn.configure(state=state)
         self.wizard.set_busy(running)
+        if not running:
+            self._refresh_count()
 
     def on_leave(self) -> None:
         if self.controller.active:
             self.controller.stop()
+        if self._import_cancel is not None:
+            self._import_cancel.set()
+            self._import_cancel = None
 
 
 class InventoryStep(PanelStep):
