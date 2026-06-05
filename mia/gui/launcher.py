@@ -39,8 +39,9 @@ class Launcher(ttk.Frame):
 
         self._heading(_("Or use a single tool:"), ("", 11), (16, 4),
                       color="#888")
-        self._card("💿", _("Rip a CD"),
-                   _("Copy a disc onto your computer."), app.show_rip)
+        self._card("💿", _("Add Your Studies"),
+                   _("Copy discs, USB folders, or ZIP downloads into your "
+                     "project."), app.show_rip)
         self._card("📋", _("Build Inventory"),
                    _("List every study in a spreadsheet."), app.show_inventory)
         self._card("💾", _("Build Archive for Doctor"),

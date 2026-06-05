@@ -11,7 +11,7 @@ from typing import Any, Optional
 from ..i18n import N_, _
 from ..project import Project
 
-STEP_TITLES = [N_("Welcome"), N_("Rip discs"), N_("Review"),
+STEP_TITLES = [N_("Welcome"), N_("Add your studies"), N_("Review"),
                N_("Build & deliver"), N_("Done")]
 LAST = len(STEP_TITLES) - 1
 
@@ -63,9 +63,10 @@ class WizardView(ttk.Frame):
     # ----- step access ----------------------------------------------------
 
     def _classes(self):
-        from .steps import (ArchiveStep, DoneStep, InventoryStep, RipStep,
-                            WelcomeStep)
-        return [WelcomeStep, RipStep, InventoryStep, ArchiveStep, DoneStep]
+        from .steps import (AddStudiesStep, ArchiveStep, DoneStep,
+                            InventoryStep, WelcomeStep)
+        return [WelcomeStep, AddStudiesStep, InventoryStep, ArchiveStep,
+                DoneStep]
 
     def _get(self, i: int):
         if i not in self._steps:

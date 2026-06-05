@@ -167,19 +167,6 @@ msgstr "▾ Ocultar detalles técnicos"
 msgid "Save technical log"
 msgstr "Guardar registro técnico"
 
-#: mia/gui/rip_view.py:14 mia/gui/launcher.py:38
-msgid "Rip a CD"
-msgstr "Copiar un CD"
-
-#: mia/gui/rip_view.py:18
-msgid ""
-"Insert a CD. The app copies it to your computer, ejects it, and waits for "
-"the next one. Keep inserting discs — you don't need to restart between them."
-msgstr ""
-"Inserta un CD. La app lo copia a tu computadora, lo expulsa y espera el "
-"siguiente. Sigue insertando discos — no necesitas reiniciar entre uno y "
-"otro."
-
 #: mia/gui/rip_view.py:23
 msgid "Save copies to:"
 msgstr "Guardar copias en:"
@@ -261,10 +248,6 @@ msgstr "Guíame paso a paso (recomendado)."
 #: mia/gui/launcher.py:36
 msgid "Or use a single tool:"
 msgstr "O usa una sola herramienta:"
-
-#: mia/gui/launcher.py:39
-msgid "Copy a disc onto your computer."
-msgstr "Copia un disco a tu computadora."
 
 #: mia/gui/launcher.py:40 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
@@ -440,16 +423,6 @@ msgstr "No se pudo mover el proyecto. Prueba con otra unidad."
 msgid "This will help you, step by step:"
 msgstr "Esto te ayudará, paso a paso:"
 
-#: mia/gui/wizard/steps.py:105
-msgid ""
-"1.  Copy your CDs onto this computer\n"
-"2.  Review everything we found\n"
-"3.  Build one archive and copy it to a USB drive for your doctor"
-msgstr ""
-"1.  Copiar tus CDs a esta computadora\n"
-"2.  Revisar todo lo que encontramos\n"
-"3.  Crear un solo archivo y copiarlo a una memoria USB para tu médico"
-
 #: mia/gui/wizard/steps.py:111
 msgid "Skip to building the archive"
 msgstr "Saltar a crear el archivo"
@@ -461,14 +434,6 @@ msgid ""
 msgstr ""
 "Bienvenido de nuevo — ya tienes {n} disco(s) copiado(s). Continúa con "
 "Siguiente, o:"
-
-#: mia/gui/wizard/steps.py:129
-msgid ""
-"Insert each CD. It copies onto your computer, ejects, and waits for the next"
-" one. When you've done all your discs, click Next."
-msgstr ""
-"Inserta cada CD. Se copia a tu computadora, se expulsa y espera el "
-"siguiente. Cuando termines todos tus discos, haz clic en Siguiente."
 
 #: mia/gui/wizard/steps.py:145
 msgid "Ready. Insert a disc, then click Start ripping."
@@ -605,10 +570,6 @@ msgid "Welcome"
 msgstr "Bienvenida"
 
 #: mia/gui/wizard/view.py:14
-msgid "Rip discs"
-msgstr "Copiar discos"
-
-#: mia/gui/wizard/view.py:14
 msgid "Review"
 msgstr "Revisar"
 
@@ -662,3 +623,142 @@ msgstr "Hecho con ♥ por Fritanga"
 #: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
 msgid "Read our blog"
 msgstr "Lee nuestro blog"
+
+#: mia/gui:0
+msgid "Add your studies"
+msgstr "Agrega tus estudios"
+
+#: mia/gui:0
+msgid "Add Your Studies"
+msgstr "Agregar tus estudios"
+
+#: mia/gui:0
+msgid "Copy discs, USB folders, or ZIP downloads into your project."
+msgstr "Copia discos, carpetas USB o descargas ZIP a tu proyecto."
+
+#: mia/gui:0
+msgid "From a folder or USB"
+msgstr "Desde una carpeta o USB"
+
+#: mia/gui:0
+msgid "From a ZIP file"
+msgstr "Desde un archivo ZIP"
+
+#: mia/gui:0
+msgid ""
+"Insert each CD — it copies and ejects automatically. You can also add "
+"studies from a USB drive, a folder, or a ZIP downloaded from a hospital "
+"portal. When everything's added, click Next."
+msgstr ""
+"Inserta cada CD — se copia y expulsa automáticamente. También puedes agregar"
+" estudios desde una memoria USB, una carpeta o un ZIP descargado del portal "
+"del hospital. Cuando hayas agregado todo, haz clic en Siguiente."
+
+#: mia/gui:0
+msgid ""
+"Insert a CD — it copies and ejects automatically. You can also add studies "
+"from a USB drive, a folder, or a downloaded ZIP."
+msgstr ""
+"Inserta un CD — se copia y expulsa automáticamente. También puedes agregar "
+"estudios desde una memoria USB, una carpeta o un ZIP descargado."
+
+#: mia/gui:0
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  Agrega tus estudios — CDs, carpetas USB o descargas ZIP\n"
+"2.  Revisa todo lo que encontramos\n"
+"3.  Crea un solo archivo y cópialo a una USB para tu médico"
+
+#: mia/gui:0
+msgid "Sources added so far: {n}"
+msgstr "Fuentes agregadas hasta ahora: {n}"
+
+#: mia/gui:0
+msgid "Choose the folder or USB drive to import"
+msgstr "Elige la carpeta o memoria USB a importar"
+
+#: mia/gui:0
+msgid "Choose the ZIP file to import"
+msgstr "Elige el archivo ZIP a importar"
+
+#: mia/gui:0
+msgid "Import"
+msgstr "Importar"
+
+#: mia/gui:0
+msgid "All files"
+msgstr "Todos los archivos"
+
+#: mia/gui:0
+msgid "No medical images were found here. Copy anyway?"
+msgstr "No se encontraron imágenes médicas aquí. ¿Copiar de todas formas?"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size}\n"
+"{dicom} medical images detected.\n"
+"\n"
+"Copy everything into your project?"
+msgstr ""
+"{files} archivos · {size}\n"
+"{dicom} imágenes médicas detectadas.\n"
+"\n"
+"¿Copiar todo a tu proyecto?"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size} inside the ZIP.\n"
+"Medical images are detected during the import.\n"
+"\n"
+"Import it into your project?"
+msgstr ""
+"{files} archivos · {size} dentro del ZIP.\n"
+"Las imágenes médicas se detectan durante la importación.\n"
+"\n"
+"¿Importarlo a tu proyecto?"
+
+#: mia/gui:0
+msgid "This doesn't look like a ZIP file."
+msgstr "Esto no parece un archivo ZIP."
+
+#: mia/gui:0
+msgid ""
+"That folder is inside your project (or contains it). Choose a different "
+"folder."
+msgstr ""
+"Esa carpeta está dentro de tu proyecto (o lo contiene). Elige una carpeta "
+"diferente."
+
+#: mia/gui:0
+msgid ""
+"Not enough space on the project drive (need about {need}, free {free})."
+msgstr ""
+"No hay suficiente espacio en la unidad del proyecto (se necesitan {need}, "
+"libres {free})."
+
+#: mia/gui:0
+msgid "Importing “{name}”…"
+msgstr "Importando “{name}”…"
+
+#: mia/gui:0
+msgid "Couldn't import this source."
+msgstr "No se pudo importar esta fuente."
+
+#: mia/gui:0
+msgid "✓ Imported: {c} files OK, {f} could not be read."
+msgstr "✓ Importado: {c} archivos OK, {f} no se pudieron leer."
+
+#: mia/gui:0
+msgid "⚠ No medical images were found in this import."
+msgstr "⚠ No se encontraron imágenes médicas en esta importación."
+
+#: mia/gui:0
+msgid "No medical images were found in this import."
+msgstr "No se encontraron imágenes médicas en esta importación."
+
+#: mia/gui:0
+msgid "✓ Import done. Add another source or continue."
+msgstr "✓ Importación lista. Agrega otra fuente o continúa."

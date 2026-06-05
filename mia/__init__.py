@@ -10,4 +10,4 @@ optional cancel token, so the same code drives both the command-line shims
 and (later) the GUI.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.3"
