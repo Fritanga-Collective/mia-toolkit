@@ -18,7 +18,7 @@ name: Release
 #
 # Windows signing via SignPath Foundation (free OSS code signing; publisher
 # shows "SignPath Foundation"). Microsoft Trusted Signing is region-blocked for
-# Mexico — dormant runbook in int-docs/AZURE-TRUSTED-SIGNING.md.
+# Mexico — dormant runbook in int-docs/infra/AZURE-TRUSTED-SIGNING.md.
 # Required once the SignPath application is approved:
 #   secret  SIGNPATH_API_TOKEN   CI user API token (this is the signing gate)
 #   var     SIGNPATH_ORG_ID      SignPath organization id
