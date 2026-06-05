@@ -49,4 +49,28 @@
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/support-zh.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/support.html"/>
   </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/privacy.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/privacy-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/privacidad.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/privacy-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+  </url>
+  <url>
+    <loc>https://mia-toolkit.fritanga.co/privacy-zh.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://mia-toolkit.fritanga.co/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://mia-toolkit.fritanga.co/privacy-zh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mia-toolkit.fritanga.co/privacy.html"/>
+  </url>
 </urlset>

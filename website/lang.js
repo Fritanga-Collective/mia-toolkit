@@ -6,15 +6,16 @@
   "use strict";
 
   var FILE_LANG = {            // filename -> language code
-    "": "en", "index.html": "en", "support.html": "en",
-    "es.html": "es", "soporte.html": "es",
-    "zh.html": "zh", "support-zh.html": "zh",
+    "": "en", "index.html": "en", "support.html": "en", "privacy.html": "en",
+    "es.html": "es", "soporte.html": "es", "privacidad.html": "es",
+    "zh.html": "zh", "support-zh.html": "zh", "privacy-zh.html": "zh",
   };
   // Where each English entry page should send a non-English visitor.
   var REDIRECT = {
     "": { es: "es.html", zh: "zh.html" },
     "index.html": { es: "es.html", zh: "zh.html" },
     "support.html": { es: "soporte.html", zh: "support-zh.html" },
+    "privacy.html": { es: "privacidad.html", zh: "privacy-zh.html" },
   };
 
   function remembered() {
