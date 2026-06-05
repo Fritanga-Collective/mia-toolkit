@@ -42,7 +42,6 @@
       note: "One-time, except the monthly option. Lemon Squeezy handles tax " +
             "and receipts; you'll get an emailed thank-you, nothing to install.",
       freeQ: "Not now?",
-      freeLink: "Just download it free →",
     },
     es: {
       intro: "Elige un monto — la app siempre es gratis.",
@@ -53,7 +52,6 @@
       note: "Pago único, salvo la opción mensual. Lemon Squeezy gestiona los " +
             "impuestos y el recibo; recibirás un agradecimiento por correo.",
       freeQ: "¿Ahora no?",
-      freeLink: "Solo descárgala gratis →",
     },
     zh: {
       intro: "选择金额 —— 应用始终免费。",
@@ -64,7 +62,6 @@
       note: "除每月选项外均为一次性支持。Lemon Squeezy 处理税费与收据；" +
             "你会收到一封感谢邮件，无需安装任何东西。",
       freeQ: "现在不方便？",
-      freeLink: "直接免费下载 →",
     },
     ms: {
       intro: "Pilih jumlah — aplikasi ini sentiasa percuma.",
@@ -76,7 +73,6 @@
             "menguruskan cukai dan resit; anda akan menerima e-mel terima " +
             "kasih, tiada apa-apa perlu dipasang.",
       freeQ: "Bukan sekarang?",
-      freeLink: "Muat turun percuma sahaja →",
     },
     ta: {
       intro: "தொகையைத் தேர்ந்தெடுங்கள் — இந்த ஆப் எப்போதும் இலவசம்.",
@@ -88,7 +84,6 @@
             "ரசீதுகளும் Lemon Squeezy மூலம் கையாளப்படும்; நன்றி மின்னஞ்சல் " +
             "பெறுவீர்கள், எதையும் நிறுவ வேண்டியதில்லை.",
       freeQ: "இப்போது வேண்டாமா?",
-      freeLink: "இலவசமாகப் பதிவிறக்குங்கள் →",
     },
   };
 
@@ -111,7 +106,9 @@
     if (intro) intro.textContent = t.intro;
     if (note) note.textContent = t.note;
     if (freeQ) freeQ.textContent = t.freeQ;
-    if (free) { free.textContent = t.freeLink; free.href = CONFIG.freeDownload; }
+    // The anchor's text is rendered by the page template from i18n JSON
+    // (support.free_dl) — only the destination is set here.
+    if (free) free.href = CONFIG.freeDownload;
     if (custom) { custom.textContent = t.custom; custom.href = CONFIG.pwyw; }
     if (!box) return;
 

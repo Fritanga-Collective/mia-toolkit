@@ -76,7 +76,8 @@ def start_zip_import(root: Any, panel: Any, *,
     cancel token, or None if nothing was started."""
     src = filedialog.askopenfilename(
         title=_("Choose the ZIP file to import"), parent=parent,
-        filetypes=[("ZIP", "*.zip"), (_("All files"), "*.*")])
+        filetypes=[("ZIP", ("*.zip", "*.ZIP")),
+                   (_("All files"), "*.*")])
     if not src:
         return None
     dest = _prepare_dest(get_dest, panel)
