@@ -1,0 +1,44 @@
+name: Metrics snapshot
+
+# Daily snapshot of the aggregates GitHub already publishes (release download
+# counts + 14-day repo traffic) into website/data/metrics.json, which the
+# generated /stats.html transparency page renders. No tracking of anyone —
+# see int-docs ANALYTICS-PLAN and the website privacy policy.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # daily, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write   # commit the snapshot
+  actions: write    # dispatch pages.yml (token pushes don't auto-trigger)
+
+concurrency:
+  group: metrics
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Snapshot downloads + traffic
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/snapshot_metrics.py
+      - name: Commit + deploy if changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- website/data/metrics.json; then
+            echo "no change today"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add website/data/metrics.json
+          git commit -m "Metrics: daily snapshot (CI)"
+          git push origin HEAD:main
+          # Token pushes never trigger other workflows — deploy explicitly.
+          gh workflow run pages.yml --ref main

@@ -13,6 +13,7 @@ Output: website/_site/  (deployed by .github/workflows/pages.yml)
 
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
@@ -27,11 +28,17 @@ LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de"]
 HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
             "ta": "ta-SG", "de": "de"}
 
-PAGES = ["index", "support", "privacy"]
+PAGES = ["index", "support", "privacy", "stats"]
 OG_PAGES = {"index", "support"}          # privacy has no social card (as before)
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
           "CNAME", "img"]
+
+# GoatCounter site code (e.g. "miatoolkit"). Empty = no analytics script is
+# emitted AND the privacy policy keeps its "no analytics" wording. Setting it
+# emits the cookieless beacon on every page and swaps in the privacy text that
+# names GoatCounter — the build keeps the policy honest automatically.
+GOATCOUNTER = "fritanga-collective"
 
 # Legacy flat URLs -> new locations (meta-refresh + canonical stubs).
 LEGACY = {
@@ -180,6 +187,75 @@ def sitemap(langs: dict) -> str:
             + "\n".join(entries) + "\n</urlset>\n")
 
 
+def load_metrics():
+    path = os.path.join(HERE, "data", "metrics.json")
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def stats_chart_svg(snapshots, pending_text: str) -> str:
+    """Build-time SVG bar chart of downloads/day — zero client JS."""
+    if len(snapshots) < 2:
+        return f'        <p class="note">{pending_text}</p>'
+    days = []
+    for prev, cur in zip(snapshots, snapshots[1:]):
+        days.append((cur["date"], max(0, cur["total"] - prev["total"])))
+    days = days[-60:]
+    peak = max((n for _d, n in days), default=1) or 1
+    w, h, pad = 640, 140, 4
+    bw = max(2, (w - 2 * pad) // max(len(days), 1) - 2)
+    bars = []
+    for i, (d, n) in enumerate(days):
+        bh = int((h - 30) * n / peak)
+        x = pad + i * (bw + 2)
+        bars.append(f'<rect x="{x}" y="{h - 20 - bh}" width="{bw}" '
+                    f'height="{bh}" fill="#2c5282"><title>{d}: {n}</title></rect>')
+    first, last = days[0][0], days[-1][0]
+    return (f'        <svg viewBox="0 0 {w} {h}" role="img" class="stats-chart" '
+            f'preserveAspectRatio="xMidYMid meet">'
+            + "".join(bars)
+            + f'<text x="{pad}" y="{h - 4}" font-size="11" fill="#4a5568">{first}</text>'
+            + f'<text x="{w - pad}" y="{h - 4}" font-size="11" fill="#4a5568" '
+              f'text-anchor="end">{last}</text></svg>')
+
+
+def stats_blocks(metrics, s: dict) -> dict:
+    empty4 = '            <tr><td colspan="4">—</td></tr>'
+    empty2 = '            <tr><td colspan="2">—</td></tr>'
+    if not metrics:
+        return {"STATS_UPDATED": "—", "STATS_TOTAL": "—", "STATS_CHART": "",
+                "STATS_TABLE": empty4, "STATS_VIEWS": "—", "STATS_UNIQUES": "—",
+                "STATS_REFERRERS": empty2}
+    snaps = metrics.get("snapshots", [])
+    latest = snaps[-1] if snaps else {}
+    rows = []
+    for r in metrics.get("releases", []):
+        mac = sum(a["count"] for a in r["assets"] if a["name"].endswith(".dmg"))
+        win = sum(a["count"] for a in r["assets"] if a["name"].endswith(".exe"))
+        rows.append(f'            <tr><td>{html.escape(r["tag"])}</td>'
+                    f'<td>{mac:,}</td>'
+                    f'<td>{win:,}</td><td>{mac + win:,}</td></tr>')
+    rows = rows or [empty4]
+    refs = [f'            <tr><td>{html.escape(r["referrer"])}</td>'
+            f'<td>{r["count"]:,}</td></tr>'
+            for r in metrics.get("referrers", [])] or [empty2]
+    return {
+        "STATS_UPDATED": metrics.get("updated", "—"),
+        "STATS_TOTAL": f'{latest.get("total", 0):,}',
+        "STATS_CHART": stats_chart_svg(snaps, s.get("stats.chart_pending", "")),
+        "STATS_TABLE": "\n".join(rows),
+        "STATS_VIEWS": f'{latest.get("views14", 0):,}',
+        "STATS_UNIQUES": f'{latest.get("uniques14", 0):,}',
+        "STATS_REFERRERS": "\n".join(refs),
+    }
+
+
+GC_SNIPPET = ('  <script data-goatcounter="https://{code}.goatcounter.com/count"\n'
+              '          async src="https://gc.zgo.at/count.js"></script>\n')
+
+
 def main() -> int:
     langs = load_langs()
     if "en" not in langs:
@@ -191,9 +267,13 @@ def main() -> int:
 
     templates = {p: open(os.path.join(HERE, "templates", f"{p}.html"),
                          encoding="utf-8").read() for p in PAGES}
+    metrics = load_metrics()
 
     pages = 0
     for lang, s in langs.items():
+        if GOATCOUNTER and "privacy.site_li1_gc" in s:
+            s = dict(s)
+            s["privacy.site_li1"] = s["privacy.site_li1_gc"]
         outdir = site if lang == "en" else os.path.join(site, lang)
         os.makedirs(outdir, exist_ok=True)
         prefix = "" if lang == "en" else "../"
@@ -204,7 +284,13 @@ def main() -> int:
                 "JSON_LD": json_ld(lang, s, page),
                 "LANGSEL": langsel(langs, lang, page),
             }
+            if page == "stats":
+                computed.update(stats_blocks(metrics, s))
             html = render(templates[page], s, computed)
+            if GOATCOUNTER:
+                html = html.replace("</body>",
+                                    GC_SNIPPET.format(code=GOATCOUNTER)
+                                    + "</body>")
             with open(os.path.join(outdir, f"{page}.html"), "w",
                       encoding="utf-8") as f:
                 f.write(html)

@@ -1,0 +1,92 @@
+{
+ "snapshots": [
+  {
+   "date": "2026-06-05",
+   "total": 18,
+   "views14": 117,
+   "uniques14": 3
+  }
+ ],
+ "releases": [
+  {
+   "tag": "v0.1.4",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.4.dmg",
+     "count": 0
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.4.exe",
+     "count": 0
+    }
+   ]
+  },
+  {
+   "tag": "v0.1.3",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.3.dmg",
+     "count": 2
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.3.exe",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "tag": "v0.1.2",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.2.dmg",
+     "count": 6
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.2.exe",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "tag": "v0.1.1",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.1.dmg",
+     "count": 3
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.1.exe",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "tag": "v0.1.0",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.0.dmg",
+     "count": 1
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.0.exe",
+     "count": 0
+    }
+   ]
+  }
+ ],
+ "referrers": [
+  {
+   "referrer": "github.com",
+   "count": 19
+  },
+  {
+   "referrer": "luis-rodriguez.github.io",
+   "count": 6
+  },
+  {
+   "referrer": "mia-toolkit.fritanga.co",
+   "count": 5
+  }
+ ],
+ "updated": "2026-06-05"
+}
