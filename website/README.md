@@ -51,7 +51,7 @@ Any static server works equally well, e.g. `npx serve` or `php -S localhost:8000
 
 1. Repo **Settings → Pages → Source: GitHub Actions**.
 2. Push to `main`. `.github/workflows/pages.yml` publishes `website/`.
-3. Live at `https://luis-rodriguez.github.io/mia-toolkit/`.
+3. Live at `https://fritanga-collective.github.io/mia-toolkit/`.
 
 ## Custom domain — `mia-toolkit.fritanga.co`
 
@@ -60,7 +60,7 @@ To make it resolve:
 
 1. **DNS** (at your `fritanga.co` provider): add a **CNAME** record
    - Host/Name: `mia-toolkit`
-   - Value/Target: `luis-rodriguez.github.io`  (no trailing path)
+   - Value/Target: `fritanga-collective.github.io`  (no trailing path)
    (A subdomain uses a CNAME record. Only an apex like `fritanga.co` would need
    `A`/`AAAA` records to GitHub's IPs instead.)
 2. **GitHub**: Settings → Pages → set **Custom domain** to

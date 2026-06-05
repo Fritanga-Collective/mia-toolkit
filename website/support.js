@@ -6,7 +6,7 @@
 
   var CONFIG = {
     freeDownload:
-      "https://github.com/luis-rodriguez/mia-toolkit/releases/latest",
+      "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
     // The single Pay-What-You-Want product. We preset the amount per tier with
     // Lemon Squeezy's `checkout[custom_price]` URL param (value in CENTS), so
     // one product drives every fixed tier; the bare URL lets the buyer choose.

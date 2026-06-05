@@ -243,7 +243,7 @@ see `mia/i18n/locale/README.md` to add Spanish).
 ## Download (no build needed)
 
 Pre-built installers are attached to every
-[GitHub Release](https://github.com/luis-rodriguez/mia-toolkit/releases/latest):
+[GitHub Release](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest):
 a macOS `.dmg` and a Windows `.exe` (Windows 10/11, 64-bit). They are currently
 **unsigned** — macOS: right-click the app → Open the first time; Windows: on the
 SmartScreen prompt choose "More info → Run anyway".
