@@ -74,6 +74,17 @@
             "kasih, tiada apa-apa perlu dipasang.",
       freeQ: "Bukan sekarang?",
     },
+    de: {
+      intro: "Wählen Sie einen Betrag — die App ist immer kostenlos.",
+      names: { coffee: "Ein Kaffee", supporter: "Unterstützer:in",
+               patron: "Förderer:in", monthly: "Monatliche Unterstützung" },
+      permo: "/Monat",
+      custom: "Oder einen eigenen Betrag geben →",
+      note: "Einmalig, außer bei der monatlichen Option. Lemon Squeezy " +
+            "übernimmt Steuern und Belege; Sie erhalten ein Dankeschön per " +
+            "E-Mail, nichts muss installiert werden.",
+      freeQ: "Jetzt nicht?",
+    },
     ta: {
       intro: "தொகையைத் தேர்ந்தெடுங்கள் — இந்த ஆப் எப்போதும் இலவசம்.",
       names: { coffee: "ஒரு காபி", supporter: "ஆதரவாளர்",

@@ -756,3 +756,11 @@ msgstr "இந்த இறக்குமதியில் மருத்த�
 #: mia/gui:0
 msgid "✓ Import done. Add another source or continue."
 msgstr "✓ இறக்குமதி முடிந்தது. மற்றொரு மூலத்தைச் சேர்க்கவும் அல்லது தொடரவும்."
+
+#: mia/gui/wizard/steps.py:0
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr ""
+"கிளினிக் அல்லது மருத்துவமனையில் பயன்படுத்துகிறீர்களா? நிறுவன உரிமங்கள் "
+"நோயாளிகளின் இலவச அணுகலுக்கு நிதியளிக்கின்றன →"

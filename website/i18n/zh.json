@@ -3,9 +3,7 @@
   "_lang_name": "中文",
   "_og_locale": "zh_CN",
   "_selector_label": "语言",
-
   "nav.support": "支持",
-
   "index.title": "MIA Toolkit — 你所有的影像，装进一个 U 盘",
   "index.meta_desc": "一款免费、注重隐私的桌面应用，把一摞医院影像光盘整理成一个有序的归档，你的放射科医生用一个 U 盘就能打开。",
   "index.og_title": "MIA Toolkit — 你所有的影像，装进一个 U 盘",
@@ -34,7 +32,6 @@
   "index.note": "签名版安装程序将随第一个正式版本发布。目前此链接指向 GitHub 上的源代码预览。",
   "index.free_pre": "永久免费。如果它帮到了你，",
   "index.free_link": "欢迎支持这个项目 →",
-
   "support.title": "支持 — MIA Toolkit",
   "support.meta_desc": "为什么我们相信你的医疗记录属于你，以及公平定价的支持如何让这个工具对所有人保持免费。",
   "support.og_title": "支持 MIA Toolkit — 你的病历属于你",
@@ -51,7 +48,6 @@
   "support.org_p": "你可以<strong>资助一个社区的免费使用</strong>、赞助一种新语言的翻译，或支持某个地区的推广。机构赞助正是让这个工具对各地的个人患者保持免费的关键。",
   "support.org_contact": "联系我们：",
   "support.back": "← 返回首页",
-
   "privacy.title": "隐私政策 — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit 的设计让我们根本无法看到你的数据：离线应用、无账户、无遥测、无 Cookie、无追踪。",
   "privacy.h1": "隐私政策",
@@ -76,14 +72,28 @@
   "privacy.changes_p": "如果本政策有变更，新版本将在此发布并更新生效日期。",
   "privacy.contact_h2": "联系方式",
   "privacy.back": "← 返回首页",
-
   "links.source": "在 GitHub 上查看源代码",
   "links.story": "了解背后的故事",
   "links.blog": "阅读博客",
-
   "footer.disclaimer": "本软件帮助你整理并交付你自己的医学影像。它不解读影像，不是医疗器械，也不能替代专业的放射科判读。不提供任何担保。",
   "footer.ethos": "开源 · 隐私优先 · 无追踪",
   "footer.privacy": "隐私政策",
   "footer.made_by_pre": "由 ",
-  "footer.made_by_post": " 用 ♥ 打造"
+  "footer.made_by_post": " 用 ♥ 打造",
+  "inst.tier": "许可证",
+  "inst.scope": "适用范围",
+  "inst.price": "每年",
+  "inst.clinic": "诊所",
+  "inst.clinic_scope": "单一站点，最多 10 台工作站",
+  "inst.hospital": "医院",
+  "inst.hospital_scope": "单一站点，工作站数量不限",
+  "inst.network": "医疗网络",
+  "inst.network_scope": "最多 10 个站点",
+  "inst.public": "公共卫生与公益组织",
+  "inst.public_scope": "社区项目",
+  "inst.free_sponsored": "免费 / 赞助",
+  "inst.per_year": "/年",
+  "inst.includes": "每份许可证均包含许可证书、采购发票、优先邮件支持、IT 部署指南和安全说明一页——并为各地患者的免费使用提供资金。",
+  "inst.cta": "申请发票或报价",
+  "inst.note": "个人永远免费。软件完全相同，采用 MIT 许可证；机构许可证是在其之上的合规与支持服务包。"
 }

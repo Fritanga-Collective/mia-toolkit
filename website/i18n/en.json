@@ -3,9 +3,7 @@
   "_lang_name": "English",
   "_og_locale": "en_US",
   "_selector_label": "Language",
-
   "nav.support": "Support",
-
   "index.title": "MIA Toolkit — one USB for all your scans",
   "index.meta_desc": "A free, private desktop app that turns a stack of hospital imaging CDs into one organized archive your radiologist can open from a single USB drive.",
   "index.og_title": "MIA Toolkit — all your imaging scans on one USB for your doctor",
@@ -34,7 +32,6 @@
   "index.note": "Signed installers arrive with the first full release. For now this links to the source preview on GitHub.",
   "index.free_pre": "Free, forever. If it helped you,",
   "index.free_link": "consider supporting the project →",
-
   "support.title": "Support — MIA Toolkit",
   "support.meta_desc": "Why we believe your medical records belong to you, and how fair support keeps this tool free for everyone.",
   "support.og_title": "Support MIA Toolkit — your medical history belongs to you",
@@ -51,7 +48,6 @@
   "support.org_p": "You can <strong>sponsor free access</strong> for a community, fund a new language translation, or support a regional rollout. Institutional sponsorship is what keeps the tool free for individual patients everywhere.",
   "support.org_contact": "Get in touch:",
   "support.back": "← Back to the home page",
-
   "privacy.title": "Privacy Policy — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit is built so we can't see your data: offline app, no account, no telemetry, no cookies, no tracking.",
   "privacy.h1": "Privacy Policy",
@@ -76,14 +72,28 @@
   "privacy.changes_p": "If this policy changes, the new version will be posted here with an updated effective date.",
   "privacy.contact_h2": "Contact",
   "privacy.back": "← Back to the home page",
-
   "links.source": "View the source on GitHub",
   "links.story": "Read the story",
   "links.blog": "Read the blog",
-
   "footer.disclaimer": "This software helps you organize and deliver your own medical images. It does not interpret images, is not a medical device, and does not replace professional radiological review. No warranty.",
   "footer.ethos": "Open source · Private by design · No tracking",
   "footer.privacy": "Privacy policy",
   "footer.made_by_pre": "Made with ♥ by ",
-  "footer.made_by_post": ""
+  "footer.made_by_post": "",
+  "inst.tier": "License",
+  "inst.scope": "Scope",
+  "inst.price": "Per year",
+  "inst.clinic": "Clinic",
+  "inst.clinic_scope": "Single site, up to 10 workstations",
+  "inst.hospital": "Hospital",
+  "inst.hospital_scope": "Single site, unlimited workstations",
+  "inst.network": "Network",
+  "inst.network_scope": "Up to 10 sites",
+  "inst.public": "Public health & NGOs",
+  "inst.public_scope": "Community programs",
+  "inst.free_sponsored": "Free / sponsored",
+  "inst.per_year": "/year",
+  "inst.includes": "Every license includes a license certificate, an invoice for procurement, priority email support, an IT deployment guide, and a security one-pager — and it funds free access for patients everywhere.",
+  "inst.cta": "Request an invoice or quote",
+  "inst.note": "Individuals never pay. The software is identical and MIT-licensed; the institutional license is the compliance and support package on top."
 }

@@ -14,6 +14,15 @@ from tkinter import filedialog, messagebox, ttk
 SUPPORT_URL = "https://mia-toolkit.fritanga.co/support.html"
 BLOG_URL = "https://fritangacollective.substack.com/"
 
+
+def institutions_url() -> str:
+    """The institutional section in the app's current language — linking the
+    language page directly avoids the website's auto-redirect entirely."""
+    from ..i18n import current_language
+    lang = current_language()
+    prefix = "" if lang == "en" else f"{lang}/"
+    return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
+
 from mia.core import deliver, dicomdir, inventory
 from mia.core.common import format_bytes
 from mia.core.ripper import copy_with_retry
@@ -414,6 +423,15 @@ class DoneStep(WizardStep):
         # Emoji outside the translatable string (language-neutral).
         ttk.Button(btns, text=f"📰  {_('Read our blog')}",
                    command=self._blog).pack(side="left", padx=(8, 0))
+        # Quiet institutional pointer — per the licensing plan: one line, no
+        # nag, opens the support page's institutional section in the browser.
+        inst = ttk.Label(
+            support, foreground="#666", cursor="hand2",
+            font=("", 11, "underline"),
+            text=_("Deploying at a clinic or hospital? Institutional licenses "
+                   "fund free access for patients →"))
+        inst.bind("<Button-1>", lambda e: webbrowser.open(institutions_url()))
+        inst.grid(row=2, column=0, sticky="w", pady=(10, 0))
 
     def _donate(self) -> None:
         webbrowser.open(SUPPORT_URL)

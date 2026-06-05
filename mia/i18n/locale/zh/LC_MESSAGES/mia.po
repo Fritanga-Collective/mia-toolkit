@@ -715,3 +715,9 @@ msgstr "此次导入未发现医学影像。"
 #: mia/gui:0
 msgid "✓ Import done. Add another source or continue."
 msgstr "✓ 导入完成。可继续添加来源或进入下一步。"
+
+#: mia/gui/wizard/steps.py:0
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr "在诊所或医院部署？机构许可证为患者的免费使用提供资金 →"

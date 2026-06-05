@@ -26,7 +26,7 @@ LOCALE_DIR = Path(__file__).resolve().parent.parent / "i18n" / "locale"
 
 # code -> display name (shown, in its own language, in the language selector)
 LANGUAGES = {"en": "English", "es": "Español", "zh": "中文",
-             "ms": "Bahasa Melayu", "ta": "தமிழ்"}
+             "ms": "Bahasa Melayu", "ta": "தமிழ்", "de": "Deutsch"}
 
 _translation: _gettext.NullTranslations = _gettext.NullTranslations()
 _current: str = "en"

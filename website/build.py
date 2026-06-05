@@ -23,9 +23,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BASE = "https://mia-toolkit.fritanga.co"
 
 # Language order = dropdown order. English lives at the site root (x-default).
-LANG_ORDER = ["en", "es", "zh", "ms", "ta"]
+LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de"]
 HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
-            "ta": "ta-SG"}
+            "ta": "ta-SG", "de": "de"}
 
 PAGES = ["index", "support", "privacy"]
 OG_PAGES = {"index", "support"}          # privacy has no social card (as before)
