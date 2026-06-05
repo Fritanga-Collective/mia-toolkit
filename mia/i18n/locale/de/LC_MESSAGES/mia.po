@@ -1,0 +1,764 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mia-toolkit 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-03 23:45-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: mia/gui/rip_session.py:53
+msgid "Please choose a folder to save copies to."
+msgstr "Bitte wählen Sie einen Ordner, in dem die Kopien gespeichert werden."
+
+#: mia/gui/rip_session.py:58
+msgid "Couldn't create that folder. Choose another."
+msgstr ""
+"Dieser Ordner konnte nicht erstellt werden. Bitte wählen Sie einen anderen."
+
+#: mia/gui/rip_session.py:66
+msgid "Insert a disc…"
+msgstr "Legen Sie eine Disc ein…"
+
+#: mia/gui/rip_session.py:67
+msgid "Ripping session started. Insert your first disc."
+msgstr "Das Kopieren wurde gestartet. Legen Sie Ihre erste Disc ein."
+
+#: mia/gui/rip_session.py:75 mia/gui/task_view.py:112
+msgid "Stopping…"
+msgstr "Wird angehalten…"
+
+#: mia/gui/rip_session.py:86
+msgid "Ripping session ended. {n} disc(s) copied."
+msgstr "Das Kopieren wurde beendet. {n} Disc(s) kopiert."
+
+#: mia/gui/rip_session.py:100
+msgid "Insert a disc… (waiting)"
+msgstr "Legen Sie eine Disc ein… (warte)"
+
+#: mia/gui/rip_session.py:117
+msgid "Ripping disc {n}: {name}…"
+msgstr "Disc {n} wird kopiert: {name}…"
+
+#: mia/gui/rip_session.py:118
+msgid "Found disc “{name}”. Copying…"
+msgstr "Disc „{name}“ gefunden. Wird kopiert…"
+
+#: mia/gui/rip_session.py:134 mia/gui/task_view.py:99
+msgid "Stopped."
+msgstr "Angehalten."
+
+#: mia/gui/rip_session.py:140
+msgid "Couldn't rip this disc. Remove it and insert another, or press Stop."
+msgstr ""
+"Diese Disc konnte nicht kopiert werden. Nehmen Sie sie heraus und legen Sie "
+"eine andere ein, oder drücken Sie auf Stopp."
+
+#: mia/gui/rip_session.py:146
+msgid "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
+msgstr ""
+"✓ Disc kopiert: {c} Dateien in Ordnung, {r} wiederhergestellt, {f} konnten "
+"nicht gelesen werden."
+
+#: mia/gui/rip_session.py:153
+msgid "✓ Disc {n} done. Insert the next disc…"
+msgstr "✓ Disc {n} fertig. Legen Sie die nächste Disc ein…"
+
+#: mia/gui/rip_session.py:162
+msgid "Choose a disc"
+msgstr "Disc auswählen"
+
+#: mia/gui/rip_session.py:166
+msgid "More than one drive looks like a disc. Which one should I copy?"
+msgstr ""
+"Mehrere Laufwerke sehen wie eine Disc aus. Welches soll kopiert werden?"
+
+#: mia/gui/rip_session.py:180
+msgid "Rip this one"
+msgstr "Diese kopieren"
+
+#: mia/gui/rip_session.py:182
+msgid "Skip for now"
+msgstr "Vorerst überspringen"
+
+#: mia/gui/task_view.py:38 mia/gui/wizard/view.py:58
+msgid "‹ Back"
+msgstr "‹ Zurück"
+
+#: mia/gui/task_view.py:54
+msgid "Stop"
+msgstr "Stopp"
+
+#: mia/gui/task_view.py:97
+msgid "Stopped on an error."
+msgstr "Wegen eines Fehlers angehalten."
+
+#: mia/gui/task_view.py:100
+msgid "Stopped by you."
+msgstr "Von Ihnen angehalten."
+
+#: mia/gui/widgets.py:32
+msgid "Choose…"
+msgstr "Auswählen…"
+
+#: mia/gui/progress_panel.py:40
+msgid "Ready."
+msgstr "Bereit."
+
+#: mia/gui/progress_panel.py:62 mia/gui/progress_panel.py:205
+msgid "▸ Show technical details"
+msgstr "▸ Technische Details anzeigen"
+
+#: mia/gui/progress_panel.py:79
+msgid "Save log…"
+msgstr "Protokoll speichern…"
+
+#: mia/gui/progress_panel.py:81
+msgid "Open log folder"
+msgstr "Protokollordner öffnen"
+
+#: mia/gui/progress_panel.py:91
+msgid "Writing the archive… this can take several minutes."
+msgstr "Das Archiv wird geschrieben… das kann einige Minuten dauern."
+
+#: mia/gui/progress_panel.py:92
+msgid "Writing the archive now. This can take several minutes — please wait…"
+msgstr ""
+"Das Archiv wird jetzt geschrieben. Das kann einige Minuten dauern — bitte "
+"warten…"
+
+#: mia/gui/progress_panel.py:134
+msgid "files {done}/{total}"
+msgstr "Dateien {done}/{total}"
+
+#: mia/gui/progress_panel.py:137
+msgid "elapsed {t}"
+msgstr "vergangen {t}"
+
+#: mia/gui/progress_panel.py:139
+msgid "ETA {t}"
+msgstr "Restzeit {t}"
+
+#: mia/gui/progress_panel.py:141
+msgid "{r:.0f}/s"
+msgstr "{r:.0f}/s"
+
+#: mia/gui/progress_panel.py:196
+msgid "▾ Hide technical details"
+msgstr "▾ Technische Details ausblenden"
+
+#: mia/gui/progress_panel.py:209
+msgid "Save technical log"
+msgstr "Technisches Protokoll speichern"
+
+#: mia/gui/rip_view.py:23
+msgid "Save copies to:"
+msgstr "Kopien speichern unter:"
+
+#: mia/gui/rip_view.py:27 mia/gui/wizard/steps.py:132
+msgid "Start ripping"
+msgstr "Kopieren starten"
+
+#: mia/gui/messages.py:61
+msgid "Recovered a file after a retry."
+msgstr "Eine Datei wurde nach einem erneuten Versuch wiederhergestellt."
+
+#: mia/gui/messages.py:63
+msgid "⚠ Could not read a file (see technical details)."
+msgstr "⚠ Eine Datei konnte nicht gelesen werden (siehe technische Details)."
+
+#: mia/gui/messages.py:69
+msgid "Copying file {done} of {total}…"
+msgstr "Datei {done} von {total} wird kopiert…"
+
+#: mia/gui/messages.py:71
+msgid "Scanning file {done} of {total}…"
+msgstr "Datei {done} von {total} wird geprüft…"
+
+#: mia/gui/messages.py:73
+msgid "Indexing image {done} of {total}…"
+msgstr "Bild {done} von {total} wird erfasst…"
+
+#: mia/gui/messages.py:75
+msgid "Working… {done} of {total}"
+msgstr "Wird bearbeitet… {done} von {total}"
+
+#: mia/gui/messages.py:82
+msgid ""
+"Permission denied. The destination may be read-only or locked. Try a "
+"different folder, or check the drive isn't write-protected."
+msgstr ""
+"Zugriff verweigert. Das Ziel ist möglicherweise schreibgeschützt oder "
+"gesperrt. Versuchen Sie einen anderen Ordner, oder prüfen Sie, ob das "
+"Laufwerk schreibgeschützt ist."
+
+#: mia/gui/messages.py:85
+msgid ""
+"A needed file or folder was not found. A disc may have been ejected too "
+"early, or a folder was moved."
+msgstr ""
+"Eine benötigte Datei oder ein benötigter Ordner wurde nicht gefunden. "
+"Möglicherweise wurde eine Disc zu früh ausgeworfen oder ein Ordner "
+"verschoben."
+
+#: mia/gui/messages.py:88
+msgid "The disk is full. Free up space or choose a drive with more room."
+msgstr ""
+"Der Datenträger ist voll. Geben Sie Speicherplatz frei oder wählen Sie ein "
+"Laufwerk mit mehr Platz."
+
+#: mia/gui/messages.py:90
+msgid "That location is read-only. Choose a different destination folder."
+msgstr ""
+"Dieser Speicherort ist schreibgeschützt. Wählen Sie einen anderen "
+"Zielordner."
+
+#: mia/gui/messages.py:91
+msgid "Something went wrong. See the technical details below."
+msgstr ""
+"Etwas ist schiefgelaufen. Sehen Sie sich die technischen Details unten an."
+
+#: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
+msgid "MIA Toolkit"
+msgstr "MIA Toolkit"
+
+#: mia/gui/launcher.py:28
+msgid "Organize your imaging CDs into one archive for your doctor."
+msgstr "Fassen Sie Ihre Bild-CDs zu einem Archiv für Ihren Arzt zusammen."
+
+#: mia/gui/launcher.py:33
+msgid "Walk me through it, step by step (recommended)."
+msgstr "Begleiten Sie mich Schritt für Schritt (empfohlen)."
+
+#: mia/gui/launcher.py:36
+msgid "Or use a single tool:"
+msgstr "Oder verwenden Sie ein einzelnes Werkzeug:"
+
+#: mia/gui/launcher.py:40 mia/gui/inventory_view.py:17
+msgid "Build Inventory"
+msgstr "Übersicht erstellen"
+
+#: mia/gui/launcher.py:41
+msgid "List every study in a spreadsheet."
+msgstr "Jede Untersuchung in einer Tabelle auflisten."
+
+#: mia/gui/launcher.py:42 mia/gui/archive_view.py:16
+msgid "Build Archive for Doctor"
+msgstr "Archiv für den Arzt erstellen"
+
+#: mia/gui/launcher.py:43
+msgid "Combine everything onto a USB drive."
+msgstr "Alles auf einem USB-Stick zusammenfassen."
+
+#: mia/gui/launcher.py:50
+msgid "Language:"
+msgstr "Sprache:"
+
+#: mia/gui/inventory_view.py:21
+msgid ""
+"Pick the folder of ripped discs. A spreadsheet of every study will be "
+"created inside it and opened for you."
+msgstr ""
+"Wählen Sie den Ordner mit den kopierten Discs. Darin wird eine Tabelle aller"
+" Untersuchungen erstellt und für Sie geöffnet."
+
+#: mia/gui/inventory_view.py:25 mia/gui/archive_view.py:24
+msgid "Ripped discs folder:"
+msgstr "Ordner mit kopierten Discs:"
+
+#: mia/gui/inventory_view.py:29
+msgid "Build inventory"
+msgstr "Übersicht erstellen"
+
+#: mia/gui/inventory_view.py:41
+msgid "Please choose a valid folder first."
+msgstr "Bitte wählen Sie zuerst einen gültigen Ordner."
+
+#: mia/gui/inventory_view.py:44
+msgid "Scanning…"
+msgstr "Wird durchsucht…"
+
+#: mia/gui/inventory_view.py:45
+msgid "Looking through {f} for studies…"
+msgstr "{f} wird nach Untersuchungen durchsucht…"
+
+#: mia/gui/inventory_view.py:57
+msgid "No DICOM studies found in that folder."
+msgstr "In diesem Ordner wurden keine DICOM-Untersuchungen gefunden."
+
+#: mia/gui/inventory_view.py:58
+msgid "No studies found. Is this the folder with your ripped discs?"
+msgstr ""
+"Keine Untersuchungen gefunden. Ist das der Ordner mit Ihren kopierten Discs?"
+
+#: mia/gui/inventory_view.py:61
+msgid "Done — {n} studies."
+msgstr "Fertig — {n} Untersuchungen."
+
+#: mia/gui/inventory_view.py:62
+msgid "✓ Found {n} studies. Opening the spreadsheet…"
+msgstr "✓ {n} Untersuchungen gefunden. Die Tabelle wird geöffnet…"
+
+#: mia/gui/archive_view.py:20
+msgid ""
+"Combine all your ripped discs into one archive the radiologist can open. "
+"Choose where to save it — a USB drive is ideal."
+msgstr ""
+"Fassen Sie alle Ihre kopierten Discs zu einem Archiv zusammen, das der "
+"Radiologe öffnen kann. Wählen Sie, wo es gespeichert wird — ein USB-Stick "
+"ist ideal."
+
+#: mia/gui/archive_view.py:28
+msgid "Save archive to:"
+msgstr "Archiv speichern unter:"
+
+#: mia/gui/archive_view.py:32
+msgid "Build archive"
+msgstr "Archiv erstellen"
+
+#: mia/gui/archive_view.py:45
+msgid "Please choose a valid ripped-discs folder."
+msgstr "Bitte wählen Sie einen gültigen Ordner mit kopierten Discs."
+
+#: mia/gui/archive_view.py:48
+msgid "Please choose where to save the archive."
+msgstr "Bitte wählen Sie, wo das Archiv gespeichert werden soll."
+
+#: mia/gui/archive_view.py:51
+msgid "That destination already has files in it."
+msgstr "In diesem Ziel befinden sich bereits Dateien."
+
+#: mia/gui/archive_view.py:52
+msgid ""
+"⚠ The destination folder isn't empty. Choose an empty folder (or a new one) "
+"so the archive stays clean."
+msgstr ""
+"⚠ Der Zielordner ist nicht leer. Wählen Sie einen leeren (oder neuen) "
+"Ordner, damit das Archiv sauber bleibt."
+
+#: mia/gui/archive_view.py:59
+msgid "Scanning for images…"
+msgstr "Wird nach Bildern durchsucht…"
+
+#: mia/gui/archive_view.py:60
+msgid "Looking for all DICOM images under {f}…"
+msgstr "Es wird nach allen DICOM-Bildern unter {f} gesucht…"
+
+#: mia/gui/archive_view.py:73
+msgid "No DICOM images found in that folder."
+msgstr "In diesem Ordner wurden keine DICOM-Bilder gefunden."
+
+#: mia/gui/archive_view.py:74
+msgid "No images found. Is this the folder with your ripped discs?"
+msgstr "Keine Bilder gefunden. Ist das der Ordner mit Ihren kopierten Discs?"
+
+#: mia/gui/archive_view.py:78
+msgid "Archive ready — {s} studies, {n} images."
+msgstr "Archiv bereit — {s} Untersuchungen, {n} Bilder."
+
+#: mia/gui/archive_view.py:80
+msgid ""
+"✓ Archive complete: {s} studies, {n} images. Copy this folder to the USB "
+"drive and hand it to the doctor."
+msgstr ""
+"✓ Archiv fertig: {s} Untersuchungen, {n} Bilder. Kopieren Sie diesen Ordner "
+"auf den USB-Stick und geben Sie ihn dem Arzt."
+
+#: mia/gui/archive_view.py:84
+msgid "README: {p}"
+msgstr "README: {p}"
+
+#: mia/gui/wizard/steps.py:74 mia/gui/wizard/steps.py:291
+msgid "Not enough space"
+msgstr "Nicht genug Speicherplatz"
+
+#: mia/gui/wizard/steps.py:75
+msgid ""
+"This drive may not have enough room (need about {n}). Move your project to "
+"another drive with more space?"
+msgstr ""
+"Dieses Laufwerk hat möglicherweise nicht genug Platz (benötigt etwa {n}). "
+"Möchten Sie Ihr Projekt auf ein anderes Laufwerk mit mehr Platz verschieben?"
+
+#: mia/gui/wizard/steps.py:78
+msgid "Cancelled — not enough space."
+msgstr "Abgebrochen — nicht genug Speicherplatz."
+
+#: mia/gui/wizard/steps.py:81
+msgid "Choose a drive or folder with more space"
+msgstr "Wählen Sie ein Laufwerk oder einen Ordner mit mehr Platz"
+
+#: mia/gui/wizard/steps.py:83
+msgid "Cancelled."
+msgstr "Abgebrochen."
+
+#: mia/gui/wizard/steps.py:94
+msgid "Could not move the project. Try another drive."
+msgstr ""
+"Das Projekt konnte nicht verschoben werden. Versuchen Sie ein anderes "
+"Laufwerk."
+
+#: mia/gui/wizard/steps.py:102
+msgid "This will help you, step by step:"
+msgstr "Das hilft Ihnen Schritt für Schritt:"
+
+#: mia/gui/wizard/steps.py:111
+msgid "Skip to building the archive"
+msgstr "Direkt zum Erstellen des Archivs springen"
+
+#: mia/gui/wizard/steps.py:118
+msgid ""
+"Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
+msgstr ""
+"Willkommen zurück — Sie haben bereits {n} Disc(s) kopiert. Fahren Sie mit "
+"Weiter fort, oder:"
+
+#: mia/gui/wizard/steps.py:145
+msgid "Ready. Insert a disc, then click Start ripping."
+msgstr ""
+"Bereit. Legen Sie eine Disc ein und klicken Sie dann auf Kopieren starten."
+
+#: mia/gui/wizard/steps.py:172
+msgid "Re-scan"
+msgstr "Erneut durchsuchen"
+
+#: mia/gui/wizard/steps.py:174
+msgid "Open spreadsheet"
+msgstr "Tabelle öffnen"
+
+#: mia/gui/wizard/steps.py:183
+msgid "No discs copied yet — you can skip this step."
+msgstr "Noch keine Discs kopiert — Sie können diesen Schritt überspringen."
+
+#: mia/gui/wizard/steps.py:191
+msgid "Looking through your discs…"
+msgstr "Ihre Discs werden durchsucht…"
+
+#: mia/gui/wizard/steps.py:207
+msgid "We found {n} studies across your discs."
+msgstr "Wir haben {n} Untersuchungen auf Ihren Discs gefunden."
+
+#: mia/gui/wizard/steps.py:217
+msgid ""
+"⚠ More than one patient appears across these discs. Open the spreadsheet's "
+"‘Consistency Check’ to be sure a stranger's disc wasn't mixed in (often it's"
+" just the same person registered differently)."
+msgstr ""
+"⚠ Auf diesen Discs erscheint mehr als ein Patient. Öffnen Sie die "
+"‚Konsistenzprüfung‘ in der Tabelle, um sicherzugehen, dass nicht "
+"versehentlich die Disc einer fremden Person dazwischengeraten ist (oft ist "
+"es nur dieselbe Person, die unterschiedlich erfasst wurde)."
+
+#: mia/gui/wizard/steps.py:233
+msgid "Build the archive"
+msgstr "Das Archiv erstellen"
+
+#: mia/gui/wizard/steps.py:236
+msgid "Choose USB & copy"
+msgstr "USB wählen & kopieren"
+
+#: mia/gui/wizard/steps.py:244
+msgid "No discs to build from. Go back and rip some discs first."
+msgstr ""
+"Keine Discs zum Erstellen vorhanden. Gehen Sie zurück und kopieren Sie "
+"zuerst einige Discs."
+
+#: mia/gui/wizard/steps.py:250
+msgid "Archive already built. Choose a USB drive to copy it to."
+msgstr ""
+"Archiv bereits erstellt. Wählen Sie einen USB-Stick, auf den es kopiert "
+"werden soll."
+
+#: mia/gui/wizard/steps.py:254
+msgid "Ready to combine your discs into one archive."
+msgstr "Bereit, Ihre Discs zu einem Archiv zusammenzufassen."
+
+#: mia/gui/wizard/steps.py:280
+msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
+msgstr ""
+"Archiv erstellt: {s} Untersuchungen, {n} Bilder. Kopieren Sie es jetzt auf "
+"einen USB-Stick."
+
+#: mia/gui/wizard/steps.py:285
+msgid "Choose your USB drive"
+msgstr "Wählen Sie Ihren USB-Stick"
+
+#: mia/gui/wizard/steps.py:292
+msgid "That drive doesn't have room for the archive (need about {n})."
+msgstr ""
+"Dieses Laufwerk hat nicht genug Platz für das Archiv (benötigt etwa {n})."
+
+#: mia/gui/wizard/steps.py:323
+msgid "✓ Copied to the USB and verified. Click Next to finish."
+msgstr ""
+"✓ Auf den USB-Stick kopiert und überprüft. Klicken Sie auf Weiter, um "
+"abzuschließen."
+
+#: mia/gui/wizard/steps.py:326
+msgid "Copied with {f} problem file(s) — see technical details."
+msgstr "Kopiert mit {f} Problemdatei(en) — siehe technische Details."
+
+#: mia/gui/wizard/steps.py:338
+msgid "Show the files on the USB"
+msgstr "Die Dateien auf dem USB-Stick anzeigen"
+
+#: mia/gui/wizard/steps.py:341
+msgid "Open the inventory"
+msgstr "Die Übersicht öffnen"
+
+#: mia/gui/wizard/steps.py:345
+msgid ""
+"Tip: include a one-page cover note with the patient's name, date of birth, a"
+" short history, and the specific questions you want the radiologist to "
+"answer."
+msgstr ""
+"Tipp: Legen Sie ein einseitiges Anschreiben bei mit dem Namen des Patienten,"
+" dem Geburtsdatum, einer kurzen Vorgeschichte und den konkreten Fragen, die "
+"der Radiologe beantworten soll."
+
+#: mia/gui/wizard/steps.py:355
+msgid ""
+"Was this useful? This tool is free and always will be. If it helped you, you"
+" can buy the dev team a coffee — it keeps the project alive and free for "
+"families who can't pay."
+msgstr ""
+"War das hilfreich? Dieses Werkzeug ist kostenlos und bleibt es immer. Wenn "
+"es Ihnen geholfen hat, können Sie dem Entwicklerteam einen Kaffee ausgeben —"
+" das hält das Projekt am Leben und kostenlos für Familien, die nicht "
+"bezahlen können."
+
+#: mia/gui/wizard/steps.py:359
+msgid "☕  Buy us a coffee"
+msgstr "☕  Spendieren Sie uns einen Kaffee"
+
+#: mia/gui/wizard/steps.py:370
+msgid ""
+"All done! Your archive is on the USB drive at:\n"
+"{p}\n"
+"\n"
+"You can now hand it to your doctor."
+msgstr ""
+"Alles erledigt! Ihr Archiv befindet sich auf dem USB-Stick unter:\n"
+"{p}\n"
+"\n"
+"Sie können es nun Ihrem Arzt geben."
+
+#: mia/gui/wizard/steps.py:374
+msgid "All done."
+msgstr "Alles erledigt."
+
+#: mia/gui/wizard/view.py:14
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: mia/gui/wizard/view.py:14
+msgid "Review"
+msgstr "Überprüfen"
+
+#: mia/gui/wizard/view.py:15
+msgid "Build & deliver"
+msgstr "Erstellen & übergeben"
+
+#: mia/gui/wizard/view.py:15
+msgid "Done"
+msgstr "Fertig"
+
+#: mia/gui/wizard/view.py:41
+msgid "Guided Setup"
+msgstr "Geführte Einrichtung"
+
+#: mia/gui/wizard/view.py:53
+msgid "Exit to Home"
+msgstr "Zurück zur Startseite"
+
+#: mia/gui/wizard/view.py:56 mia/gui/wizard/view.py:131
+msgid "Next ›"
+msgstr "Weiter ›"
+
+#: mia/gui/wizard/view.py:91
+msgid "Step {n} of {m}:  {t}"
+msgstr "Schritt {n} von {m}:  {t}"
+
+#: mia/gui/wizard/view.py:131
+msgid "Finish"
+msgstr "Fertigstellen"
+
+#: mia/gui/launcher.py:0
+msgid ""
+"This software helps you organize and deliver your own medical images. It "
+"does not interpret images, is not a medical device, and does not replace "
+"professional radiological review. No warranty."
+msgstr ""
+"Diese Software hilft Ihnen, Ihre eigenen medizinischen Bilder zu "
+"organisieren und weiterzugeben. Sie deutet keine Bilder, ist kein "
+"Medizinprodukt und ersetzt keine fachärztliche radiologische Beurteilung. "
+"Keine Gewährleistung."
+
+#: mia/gui/launcher.py:0
+msgid "Open source · Private by design · No tracking"
+msgstr "Quelloffen · Datenschutz von Grund auf · Kein Tracking"
+
+#: mia/gui/launcher.py:0
+msgid "Made with ♥ by Fritanga"
+msgstr "Mit ♥ erstellt von Fritanga"
+
+#: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
+msgid "Read our blog"
+msgstr "Unseren Blog lesen"
+
+#: mia/gui:0
+msgid "Add your studies"
+msgstr "Untersuchungen hinzufügen"
+
+#: mia/gui:0
+msgid "Add Your Studies"
+msgstr "Untersuchungen hinzufügen"
+
+#: mia/gui:0
+msgid "Copy discs, USB folders, or ZIP downloads into your project."
+msgstr "Kopieren Sie Discs, USB-Ordner oder ZIP-Downloads in Ihr Projekt."
+
+#: mia/gui:0
+msgid "From a folder or USB"
+msgstr "Aus einem Ordner oder USB"
+
+#: mia/gui:0
+msgid "From a ZIP file"
+msgstr "Aus einer ZIP-Datei"
+
+#: mia/gui:0
+msgid ""
+"Insert each CD — it copies and ejects automatically. You can also add "
+"studies from a USB drive, a folder, or a ZIP downloaded from a hospital "
+"portal. When everything's added, click Next."
+msgstr ""
+"Legen Sie jede CD ein — sie wird automatisch kopiert und ausgeworfen. Sie "
+"können Untersuchungen auch von einem USB-Stick, aus einem Ordner oder aus "
+"einer von einem Krankenhausportal heruntergeladenen ZIP-Datei hinzufügen. "
+"Wenn alles hinzugefügt ist, klicken Sie auf Weiter."
+
+#: mia/gui:0
+msgid ""
+"Insert a CD — it copies and ejects automatically. You can also add studies "
+"from a USB drive, a folder, or a downloaded ZIP."
+msgstr ""
+"Legen Sie eine CD ein — sie wird automatisch kopiert und ausgeworfen. Sie "
+"können Untersuchungen auch von einem USB-Stick, aus einem Ordner oder aus "
+"einer heruntergeladenen ZIP-Datei hinzufügen."
+
+#: mia/gui:0
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  Fügen Sie Ihre Untersuchungen hinzu — CDs, USB-Ordner oder ZIP-Downloads\n"
+"2.  Überprüfen Sie alles, was wir gefunden haben\n"
+"3.  Erstellen Sie ein Archiv und kopieren Sie es für Ihren Arzt auf einen USB-Stick"
+
+#: mia/gui:0
+msgid "Sources added so far: {n}"
+msgstr "Bisher hinzugefügte Quellen: {n}"
+
+#: mia/gui:0
+msgid "Choose the folder or USB drive to import"
+msgstr "Wählen Sie den Ordner oder USB-Stick zum Importieren"
+
+#: mia/gui:0
+msgid "Choose the ZIP file to import"
+msgstr "Wählen Sie die ZIP-Datei zum Importieren"
+
+#: mia/gui:0
+msgid "Import"
+msgstr "Importieren"
+
+#: mia/gui:0
+msgid "All files"
+msgstr "Alle Dateien"
+
+#: mia/gui:0
+msgid "No medical images were found here. Copy anyway?"
+msgstr "Hier wurden keine medizinischen Bilder gefunden. Trotzdem kopieren?"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size}\n"
+"{dicom} medical images detected.\n"
+"\n"
+"Copy everything into your project?"
+msgstr ""
+"{files} Dateien · {size}\n"
+"{dicom} medizinische Bilder erkannt.\n"
+"\n"
+"Alles in Ihr Projekt kopieren?"
+
+#: mia/gui:0
+msgid ""
+"{files} files · {size} inside the ZIP.\n"
+"Medical images are detected during the import.\n"
+"\n"
+"Import it into your project?"
+msgstr ""
+"{files} Dateien · {size} in der ZIP-Datei.\n"
+"Medizinische Bilder werden während des Imports erkannt.\n"
+"\n"
+"In Ihr Projekt importieren?"
+
+#: mia/gui:0
+msgid "This doesn't look like a ZIP file."
+msgstr "Das sieht nicht nach einer ZIP-Datei aus."
+
+#: mia/gui:0
+msgid ""
+"That folder is inside your project (or contains it). Choose a different "
+"folder."
+msgstr ""
+"Dieser Ordner liegt innerhalb Ihres Projekts (oder enthält es). Wählen Sie "
+"einen anderen Ordner."
+
+#: mia/gui:0
+msgid ""
+"Not enough space on the project drive (need about {need}, free {free})."
+msgstr ""
+"Nicht genug Platz auf dem Projektlaufwerk (benötigt etwa {need}, frei "
+"{free})."
+
+#: mia/gui:0
+msgid "Importing “{name}”…"
+msgstr "„{name}“ wird importiert…"
+
+#: mia/gui:0
+msgid "Couldn't import this source."
+msgstr "Diese Quelle konnte nicht importiert werden."
+
+#: mia/gui:0
+msgid "✓ Imported: {c} files OK, {f} could not be read."
+msgstr ""
+"✓ Importiert: {c} Dateien in Ordnung, {f} konnten nicht gelesen werden."
+
+#: mia/gui:0
+msgid "⚠ No medical images were found in this import."
+msgstr "⚠ In diesem Import wurden keine medizinischen Bilder gefunden."
+
+#: mia/gui:0
+msgid "No medical images were found in this import."
+msgstr "In diesem Import wurden keine medizinischen Bilder gefunden."
+
+#: mia/gui:0
+msgid "✓ Import done. Add another source or continue."
+msgstr ""
+"✓ Import fertig. Fügen Sie eine weitere Quelle hinzu oder fahren Sie fort."
+
+#: mia/gui/wizard/steps.py:0
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr ""
+"Einsatz in einer Klinik oder einem Krankenhaus? Institutionelle Lizenzen "
+"finanzieren den kostenlosen Zugang für Patienten →"

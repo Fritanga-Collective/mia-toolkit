@@ -7,7 +7,7 @@
   "use strict";
 
   // Non-default languages = the /{code}/ folders build.py generates.
-  var EXTRA = ["es", "zh", "ms", "ta"];
+  var EXTRA = ["es", "zh", "ms", "ta", "de"];
   var KNOWN = ["en"].concat(EXTRA);
 
   function parts() {
