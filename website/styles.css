@@ -35,7 +35,10 @@ body {
 header { border-bottom: 1px solid var(--border); }
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 0;
+  flex-wrap: wrap; gap: 8px;
+  /* Keep the .wrap horizontal padding — `14px 0` would override it and let the
+     brand/language selector touch the screen edge on mobile. */
+  padding: 14px 20px;
 }
 .brand { font-weight: 700; color: var(--accent); text-decoration: none;
   font-size: 1.05rem; }
