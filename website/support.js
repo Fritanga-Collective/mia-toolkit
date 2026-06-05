@@ -66,6 +66,30 @@
       freeQ: "现在不方便？",
       freeLink: "直接免费下载 →",
     },
+    ms: {
+      intro: "Pilih jumlah — aplikasi ini sentiasa percuma.",
+      names: { coffee: "Belanja kopi", supporter: "Penyokong",
+               patron: "Penaung", monthly: "Penyokong bulanan" },
+      permo: "/bln",
+      custom: "Atau beri jumlah pilihan anda →",
+      note: "Sekali sahaja, kecuali pilihan bulanan. Lemon Squeezy " +
+            "menguruskan cukai dan resit; anda akan menerima e-mel terima " +
+            "kasih, tiada apa-apa perlu dipasang.",
+      freeQ: "Bukan sekarang?",
+      freeLink: "Muat turun percuma sahaja →",
+    },
+    ta: {
+      intro: "தொகையைத் தேர்ந்தெடுங்கள் — இந்த ஆப் எப்போதும் இலவசம்.",
+      names: { coffee: "ஒரு காபி", supporter: "ஆதரவாளர்",
+               patron: "பெரும் ஆதரவாளர்", monthly: "மாதாந்திர ஆதரவாளர்" },
+      permo: "/மாதம்",
+      custom: "அல்லது உங்கள் விருப்பத் தொகை →",
+      note: "மாதாந்திர விருப்பம் தவிர, மற்றவை ஒருமுறை மட்டுமே. வரிகளும் " +
+            "ரசீதுகளும் Lemon Squeezy மூலம் கையாளப்படும்; நன்றி மின்னஞ்சல் " +
+            "பெறுவீர்கள், எதையும் நிறுவ வேண்டியதில்லை.",
+      freeQ: "இப்போது வேண்டாமா?",
+      freeLink: "இலவசமாகப் பதிவிறக்குங்கள் →",
+    },
   };
 
   function ready(fn) {

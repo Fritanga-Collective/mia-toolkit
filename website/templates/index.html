@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{index.title}}</title>
+  <meta name="description" content="{{index.meta_desc}}">
+  <link rel="stylesheet" href="{{P}}styles.css">
+  <script src="{{P}}lang.js"></script>
+  <!-- No tracking, no cookies, no analytics. -->
+{{HEAD_SEO}}
+{{JSON_LD}}
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="index.html">MIA Toolkit</a>
+      <nav class="lang">
+        <a href="support.html">{{nav.support}}</a>
+{{LANGSEL}}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <img class="hero-img" src="{{P}}img/hero.jpg" width="1600" height="872"
+             alt="{{index.hero_alt}}">
+        <a class="btn cta" href="#download">{{index.cta}}</a>
+        <h1>{{index.h1}}</h1>
+        <p class="lead">{{index.lead}}</p>
+      </section>
+
+      <section class="why">
+        <h2>{{index.why_h2}}</h2>
+        <p>{{index.why_p1}}</p>
+        <p>{{index.why_p2}}</p>
+        <p>{{index.why_p3}}</p>
+      </section>
+
+      <section>
+        <h2>{{index.steps_h2}}</h2>
+        <ul class="steps">
+          <li><b>{{index.step1_b}}</b>{{index.step1_t}}</li>
+          <li><b>{{index.step2_b}}</b>{{index.step2_t}}</li>
+          <li><b>{{index.step3_b}}</b>{{index.step3_t}}</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="download" id="download">
+      <div class="wrap">
+        <h2>{{index.dl_h2}}</h2>
+        <a id="dl-primary" class="btn" href="https://github.com/Fritanga-Collective/mia-toolkit/releases/latest"
+           data-label-mac="{{index.dl_mac}}"
+           data-label-win="{{index.dl_win}}"
+           data-label-other="{{index.dl_other}}">
+          <span class="label">{{index.dl_other}}</span>
+          <small>{{index.dl_version}} <span class="version">0.1.2</span></small>
+        </a>
+        <p class="alt">
+          {{index.dl_pick}}
+          <a id="dl-mac" href="https://github.com/Fritanga-Collective/mia-toolkit/releases/latest">macOS (.dmg)</a>
+          ·
+          <a id="dl-win" href="https://github.com/Fritanga-Collective/mia-toolkit/releases/latest">Windows (.exe)</a>
+        </p>
+        <p class="reqs">{{index.reqs}}</p>
+        <p class="note">{{index.note}}</p>
+        <p class="alt">{{index.free_pre}}
+          <a href="support.html">{{index.free_link}}</a></p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="links">
+        <a href="https://github.com/Fritanga-Collective/mia-toolkit">{{links.source}}</a>
+        <a href="https://github.com/Fritanga-Collective/mia-toolkit/blob/main/README.md">{{links.story}}</a>
+        <a href="https://fritangacollective.substack.com/">{{links.blog}}</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="disclaimer">{{footer.disclaimer}}</p>
+      <p>{{footer.ethos}} ·
+        <a href="privacy.html">{{footer.privacy}}</a></p>
+      <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
+    </div>
+  </footer>
+
+  <script src="{{P}}download.js"></script>
+</body>
+</html>

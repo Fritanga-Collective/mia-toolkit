@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{support.title}}</title>
+  <meta name="description" content="{{support.meta_desc}}">
+  <link rel="stylesheet" href="{{P}}styles.css">
+  <script src="{{P}}lang.js"></script>
+{{HEAD_SEO}}
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="index.html">MIA Toolkit</a>
+      <nav class="lang">
+{{LANGSEL}}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="manifesto">
+        <h1>{{support.h1}}</h1>
+        <p class="big">{{support.big}}</p>
+        <p>{{support.p1}}</p>
+        <p>{{support.p2}}</p>
+        <p>{{support.p3}}</p>
+      </section>
+
+      <section>
+        <h2>{{support.tiers_h2}}</h2>
+        <div class="support-box">
+          <p id="tiers-intro"></p>
+          <div class="tiers" id="tiers"></div>
+          <a class="tier-custom" id="tier-custom" href="#"></a>
+          <p class="tiers-note" id="tiers-note"></p>
+          <p class="free-line"><span id="free-q"></span>
+            <a id="free-dl" href="https://github.com/Fritanga-Collective/mia-toolkit/releases/latest">{{support.free_dl}}</a></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>{{support.where_h2}}</h2>
+        <p>{{support.where_p}}</p>
+      </section>
+
+      <section>
+        <h2>{{support.org_h2}}</h2>
+        <div class="sponsor">
+          <p>{{support.org_p}}</p>
+          <p>{{support.org_contact}}
+            <a href="mailto:mia-tools@fritanga.co?subject=MIA%20Toolkit%20sponsorship">mia-tools@fritanga.co</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="links">
+        <a href="index.html">{{support.back}}</a>
+        <a href="https://github.com/Fritanga-Collective/mia-toolkit">{{links.source}}</a>
+        <a href="https://fritangacollective.substack.com/">{{links.blog}}</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>{{footer.ethos}} ·
+        <a href="privacy.html">{{footer.privacy}}</a></p>
+      <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
+    </div>
+  </footer>
+
+  <script src="{{P}}support.js"></script>
+</body>
+</html>
