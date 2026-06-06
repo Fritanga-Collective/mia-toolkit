@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Sign, package, notarize, and staple the macOS app.
 #
-# SCAFFOLD: this cannot run until you have an Apple Developer membership and a
-# "Developer ID Application" certificate in your keychain. It is written so that,
-# once you do, it runs end-to-end with two env vars set.
+# VALIDATED 2026-06-05: ran end-to-end with a real Developer ID certificate —
+# signed (inside-out, hardened runtime), notarized (Accepted), stapled, and
+# Gatekeeper-assessed as "Notarized Developer ID". Needs two env vars set.
 #
 # One-time setup (after enrollment):
 #   1. Create + install a "Developer ID Application" certificate (Xcode or the
