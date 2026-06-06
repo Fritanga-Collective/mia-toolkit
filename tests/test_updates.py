@@ -54,6 +54,36 @@ def test_check_raises_on_unreachable(tmp_path):
         updates.check(url=(tmp_path / "missing.json").as_uri())
 
 
+def test_ssl_context_uses_certifi_ca_file(tmp_path, monkeypatch):
+    """Frozen builds have no system CA path — the context must load exactly
+    what certifi.where() points at (the v0.1.6 in-app check failed here).
+    Point certifi at a one-cert file: only that CA may end up in the context;
+    system CAs sneaking in (i.e. certifi being ignored) fails the test."""
+    import ssl
+
+    import certifi
+    with open(certifi.where(), encoding="utf-8") as f:
+        bundle = f.read()
+    one_cert = (bundle.split("-----END CERTIFICATE-----")[0]
+                + "-----END CERTIFICATE-----\n")
+    ca_file = tmp_path / "one-ca.pem"
+    ca_file.write_text(one_cert, encoding="utf-8")
+    monkeypatch.setattr(updates.certifi, "where", lambda: str(ca_file))
+
+    context = updates._ssl_context()
+    assert context.verify_mode == ssl.CERT_REQUIRED
+    assert len(context.get_ca_certs()) == 1
+
+
+def test_ssl_context_falls_back_without_certifi(monkeypatch):
+    """Source installs without certifi still get a verifying default context."""
+    import ssl
+
+    monkeypatch.setattr(updates, "certifi", None)
+    context = updates._ssl_context()
+    assert context.verify_mode == ssl.CERT_REQUIRED
+
+
 def test_repo_version_json_is_valid():
     with open("website/version.json", encoding="utf-8") as f:
         data = json.load(f)

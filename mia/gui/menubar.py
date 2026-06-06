@@ -54,9 +54,13 @@ def _check_updates(app) -> None:
 
     def done(status, result) -> None:
         if status != "done":
+            # Append the technical reason untranslated — it makes failures
+            # diagnosable (e.g. SSL, DNS, offline) without new msgids.
+            detail = (f"\n\n({type(result).__name__}: {result})"
+                      if isinstance(result, Exception) else "")
             messagebox.showinfo(
                 _("Check for Updates…"),
-                _("Couldn't check for updates. Try again later."))
+                _("Couldn't check for updates. Try again later.") + detail)
             return
         if result.newer:
             if messagebox.askyesno(

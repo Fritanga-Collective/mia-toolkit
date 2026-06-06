@@ -204,9 +204,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
+          # --generate-notes lists merged PRs/commits since the previous tag;
+          # hand-edit afterwards for the user-facing feature one-liners.
           gh release create "$TAG" artifacts/*.dmg artifacts/*.exe \
             --repo "$GITHUB_REPOSITORY" --title "$TAG" \
-            --notes "Automated release $TAG." \
+            --generate-notes \
           || gh release upload "$TAG" artifacts/*.dmg artifacts/*.exe \
             --repo "$GITHUB_REPOSITORY" --clobber
 
