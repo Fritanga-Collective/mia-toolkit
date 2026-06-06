@@ -45,6 +45,35 @@ def _about(root: tk.Tk, aqua: bool) -> None:
             f"{_('Made with ♥ by Fritanga')}\n{SITE}")
 
 
+def _check_updates(app) -> None:
+    """Explicit user action — the only network call the app ever makes."""
+    from . import jobs, updates
+
+    def work(_emit, _cancel):
+        return updates.check()
+
+    def done(status, result) -> None:
+        if status != "done":
+            messagebox.showinfo(
+                _("Check for Updates…"),
+                _("Couldn't check for updates. Try again later."))
+            return
+        if result.newer:
+            if messagebox.askyesno(
+                    _("Check for Updates…"),
+                    _("Version {new} is available — you have {cur}.\n\n"
+                      "Open the download page?")
+                    .format(new=result.latest, cur=result.current)):
+                webbrowser.open(updates.DOWNLOAD_PAGE)
+        else:
+            messagebox.showinfo(
+                _("Check for Updates…"),
+                _("You're on the latest version ({v}).")
+                .format(v=result.current))
+
+    jobs.run_job(app.root, work, lambda _p: None, done)
+
+
 def _open_project_folder() -> None:
     from .project import Project
     from .sysutil import open_path
@@ -65,6 +94,8 @@ def build_menubar(app) -> tk.Menu:
         appmenu = tk.Menu(menubar, name="apple", tearoff=False)
         appmenu.add_command(label=_("About MIA Toolkit"),
                             command=lambda: _about(root, aqua))
+        appmenu.add_command(label=_("Check for Updates…"),
+                            command=lambda: _check_updates(app))
         appmenu.add_separator()
         menubar.add_cascade(menu=appmenu)
 
@@ -125,6 +156,8 @@ def build_menubar(app) -> tk.Menu:
                              command=lambda u=url: webbrowser.open(u))
     if not aqua:
         helpmenu.add_separator()
+        helpmenu.add_command(label=_("Check for Updates…"),
+                             command=lambda: _check_updates(app))
         helpmenu.add_command(label=_("About MIA Toolkit"),
                              command=lambda: _about(root, aqua))
     menubar.add_cascade(label=_("Help"), menu=helpmenu)

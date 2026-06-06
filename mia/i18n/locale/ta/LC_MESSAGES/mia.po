@@ -840,3 +840,25 @@ msgstr "MIA Toolkit பற்றி"
 #: mia/gui/menubar.py:0
 msgid "A task is still running — stop it or let it finish first."
 msgstr "ஒரு பணி இன்னும் இயங்குகிறது — அதை நிறுத்துங்கள் அல்லது முடியட்டும்."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "புதுப்பிப்புகளைச் சரிபார்…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள் ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"பதிப்பு {new} கிடைக்கிறது — உங்களிடம் {cur} உள்ளது.\n"
+"\n"
+"பதிவிறக்கப் பக்கத்தைத் திறக்கவா?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. பின்னர் முயற்சிக்கவும்."

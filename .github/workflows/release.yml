@@ -249,18 +249,38 @@ jobs:
                      lambda m: m.group(1) + win + m.group(2), s, count=1)
           p.write_text(s)
           PY
+          # version.json for the user-initiated in-app update check
+          # (static, first-party, sha256 per asset for the IT guide).
+          mkdir -p /tmp/rel-assets && pushd /tmp/rel-assets >/dev/null
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            -p '*.dmg' -p '*.exe' --clobber
+          MAC_SHA=$(shasum -a 256 *.dmg 2>/dev/null | head -n1 | awk '{print $1}')
+          WIN_SHA=$(shasum -a 256 *.exe 2>/dev/null | head -n1 | awk '{print $1}')
+          popd >/dev/null
+          python3 - "$VER" "$MAC_URL" "$MAC_SHA" "$WIN_URL" "$WIN_SHA" <<'PY'
+          import datetime, json, sys
+          ver, mac, mac_sha, win, win_sha = sys.argv[1:6]
+          data = {
+              "version": ver,
+              "date": datetime.date.today().isoformat(),
+              "mac": {"url": mac, "sha256": mac_sha},
+              "win": {"url": win, "sha256": win_sha},
+              "notes": "https://github.com/Fritanga-Collective/mia-toolkit/releases",
+          }
+          open("website/version.json", "w").write(json.dumps(data, indent=1) + "\n")
+          PY
       - name: Commit if changed + deploy the site
         env:
           TAG: ${{ github.ref_name }}
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- website/download.js; then
-            echo "download.js already in sync with $TAG"; exit 0
+          if git diff --quiet -- website/download.js website/version.json; then
+            echo "site already in sync with $TAG"; exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add website/download.js
+          git add website/download.js website/version.json
           git commit -m "Website: sync download to ${TAG} (CI)"
           git push origin HEAD:main
           # Commits pushed with GITHUB_TOKEN never trigger other workflows

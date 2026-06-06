@@ -56,7 +56,7 @@
   "privacy.app_h2": "Die App",
   "privacy.app_li1": "Läuft <strong>vollständig offline</strong>. Das Internet wird nur ein einziges Mal benötigt, zum Herunterladen.",
   "privacy.app_li2": "<strong>Kein Konto, keine Anmeldung, keine Cloud.</strong>",
-  "privacy.app_li3": "<strong>Keine Telemetrie, keine Analyse</strong> — die App sendet niemals etwas an irgendwen.",
+  "privacy.app_li3": "<strong>Keine Telemetrie, keine Analyse</strong> — die App sendet niemals etwas an irgendwen. Eine Ausnahme, die Sie steuern: Ein Klick auf „Nach Updates suchen“ ruft eine einzelne Versionsdatei von unserer Website ab; sie enthält keine personenbezogenen Daten oder Kennungen.",
   "privacy.app_li4": "Ihre medizinischen Bilder <strong>verlassen niemals Ihren Computer</strong> (oder den USB-Stick, auf den Sie sie kopieren). Wir betreiben keine Server und sehen, empfangen oder speichern sie niemals.",
   "privacy.app_li5": "Die App speichert nur eine kleine Einstellungsdatei auf Ihrem eigenen Computer (zum Beispiel Ihre Sprachwahl).",
   "privacy.site_h2": "Diese Website",

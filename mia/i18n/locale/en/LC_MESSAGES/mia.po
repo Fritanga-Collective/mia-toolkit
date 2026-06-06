@@ -832,3 +832,25 @@ msgstr "About MIA Toolkit"
 #: mia/gui/menubar.py:0
 msgid "A task is still running — stop it or let it finish first."
 msgstr "A task is still running — stop it or let it finish first."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "Check for Updates…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "You're on the latest version ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "Couldn't check for updates. Try again later."

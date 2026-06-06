@@ -820,3 +820,25 @@ msgstr "Perihal MIA Toolkit"
 #: mia/gui/menubar.py:0
 msgid "A task is still running — stop it or let it finish first."
 msgstr "Tugasan masih berjalan — hentikan atau tunggu ia selesai."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "Semak Kemas Kini…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "Anda menggunakan versi terkini ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"Versi {new} sudah tersedia — anda menggunakan {cur}.\n"
+"\n"
+"Buka halaman muat turun?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "Tidak dapat menyemak kemas kini. Cuba lagi nanti."

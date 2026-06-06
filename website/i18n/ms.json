@@ -56,7 +56,7 @@
   "privacy.app_h2": "Aplikasi",
   "privacy.app_li1": "Berjalan <strong>sepenuhnya luar talian</strong>. Internet hanya diperlukan sekali sahaja, untuk memuat turunnya.",
   "privacy.app_li2": "<strong>Tiada akaun, tiada pendaftaran, tiada awan.</strong>",
-  "privacy.app_li3": "<strong>Tiada telemetri, tiada analitik</strong> — aplikasi ini tidak pernah menghantar apa-apa, kepada sesiapa.",
+  "privacy.app_li3": "<strong>Tiada telemetri, tiada analitik</strong> — aplikasi tidak menghantar apa-apa, kepada sesiapa pun. Satu pengecualian yang anda kawal: mengklik \"Semak Kemas Kini\" mengambil satu fail versi daripada laman web kami; ia tidak membawa data peribadi atau pengecam.",
   "privacy.app_li4": "Imej perubatan anda <strong>tidak pernah meninggalkan komputer anda</strong> (atau pemacu USB yang anda salinkannya). Kami tidak mengendalikan sebarang pelayan dan tidak pernah melihat, menerima, atau menyimpannya.",
   "privacy.app_li5": "Aplikasi ini hanya menyimpan satu fail tetapan kecil pada komputer anda sendiri (contohnya, pilihan bahasa anda).",
   "privacy.site_h2": "Laman web ini",
