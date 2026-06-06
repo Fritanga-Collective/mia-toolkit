@@ -54,6 +54,17 @@ def test_check_raises_on_unreachable(tmp_path):
         updates.check(url=(tmp_path / "missing.json").as_uri())
 
 
+def test_ssl_context_uses_certifi_ca_file():
+    """Frozen builds have no system CA path — the context must load certifi's
+    bundled store (the v0.1.6 in-app check failed exactly here)."""
+    import certifi
+    context = updates._ssl_context()
+    assert context.verify_mode.name == "CERT_REQUIRED"
+    ca_paths = {ca["serialNumber"] for ca in context.get_ca_certs()}
+    assert ca_paths, "no CA certificates loaded"
+    assert certifi.where()  # dependency present and resolvable
+
+
 def test_repo_version_json_is_valid():
     with open("website/version.json", encoding="utf-8") as f:
         data = json.load(f)
