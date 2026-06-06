@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mia-toolkit"
-version = "0.1.5"
+version = "0.1.6"
 description = "Consolidate hospital imaging CDs into a single DICOM archive"
 readme = "README.md"
 requires-python = ">=3.9"
