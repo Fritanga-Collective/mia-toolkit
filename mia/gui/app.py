@@ -29,7 +29,7 @@ class App:
             # Menus/shortcuts bypass the views' own busy-locking — refuse to
             # tear down a view while it is running a job.
             is_busy = getattr(current, "is_busy", None)
-            if is_busy is not None and is_busy():
+            if callable(is_busy) and is_busy():
                 messagebox.showinfo(
                     _("MIA Toolkit"),
                     _("A task is still running — stop it or let it finish "

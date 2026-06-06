@@ -254,8 +254,14 @@ jobs:
           mkdir -p /tmp/rel-assets && pushd /tmp/rel-assets >/dev/null
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
             -p '*.dmg' -p '*.exe' --clobber
-          MAC_SHA=$(shasum -a 256 *.dmg 2>/dev/null | head -n1 | awk '{print $1}')
-          WIN_SHA=$(shasum -a 256 *.exe 2>/dev/null | head -n1 | awk '{print $1}')
+          MAC_FILE=$(find . -maxdepth 1 -name '*.dmg' | head -n1)
+          WIN_FILE=$(find . -maxdepth 1 -name '*.exe' | head -n1)
+          if [ -z "$MAC_FILE" ] || [ -z "$WIN_FILE" ]; then
+            echo "::error::release assets missing (dmg='$MAC_FILE' exe='$WIN_FILE') — refusing to publish an invalid version.json"
+            exit 1
+          fi
+          MAC_SHA=$(shasum -a 256 "$MAC_FILE" | awk '{print $1}')
+          WIN_SHA=$(shasum -a 256 "$WIN_FILE" | awk '{print $1}')
           popd >/dev/null
           python3 - "$VER" "$MAC_URL" "$MAC_SHA" "$WIN_URL" "$WIN_SHA" <<'PY'
           import datetime, json, sys

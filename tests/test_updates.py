@@ -55,7 +55,10 @@ def test_check_raises_on_unreachable(tmp_path):
 
 
 def test_repo_version_json_is_valid():
-    data = json.load(open("website/version.json", encoding="utf-8"))
+    with open("website/version.json", encoding="utf-8") as f:
+        data = json.load(f)
     assert {"version", "mac", "win", "notes"} <= set(data)
     assert data["mac"]["url"].endswith(".dmg")
     assert len(data["mac"]["sha256"]) == 64
+    assert data["win"]["url"].endswith(".exe")
+    assert len(data["win"]["sha256"]) == 64
