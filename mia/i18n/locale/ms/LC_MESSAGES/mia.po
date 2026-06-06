@@ -744,3 +744,79 @@ msgid ""
 msgstr ""
 "Menggunakannya di klinik atau hospital? Lesen institusi membiayai akses "
 "percuma untuk pesakit →"
+
+#: mia/gui/menubar.py:0
+msgid "File"
+msgstr "Fail"
+
+#: mia/gui/menubar.py:0
+msgid "Edit"
+msgstr "Sunting"
+
+#: mia/gui/menubar.py:0
+msgid "Cut"
+msgstr "Potong"
+
+#: mia/gui/menubar.py:0
+msgid "Copy"
+msgstr "Salin"
+
+#: mia/gui/menubar.py:0
+msgid "Paste"
+msgstr "Tampal"
+
+#: mia/gui/menubar.py:0
+msgid "Select All"
+msgstr "Pilih Semua"
+
+#: mia/gui/menubar.py:0
+msgid "Go"
+msgstr "Pergi"
+
+#: mia/gui/menubar.py:0
+msgid "Home"
+msgstr "Laman Utama"
+
+#: mia/gui/menubar.py:0
+msgid "Language"
+msgstr "Bahasa"
+
+#: mia/gui/menubar.py:0
+msgid "Window"
+msgstr "Tetingkap"
+
+#: mia/gui/menubar.py:0
+msgid "Help"
+msgstr "Bantuan"
+
+#: mia/gui/menubar.py:0
+msgid "Website"
+msgstr "Laman web"
+
+#: mia/gui/menubar.py:0
+msgid "Privacy policy"
+msgstr "Dasar privasi"
+
+#: mia/gui/menubar.py:0
+msgid "Support the project"
+msgstr "Sokong projek ini"
+
+#: mia/gui/menubar.py:0
+msgid "Transparency"
+msgstr "Ketelusan"
+
+#: mia/gui/menubar.py:0
+msgid "Open Project Folder"
+msgstr "Buka Folder Projek"
+
+#: mia/gui/menubar.py:0
+msgid "Exit"
+msgstr "Keluar"
+
+#: mia/gui/menubar.py:0
+msgid "About MIA Toolkit"
+msgstr "Perihal MIA Toolkit"
+
+#: mia/gui/menubar.py:0
+msgid "A task is still running — stop it or let it finish first."
+msgstr "Tugasan masih berjalan — hentikan atau tunggu ia selesai."
