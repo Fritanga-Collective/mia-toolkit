@@ -73,7 +73,6 @@
   "privacy.contact_h2": "Kontakt",
   "privacy.back": "← Zurück zur Startseite",
   "links.source": "Den Quellcode auf GitHub ansehen",
-  "links.story": "Die Geschichte lesen",
   "links.blog": "Den Blog lesen",
   "footer.disclaimer": "Diese Software hilft Ihnen, Ihre eigenen medizinischen Bilder zu ordnen und zu übergeben. Sie deutet keine Bilder, ist kein Medizinprodukt und ersetzt nicht die fachliche radiologische Befundung. Keine Gewährleistung.",
   "footer.ethos": "Quelloffen · Privat durch Konzept · Keine Nachverfolgung",
@@ -117,5 +116,6 @@
   "footer.stats": "Transparenz",
   "privacy.site_li1_gc": "Eine statische Website <strong>ohne Cookies, ohne Tracker und ohne Werbung</strong>. Für aggregierte Seitenaufruf-Zahlen nutzen wir <strong>GoatCounter</strong>, einen quelloffenen, cookielosen Zähler — er speichert keine personenbezogenen Daten, erstellt keine Profile und betreibt kein seitenübergreifendes Tracking.",
   "stats.col_referrer": "Quelle",
-  "stats.col_count": "Anzahl"
+  "stats.col_count": "Anzahl",
+  "_blog_url": "https://fritangacollective.substack.com/"
 }

@@ -73,7 +73,6 @@
   "privacy.contact_h2": "联系方式",
   "privacy.back": "← 返回首页",
   "links.source": "在 GitHub 上查看源代码",
-  "links.story": "了解背后的故事",
   "links.blog": "阅读博客",
   "footer.disclaimer": "本软件帮助你整理并交付你自己的医学影像。它不解读影像，不是医疗器械，也不能替代专业的放射科判读。不提供任何担保。",
   "footer.ethos": "开源 · 隐私优先 · 无追踪",
@@ -117,5 +116,6 @@
   "footer.stats": "透明度",
   "privacy.site_li1_gc": "静态网站，<strong>无 Cookie、无追踪器、无广告</strong>。我们使用开源、无 Cookie 的计数器 <strong>GoatCounter</strong> 统计聚合页面浏览量——它不存储个人数据、不建立画像、不做跨站追踪。",
   "stats.col_referrer": "来源",
-  "stats.col_count": "次数"
+  "stats.col_count": "次数",
+  "_blog_url": "https://fritangacollective.substack.com/s/4d3"
 }
