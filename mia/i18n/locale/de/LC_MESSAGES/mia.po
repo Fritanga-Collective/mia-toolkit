@@ -762,3 +762,102 @@ msgid ""
 msgstr ""
 "Einsatz in einer Klinik oder einem Krankenhaus? Institutionelle Lizenzen "
 "finanzieren den kostenlosen Zugang für Patienten →"
+
+#: mia/gui/menubar.py:0
+msgid "File"
+msgstr "Datei"
+
+#: mia/gui/menubar.py:0
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: mia/gui/menubar.py:0
+msgid "Cut"
+msgstr "Ausschneiden"
+
+#: mia/gui/menubar.py:0
+msgid "Copy"
+msgstr "Kopieren"
+
+#: mia/gui/menubar.py:0
+msgid "Paste"
+msgstr "Einfügen"
+
+#: mia/gui/menubar.py:0
+msgid "Select All"
+msgstr "Alles auswählen"
+
+#: mia/gui/menubar.py:0
+msgid "Go"
+msgstr "Gehe zu"
+
+#: mia/gui/menubar.py:0
+msgid "Home"
+msgstr "Start"
+
+#: mia/gui/menubar.py:0
+msgid "Language"
+msgstr "Sprache"
+
+#: mia/gui/menubar.py:0
+msgid "Window"
+msgstr "Fenster"
+
+#: mia/gui/menubar.py:0
+msgid "Help"
+msgstr "Hilfe"
+
+#: mia/gui/menubar.py:0
+msgid "Website"
+msgstr "Website"
+
+#: mia/gui/menubar.py:0
+msgid "Privacy policy"
+msgstr "Datenschutz"
+
+#: mia/gui/menubar.py:0
+msgid "Support the project"
+msgstr "Das Projekt unterstützen"
+
+#: mia/gui/menubar.py:0
+msgid "Transparency"
+msgstr "Transparenz"
+
+#: mia/gui/menubar.py:0
+msgid "Open Project Folder"
+msgstr "Projektordner öffnen"
+
+#: mia/gui/menubar.py:0
+msgid "Exit"
+msgstr "Beenden"
+
+#: mia/gui/menubar.py:0
+msgid "About MIA Toolkit"
+msgstr "Über MIA Toolkit"
+
+#: mia/gui/menubar.py:0
+msgid "A task is still running — stop it or let it finish first."
+msgstr ""
+"Eine Aufgabe läuft noch — stoppen Sie sie oder lassen Sie sie abschließen."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "Nach Updates suchen…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "Sie haben die neueste Version ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"Version {new} ist verfügbar — Sie haben {cur}.\n"
+"\n"
+"Download-Seite öffnen?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "Updates konnten nicht geprüft werden. Versuchen Sie es später erneut."

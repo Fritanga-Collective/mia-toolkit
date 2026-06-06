@@ -56,7 +56,7 @@
   "privacy.app_h2": "La aplicación",
   "privacy.app_li1": "Funciona <strong>completamente sin conexión</strong>. Internet solo se necesita una vez, para descargarla.",
   "privacy.app_li2": "<strong>Sin cuenta, sin registro, sin nube.</strong>",
-  "privacy.app_li3": "<strong>Sin telemetría y sin analíticas</strong> — la app no envía nada, nunca, a nadie.",
+  "privacy.app_li3": "<strong>Sin telemetría y sin analíticas</strong> — la app no envía nada, nunca, a nadie. Una excepción que tú controlas: al hacer clic en \"Buscar actualizaciones\" se descarga un único archivo de versión desde nuestro sitio; no lleva datos personales ni identificadores.",
   "privacy.app_li4": "Tus imágenes médicas <strong>nunca salen de tu computadora</strong> (o de la USB a la que las copias). No operamos servidores y nunca las vemos, recibimos ni almacenamos.",
   "privacy.app_li5": "La app solo guarda un pequeño archivo de configuración en tu propia computadora (por ejemplo, tu idioma).",
   "privacy.site_h2": "Este sitio web",
@@ -73,7 +73,6 @@
   "privacy.contact_h2": "Contacto",
   "privacy.back": "← Volver a la página principal",
   "links.source": "Ver el código en GitHub",
-  "links.story": "Leer la historia",
   "links.blog": "Lee el blog",
   "footer.disclaimer": "Este software te ayuda a organizar y entregar tus propias imágenes médicas. No interpreta imágenes, no es un dispositivo médico y no sustituye la revisión profesional de un radiólogo. Sin garantía.",
   "footer.ethos": "Código abierto · Privado por diseño · Sin rastreo",
@@ -117,5 +116,6 @@
   "footer.stats": "Transparencia",
   "privacy.site_li1_gc": "Un sitio estático <strong>sin cookies, sin rastreadores y sin anuncios</strong>. Usamos <strong>GoatCounter</strong>, un contador de código abierto y sin cookies, para contar visitas de forma agregada — no guarda datos personales, no crea perfiles y no rastrea entre sitios.",
   "stats.col_referrer": "Origen",
-  "stats.col_count": "Conteo"
+  "stats.col_count": "Conteo",
+  "_blog_url": "https://fritangacollective.substack.com/s/espanol"
 }

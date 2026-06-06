@@ -32,7 +32,7 @@ PAGES = ["index", "support", "privacy", "stats"]
 OG_PAGES = {"index", "support"}          # privacy has no social card (as before)
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
-          "CNAME", "img"]
+          "CNAME", "img", "version.json"]
 
 # GoatCounter site code (e.g. "miatoolkit"). Empty = no analytics script is
 # emitted AND the privacy policy keeps its "no analytics" wording. Setting it

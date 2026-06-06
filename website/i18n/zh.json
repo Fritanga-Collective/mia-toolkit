@@ -56,7 +56,7 @@
   "privacy.app_h2": "应用",
   "privacy.app_li1": "<strong>完全离线运行</strong>。只有下载它的那一次需要联网。",
   "privacy.app_li2": "<strong>无账户、无注册、无云端。</strong>",
-  "privacy.app_li3": "<strong>无遥测、无分析</strong>——应用永远不会向任何人发送任何内容。",
+  "privacy.app_li3": "<strong>无遥测、无分析</strong>——应用永远不会向任何人发送任何内容。唯一例外由你掌控：点击\"检查更新\"时，会从我们的网站获取一个版本文件；其中不含任何个人数据或标识符。",
   "privacy.app_li4": "你的医学影像<strong>永远不会离开你的电脑</strong>（或你复制到的 U 盘）。我们不运营任何服务器，永远不会看到、接收或存储它们。",
   "privacy.app_li5": "应用只在你自己的电脑上保存一个小的设置文件（例如你的语言选择）。",
   "privacy.site_h2": "本网站",
@@ -73,7 +73,6 @@
   "privacy.contact_h2": "联系方式",
   "privacy.back": "← 返回首页",
   "links.source": "在 GitHub 上查看源代码",
-  "links.story": "了解背后的故事",
   "links.blog": "阅读博客",
   "footer.disclaimer": "本软件帮助你整理并交付你自己的医学影像。它不解读影像，不是医疗器械，也不能替代专业的放射科判读。不提供任何担保。",
   "footer.ethos": "开源 · 隐私优先 · 无追踪",
@@ -117,5 +116,6 @@
   "footer.stats": "透明度",
   "privacy.site_li1_gc": "静态网站，<strong>无 Cookie、无追踪器、无广告</strong>。我们使用开源、无 Cookie 的计数器 <strong>GoatCounter</strong> 统计聚合页面浏览量——它不存储个人数据、不建立画像、不做跨站追踪。",
   "stats.col_referrer": "来源",
-  "stats.col_count": "次数"
+  "stats.col_count": "次数",
+  "_blog_url": "https://fritangacollective.substack.com/s/4d3"
 }

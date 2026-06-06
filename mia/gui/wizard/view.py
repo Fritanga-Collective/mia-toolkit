@@ -122,6 +122,10 @@ class WizardView(ttk.Frame):
             self.current.on_leave()
         self.app.show_launcher()
 
+    def is_busy(self) -> bool:
+        """True while a step is running a job (menu navigation checks this)."""
+        return self._busy
+
     def set_busy(self, busy: bool) -> None:
         self._busy = busy
         self.refresh_nav()

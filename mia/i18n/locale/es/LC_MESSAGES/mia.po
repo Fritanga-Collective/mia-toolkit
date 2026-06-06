@@ -770,3 +770,101 @@ msgid ""
 msgstr ""
 "¿Lo usarán en una clínica u hospital? Las licencias institucionales "
 "financian el acceso gratuito de los pacientes →"
+
+#: mia/gui/menubar.py:0
+msgid "File"
+msgstr "Archivo"
+
+#: mia/gui/menubar.py:0
+msgid "Edit"
+msgstr "Edición"
+
+#: mia/gui/menubar.py:0
+msgid "Cut"
+msgstr "Cortar"
+
+#: mia/gui/menubar.py:0
+msgid "Copy"
+msgstr "Copiar"
+
+#: mia/gui/menubar.py:0
+msgid "Paste"
+msgstr "Pegar"
+
+#: mia/gui/menubar.py:0
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#: mia/gui/menubar.py:0
+msgid "Go"
+msgstr "Ir"
+
+#: mia/gui/menubar.py:0
+msgid "Home"
+msgstr "Inicio"
+
+#: mia/gui/menubar.py:0
+msgid "Language"
+msgstr "Idioma"
+
+#: mia/gui/menubar.py:0
+msgid "Window"
+msgstr "Ventana"
+
+#: mia/gui/menubar.py:0
+msgid "Help"
+msgstr "Ayuda"
+
+#: mia/gui/menubar.py:0
+msgid "Website"
+msgstr "Sitio web"
+
+#: mia/gui/menubar.py:0
+msgid "Privacy policy"
+msgstr "Política de privacidad"
+
+#: mia/gui/menubar.py:0
+msgid "Support the project"
+msgstr "Apoyar el proyecto"
+
+#: mia/gui/menubar.py:0
+msgid "Transparency"
+msgstr "Transparencia"
+
+#: mia/gui/menubar.py:0
+msgid "Open Project Folder"
+msgstr "Abrir carpeta del proyecto"
+
+#: mia/gui/menubar.py:0
+msgid "Exit"
+msgstr "Salir"
+
+#: mia/gui/menubar.py:0
+msgid "About MIA Toolkit"
+msgstr "Acerca de MIA Toolkit"
+
+#: mia/gui/menubar.py:0
+msgid "A task is still running — stop it or let it finish first."
+msgstr "Hay una tarea en curso — deténla o espera a que termine."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "Buscar actualizaciones…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "Tienes la versión más reciente ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"La versión {new} ya está disponible — tienes la {cur}.\n"
+"\n"
+"¿Abrir la página de descarga?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "No se pudo buscar actualizaciones. Inténtalo más tarde."

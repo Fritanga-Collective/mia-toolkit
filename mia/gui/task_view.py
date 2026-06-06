@@ -106,6 +106,11 @@ class TaskView(ttk.Frame):
         self._cancel = jobs.run_job(self.app.root, work, self.panel.on_event,
                                     done)
 
+    def is_busy(self) -> bool:
+        """True while a job/session runs (the Stop button is the single source
+        of truth across all subclasses, including controller-driven ones)."""
+        return str(self.stop_btn.cget("state")) == "normal"
+
     def stop(self) -> None:
         if self._cancel is not None:
             self._cancel.set()

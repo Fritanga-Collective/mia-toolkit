@@ -721,3 +721,101 @@ msgid ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
 msgstr "在诊所或医院部署？机构许可证为患者的免费使用提供资金 →"
+
+#: mia/gui/menubar.py:0
+msgid "File"
+msgstr "文件"
+
+#: mia/gui/menubar.py:0
+msgid "Edit"
+msgstr "编辑"
+
+#: mia/gui/menubar.py:0
+msgid "Cut"
+msgstr "剪切"
+
+#: mia/gui/menubar.py:0
+msgid "Copy"
+msgstr "复制"
+
+#: mia/gui/menubar.py:0
+msgid "Paste"
+msgstr "粘贴"
+
+#: mia/gui/menubar.py:0
+msgid "Select All"
+msgstr "全选"
+
+#: mia/gui/menubar.py:0
+msgid "Go"
+msgstr "前往"
+
+#: mia/gui/menubar.py:0
+msgid "Home"
+msgstr "主页"
+
+#: mia/gui/menubar.py:0
+msgid "Language"
+msgstr "语言"
+
+#: mia/gui/menubar.py:0
+msgid "Window"
+msgstr "窗口"
+
+#: mia/gui/menubar.py:0
+msgid "Help"
+msgstr "帮助"
+
+#: mia/gui/menubar.py:0
+msgid "Website"
+msgstr "网站"
+
+#: mia/gui/menubar.py:0
+msgid "Privacy policy"
+msgstr "隐私政策"
+
+#: mia/gui/menubar.py:0
+msgid "Support the project"
+msgstr "支持这个项目"
+
+#: mia/gui/menubar.py:0
+msgid "Transparency"
+msgstr "透明度"
+
+#: mia/gui/menubar.py:0
+msgid "Open Project Folder"
+msgstr "打开项目文件夹"
+
+#: mia/gui/menubar.py:0
+msgid "Exit"
+msgstr "退出"
+
+#: mia/gui/menubar.py:0
+msgid "About MIA Toolkit"
+msgstr "关于 MIA Toolkit"
+
+#: mia/gui/menubar.py:0
+msgid "A task is still running — stop it or let it finish first."
+msgstr "任务仍在进行中——请先停止或等待完成。"
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "检查更新…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "你已是最新版本（{v}）。"
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"新版本 {new} 已发布——你当前为 {cur}。\n"
+"\n"
+"要打开下载页面吗？"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "无法检查更新。请稍后再试。"

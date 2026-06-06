@@ -56,7 +56,7 @@
   "privacy.app_h2": "The app",
   "privacy.app_li1": "Runs <strong>completely offline</strong>. The internet is only needed once, to download it.",
   "privacy.app_li2": "<strong>No account, no sign-up, no cloud.</strong>",
-  "privacy.app_li3": "<strong>No telemetry, no analytics</strong> — the app sends nothing, ever, to anyone.",
+  "privacy.app_li3": "<strong>No telemetry, no analytics</strong> — the app sends nothing, ever, to anyone. One exception you control: clicking \"Check for Updates\" fetches a single version file from our website; it carries no personal data or identifiers.",
   "privacy.app_li4": "Your medical images <strong>never leave your computer</strong> (or the USB drive you copy them to). We operate no servers and never see, receive, or store them.",
   "privacy.app_li5": "The app saves only a small settings file on your own computer (for example, your language choice).",
   "privacy.site_h2": "This website",
@@ -73,7 +73,6 @@
   "privacy.contact_h2": "Contact",
   "privacy.back": "← Back to the home page",
   "links.source": "View the source on GitHub",
-  "links.story": "Read the story",
   "links.blog": "Read the blog",
   "footer.disclaimer": "This software helps you organize and deliver your own medical images. It does not interpret images, is not a medical device, and does not replace professional radiological review. No warranty.",
   "footer.ethos": "Open source · Private by design · No tracking",
@@ -117,5 +116,6 @@
   "footer.stats": "Transparency",
   "privacy.site_li1_gc": "A static site with <strong>no cookies, no trackers, and no ads</strong>. We use <strong>GoatCounter</strong>, an open-source, cookieless counter, for aggregate page-view counts — it stores no personal data, builds no profiles, and does no cross-site tracking.",
   "stats.col_referrer": "Referrer",
-  "stats.col_count": "Count"
+  "stats.col_count": "Count",
+  "_blog_url": "https://fritangacollective.substack.com/"
 }

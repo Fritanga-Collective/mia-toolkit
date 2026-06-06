@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import messagebox, ttk
 from typing import Callable
 
 from .i18n import _, install
+from .menubar import build_menubar
 
 
 class App:
@@ -19,11 +20,22 @@ class App:
         self.container.pack(fill="both", expand=True)
         self._current: tk.Widget | None = None
 
+        self._menubar = build_menubar(self)
         self.show_launcher()
 
     def _swap(self, factory: Callable[[tk.Misc], tk.Widget]) -> None:
-        if self._current is not None:
-            self._current.destroy()
+        current = self._current
+        if current is not None:
+            # Menus/shortcuts bypass the views' own busy-locking — refuse to
+            # tear down a view while it is running a job.
+            is_busy = getattr(current, "is_busy", None)
+            if callable(is_busy) and is_busy():
+                messagebox.showinfo(
+                    _("MIA Toolkit"),
+                    _("A task is still running — stop it or let it finish "
+                      "first."))
+                return
+            current.destroy()
         self._current = factory(self.container)
         self._current.pack(fill="both", expand=True)
 
@@ -53,6 +65,7 @@ class App:
         from .i18n import set_language
         set_language(lang)
         self.root.title(_("MIA Toolkit"))
+        self._menubar = build_menubar(self)  # relabel menus in the new language
         self.show_launcher()
 
     def run(self) -> None:

@@ -756,3 +756,101 @@ msgid ""
 msgstr ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
+
+#: mia/gui/menubar.py:0
+msgid "File"
+msgstr "File"
+
+#: mia/gui/menubar.py:0
+msgid "Edit"
+msgstr "Edit"
+
+#: mia/gui/menubar.py:0
+msgid "Cut"
+msgstr "Cut"
+
+#: mia/gui/menubar.py:0
+msgid "Copy"
+msgstr "Copy"
+
+#: mia/gui/menubar.py:0
+msgid "Paste"
+msgstr "Paste"
+
+#: mia/gui/menubar.py:0
+msgid "Select All"
+msgstr "Select All"
+
+#: mia/gui/menubar.py:0
+msgid "Go"
+msgstr "Go"
+
+#: mia/gui/menubar.py:0
+msgid "Home"
+msgstr "Home"
+
+#: mia/gui/menubar.py:0
+msgid "Language"
+msgstr "Language"
+
+#: mia/gui/menubar.py:0
+msgid "Window"
+msgstr "Window"
+
+#: mia/gui/menubar.py:0
+msgid "Help"
+msgstr "Help"
+
+#: mia/gui/menubar.py:0
+msgid "Website"
+msgstr "Website"
+
+#: mia/gui/menubar.py:0
+msgid "Privacy policy"
+msgstr "Privacy policy"
+
+#: mia/gui/menubar.py:0
+msgid "Support the project"
+msgstr "Support the project"
+
+#: mia/gui/menubar.py:0
+msgid "Transparency"
+msgstr "Transparency"
+
+#: mia/gui/menubar.py:0
+msgid "Open Project Folder"
+msgstr "Open Project Folder"
+
+#: mia/gui/menubar.py:0
+msgid "Exit"
+msgstr "Exit"
+
+#: mia/gui/menubar.py:0
+msgid "About MIA Toolkit"
+msgstr "About MIA Toolkit"
+
+#: mia/gui/menubar.py:0
+msgid "A task is still running — stop it or let it finish first."
+msgstr "A task is still running — stop it or let it finish first."
+
+#: mia/gui/menubar.py:0
+msgid "Check for Updates…"
+msgstr "Check for Updates…"
+
+#: mia/gui/menubar.py:0
+msgid "You're on the latest version ({v})."
+msgstr "You're on the latest version ({v})."
+
+#: mia/gui/menubar.py:0
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+
+#: mia/gui/menubar.py:0
+msgid "Couldn't check for updates. Try again later."
+msgstr "Couldn't check for updates. Try again later."

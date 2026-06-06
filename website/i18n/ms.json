@@ -56,7 +56,7 @@
   "privacy.app_h2": "Aplikasi",
   "privacy.app_li1": "Berjalan <strong>sepenuhnya luar talian</strong>. Internet hanya diperlukan sekali sahaja, untuk memuat turunnya.",
   "privacy.app_li2": "<strong>Tiada akaun, tiada pendaftaran, tiada awan.</strong>",
-  "privacy.app_li3": "<strong>Tiada telemetri, tiada analitik</strong> — aplikasi ini tidak pernah menghantar apa-apa, kepada sesiapa.",
+  "privacy.app_li3": "<strong>Tiada telemetri, tiada analitik</strong> — aplikasi tidak menghantar apa-apa, kepada sesiapa pun. Satu pengecualian yang anda kawal: mengklik \"Semak Kemas Kini\" mengambil satu fail versi daripada laman web kami; ia tidak membawa data peribadi atau pengecam.",
   "privacy.app_li4": "Imej perubatan anda <strong>tidak pernah meninggalkan komputer anda</strong> (atau pemacu USB yang anda salinkannya). Kami tidak mengendalikan sebarang pelayan dan tidak pernah melihat, menerima, atau menyimpannya.",
   "privacy.app_li5": "Aplikasi ini hanya menyimpan satu fail tetapan kecil pada komputer anda sendiri (contohnya, pilihan bahasa anda).",
   "privacy.site_h2": "Laman web ini",
@@ -73,7 +73,6 @@
   "privacy.contact_h2": "Hubungi",
   "privacy.back": "← Kembali ke laman utama",
   "links.source": "Lihat sumber di GitHub",
-  "links.story": "Baca kisahnya",
   "links.blog": "Baca blog",
   "footer.disclaimer": "Perisian ini membantu anda mengatur dan menghantar imej perubatan anda sendiri. Ia tidak mentafsir imej, bukan peranti perubatan, dan tidak menggantikan semakan radiologi profesional. Tiada jaminan.",
   "footer.ethos": "Sumber terbuka · Peribadi secara reka bentuk · Tiada penjejakan",
@@ -117,5 +116,6 @@
   "footer.stats": "Ketelusan",
   "privacy.site_li1_gc": "Laman statik <strong>tanpa kuki, tanpa penjejak dan tanpa iklan</strong>. Kami menggunakan <strong>GoatCounter</strong>, pembilang sumber terbuka tanpa kuki, untuk kiraan paparan halaman secara agregat — ia tidak menyimpan data peribadi, tidak membina profil dan tidak menjejak antara laman.",
   "stats.col_referrer": "Sumber",
-  "stats.col_count": "Bilangan"
+  "stats.col_count": "Bilangan",
+  "_blog_url": "https://fritangacollective.substack.com/"
 }
