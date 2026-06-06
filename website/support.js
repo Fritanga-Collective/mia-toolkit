@@ -7,29 +7,26 @@
   var CONFIG = {
     freeDownload:
       "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
-    // The single Pay-What-You-Want product. We preset the amount per tier with
-    // Lemon Squeezy's `checkout[custom_price]` URL param (value in CENTS), so
-    // one product drives every fixed tier; the bare URL lets the buyer choose.
-    pwyw:
-      "https://mia-tools.lemonsqueezy.com/checkout/buy/7bb51bbe-d566-480d-9a44-cbde6fc871cc",
-    // Per tier: `amount` (USD) → preset via custom_price on `pwyw`. Set `url` to
-    // a dedicated product/variant buy-link to override (e.g. once a real monthly
-    // *subscription* product exists — a URL param can't make PWYW recurring).
+    // One Lemon Squeezy product with four fixed-price variants (the old PWYW
+    // product is in draft). The bare URL shows all variants for the buyer to
+    // choose; `?enabled=<variant_id>` filters the checkout to a single
+    // variant, which is how each tier button deep-links its own price.
+    checkout:
+      "https://mia-tools.lemonsqueezy.com/checkout/buy/9d2bf6af-6bbc-4a07-a55e-af6a5de6a5f9",
+    // Per tier: `variant` is the Lemon Squeezy variant id; `amount` is only
+    // for display. The monthly variant is a real subscription (recurring).
     tiers: [
-      { id: "coffee", amount: 5.99, url: "" },
-      { id: "supporter", amount: 15.99, url: "" },
-      { id: "patron", amount: 50.99, url: "" },
-      { id: "monthly", amount: 5, url: "", recurring: true },
+      { id: "coffee", amount: 5.99, variant: "1752624" },
+      { id: "supporter", amount: 15.99, variant: "1752625" },
+      { id: "patron", amount: 50.99, variant: "1752626" },
+      { id: "monthly", amount: 5, variant: "1752627", recurring: true },
     ],
   };
 
-  // Build a checkout URL for a tier: a dedicated product URL if set, otherwise
-  // the PWYW product with the amount preset (Lemon Squeezy custom_price = cents).
+  // Checkout URL for a tier: the shared product filtered to its variant.
   function checkoutUrl(tier) {
-    if (tier && tier.url) return tier.url;
-    if (!tier || !tier.amount) return CONFIG.pwyw; // bare = buyer chooses
-    return CONFIG.pwyw +
-      "?checkout%5Bcustom_price%5D=" + Math.round(tier.amount * 100);
+    if (!tier || !tier.variant) return CONFIG.checkout; // bare = buyer chooses
+    return CONFIG.checkout + "?enabled=" + tier.variant;
   }
 
   var STR = {
@@ -38,7 +35,7 @@
       names: { coffee: "Coffee", supporter: "Supporter", patron: "Patron",
                monthly: "Monthly supporter" },
       permo: "/mo",
-      custom: "Or give a custom amount →",
+      custom: "Or compare all options at checkout →",
       note: "One-time, except the monthly option. Lemon Squeezy handles tax " +
             "and receipts; you'll get an emailed thank-you, nothing to install.",
       freeQ: "Not now?",
@@ -48,7 +45,7 @@
       names: { coffee: "Un café", supporter: "Colaborador/a", patron: "Mecenas",
                monthly: "Apoyo mensual" },
       permo: "/mes",
-      custom: "O aporta el monto que quieras →",
+      custom: "O compara todas las opciones al pagar →",
       note: "Pago único, salvo la opción mensual. Lemon Squeezy gestiona los " +
             "impuestos y el recibo; recibirás un agradecimiento por correo.",
       freeQ: "¿Ahora no?",
@@ -58,7 +55,7 @@
       names: { coffee: "请喝咖啡", supporter: "支持者", patron: "赞助人",
                monthly: "每月支持" },
       permo: "/月",
-      custom: "或自定义金额 →",
+      custom: "或在结账页比较所有选项 →",
       note: "除每月选项外均为一次性支持。Lemon Squeezy 处理税费与收据；" +
             "你会收到一封感谢邮件，无需安装任何东西。",
       freeQ: "现在不方便？",
@@ -68,7 +65,7 @@
       names: { coffee: "Belanja kopi", supporter: "Penyokong",
                patron: "Penaung", monthly: "Penyokong bulanan" },
       permo: "/bln",
-      custom: "Atau beri jumlah pilihan anda →",
+      custom: "Atau bandingkan semua pilihan semasa pembayaran →",
       note: "Sekali sahaja, kecuali pilihan bulanan. Lemon Squeezy " +
             "menguruskan cukai dan resit; anda akan menerima e-mel terima " +
             "kasih, tiada apa-apa perlu dipasang.",
@@ -79,7 +76,7 @@
       names: { coffee: "Ein Kaffee", supporter: "Unterstützer:in",
                patron: "Förderer:in", monthly: "Monatliche Unterstützung" },
       permo: "/Monat",
-      custom: "Oder einen eigenen Betrag geben →",
+      custom: "Oder alle Optionen beim Bezahlen vergleichen →",
       note: "Einmalig, außer bei der monatlichen Option. Lemon Squeezy " +
             "übernimmt Steuern und Belege; Sie erhalten ein Dankeschön per " +
             "E-Mail, nichts muss installiert werden.",
@@ -90,7 +87,7 @@
       names: { coffee: "ஒரு காபி", supporter: "ஆதரவாளர்",
                patron: "பெரும் ஆதரவாளர்", monthly: "மாதாந்திர ஆதரவாளர்" },
       permo: "/மாதம்",
-      custom: "அல்லது உங்கள் விருப்பத் தொகை →",
+      custom: "அல்லது அனைத்து விருப்பங்களையும் கட்டண பக்கத்தில் ஒப்பிடுங்கள் →",
       note: "மாதாந்திர விருப்பம் தவிர, மற்றவை ஒருமுறை மட்டுமே. வரிகளும் " +
             "ரசீதுகளும் Lemon Squeezy மூலம் கையாளப்படும்; நன்றி மின்னஞ்சல் " +
             "பெறுவீர்கள், எதையும் நிறுவ வேண்டியதில்லை.",
@@ -120,7 +117,7 @@
     // The anchor's text is rendered by the page template from i18n JSON
     // (support.free_dl) — only the destination is set here.
     if (free) free.href = CONFIG.freeDownload;
-    if (custom) { custom.textContent = t.custom; custom.href = CONFIG.pwyw; }
+    if (custom) { custom.textContent = t.custom; custom.href = CONFIG.checkout; }
     if (!box) return;
 
     box.innerHTML = "";
