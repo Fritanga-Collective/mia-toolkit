@@ -8,21 +8,20 @@ UI language.
 
 from __future__ import annotations
 
-import os
 import tkinter as tk
 import webbrowser
 from tkinter import messagebox
 
 from .. import __version__
-from .i18n import LANGUAGES, _, current_language
+from .i18n import LANGUAGES, N_, _, current_language
 
 SITE = "https://mia-toolkit.fritanga.co/"
 LINKS = [
-    ("Website", SITE),
-    ("Privacy policy", SITE + "privacy.html"),
-    ("Support the project", SITE + "support.html"),
-    ("Transparency", SITE + "stats.html"),
-    ("Read our blog", "https://fritangacollective.substack.com/"),
+    (N_("Website"), SITE),
+    (N_("Privacy policy"), SITE + "privacy.html"),
+    (N_("Support the project"), SITE + "support.html"),
+    (N_("Transparency"), SITE + "stats.html"),
+    (N_("Read our blog"), "https://fritangacollective.substack.com/"),
 ]
 
 
@@ -63,7 +62,7 @@ def build_menubar(app) -> tk.Menu:
 
     # ----- macOS application menu (About + auto Quit) ----------------------
     if aqua:
-        appmenu = tk.Menu(menubar, name="apple")
+        appmenu = tk.Menu(menubar, name="apple", tearoff=False)
         appmenu.add_command(label=_("About MIA Toolkit"),
                             command=lambda: _about(root, aqua))
         appmenu.add_separator()
@@ -115,11 +114,12 @@ def build_menubar(app) -> tk.Menu:
 
     # ----- Window (macOS: system-managed window list) -----------------------
     if aqua:
-        windowmenu = tk.Menu(menubar, name="window")
+        windowmenu = tk.Menu(menubar, name="window", tearoff=False)
         menubar.add_cascade(label=_("Window"), menu=windowmenu)
 
     # ----- Help --------------------------------------------------------------
-    helpmenu = tk.Menu(menubar, name="help" if aqua else None, tearoff=False)
+    helpmenu = tk.Menu(menubar, name="help" if aqua else None,
+                       tearoff=False)
     for label, url in LINKS:
         helpmenu.add_command(label=_(label),
                              command=lambda u=url: webbrowser.open(u))
