@@ -122,6 +122,21 @@ def safe_get(ds, attr: str, default: str = "") -> str:
     return str(val).strip()
 
 
+# Characters that make a spreadsheet cell evaluate as a formula. A DICOM field
+# (PatientName, StudyDescription…) coming off an untrusted disc/ZIP could be
+# e.g. ``=HYPERLINK(...)`` or ``=cmd|'/c calc'!A1``; openpyxl would store it as
+# a live formula that runs when the inventory is opened. Prefix a single quote
+# so the value is stored as literal text instead (the Excel-injection defense).
+_FORMULA_TRIGGERS = ("=", "+", "-", "@", "\t", "\r")
+
+
+def xlsx_safe(value):
+    """Defuse spreadsheet formula injection for string cell values."""
+    if isinstance(value, str) and value[:1] in _FORMULA_TRIGGERS:
+        return "'" + value
+    return value
+
+
 def format_date(date_str: str) -> str:
     """Convert DICOM date YYYYMMDD -> YYYY-MM-DD."""
     if not date_str or len(date_str) < 8:
@@ -325,7 +340,7 @@ def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
             source,
         ]
         for col, val in enumerate(row, 1):
-            c = ws1.cell(row=idx + 1, column=col, value=val)
+            c = ws1.cell(row=idx + 1, column=col, value=xlsx_safe(val))
             if idx % 2 == 0:
                 c.fill = alt_fill
             if 8 <= col <= 13:
@@ -373,7 +388,7 @@ def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
                 source,
             ]
             for col, val in enumerate(row_data, 1):
-                c = ws2.cell(row=row, column=col, value=val)
+                c = ws2.cell(row=row, column=col, value=xlsx_safe(val))
                 if idx % 2 == 0:
                     c.fill = alt_fill
             row += 1
@@ -396,7 +411,7 @@ def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
         ws3.cell(row=start_row, column=1, value=title).font = Font(bold=True)
         r = start_row + 1
         for value, count in sorted(counts.items(), key=lambda x: -x[1]):
-            ws3.cell(row=r, column=1, value=value)
+            ws3.cell(row=r, column=1, value=xlsx_safe(value))
             ws3.cell(row=r, column=2, value=f"{count} studies")
             r += 1
         return r + 1

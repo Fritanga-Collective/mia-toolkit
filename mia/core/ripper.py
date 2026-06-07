@@ -128,17 +128,39 @@ def sanitize_label(label: str) -> str:
     return safe[:40].strip("_")
 
 
-def copy_with_retry(src: str, dst: str, retries: int = DEFAULT_RETRIES) -> Tuple[bool, Optional[str]]:
+def _manifest_safe(text: str) -> str:
+    """Escape control chars (newlines, etc.) before writing a path into the
+    plain-text manifest. A filename can legally contain a newline on Unix; left
+    raw it could forge manifest lines (e.g. a fake 'Total files : 9')."""
+    return text.encode("unicode_escape").decode("ascii")
+
+
+def _sleep_cancellable(seconds: float, cancel: Optional[CancelToken]) -> None:
+    """Sleep in short slices so a cancel during retry backoff stays responsive
+    (a disc full of unreadable files would otherwise block cancel for seconds
+    per file)."""
+    if cancel is None:
+        time.sleep(seconds)
+        return
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        check_cancel(cancel)
+        time.sleep(min(0.2, deadline - time.time()))
+
+
+def copy_with_retry(src: str, dst: str, retries: int = DEFAULT_RETRIES,
+                    *, cancel: Optional[CancelToken] = None) -> Tuple[bool, Optional[str]]:
     """
     Copy a single file. Returns (success: bool, note: str|None).
 
     Retries on OSError up to `retries` times, then falls back to dd with
-    error tolerance for badly damaged sectors.
+    error tolerance for badly damaged sectors. ``follow_symlinks=False`` keeps
+    a stray link from being dereferenced even if one reaches this far.
     """
     last_err = None
     for attempt in range(retries):
         try:
-            shutil.copy2(src, dst)
+            shutil.copy2(src, dst, follow_symlinks=False)
             if os.path.getsize(src) == os.path.getsize(dst):
                 if attempt > 0:
                     return True, f"ok (retry {attempt + 1})"
@@ -147,7 +169,7 @@ def copy_with_retry(src: str, dst: str, retries: int = DEFAULT_RETRIES) -> Tuple
         except (OSError, IOError) as e:
             last_err = str(e)
         if attempt < retries - 1:
-            time.sleep(RETRY_DELAY_SEC * (attempt + 1))
+            _sleep_cancellable(RETRY_DELAY_SEC * (attempt + 1), cancel)
 
     # All retries failed -> try dd as last resort
     if shutil.which("dd"):
@@ -192,14 +214,27 @@ def rip_disc(
     emit(progress, Progress(0, 0, kind="info", phase="index",
                             note=f"Destination: {disc_dir}"))
 
-    # First pass: list all files (also tells us total count for progress)
+    # First pass: list all files (also tells us total count for progress).
+    # Symlinks are skipped, never followed: a crafted source (USB/ZIP) could
+    # contain a link like x.dcm -> /etc/passwd, and shutil.copy2 would
+    # otherwise dereference it and copy the *target's* contents into the
+    # project. os.walk already doesn't descend symlinked dirs (followlinks=
+    # False); we also prune them so they can't be traversed, and skip
+    # symlinked files, recording both in the manifest (no silent drop).
     emit(progress, Progress(0, 0, kind="info", phase="index",
                             note="Indexing disc..."))
     all_files = []
+    links_skipped: List[str] = []
     for dirpath, dirnames, filenames in os.walk(source):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIR_NAMES]
+        dirnames[:] = [d for d in dirnames
+                       if d not in SKIP_DIR_NAMES
+                       and not os.path.islink(os.path.join(dirpath, d))]
         for fn in filenames:
-            all_files.append(os.path.join(dirpath, fn))
+            full = os.path.join(dirpath, fn)
+            if os.path.islink(full):
+                links_skipped.append(os.path.relpath(full, source))
+                continue
+            all_files.append(full)
     total_files = len(all_files)
     emit(progress, Progress(0, total_files, kind="info", phase="index",
                             note=f"{total_files} files found"))
@@ -219,18 +254,26 @@ def rip_disc(
 
         rel = os.path.relpath(src_path, source)
         dst_path = os.path.join(disc_dir, rel)
-        os.makedirs(os.path.dirname(dst_path), exist_ok=True)
 
-        # Resume support: skip if already present with matching size
-        if os.path.exists(dst_path):
-            try:
-                if os.path.getsize(src_path) == os.path.getsize(dst_path):
-                    skipped += 1
-                    continue
-            except OSError:
-                pass
+        # Per-file isolation: a pathological entry (e.g. a path that overflows
+        # the OS limit once the disc_NN_… prefix is added → ENAMETOOLONG) must
+        # be recorded as one failure, not abort the whole rip with an uncaught
+        # OSError that also skips writing the manifest.
+        try:
+            os.makedirs(os.path.dirname(dst_path), exist_ok=True)
 
-        success, note = copy_with_retry(src_path, dst_path)
+            # Resume support: skip if already present with matching size
+            if os.path.exists(dst_path):
+                try:
+                    if os.path.getsize(src_path) == os.path.getsize(dst_path):
+                        skipped += 1
+                        continue
+                except OSError:
+                    pass
+
+            success, note = copy_with_retry(src_path, dst_path, cancel=cancel)
+        except OSError as e:
+            success, note = False, str(e)
         if success:
             copied += 1
             try:
@@ -256,13 +299,15 @@ def rip_disc(
 
     elapsed = time.time() - start
 
-    # Manifest
+    # Manifest — written atomically (temp + os.replace) so an interrupted
+    # write can't leave a half-truncated manifest in place.
     manifest_path = os.path.join(disc_dir, "_manifest.txt")
-    with open(manifest_path, "w") as f:
+    tmp_manifest = manifest_path + ".tmp"
+    with open(tmp_manifest, "w") as f:
         f.write("CD Rip Manifest\n")
         f.write("================\n")
-        f.write(f"Source        : {source}\n")
-        f.write(f"Destination   : {disc_dir}\n")
+        f.write(f"Source        : {_manifest_safe(source)}\n")
+        f.write(f"Destination   : {_manifest_safe(disc_dir)}\n")
         f.write(f"Date          : {datetime.now().isoformat(timespec='seconds')}\n")
         f.write(f"Total files   : {total_files}\n")
         f.write(f"Copied OK     : {copied}\n")
@@ -270,14 +315,19 @@ def rip_disc(
         f.write(f"Failed        : {failed}\n")
         f.write(f"Bytes copied  : {bytes_done} ({format_bytes(bytes_done)})\n")
         f.write(f"Duration      : {format_duration(elapsed)}\n")
+        if links_skipped:
+            f.write(f"\nSymlinks skipped for safety ({len(links_skipped)}):\n")
+            for path in links_skipped:
+                f.write(f"  - {_manifest_safe(path)}\n")
         if retry_notes:
             f.write(f"\nFiles that needed retries or dd recovery ({len(retry_notes)}):\n")
             for path, note in retry_notes:
-                f.write(f"  - {path}  [{note}]\n")
+                f.write(f"  - {_manifest_safe(path)}  [{_manifest_safe(note)}]\n")
         if failures:
             f.write(f"\nFiles that COULD NOT be copied ({len(failures)}):\n")
             for path, err in failures:
-                f.write(f"  - {path}  ({err})\n")
+                f.write(f"  - {_manifest_safe(path)}  ({_manifest_safe(err)})\n")
+    os.replace(tmp_manifest, manifest_path)
 
     return RipResult(
         disc_dir=disc_dir,

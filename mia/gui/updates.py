@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import re
 import ssl
+import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from typing import Tuple
@@ -26,6 +27,23 @@ except ImportError:  # source installs can rely on the interpreter's defaults
 VERSION_URL = "https://mia-toolkit.fritanga.co/version.json"
 DOWNLOAD_PAGE = "https://mia-toolkit.fritanga.co/"
 TIMEOUT_SECONDS = 5.0
+# version.json is a tiny static file; cap the read so a hostile/compromised
+# endpoint can't stream gigabytes into memory.
+MAX_RESPONSE_BYTES = 64 * 1024
+# A well-formed version string we're willing to act on (digits-and-dots).
+_VERSION_RE = re.compile(r"^\d{1,9}(\.\d{1,9}){0,3}$")
+
+
+class _NoHTTPDowngrade(urllib.request.HTTPRedirectHandler):
+    """Allow redirects only when they stay on HTTPS. A compromised endpoint
+    could otherwise 30x-redirect to plaintext http:// (or another scheme),
+    dropping TLS on the follow-up fetch. (urllib already blocks file:/data:.)"""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if not newurl.lower().startswith("https://"):
+            raise urllib.error.HTTPError(
+                newurl, code, "refusing non-HTTPS redirect", headers, fp)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
 @dataclass
@@ -61,10 +79,17 @@ def check(url: str = VERSION_URL,
     parse failure — callers report 'couldn't check' and move on."""
     request = urllib.request.Request(
         url, headers={"User-Agent": "MIA-Toolkit"})  # deliberately versionless
-    with urllib.request.urlopen(request, timeout=timeout,
-                                context=_ssl_context()) as response:
-        data = json.loads(response.read().decode("utf-8"))
-    latest = str(data["version"])
+    opener = urllib.request.build_opener(
+        _NoHTTPDowngrade, urllib.request.HTTPSHandler(context=_ssl_context()))
+    with opener.open(request, timeout=timeout) as response:
+        # Read one byte past the cap to detect (and reject) oversized bodies.
+        raw = response.read(MAX_RESPONSE_BYTES + 1)
+    if len(raw) > MAX_RESPONSE_BYTES:
+        raise ValueError("version file is implausibly large — refusing")
+    data = json.loads(raw.decode("utf-8"))
+    latest = data.get("version") if isinstance(data, dict) else None
+    if not isinstance(latest, str) or not _VERSION_RE.match(latest):
+        raise ValueError(f"unexpected version value: {latest!r}")
     return UpdateResult(
         current=__version__,
         latest=latest,
