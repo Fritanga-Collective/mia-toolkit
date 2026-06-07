@@ -861,3 +861,48 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "Updates konnten nicht geprüft werden. Versuchen Sie es später erneut."
+
+msgid "Add documents"
+msgstr "Dokumente hinzufügen"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"Fügen Sie den Befund des Radiologen oder Labor-/Blutwerte (PDF) hinzu. Sie "
+"reisen als Dateien mit den Aufnahmen, die Ihr Arzt öffnen kann, und PDFs "
+"können zusätzlich für ein PACS in das Bildarchiv eingebettet werden. "
+"Optional — mit Weiter überspringen."
+
+msgid "Add files…"
+msgstr "Dateien hinzufügen…"
+
+msgid "No documents added yet."
+msgstr "Noch keine Dokumente hinzugefügt."
+
+msgid "Just include the file"
+msgstr "Nur die Datei beifügen"
+
+msgid "Choose reports or documents"
+msgstr "Berichte oder Dokumente wählen"
+
+msgid "Documents"
+msgstr "Dokumente"
+
+msgid "Add more files to the USB"
+msgstr "Weitere Dateien auf den USB-Stick"
+
+msgid "Copied {n} file(s) to the USB."
+msgstr "{n} Datei(en) auf den USB-Stick kopiert."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"Um Berichte für ein PACS in das DICOM-Archiv einzubetten, fügen Sie sie vor "
+"dem Erstellen hinzu."
+
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr ""
+"{n} Bericht-PDF(s) gefunden — prüfen Sie sie unter ‘Dokumente hinzufügen’."

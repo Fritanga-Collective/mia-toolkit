@@ -862,3 +862,48 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. பின்னர் முயற்சிக்கவும்."
+
+msgid "Add documents"
+msgstr "ஆவணங்களைச் சேர்க்கவும்"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"கதிரியக்க மருத்துவரின் அறிக்கை அல்லது ஆய்வக/இரத்தப் பரிசோதனை முடிவுகளை (PDF)"
+" சேர்க்கவும். அவை உங்கள் மருத்துவர் திறக்கக்கூடிய கோப்புகளாக ஸ்கேன்களுடன் "
+"செல்கின்றன; PDF-களை PACS-க்காக படிமக் காப்பகத்திலும் உட்பொதிக்கலாம். "
+"விருப்பத்தேர்வு — தவிர்க்க ‘அடுத்து’ என்பதைக் கிளிக் செய்யவும்."
+
+msgid "Add files…"
+msgstr "கோப்புகளைச் சேர்க்கவும்…"
+
+msgid "No documents added yet."
+msgstr "இன்னும் ஆவணங்கள் சேர்க்கப்படவில்லை."
+
+msgid "Just include the file"
+msgstr "கோப்பை மட்டும் சேர்க்கவும்"
+
+msgid "Choose reports or documents"
+msgstr "அறிக்கைகள் அல்லது ஆவணங்களைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Documents"
+msgstr "ஆவணங்கள்"
+
+msgid "Add more files to the USB"
+msgstr "USB-க்கு மேலும் கோப்புகளைச் சேர்க்கவும்"
+
+msgid "Copied {n} file(s) to the USB."
+msgstr "{n} கோப்பு(கள்) USB-க்கு நகலெடுக்கப்பட்டது."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"PACS-க்கான DICOM காப்பகத்தில் அறிக்கைகளை உட்பொதிக்க, உருவாக்குவதற்கு முன் "
+"அவற்றைச் சேர்க்கவும்."
+
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr ""
+"{n} அறிக்கை PDF கண்டறியப்பட்டது — ‘ஆவணங்களைச் சேர்’ என்பதில் பார்க்கவும்."

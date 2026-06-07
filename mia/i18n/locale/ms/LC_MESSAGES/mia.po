@@ -842,3 +842,47 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "Tidak dapat menyemak kemas kini. Cuba lagi nanti."
+
+msgid "Add documents"
+msgstr "Tambah dokumen"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"Tambah laporan pakar radiologi atau keputusan makmal/ujian darah (PDF). Ia "
+"dibawa bersama imbasan sebagai fail yang boleh dibuka oleh doktor anda, dan "
+"PDF juga boleh dibenamkan ke dalam arkib pengimejan untuk PACS. Pilihan — "
+"klik Seterusnya untuk melangkau."
+
+msgid "Add files…"
+msgstr "Tambah fail…"
+
+msgid "No documents added yet."
+msgstr "Belum ada dokumen ditambah."
+
+msgid "Just include the file"
+msgstr "Sertakan fail sahaja"
+
+msgid "Choose reports or documents"
+msgstr "Pilih laporan atau dokumen"
+
+msgid "Documents"
+msgstr "Dokumen"
+
+msgid "Add more files to the USB"
+msgstr "Tambah lagi fail ke USB"
+
+msgid "Copied {n} file(s) to the USB."
+msgstr "{n} fail disalin ke USB."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"Untuk membenamkan laporan ke dalam arkib DICOM bagi PACS, tambahkannya "
+"sebelum membina."
+
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr "Menjumpai {n} PDF laporan — semak di ‘Tambah dokumen’."

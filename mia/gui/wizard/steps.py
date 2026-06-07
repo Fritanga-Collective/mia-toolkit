@@ -23,7 +23,7 @@ def institutions_url() -> str:
     prefix = "" if lang == "en" else f"{lang}/"
     return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
 
-from mia.core import deliver, dicomdir, inventory
+from mia.core import deliver, dicomdir, documents, inventory
 from mia.core.common import format_bytes
 from mia.core.ripper import copy_with_retry
 
@@ -119,8 +119,9 @@ class WelcomeStep(WizardStep):
         ).grid(row=1, column=0, sticky="w", pady=(6, 16))
         self.resume_lbl = ttk.Label(self, foreground="#0a7d28", text="")
         self.resume_lbl.grid(row=2, column=0, sticky="w")
+        from .view import BUILD_STEP
         self.skip_btn = ttk.Button(self, text=_("Skip to building the archive"),
-                                   command=lambda: self.wizard.goto(3))
+                                   command=lambda: self.wizard.goto(BUILD_STEP))
 
     def enter(self) -> None:
         n = self.project.disc_count()
@@ -163,7 +164,7 @@ class AddStudiesStep(PanelStep):
             self.wizard.app.root, self.panel,
             get_dest=lambda: self.project.raw_discs_dir,
             on_state_changed=self._state,
-            on_disc=lambda r: self._added(),
+            on_disc=lambda r: self._added(r),
             parent_widget=self)
         self._import_cancel = None
 
@@ -186,18 +187,32 @@ class AddStudiesStep(PanelStep):
     def _import_folder(self) -> None:
         self._import_cancel = import_flow.start_folder_import(
             self.wizard.app.root, self.panel, get_dest=self._get_dest,
-            on_state=self._state, on_done=lambda r: self._added(),
+            on_state=self._state, on_done=lambda r: self._added(r),
             parent=self)
 
     def _import_zip(self) -> None:
         self._import_cancel = import_flow.start_zip_import(
             self.wizard.app.root, self.panel, get_dest=self._get_dest,
-            on_state=self._state, on_done=lambda r: self._added(),
+            on_state=self._state, on_done=lambda r: self._added(r),
             parent=self)
 
-    def _added(self) -> None:
+    def _added(self, result=None) -> None:
+        self._note_pdfs(result)
         self._refresh_count()
         self.wizard.refresh_nav()
+
+    def _note_pdfs(self, result) -> None:
+        """If the just-imported source carried report PDFs, point the user at
+        the upcoming documents step (non-blocking — the real choice is there)."""
+        from mia.core import documents
+        disc_dir = getattr(result, "disc_dir", None)
+        if not disc_dir:
+            return
+        n = len(documents.find_pdfs(disc_dir))
+        if n:
+            self.panel.log_plain("📄 " + _(
+                "Found {n} report PDF(s) — review them in "
+                "‘Add documents’.").format(n=n), tag="info")
 
     def _refresh_count(self) -> None:
         n = self.project.disc_count()
@@ -263,6 +278,7 @@ class InventoryStep(PanelStep):
         if status != "done" or result is None:
             return
         self._scanned = True
+        self.wizard.inventory_result = result  # studies feed the documents step
         self.info.configure(
             text=_("We found {n} studies across your discs.")
             .format(n=result.study_count))
@@ -282,6 +298,131 @@ class InventoryStep(PanelStep):
     def _open(self) -> None:
         if os.path.exists(self.project.inventory_path):
             open_path(self.project.inventory_path)
+
+
+def _copy_reports(plan, dest: str, result=None) -> int:
+    """Copy each included document into ``dest/Reports/`` (unique names),
+    folding any failure into ``result``. Returns the count copied OK."""
+    paths = [d["path"] for d in plan] if plan else []
+    paths = [p for p in paths if os.path.exists(p)]
+    if not paths:
+        return 0
+    reports = os.path.join(dest, "Reports")
+    os.makedirs(reports, exist_ok=True)
+    used: set = set()
+    copied = 0
+    for src in paths:
+        base = os.path.basename(src)
+        target = os.path.join(reports, base)
+        n = 1
+        while target in used or os.path.exists(target):
+            stem, ext = os.path.splitext(base)
+            target = os.path.join(reports, f"{stem} ({n}){ext}")
+            n += 1
+        used.add(target)
+        ok, note = copy_with_retry(src, target)
+        if ok and os.path.exists(target):
+            copied += 1
+        elif result is not None:
+            result.failed += 1
+            result.failures.append((base, note or "could not copy report"))
+    return copied
+
+
+class AddDocumentsStep(WizardStep):
+    """Optional: add report/lab PDFs (and other files) to the archive. PDFs can
+    be embedded into a study (rides into PACS); everything checked is also
+    copied to a Reports/ folder on the USB. Auto-discovered PDFs are pre-listed.
+    The actual encapsulation/copy happens in the build & deliver steps."""
+
+    NO_EMBED = None  # sentinel label resolved at runtime via _no_embed_label()
+
+    def build(self) -> None:
+        ttk.Label(self, wraplength=580, justify="left", text=_(
+            "Add the radiologist's report or lab/blood-work results (PDFs). "
+            "They travel with the scans as files your doctor can open, and PDFs "
+            "can also be embedded into the imaging archive for a PACS. Optional "
+            "— click Next to skip.")
+        ).grid(row=0, column=0, sticky="w")
+        ttk.Button(self, text=f"📎  {_('Add files…')}", command=self._add_files
+                   ).grid(row=1, column=0, sticky="w", pady=(8, 6))
+        self.rows_frame = ttk.Frame(self)
+        self.rows_frame.grid(row=2, column=0, sticky="nsew")
+        self.rows_frame.columnconfigure(1, weight=1)
+        self.empty_lbl = ttk.Label(self, foreground="#666",
+                                   text=_("No documents added yet."))
+        self.empty_lbl.grid(row=3, column=0, sticky="w", pady=(4, 0))
+        self._rows: list[dict] = []
+        self._seen: set = set()
+
+    def _no_embed_label(self) -> str:
+        return _("Just include the file")
+
+    def _study_refs(self):
+        inv = self.wizard.inventory_result
+        return documents.study_choices(inv) if inv is not None else []
+
+    def enter(self) -> None:
+        # Pre-list PDFs found on the imported media (once).
+        for pdf in documents.find_pdfs(self.project.raw_discs_dir):
+            if pdf in self._seen:
+                continue
+            ref = documents.study_for_path(pdf, self.project.raw_discs_dir)
+            self._add_row(pdf, default_study=ref, found=True)
+        self._refresh_empty()
+
+    def _add_files(self) -> None:
+        paths = filedialog.askopenfilenames(
+            title=_("Choose reports or documents"),
+            filetypes=[(_("Documents"), ("*.pdf", "*.PDF", "*.jpg", "*.jpeg",
+                                         "*.png")), (_("All files"), "*.*")])
+        for p in paths:
+            if p and p not in self._seen:
+                self._add_row(p, default_study=None, found=False)
+        self._refresh_empty()
+
+    def _add_row(self, path: str, *, default_study, found: bool) -> None:
+        self._seen.add(path)
+        r = len(self._rows)
+        refs = self._study_refs()
+        include = tk.BooleanVar(value=True)  # checked by default; uncheck to skip
+        cb = ttk.Checkbutton(self.rows_frame, variable=include)
+        cb.grid(row=r, column=0, sticky="w")
+        name = ("📄 " if found else "") + os.path.basename(path)
+        ttk.Label(self.rows_frame, text=name).grid(row=r, column=1, sticky="w")
+        # Embed-target dropdown: "just include" or a specific study (PDFs only).
+        is_pdf = path.lower().endswith(".pdf")
+        values = [self._no_embed_label()] + [ref.label for ref in refs]
+        combo = ttk.Combobox(self.rows_frame, values=values, state="readonly"
+                             if (is_pdf and refs) else "disabled", width=28)
+        sel = self._no_embed_label()
+        if is_pdf and refs and default_study is not None:
+            for ref in refs:
+                if ref.study_uid == default_study.study_uid:
+                    sel = ref.label
+                    break
+        combo.set(sel)
+        combo.grid(row=r, column=2, sticky="e", padx=(8, 0))
+        self._rows.append({"path": path, "include": include, "combo": combo,
+                           "refs": refs})
+
+    def _refresh_empty(self) -> None:
+        self.empty_lbl.grid() if not self._rows else self.empty_lbl.grid_remove()
+
+    def on_leave(self) -> None:
+        plan = []
+        for row in self._rows:
+            if not row["include"].get():
+                continue
+            embed = None
+            label = row["combo"].get()
+            if label and label != self._no_embed_label():
+                for ref in row["refs"]:
+                    if ref.label == label:
+                        embed = ref
+                        break
+            plan.append({"path": row["path"], "embed_study": embed})
+        self.wizard.documents_plan = plan
 
 
 class ArchiveStep(PanelStep):
@@ -318,18 +459,37 @@ class ArchiveStep(PanelStep):
 
     def _do_build(self) -> None:
         out = self.project.archive_dir
-        if os.path.exists(out) and not self.project.has_archive():
-            # A leftover partial build inside our managed folder — safe to clear.
+        embed = [d for d in self.wizard.documents_plan if d.get("embed_study")]
+        # Rebuild if there's a leftover partial build, or if documents need to
+        # be embedded into the fileset (they ride in via raw_discs/_documents).
+        if os.path.exists(out) and (embed or not self.project.has_archive()):
             shutil.rmtree(out, ignore_errors=True)
-        if self.project.has_archive():
+        if self.project.has_archive() and not embed:
             self._build_done("done", None)
             return
 
         def work(emit, cancel):
+            self._stage_documents()  # encapsulate embed-PDFs before the walk
             return dicomdir.build_fileset(self.project.raw_discs_dir, out,
                                           progress=emit, cancel=cancel)
 
         self.run_job(work, self._build_done, self.project.root)
+
+    def _stage_documents(self) -> None:
+        """Encapsulate embed-marked PDFs into raw_discs/_documents so the
+        DICOMDIR build picks them up. A bad PDF is skipped, not fatal — the
+        companion Reports/ copy still carries the original."""
+        staged = self.project.staged_docs_dir
+        shutil.rmtree(staged, ignore_errors=True)
+        embed = [d for d in self.wizard.documents_plan if d.get("embed_study")]
+        if not embed:
+            return
+        os.makedirs(staged, exist_ok=True)
+        for d in embed:
+            try:
+                documents.encapsulate_pdf(d["path"], d["embed_study"], staged)
+            except Exception:
+                pass
 
     def _build_done(self, status, result) -> None:
         if status != "done":
@@ -368,6 +528,10 @@ class ArchiveStep(PanelStep):
                     result.failed += 1
                     result.failures.append(
                         (os.path.basename(inv), note or "could not copy inventory"))
+            # Companion reports/labs → Reports/ (every included document, as a
+            # plain file the doctor can open; embed copies already rode in the
+            # Archive via _stage_documents).
+            _copy_reports(self.wizard.documents_plan, dest, result)
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root)
@@ -401,6 +565,10 @@ class DoneStep(WizardStep):
         self.inv_btn = ttk.Button(bar, text=_("Open the inventory"),
                                   command=self._inv)
         self.inv_btn.pack(side="left", padx=(8, 0))
+        self.addfiles_btn = ttk.Button(
+            bar, text=f"📎  {_('Add more files to the USB')}",
+            command=self._add_files, state="disabled")
+        self.addfiles_btn.pack(side="left", padx=(8, 0))
         ttk.Label(self, wraplength=580, justify="left", foreground="#444",
                   text=_("Tip: include a one-page cover note with the patient's "
                          "name, date of birth, a short history, and the specific "
@@ -446,8 +614,31 @@ class DoneStep(WizardStep):
                 "All done! Your archive is on the USB drive at:\n{p}\n\n"
                 "You can now hand it to your doctor.").format(p=dp))
             self.reveal_btn.configure(state="normal")
+            self.addfiles_btn.configure(state="normal")
         else:
             self.lbl.configure(text=_("All done."))
+            self.addfiles_btn.configure(state="disabled")
+
+    def _add_files(self) -> None:
+        """Companion-only append to the delivered USB. (Embedding into the
+        DICOM archive must happen before building, so it's not offered here.)"""
+        dp = self.wizard.delivered_path
+        if not dp:
+            return
+        paths = filedialog.askopenfilenames(
+            title=_("Choose reports or documents"),
+            filetypes=[(_("Documents"), ("*.pdf", "*.PDF", "*.jpg", "*.jpeg",
+                                         "*.png")), (_("All files"), "*.*")])
+        if not paths:
+            return
+        plan = [{"path": p, "embed_study": None} for p in paths]
+        n = _copy_reports(plan, dp)
+        messagebox.showinfo(
+            _("Add more files to the USB"),
+            _("Copied {n} file(s) to the USB.").format(n=n)
+            + "\n\n"
+            + _("To embed reports into the DICOM archive for a PACS, add them "
+                "before building."))
 
     def _reveal(self) -> None:
         if self.wizard.delivered_path:

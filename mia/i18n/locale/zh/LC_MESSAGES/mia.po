@@ -819,3 +819,43 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "无法检查更新。请稍后再试。"
+
+msgid "Add documents"
+msgstr "添加文档"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"添加放射科报告或化验/血液检查结果（PDF）。它们会作为医生可打开的文件随影像一同保存，PDF 还可嵌入影像存档以供 PACS "
+"使用。可选——点击“下一步”可跳过。"
+
+msgid "Add files…"
+msgstr "添加文件…"
+
+msgid "No documents added yet."
+msgstr "尚未添加文档。"
+
+msgid "Just include the file"
+msgstr "仅包含该文件"
+
+msgid "Choose reports or documents"
+msgstr "选择报告或文档"
+
+msgid "Documents"
+msgstr "文档"
+
+msgid "Add more files to the USB"
+msgstr "向 U 盘添加更多文件"
+
+msgid "Copied {n} file(s) to the USB."
+msgstr "已将 {n} 个文件复制到 U 盘。"
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr "若要将报告嵌入用于 PACS 的 DICOM 存档，请在构建前添加它们。"
+
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr "发现 {n} 个报告 PDF——在“添加文档”中查看它们。"
