@@ -897,3 +897,8 @@ msgstr ""
 
 msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
 msgstr "Found {n} report PDF(s) — review them in ‘Add documents’."
+
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"Couldn't embed {name} into the archive — it's still included as a file."

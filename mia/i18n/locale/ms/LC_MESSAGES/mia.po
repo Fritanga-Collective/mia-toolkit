@@ -886,3 +886,9 @@ msgstr ""
 
 msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
 msgstr "Menjumpai {n} PDF laporan — semak di ‘Tambah dokumen’."
+
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"Tidak dapat membenamkan {name} ke dalam arkib — ia tetap disertakan sebagai "
+"fail."

@@ -2,8 +2,9 @@
 as Encapsulated PDF DICOM instances so they join a study in the archive/PACS.
 
 Local I/O only. The companion-folder copy (originals → ``Reports/`` on the USB)
-is handled by the delivery step with ``deliver.copy_tree_verified``; this module
-provides discovery, study association, and the PDF→DICOM encapsulation.
+is handled by the wizard delivery step (``_copy_reports`` via
+``ripper.copy_with_retry``); this module provides discovery, study association,
+and the PDF→DICOM encapsulation.
 """
 
 from __future__ import annotations

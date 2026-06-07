@@ -859,3 +859,7 @@ msgstr "若要将报告嵌入用于 PACS 的 DICOM 存档，请在构建前添�
 
 msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
 msgstr "发现 {n} 个报告 PDF——在“添加文档”中查看它们。"
+
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr "无法将 {name} 嵌入存档——它仍会作为文件包含在内。"

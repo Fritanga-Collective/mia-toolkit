@@ -24,7 +24,7 @@ def institutions_url() -> str:
     return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
 
 from mia.core import deliver, dicomdir, documents, inventory
-from mia.core.common import format_bytes
+from mia.core.common import Progress, format_bytes
 from mia.core.ripper import copy_with_retry
 
 from .. import import_flow
@@ -302,9 +302,10 @@ class InventoryStep(PanelStep):
 
 def _copy_reports(plan, dest: str, result=None) -> int:
     """Copy each included document into ``dest/Reports/`` (unique names),
-    folding any failure into ``result``. Returns the count copied OK."""
+    folding any failure — including a source that has since disappeared (e.g.
+    removable media unplugged) — into ``result`` so the UI can't report a clean
+    delivery while a requested document is missing. Returns the count copied."""
     paths = [d["path"] for d in plan] if plan else []
-    paths = [p for p in paths if os.path.exists(p)]
     if not paths:
         return 0
     reports = os.path.join(dest, "Reports")
@@ -313,6 +314,11 @@ def _copy_reports(plan, dest: str, result=None) -> int:
     copied = 0
     for src in paths:
         base = os.path.basename(src)
+        if not os.path.exists(src):
+            if result is not None:
+                result.failed += 1
+                result.failures.append((base, "source file no longer exists"))
+            continue
         target = os.path.join(reports, base)
         n = 1
         while target in used or os.path.exists(target):
@@ -469,16 +475,17 @@ class ArchiveStep(PanelStep):
             return
 
         def work(emit, cancel):
-            self._stage_documents()  # encapsulate embed-PDFs before the walk
+            self._stage_documents(emit)  # encapsulate embed-PDFs before walk
             return dicomdir.build_fileset(self.project.raw_discs_dir, out,
                                           progress=emit, cancel=cancel)
 
         self.run_job(work, self._build_done, self.project.root)
 
-    def _stage_documents(self) -> None:
+    def _stage_documents(self, emit) -> None:
         """Encapsulate embed-marked PDFs into raw_discs/_documents so the
-        DICOMDIR build picks them up. A bad PDF is skipped, not fatal — the
-        companion Reports/ copy still carries the original."""
+        DICOMDIR build picks them up. A bad PDF is skipped (not fatal — the
+        companion Reports/ copy still carries the original), but the failure is
+        surfaced in the progress log so the user knows it wasn't embedded."""
         staged = self.project.staged_docs_dir
         shutil.rmtree(staged, ignore_errors=True)
         embed = [d for d in self.wizard.documents_plan if d.get("embed_study")]
@@ -486,10 +493,13 @@ class ArchiveStep(PanelStep):
             return
         os.makedirs(staged, exist_ok=True)
         for d in embed:
+            name = os.path.basename(d["path"])
             try:
                 documents.encapsulate_pdf(d["path"], d["embed_study"], staged)
             except Exception:
-                pass
+                emit(Progress(0, 0, kind="fail", phase="build", note=_(
+                    "Couldn't embed {name} into the archive — it's still "
+                    "included as a file.").format(name=name)))
 
     def _build_done(self, status, result) -> None:
         if status != "done":
