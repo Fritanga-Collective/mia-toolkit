@@ -4,6 +4,7 @@ inventory (mia.core.ripper, mia.core.inventory). See docs/SECURITY-AUDIT.md."""
 from __future__ import annotations
 
 import os
+import sys
 
 import pytest
 from openpyxl import load_workbook
@@ -14,6 +15,21 @@ from mia.core.ripper import rip_disc
 from tests.helpers import make_dicom
 
 
+def _symlink_or_skip(target, link):
+    """Create a symlink, or skip on platforms/accounts that can't (Windows
+    without the privilege). The threats these tests cover are POSIX-shaped."""
+    try:
+        os.symlink(target, link)
+    except (OSError, NotImplementedError) as e:
+        pytest.skip(f"symlinks unavailable here: {e}")
+
+
+# Windows filenames can't contain control characters, so the manifest-forgery
+# threat (and its test fixture) only exist on POSIX filesystems.
+posix_only = pytest.mark.skipif(sys.platform == "win32",
+                                reason="POSIX-only filename semantics")
+
+
 # ---- A2: symlink copy-through (data exfiltration) --------------------------
 
 def test_rip_skips_symlinked_file(tmp_path):
@@ -22,7 +38,7 @@ def test_rip_skips_symlinked_file(tmp_path):
     src = tmp_path / "disc"
     src.mkdir()
     (src / "real.txt").write_text("ok")
-    os.symlink(str(secret), str(src / "innocuous.dcm"))  # link -> secret
+    _symlink_or_skip(str(secret), str(src / "innocuous.dcm"))  # link -> secret
 
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
 
@@ -42,7 +58,7 @@ def test_rip_does_not_recurse_symlinked_dir(tmp_path):
     src = tmp_path / "disc"
     src.mkdir()
     (src / "real.txt").write_text("ok")
-    os.symlink(str(outside), str(src / "linkdir"))
+    _symlink_or_skip(str(outside), str(src / "linkdir"))
 
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
     assert not os.path.exists(os.path.join(result.disc_dir, "linkdir",
@@ -51,6 +67,7 @@ def test_rip_does_not_recurse_symlinked_dir(tmp_path):
 
 # ---- A11: control chars in a filename can't forge manifest lines -----------
 
+@posix_only
 def test_manifest_escapes_newline_in_failed_path(tmp_path, monkeypatch):
     src = tmp_path / "disc"
     src.mkdir()
