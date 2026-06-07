@@ -11,8 +11,9 @@
     // product is in draft). The bare URL shows all variants for the buyer to
     // choose; `?enabled=<variant_id>` filters the checkout to a single
     // variant, which is how each tier button deep-links its own price.
+    // Served from our Lemon Squeezy store custom domain (CNAME).
     checkout:
-      "https://mia-tools.lemonsqueezy.com/checkout/buy/9d2bf6af-6bbc-4a07-a55e-af6a5de6a5f9",
+      "https://support.mia-toolkit.fritanga.co/checkout/buy/9d2bf6af-6bbc-4a07-a55e-af6a5de6a5f9",
     // Per tier: `variant` is the Lemon Squeezy variant id; `amount` is only
     // for display. The monthly variant is a real subscription (recurring).
     tiers: [
