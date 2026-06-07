@@ -31,7 +31,9 @@ TIMEOUT_SECONDS = 5.0
 # endpoint can't stream gigabytes into memory.
 MAX_RESPONSE_BYTES = 64 * 1024
 # A well-formed version string we're willing to act on (digits-and-dots).
-_VERSION_RE = re.compile(r"^\d{1,9}(\.\d{1,9}){0,3}$")
+# Capped at 3 components to match what parse_version() actually compares — a
+# 4th component would be silently ignored and could mask a real update.
+_VERSION_RE = re.compile(r"^\d{1,9}(\.\d{1,9}){0,2}$")
 
 
 class _NoHTTPDowngrade(urllib.request.HTTPRedirectHandler):

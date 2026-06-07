@@ -63,6 +63,9 @@ def test_rip_does_not_recurse_symlinked_dir(tmp_path):
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
     assert not os.path.exists(os.path.join(result.disc_dir, "linkdir",
                                             "secret.txt"))
+    # The skipped symlinked dir is recorded in the manifest (no silent drop).
+    manifest = open(result.manifest_path).read()
+    assert "Symlinks skipped" in manifest and "linkdir" in manifest
 
 
 # ---- A11: control chars in a filename can't forge manifest lines -----------
@@ -79,10 +82,13 @@ def test_manifest_escapes_newline_in_failed_path(tmp_path, monkeypatch):
                         lambda *a, **k: (False, "unreadable"))
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
     text = open(result.manifest_path).read()
-    # The forged "Total files : 9" line must not appear on its own line.
-    assert "\nTotal files   : 9\n" not in text.replace(
-        "Total files   : 0", "")  # the real header line is 0 here
-    assert "\\n" in text  # the newline was escaped
+    # The only "Total files" line must be the real header (1 file here, which
+    # failed) — never the forged ": 9", regardless of trailing text.
+    total_lines = [ln for ln in text.splitlines()
+                   if ln.startswith("Total files")]
+    assert total_lines == ["Total files   : 1"]
+    # The malicious name survived as a single escaped line, not a real newline.
+    assert "evil\\nTotal" in text
 
 
 # ---- A1: Excel formula injection from DICOM fields -------------------------

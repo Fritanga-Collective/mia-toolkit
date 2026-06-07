@@ -226,9 +226,16 @@ def rip_disc(
     all_files = []
     links_skipped: List[str] = []
     for dirpath, dirnames, filenames in os.walk(source):
-        dirnames[:] = [d for d in dirnames
-                       if d not in SKIP_DIR_NAMES
-                       and not os.path.islink(os.path.join(dirpath, d))]
+        kept_dirs = []
+        for d in dirnames:
+            if d in SKIP_DIR_NAMES:
+                continue
+            full_d = os.path.join(dirpath, d)
+            if os.path.islink(full_d):
+                links_skipped.append(os.path.relpath(full_d, source))
+                continue
+            kept_dirs.append(d)
+        dirnames[:] = kept_dirs
         for fn in filenames:
             full = os.path.join(dirpath, fn)
             if os.path.islink(full):
