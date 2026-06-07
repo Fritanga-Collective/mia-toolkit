@@ -89,14 +89,15 @@ def test_long_member_name_clean_error(tmp_path):
 # ---- A10: "*.zip_contents" collision must not crash ------------------------
 
 def test_zip_contents_name_collision(tmp_path):
-    # Outer zip carries both inner.zip and a regular file named
-    # inner.zip_contents — the nested-expansion dir name must uniquify.
+    # "inner.zip" expands into a dir named "inner_contents" (the ".zip" suffix
+    # is dropped). Carry a regular file with exactly that name next to it so
+    # the expansion would hit a pre-existing non-dir — must uniquify, not crash.
     inner = _zip(tmp_path / "inner.zip", [("scan.dcm", b"DICMDATA")])
     with open(inner, "rb") as f:
         inner_bytes = f.read()
     outer = _zip(tmp_path / "outer.zip", [
         ("inner.zip", inner_bytes),
-        ("inner.zip_contents", b"i am a regular file"),
+        ("inner_contents", b"i am a regular file, not a directory"),
     ])
     # Should complete without raising (FileExistsError/NotADirectoryError).
     result = import_zip(outer, str(tmp_path / "proj"), 1)

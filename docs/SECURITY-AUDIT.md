@@ -46,7 +46,7 @@ the result here.
 | A7 | Med | A redirect could **downgrade HTTPS→HTTP** on the follow-up fetch. | Non-HTTPS redirects are refused. |
 | A8 | Low | A malformed `version` value could show a **spoofed update prompt**. | `version` must be a sane digits-and-dots string or the check fails. |
 | A9 | Low | An over-long ZIP member name raised a raw OS error. | Rejected with a clear message. |
-| A10 | Low | A `name.zip` next to a file literally named `name.zip_contents` could crash nested extraction. | The expansion directory name is uniquified. |
+| A10 | Low | A `name.zip` next to a file literally named `name_contents` (the expansion dir's name) could crash nested extraction. | The expansion directory name is uniquified. |
 | A11 | Low | A filename containing a newline could **forge manifest lines**. | Control characters are escaped when written to the manifest. |
 | A12 | Low | Many unreadable files made retry backoff **block cancellation**. | Cancellation is checked during retry waits. |
 

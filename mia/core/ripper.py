@@ -143,9 +143,12 @@ def _sleep_cancellable(seconds: float, cancel: Optional[CancelToken]) -> None:
         time.sleep(seconds)
         return
     deadline = time.time() + seconds
-    while time.time() < deadline:
+    while True:
         check_cancel(cancel)
-        time.sleep(min(0.2, deadline - time.time()))
+        remaining = deadline - time.time()
+        if remaining <= 0:
+            return
+        time.sleep(min(0.2, remaining))
 
 
 def copy_with_retry(src: str, dst: str, retries: int = DEFAULT_RETRIES,
