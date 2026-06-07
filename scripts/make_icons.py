@@ -46,10 +46,15 @@ def cat_square(margin_frac: float = 0.06) -> Image.Image:
     mask = (ImageOps.invert(img)
             .point(lambda p: 255 if p > 96 else 0)
             .filter(ImageFilter.MedianFilter(9)))
-    left, top, right, bottom = mask.getbbox()
+    bbox = mask.getbbox()
+    if bbox is None:
+        sys.exit(f"no drawing found in {MASTER} — threshold removed "
+                 "every pixel; is the master the line-art logo?")
+    left, top, right, bottom = bbox
     side = max(right - left, bottom - top)
-    margin = int(side * margin_frac)
-    side += 2 * margin
+    # Add the margin, but never let the box outgrow the canvas (which would
+    # break the clamping below with negative offsets).
+    side = min(side + 2 * int(side * margin_frac), img.width, img.height)
     # Center the box on the drawing, clamped to the canvas.
     cx, cy = (left + right) // 2, (top + bottom) // 2
     x0 = min(max(cx - side // 2, 0), img.width - side)
