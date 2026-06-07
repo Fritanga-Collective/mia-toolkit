@@ -31,6 +31,7 @@ OutputBaseFilename=MIA-Toolkit-Setup-{#AppVer}
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+SetupIconFile={#SourcePath}app.ico
 UninstallDisplayIcon={app}\{#ExeName}
 
 [Languages]

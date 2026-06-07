@@ -31,6 +31,7 @@ VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
 hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")
 datas = collect_data_files("pydicom") + [
     (os.path.join(REPO, "mia/i18n/locale"), "mia/i18n/locale"),
+    (os.path.join(REPO, "mia/gui/assets"), "mia/gui/assets"),
 ]
 
 a = Analysis(
@@ -68,7 +69,7 @@ coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="mia")
 app = BUNDLE(
     coll,
     name="MIA Toolkit.app",
-    icon=None,  # add packaging/macos/app.icns later
+    icon=os.path.join(REPO, "packaging/macos/app.icns"),
     bundle_identifier="com.fritanga.miatoolkit",
     version=VERSION,
     info_plist={

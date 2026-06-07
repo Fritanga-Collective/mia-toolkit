@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 import tkinter as tk
+from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import Callable
 
 from .i18n import _, install
 from .menubar import build_menubar
+
+# Window/taskbar icon (macOS Dock uses the bundle's .icns instead). Bundled
+# by the PyInstaller specs alongside the locale data.
+ICON_PNG = Path(__file__).resolve().parent / "assets" / "icon.png"
 
 
 class App:
@@ -15,6 +20,11 @@ class App:
         self.root = tk.Tk()
         self.root.title(_("MIA Toolkit"))
         self.root.minsize(660, 580)
+        try:
+            self._icon = tk.PhotoImage(file=str(ICON_PNG))
+            self.root.iconphoto(True, self._icon)
+        except tk.TclError:
+            pass  # icon is cosmetic — never block startup over it
 
         self.container = ttk.Frame(self.root)
         self.container.pack(fill="both", expand=True)
