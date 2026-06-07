@@ -23,6 +23,7 @@ VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
 hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")
 datas = collect_data_files("pydicom") + [
     (os.path.join(REPO, "mia/i18n/locale"), "mia/i18n/locale"),
+    (os.path.join(REPO, "mia/gui/assets"), "mia/gui/assets"),
 ]
 
 a = Analysis(
@@ -48,7 +49,7 @@ exe = EXE(
     strip=False,
     upx=False,
     console=False,         # GUI app — no console window
-    icon=None,             # add packaging/windows/app.ico later
+    icon=os.path.join(REPO, "packaging/windows/app.ico"),
 )
 
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="MIAToolkit")
