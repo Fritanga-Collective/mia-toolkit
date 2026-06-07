@@ -46,7 +46,8 @@ def test_rip_skips_symlinked_file(tmp_path):
     # The link's target content must never be materialized in the project.
     assert not os.path.exists(copied_link) or os.path.islink(copied_link)
     if os.path.exists(copied_link) and not os.path.islink(copied_link):
-        assert "ssn" not in open(copied_link).read()
+        with open(copied_link) as f:
+            assert "ssn" not in f.read()
     # The real file still copied.
     assert os.path.exists(os.path.join(result.disc_dir, "real.txt"))
 
@@ -64,7 +65,8 @@ def test_rip_does_not_recurse_symlinked_dir(tmp_path):
     assert not os.path.exists(os.path.join(result.disc_dir, "linkdir",
                                             "secret.txt"))
     # The skipped symlinked dir is recorded in the manifest (no silent drop).
-    manifest = open(result.manifest_path).read()
+    with open(result.manifest_path) as f:
+        manifest = f.read()
     assert "Symlinks skipped" in manifest and "linkdir" in manifest
 
 
@@ -81,7 +83,8 @@ def test_manifest_escapes_newline_in_failed_path(tmp_path, monkeypatch):
     monkeypatch.setattr("mia.core.ripper.copy_with_retry",
                         lambda *a, **k: (False, "unreadable"))
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
-    text = open(result.manifest_path).read()
+    with open(result.manifest_path) as f:
+        text = f.read()
     # The only "Total files" line must be the real header (1 file here, which
     # failed) — never the forged ": 9", regardless of trailing text.
     total_lines = [ln for ln in text.splitlines()

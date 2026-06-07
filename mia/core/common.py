@@ -86,6 +86,13 @@ def format_duration(seconds: float) -> str:
     return f"{hours}h {minutes}m"
 
 
+def manifest_safe(text: str) -> str:
+    """Escape control chars (newlines, etc.) before writing a path into a
+    plain-text manifest. A filename can legally contain a newline on Unix;
+    left raw it could forge manifest lines (e.g. a fake 'Total files : 9')."""
+    return text.encode("unicode_escape").decode("ascii")
+
+
 def is_dicom_file(path: str) -> bool:
     """DICOM files have the magic bytes 'DICM' at offset 128."""
     try:

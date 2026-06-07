@@ -30,6 +30,7 @@ from .common import (
     emit,
     format_bytes,
     format_duration,
+    manifest_safe,
 )
 
 DEFAULT_DEST = "./raw_discs"
@@ -126,13 +127,6 @@ def sanitize_label(label: str) -> str:
     """Filesystem-safe disc label."""
     safe = "".join(c if (c.isalnum() or c in "-_") else "_" for c in label)
     return safe[:40].strip("_")
-
-
-def _manifest_safe(text: str) -> str:
-    """Escape control chars (newlines, etc.) before writing a path into the
-    plain-text manifest. A filename can legally contain a newline on Unix; left
-    raw it could forge manifest lines (e.g. a fake 'Total files : 9')."""
-    return text.encode("unicode_escape").decode("ascii")
 
 
 def _sleep_cancellable(seconds: float, cancel: Optional[CancelToken]) -> None:
@@ -265,6 +259,13 @@ def rip_disc(
         rel = os.path.relpath(src_path, source)
         dst_path = os.path.join(disc_dir, rel)
 
+        # Re-check at copy time (TOCTOU): a file could have been swapped for a
+        # symlink between the indexing pass and now. Never copy a link into the
+        # project — record it like the ones caught during indexing.
+        if os.path.islink(src_path):
+            links_skipped.append(rel)
+            continue
+
         # Per-file isolation: a pathological entry (e.g. a path that overflows
         # the OS limit once the disc_NN_… prefix is added → ENAMETOOLONG) must
         # be recorded as one failure, not abort the whole rip with an uncaught
@@ -316,8 +317,8 @@ def rip_disc(
     with open(tmp_manifest, "w") as f:
         f.write("CD Rip Manifest\n")
         f.write("================\n")
-        f.write(f"Source        : {_manifest_safe(source)}\n")
-        f.write(f"Destination   : {_manifest_safe(disc_dir)}\n")
+        f.write(f"Source        : {manifest_safe(source)}\n")
+        f.write(f"Destination   : {manifest_safe(disc_dir)}\n")
         f.write(f"Date          : {datetime.now().isoformat(timespec='seconds')}\n")
         f.write(f"Total files   : {total_files}\n")
         f.write(f"Copied OK     : {copied}\n")
@@ -328,15 +329,15 @@ def rip_disc(
         if links_skipped:
             f.write(f"\nSymlinks skipped for safety ({len(links_skipped)}):\n")
             for path in links_skipped:
-                f.write(f"  - {_manifest_safe(path)}\n")
+                f.write(f"  - {manifest_safe(path)}\n")
         if retry_notes:
             f.write(f"\nFiles that needed retries or dd recovery ({len(retry_notes)}):\n")
             for path, note in retry_notes:
-                f.write(f"  - {_manifest_safe(path)}  [{_manifest_safe(note)}]\n")
+                f.write(f"  - {manifest_safe(path)}  [{manifest_safe(note)}]\n")
         if failures:
             f.write(f"\nFiles that COULD NOT be copied ({len(failures)}):\n")
             for path, err in failures:
-                f.write(f"  - {_manifest_safe(path)}  ({_manifest_safe(err)})\n")
+                f.write(f"  - {manifest_safe(path)}  ({manifest_safe(err)})\n")
     os.replace(tmp_manifest, manifest_path)
 
     return RipResult(

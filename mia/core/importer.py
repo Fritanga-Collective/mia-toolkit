@@ -23,14 +23,9 @@ from .common import (
     check_cancel,
     emit,
     is_dicom_file,
+    manifest_safe,
 )
-from .ripper import (
-    SKIP_DIR_NAMES,
-    RipResult,
-    _manifest_safe,
-    rip_disc,
-    sanitize_label,
-)
+from .ripper import SKIP_DIR_NAMES, RipResult, rip_disc, sanitize_label
 
 # Pre-scan is synchronous in the GUI (it only stats files and reads 132 bytes
 # each), so cap it for pathological trees; a capped result is still enough to
@@ -155,7 +150,7 @@ def _finish(rip: RipResult, *, source_type: str,
         with open(rip.manifest_path, "a") as f:
             f.write(f"\nSource type   : {source_type}\n")
             if source_note:
-                f.write(f"Original file : {_manifest_safe(source_note)}\n")
+                f.write(f"Original file : {manifest_safe(source_note)}\n")
             f.write(f"DICOM files   : {dicom}\n")
     except OSError:
         pass
