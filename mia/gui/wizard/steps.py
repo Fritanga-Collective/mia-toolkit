@@ -314,7 +314,13 @@ def _copy_reports(plan, dest: str, result=None) -> int:
     copied = 0
     for src in paths:
         base = os.path.basename(src)
-        if not os.path.exists(src):
+        # Resolve symlinks: copy_with_retry uses follow_symlinks=False (a disc-
+        # rip security guard), so a symlinked pick would otherwise land a broken
+        # link on the recipient's USB. The user chose this document — they want
+        # its real contents. realpath of a broken link → a missing path → fails
+        # below and is folded into the result.
+        real = os.path.realpath(src)
+        if not os.path.exists(real):
             if result is not None:
                 result.failed += 1
                 result.failures.append((base, "source file no longer exists"))
@@ -326,7 +332,7 @@ def _copy_reports(plan, dest: str, result=None) -> int:
             target = os.path.join(reports, f"{stem} ({n}){ext}")
             n += 1
         used.add(target)
-        ok, note = copy_with_retry(src, target)
+        ok, note = copy_with_retry(real, target)
         if ok and os.path.exists(target):
             copied += 1
         elif result is not None:
