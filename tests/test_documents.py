@@ -53,6 +53,16 @@ def test_study_for_path_outside_raw_returns_none(tmp_path):
     assert documents.study_for_path(str(pdf), str(tmp_path / "raw_discs")) is None
 
 
+def test_study_for_path_directly_under_raw_returns_none(tmp_path):
+    # A PDF sitting directly in raw_discs (no disc_* folder) has no owning disc
+    # → None, and must not os.walk the whole project to pick an unrelated study.
+    raw = tmp_path / "raw_discs"
+    _make_disc(tmp_path)  # an unrelated disc exists alongside
+    pdf = raw / "loose.pdf"
+    pdf.write_bytes(b"%PDF-1.4\n")
+    assert documents.study_for_path(str(pdf), str(raw)) is None
+
+
 def test_study_for_path_matches_same_disc(tmp_path):
     disc, suid = _make_disc(tmp_path)
     pdf = disc / "report.pdf"

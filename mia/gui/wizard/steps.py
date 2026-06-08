@@ -373,8 +373,8 @@ class AddDocumentsStep(WizardStep):
         self.empty_lbl.grid(row=3, column=0, sticky="w", pady=(4, 0))
         self._rows: list[dict] = []
         self._seen: set = set()
-        self._refs = None       # cached study choices (computed once)
-        self._scanned = False
+        self._refs = None       # latest study choices (refreshed each scan)
+        self._scanning = False  # in-flight guard (avoid overlapping scans)
 
     def _no_embed_label(self) -> str:
         return _("Just include the file")
@@ -386,12 +386,15 @@ class AddDocumentsStep(WizardStep):
         return self._refs
 
     def enter(self) -> None:
-        # Pre-list PDFs found on the imported media — once, off the UI thread
-        # (a full os.walk over a large ripped dataset would otherwise freeze the
-        # wizard on entry).
-        if self._scanned:
+        # Re-list PDFs found on the imported media on every entry, off the UI
+        # thread (a full os.walk over a large ripped dataset would otherwise
+        # freeze the wizard). Re-scanning — not a one-shot — means PDFs from a
+        # later import (or after an Inventory re-scan) show up here too; rows
+        # already shown are skipped via _seen. An in-flight guard avoids
+        # overlapping scans on rapid back/forth.
+        if self._scanning:
             return
-        self._scanned = True
+        self._scanning = True
         raw = self.project.raw_discs_dir
         staged = self.project.staged_docs_dir
         inv = self.wizard.inventory_result
@@ -402,8 +405,9 @@ class AddDocumentsStep(WizardStep):
             return refs, [(p, documents.study_for_path(p, raw)) for p in pdfs]
 
         def done(status, payload):
+            self._scanning = False
             if status == "done" and payload:
-                self._refs, found = payload
+                self._refs, found = payload  # refresh study choices for new rows
                 for pdf, ref in found:
                     if pdf not in self._seen:
                         self._add_row(pdf, default_study=ref, found=True)

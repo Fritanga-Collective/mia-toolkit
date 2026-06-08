@@ -83,16 +83,19 @@ def study_for_path(pdf_path: str, raw_discs_dir: str) -> Optional[StudyRef]:
     DICOM is found alongside it."""
     raw = os.path.abspath(raw_discs_dir)
     pdf_abs = os.path.abspath(pdf_path)
-    if pdf_abs != raw and not pdf_abs.startswith(raw + os.sep):
+    if not pdf_abs.startswith(raw + os.sep):
         return None  # outside raw_discs — don't walk arbitrary trees
-    # Walk up to the immediate child of raw_discs (the disc_NN_… folder),
-    # stopping at the filesystem root so a drive root can't loop forever
-    # (os.path.dirname('C:\\') == 'C:\\').
+    # Walk up to the immediate child of raw_discs (the disc_NN_… folder). A PDF
+    # sitting directly in raw_discs has no owning disc → no default association
+    # (return None rather than os.walk the whole project / drive). The root
+    # guard also prevents a drive root from looping (dirname('C:\\')=='C:\\').
     disc_dir = os.path.dirname(pdf_abs)
+    if disc_dir == raw:
+        return None
     while os.path.dirname(disc_dir) != raw:
         parent = os.path.dirname(disc_dir)
         if parent == disc_dir:
-            break
+            return None
         disc_dir = parent
     sample = _sample_instance(disc_dir)
     if not sample:
