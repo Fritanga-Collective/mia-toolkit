@@ -30,11 +30,27 @@ def test_find_pdfs(tmp_path):
     assert {os.path.basename(p) for p in found} == {"report.pdf", "labs.PDF"}
 
 
-def test_find_pdfs_skips_staging(tmp_path):
+def test_find_pdfs_excludes_only_named_staging(tmp_path):
     raw = tmp_path / "raw_discs"
-    (raw / "_documents").mkdir(parents=True)
-    (raw / "_documents" / "x.pdf").write_bytes(b"%PDF-1.4\n")
-    assert documents.find_pdfs(str(raw)) == []
+    staged = raw / "_documents"
+    staged.mkdir(parents=True)
+    (staged / "x.pdf").write_bytes(b"%PDF-1.4\n")
+    # The staging dir is excluded by path…
+    assert documents.find_pdfs(str(raw), exclude_dir=str(staged)) == []
+    # …but a disc that happens to contain its own _documents folder is NOT.
+    disc_docs = raw / "disc_01" / "_documents"
+    disc_docs.mkdir(parents=True)
+    (disc_docs / "report.pdf").write_bytes(b"%PDF-1.4\n")
+    found = documents.find_pdfs(str(raw), exclude_dir=str(staged))
+    assert [os.path.basename(p) for p in found] == ["report.pdf"]
+
+
+def test_study_for_path_outside_raw_returns_none(tmp_path):
+    # A PDF outside raw_discs must not trigger an arbitrary-tree walk / loop.
+    pdf = tmp_path / "elsewhere" / "x.pdf"
+    pdf.parent.mkdir()
+    pdf.write_bytes(b"%PDF-1.4\n")
+    assert documents.study_for_path(str(pdf), str(tmp_path / "raw_discs")) is None
 
 
 def test_study_for_path_matches_same_disc(tmp_path):

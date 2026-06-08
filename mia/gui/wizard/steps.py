@@ -115,7 +115,8 @@ class WelcomeStep(WizardStep):
         ttk.Label(self, justify="left", text=_(
             "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
             "2.  Review everything we found\n"
-            "3.  Build one archive and copy it to a USB drive for your doctor")
+            "3.  Add any report or lab PDFs (optional)\n"
+            "4.  Build one archive and copy it to a USB drive for your doctor")
         ).grid(row=1, column=0, sticky="w", pady=(6, 16))
         self.resume_lbl = ttk.Label(self, foreground="#0a7d28", text="")
         self.resume_lbl.grid(row=2, column=0, sticky="w")
@@ -203,16 +204,22 @@ class AddStudiesStep(PanelStep):
 
     def _note_pdfs(self, result) -> None:
         """If the just-imported source carried report PDFs, point the user at
-        the upcoming documents step (non-blocking — the real choice is there)."""
-        from mia.core import documents
+        the upcoming documents step. The scan runs off the UI thread so a large
+        disc doesn't pause the UI right after an import finishes."""
         disc_dir = getattr(result, "disc_dir", None)
         if not disc_dir:
             return
-        n = len(documents.find_pdfs(disc_dir))
-        if n:
-            self.panel.log_plain("📄 " + _(
-                "Found {n} report PDF(s) — review them in "
-                "‘Add documents’.").format(n=n), tag="info")
+
+        def work(_emit, _cancel):
+            return len(documents.find_pdfs(disc_dir))
+
+        def done(status, n):
+            if status == "done" and n:
+                self.panel.log_plain("📄 " + _(
+                    "Found {n} report PDF(s) — review them in "
+                    "‘Add documents’.").format(n=n), tag="info")
+
+        run_job(self.wizard.app.root, work, lambda _p: None, done)
 
     def _refresh_count(self) -> None:
         n = self.project.disc_count()
@@ -366,22 +373,43 @@ class AddDocumentsStep(WizardStep):
         self.empty_lbl.grid(row=3, column=0, sticky="w", pady=(4, 0))
         self._rows: list[dict] = []
         self._seen: set = set()
+        self._refs = None       # cached study choices (computed once)
+        self._scanned = False
 
     def _no_embed_label(self) -> str:
         return _("Just include the file")
 
     def _study_refs(self):
-        inv = self.wizard.inventory_result
-        return documents.study_choices(inv) if inv is not None else []
+        if self._refs is None:
+            inv = self.wizard.inventory_result
+            self._refs = documents.study_choices(inv) if inv is not None else []
+        return self._refs
 
     def enter(self) -> None:
-        # Pre-list PDFs found on the imported media (once).
-        for pdf in documents.find_pdfs(self.project.raw_discs_dir):
-            if pdf in self._seen:
-                continue
-            ref = documents.study_for_path(pdf, self.project.raw_discs_dir)
-            self._add_row(pdf, default_study=ref, found=True)
-        self._refresh_empty()
+        # Pre-list PDFs found on the imported media — once, off the UI thread
+        # (a full os.walk over a large ripped dataset would otherwise freeze the
+        # wizard on entry).
+        if self._scanned:
+            return
+        self._scanned = True
+        raw = self.project.raw_discs_dir
+        staged = self.project.staged_docs_dir
+        inv = self.wizard.inventory_result
+
+        def work(_emit, _cancel):
+            refs = documents.study_choices(inv) if inv is not None else []
+            pdfs = documents.find_pdfs(raw, exclude_dir=staged)
+            return refs, [(p, documents.study_for_path(p, raw)) for p in pdfs]
+
+        def done(status, payload):
+            if status == "done" and payload:
+                self._refs, found = payload
+                for pdf, ref in found:
+                    if pdf not in self._seen:
+                        self._add_row(pdf, default_study=ref, found=True)
+            self._refresh_empty()
+
+        run_job(self.wizard.app.root, work, lambda _p: None, done)
 
     def _add_files(self) -> None:
         paths = filedialog.askopenfilenames(
@@ -402,18 +430,20 @@ class AddDocumentsStep(WizardStep):
         cb.grid(row=r, column=0, sticky="w")
         name = ("📄 " if found else "") + os.path.basename(path)
         ttk.Label(self.rows_frame, text=name).grid(row=r, column=1, sticky="w")
-        # Embed-target dropdown: "just include" or a specific study (PDFs only).
+        # Embed-target dropdown: index 0 = "just include"; index i = refs[i-1].
+        # Selection is read back by index (not label) so two studies with the
+        # same date+description label can't collide onto the wrong study.
         is_pdf = path.lower().endswith(".pdf")
         values = [self._no_embed_label()] + [ref.label for ref in refs]
         combo = ttk.Combobox(self.rows_frame, values=values, state="readonly"
                              if (is_pdf and refs) else "disabled", width=28)
-        sel = self._no_embed_label()
+        default_idx = 0
         if is_pdf and refs and default_study is not None:
-            for ref in refs:
+            for i, ref in enumerate(refs):
                 if ref.study_uid == default_study.study_uid:
-                    sel = ref.label
+                    default_idx = i + 1
                     break
-        combo.set(sel)
+        combo.current(default_idx)
         combo.grid(row=r, column=2, sticky="e", padx=(8, 0))
         self._rows.append({"path": path, "include": include, "combo": combo,
                            "refs": refs})
@@ -426,13 +456,8 @@ class AddDocumentsStep(WizardStep):
         for row in self._rows:
             if not row["include"].get():
                 continue
-            embed = None
-            label = row["combo"].get()
-            if label and label != self._no_embed_label():
-                for ref in row["refs"]:
-                    if ref.label == label:
-                        embed = ref
-                        break
+            idx = row["combo"].current()  # 0 = just include; i = refs[i-1]
+            embed = row["refs"][idx - 1] if 0 < idx <= len(row["refs"]) else None
             plan.append({"path": row["path"], "embed_study": embed})
         self.wizard.documents_plan = plan
 

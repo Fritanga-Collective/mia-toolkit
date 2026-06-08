@@ -36,11 +36,17 @@ class StudyRef:
     sample_path: str
 
 
-def find_pdfs(root: str) -> List[str]:
-    """All ``*.pdf`` under ``root`` (the staging dir excluded), sorted."""
+def find_pdfs(root: str, exclude_dir: Optional[str] = None) -> List[str]:
+    """All ``*.pdf`` under ``root``, sorted. ``exclude_dir`` (an absolute path,
+    typically the wizard's ``raw_discs/_documents`` staging dir) is skipped —
+    matched by path, so a disc that happens to contain its own ``_documents``
+    folder is NOT pruned."""
+    exclude = os.path.abspath(exclude_dir) if exclude_dir else None
     out: List[str] = []
     for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames if d != "_documents"]
+        if exclude:
+            dirnames[:] = [d for d in dirnames
+                           if os.path.abspath(os.path.join(dirpath, d)) != exclude]
         for fn in filenames:
             if fn.lower().endswith(".pdf"):
                 out.append(os.path.join(dirpath, fn))
@@ -73,13 +79,21 @@ def study_choices(inventory_result) -> List[StudyRef]:
 
 def study_for_path(pdf_path: str, raw_discs_dir: str) -> Optional[StudyRef]:
     """Default association for an auto-found PDF: the study sitting in the same
-    disc folder as the PDF. Returns None if no DICOM is found alongside it."""
+    disc folder as the PDF. Returns None if the PDF isn't under raw_discs or no
+    DICOM is found alongside it."""
     raw = os.path.abspath(raw_discs_dir)
-    disc_dir = os.path.dirname(os.path.abspath(pdf_path))
-    # Walk up to the immediate child of raw_discs (the disc_NN_… folder).
-    while os.path.dirname(disc_dir) != raw and disc_dir != raw \
-            and os.path.dirname(disc_dir) not in ("", "/"):
-        disc_dir = os.path.dirname(disc_dir)
+    pdf_abs = os.path.abspath(pdf_path)
+    if pdf_abs != raw and not pdf_abs.startswith(raw + os.sep):
+        return None  # outside raw_discs — don't walk arbitrary trees
+    # Walk up to the immediate child of raw_discs (the disc_NN_… folder),
+    # stopping at the filesystem root so a drive root can't loop forever
+    # (os.path.dirname('C:\\') == 'C:\\').
+    disc_dir = os.path.dirname(pdf_abs)
+    while os.path.dirname(disc_dir) != raw:
+        parent = os.path.dirname(disc_dir)
+        if parent == disc_dir:
+            break
+        disc_dir = parent
     sample = _sample_instance(disc_dir)
     if not sample:
         return None
