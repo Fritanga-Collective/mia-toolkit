@@ -673,6 +673,7 @@ msgstr ""
 "3.  Crea un solo archivo y cópialo a una USB para tu médico"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "Fuentes agregadas hasta ahora: {n}"
 
@@ -697,6 +698,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "No se encontraron imágenes médicas aquí. ¿Copiar de todas formas?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -709,6 +711,7 @@ msgstr ""
 "¿Copiar todo a tu proyecto?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -733,6 +736,7 @@ msgstr ""
 "diferente."
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr ""
@@ -740,6 +744,7 @@ msgstr ""
 "libres {free})."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "Importando “{name}”…"
 
@@ -748,6 +753,7 @@ msgid "Couldn't import this source."
 msgstr "No se pudo importar esta fuente."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr "✓ Importado: {c} archivos OK, {f} no se pudieron leer."
 
@@ -852,10 +858,12 @@ msgid "Check for Updates…"
 msgstr "Buscar actualizaciones…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Tienes la versión más reciente ({v})."
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -900,6 +908,7 @@ msgstr "Documentos"
 msgid "Add more files to the USB"
 msgstr "Agregar más archivos a la USB"
 
+#, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "Se copiaron {n} archivo(s) a la USB."
 
@@ -910,10 +919,12 @@ msgstr ""
 "Para incrustar informes en el archivo DICOM para un PACS, agrégalos antes de"
 " construir."
 
+#, python-brace-format
 msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
 msgstr ""
 "Se encontraron {n} PDF de informes — revísalos en ‘Agregar documentos’."
 
+#, python-brace-format
 msgid ""
 "Couldn't embed {name} into the archive — it's still included as a file."
 msgstr ""

@@ -34,6 +34,7 @@ msgid "Stopping…"
 msgstr "Sedang berhenti…"
 
 #: mia/gui/rip_session.py:86
+#, python-brace-format
 msgid "Ripping session ended. {n} disc(s) copied."
 msgstr "Sesi menyalin telah tamat. {n} cakera telah disalin."
 
@@ -42,10 +43,12 @@ msgid "Insert a disc… (waiting)"
 msgstr "Masukkan cakera… (menunggu)"
 
 #: mia/gui/rip_session.py:117
+#, python-brace-format
 msgid "Ripping disc {n}: {name}…"
 msgstr "Menyalin cakera {n}: {name}…"
 
 #: mia/gui/rip_session.py:118
+#, python-brace-format
 msgid "Found disc “{name}”. Copying…"
 msgstr "Cakera “{name}” dijumpai. Sedang menyalin…"
 
@@ -60,11 +63,13 @@ msgstr ""
 "tekan Berhenti."
 
 #: mia/gui/rip_session.py:146
+#, python-brace-format
 msgid "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
 msgstr ""
 "✓ Cakera telah disalin: {c} fail OK, {r} dipulihkan, {f} tidak dapat dibaca."
 
 #: mia/gui/rip_session.py:153
+#, python-brace-format
 msgid "✓ Disc {n} done. Insert the next disc…"
 msgstr "✓ Cakera {n} selesai. Masukkan cakera seterusnya…"
 
@@ -133,18 +138,22 @@ msgstr ""
 "sila tunggu…"
 
 #: mia/gui/progress_panel.py:134
+#, python-brace-format
 msgid "files {done}/{total}"
 msgstr "fail {done}/{total}"
 
 #: mia/gui/progress_panel.py:137
+#, python-brace-format
 msgid "elapsed {t}"
 msgstr "berlalu {t}"
 
 #: mia/gui/progress_panel.py:139
+#, python-brace-format
 msgid "ETA {t}"
 msgstr "ETA {t}"
 
 #: mia/gui/progress_panel.py:141
+#, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/s"
 
@@ -173,18 +182,22 @@ msgid "⚠ Could not read a file (see technical details)."
 msgstr "⚠ Tidak dapat membaca satu fail (lihat butiran teknikal)."
 
 #: mia/gui/messages.py:69
+#, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "Menyalin fail {done} daripada {total}…"
 
 #: mia/gui/messages.py:71
+#, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "Mengimbas fail {done} daripada {total}…"
 
 #: mia/gui/messages.py:73
+#, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "Mengindeks imej {done} daripada {total}…"
 
 #: mia/gui/messages.py:75
+#, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "Sedang bekerja… {done} daripada {total}"
 
@@ -279,6 +292,7 @@ msgid "Scanning…"
 msgstr "Mengimbas…"
 
 #: mia/gui/inventory_view.py:45
+#, python-brace-format
 msgid "Looking through {f} for studies…"
 msgstr "Mencari kajian di dalam {f}…"
 
@@ -293,10 +307,12 @@ msgstr ""
 "salin?"
 
 #: mia/gui/inventory_view.py:61
+#, python-brace-format
 msgid "Done — {n} studies."
 msgstr "Selesai — {n} kajian."
 
 #: mia/gui/inventory_view.py:62
+#, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ Menjumpai {n} kajian. Sedang membuka hamparan…"
 
@@ -342,6 +358,7 @@ msgid "Scanning for images…"
 msgstr "Mengimbas imej…"
 
 #: mia/gui/archive_view.py:60
+#, python-brace-format
 msgid "Looking for all DICOM images under {f}…"
 msgstr "Mencari semua imej DICOM di dalam {f}…"
 
@@ -355,10 +372,12 @@ msgstr ""
 "Tiada imej dijumpai. Adakah ini folder dengan cakera yang telah anda salin?"
 
 #: mia/gui/archive_view.py:78
+#, python-brace-format
 msgid "Archive ready — {s} studies, {n} images."
 msgstr "Arkib sedia — {s} kajian, {n} imej."
 
 #: mia/gui/archive_view.py:80
+#, python-brace-format
 msgid ""
 "✓ Archive complete: {s} studies, {n} images. Copy this folder to the USB "
 "drive and hand it to the doctor."
@@ -367,6 +386,7 @@ msgstr ""
 "serahkan kepada doktor."
 
 #: mia/gui/archive_view.py:84
+#, python-brace-format
 msgid "README: {p}"
 msgstr "README: {p}"
 
@@ -375,6 +395,7 @@ msgid "Not enough space"
 msgstr "Ruang tidak mencukupi"
 
 #: mia/gui/wizard/steps.py:75
+#, python-brace-format
 msgid ""
 "This drive may not have enough room (need about {n}). Move your project to "
 "another drive with more space?"
@@ -407,6 +428,7 @@ msgid "Skip to building the archive"
 msgstr "Langkau terus ke pembinaan arkib"
 
 #: mia/gui/wizard/steps.py:118
+#, python-brace-format
 msgid ""
 "Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
 msgstr ""
@@ -434,6 +456,7 @@ msgid "Looking through your discs…"
 msgstr "Sedang mencari di dalam cakera anda…"
 
 #: mia/gui/wizard/steps.py:207
+#, python-brace-format
 msgid "We found {n} studies across your discs."
 msgstr "Kami menjumpai {n} kajian dalam cakera anda."
 
@@ -469,6 +492,7 @@ msgid "Ready to combine your discs into one archive."
 msgstr "Sedia untuk menggabungkan cakera anda menjadi satu arkib."
 
 #: mia/gui/wizard/steps.py:280
+#, python-brace-format
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr "Arkib dibina: {s} kajian, {n} imej. Sekarang salin ia ke pemacu USB."
 
@@ -477,6 +501,7 @@ msgid "Choose your USB drive"
 msgstr "Pilih pemacu USB anda"
 
 #: mia/gui/wizard/steps.py:292
+#, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr ""
 "Pemacu itu tidak mempunyai ruang untuk arkib (perlukan kira-kira {n})."
@@ -486,6 +511,7 @@ msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr "✓ Telah disalin ke USB dan disahkan. Klik Seterusnya untuk selesai."
 
 #: mia/gui/wizard/steps.py:326
+#, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr "Disalin dengan {f} fail bermasalah — lihat butiran teknikal."
 
@@ -523,6 +549,7 @@ msgid "☕  Buy us a coffee"
 msgstr "☕  Belanja kami kopi"
 
 #: mia/gui/wizard/steps.py:370
+#, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
 "{p}\n"
@@ -567,6 +594,7 @@ msgid "Next ›"
 msgstr "Seterusnya ›"
 
 #: mia/gui/wizard/view.py:91
+#, python-brace-format
 msgid "Step {n} of {m}:  {t}"
 msgstr "Langkah {n} daripada {m}:  {t}"
 
@@ -647,6 +675,7 @@ msgstr ""
 "3.  Bina satu arkib dan salin ia ke pemacu USB untuk doktor anda"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "Sumber yang ditambah setakat ini: {n}"
 
@@ -671,6 +700,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "Tiada imej perubatan dijumpai di sini. Salin juga?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -683,6 +713,7 @@ msgstr ""
 "Salin semuanya ke dalam projek anda?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -707,6 +738,7 @@ msgstr ""
 "yang lain."
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr ""
@@ -714,6 +746,7 @@ msgstr ""
 "{free})."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "Sedang mengimport “{name}”…"
 
@@ -722,6 +755,7 @@ msgid "Couldn't import this source."
 msgstr "Tidak dapat mengimport sumber ini."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr "✓ Telah diimport: {c} fail OK, {f} tidak dapat dibaca."
 
@@ -826,10 +860,12 @@ msgid "Check for Updates…"
 msgstr "Semak Kemas Kini…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Anda menggunakan versi terkini ({v})."
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -874,6 +910,7 @@ msgstr "Dokumen"
 msgid "Add more files to the USB"
 msgstr "Tambah lagi fail ke USB"
 
+#, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "{n} fail disalin ke USB."
 
@@ -884,9 +921,11 @@ msgstr ""
 "Untuk membenamkan laporan ke dalam arkib DICOM bagi PACS, tambahkannya "
 "sebelum membina."
 
+#, python-brace-format
 msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
 msgstr "Menjumpai {n} PDF laporan — semak di ‘Tambah dokumen’."
 
+#, python-brace-format
 msgid ""
 "Couldn't embed {name} into the archive — it's still included as a file."
 msgstr ""
