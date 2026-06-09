@@ -368,6 +368,16 @@ class ArchiveStep(PanelStep):
                     result.failed += 1
                     result.failures.append(
                         (os.path.basename(inv), note or "could not copy inventory"))
+            # Doctor-facing docs at the CaseReview root (beside Archive/, never
+            # inside it — they must not perturb the DICOMDIR). README describes
+            # the archive; DELIVERY-LOG records what was copied and when.
+            ar = self.wizard.archive_result
+            try:
+                if ar is not None:
+                    dicomdir.write_readme(dest, ar, self.project.raw_discs_dir)
+                dicomdir.write_delivery_log(dest, ar)
+            except OSError:
+                pass
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root)
