@@ -966,3 +966,24 @@ msgstr ""
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "{f} Datei(en) konnten nicht kopiert werden."
+
+msgid "Copy this drive?"
+msgstr "Dieses Laufwerk kopieren?"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "Laufwerk „{name}“ kopieren?"
+
+msgid "Already added"
+msgstr "Bereits hinzugefügt"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "„{name}“ scheint bereits hinzugefügt. Erneut kopieren?"
+
+msgid "These studies look already added. Import again?"
+msgstr "Diese Studien scheinen bereits hinzugefügt. Erneut importieren?"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "Bereits hinzugefügt — „{name}“ wird übersprungen."

@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import os
 import platform
+import plistlib
 import shutil
 import subprocess
 import sys
@@ -108,6 +109,41 @@ def detect_mounted_cds() -> List[str]:
     if platform.system() == "Linux":
         return detect_mounted_cds_linux()
     return []
+
+
+def is_optical(mount: str) -> bool:
+    """True if ``mount`` is an optical disc (CD/DVD), not a USB/hard drive.
+
+    The auto-rip loop should grab only real discs; a plugged USB is imported
+    deliberately via the explicit button. Unknown/error → False (treat as
+    non-optical, so callers prompt rather than silently rip).
+    """
+    system = platform.system()
+    if system == "Darwin":
+        try:
+            out = subprocess.run(
+                ["diskutil", "info", "-plist", mount],
+                capture_output=True, timeout=10).stdout
+        except (OSError, subprocess.SubprocessError):
+            return False
+        try:
+            info = plistlib.loads(out)
+        except Exception:
+            return False
+        if info.get("OpticalMediaType") or info.get("OpticalDeviceType"):
+            return True
+        proto = str(info.get("BusProtocol") or info.get("DeviceProtocol") or "")
+        return proto.upper() in ("ATAPI", "ATA")  # optical bus
+    if system == "Linux":
+        try:
+            with open("/proc/mounts", encoding="utf-8") as f:
+                for line in f:
+                    parts = line.split()
+                    if len(parts) >= 3 and parts[1] == mount:
+                        return parts[2] in ("iso9660", "udf")
+        except OSError:
+            return False
+    return False
 
 
 def next_disc_number(dest_root: str) -> int:

@@ -946,3 +946,24 @@ msgstr ""
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "{f} fail tidak dapat disalin."
+
+msgid "Copy this drive?"
+msgstr "Salin pemacu ini?"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "Salin pemacu “{name}” ini?"
+
+msgid "Already added"
+msgstr "Sudah ditambah"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}” nampaknya sudah ditambah. Salin lagi?"
+
+msgid "These studies look already added. Import again?"
+msgstr "Kajian ini nampaknya sudah ditambah. Import lagi?"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "Sudah ditambah — melangkau “{name}”."

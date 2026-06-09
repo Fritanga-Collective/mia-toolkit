@@ -8,7 +8,7 @@ macOS (the .icns step shells out to `iconutil`):
     python scripts/make_icons.py
 
 Outputs (committed binaries):
-    packaging/macos/app.icns            Dock icon (Big Sur rounded-rect style)
+    packaging/macos/app.icns            Dock icon (macOS squircle / superellipse)
     packaging/windows/app.ico           multi-res 16..256 (exe + installer)
     website/favicon.ico                 16+32+48
     website/img/favicon-16.png /-32.png
@@ -23,6 +23,7 @@ the drawing — full-frame exports would render the cat invisible at 16px.
 
 from __future__ import annotations
 
+import math
 import shutil
 import subprocess
 import sys
@@ -85,21 +86,45 @@ def flat(size: int, art: Image.Image, inset_frac: float = 0.0) -> Image.Image:
     return tile
 
 
-def squircle(size: int, art: Image.Image) -> Image.Image:
-    """macOS Big Sur style: white rounded-rect on transparency, art inset.
+# Apple's macOS app-icon corner is a continuous-curvature *squircle*
+# (superellipse), not a circular arc — PIL's rounded_rectangle gives the latter
+# and reads subtly wrong next to native icons. n≈5 matches Apple's curve.
+_SQUIRCLE_N = 5.0
+_SUPERSAMPLE = 4  # render the mask big, then LANCZOS down for clean edges
 
-    Apple's grid: the icon shape spans ~824/1024 of the canvas with ~22.5%
-    corner radius; keeping the margins makes the icon sit at the same visual
-    size as neighbours in the Dock.
+
+def _squircle_mask(size: int) -> Image.Image:
+    """An 'L' alpha mask: filled superellipse |x|^n + |y|^n <= 1, antialiased
+    via supersampling. Built as a dense polygon so no numpy is needed."""
+    hi = size * _SUPERSAMPLE
+    half = hi / 2.0
+    n = _SQUIRCLE_N
+    pts = []
+    steps = max(256, hi // 2)
+    for i in range(int(steps) + 1):
+        # Parametric superellipse sweep (sign-preserving powers).
+        theta = 2.0 * math.pi * i / steps
+        ct, st = math.cos(theta), math.sin(theta)
+        x = half * math.copysign(abs(ct) ** (2.0 / n), ct)
+        y = half * math.copysign(abs(st) ** (2.0 / n), st)
+        pts.append((half + x, half + y))
+    big = Image.new("L", (hi, hi), 0)
+    ImageDraw.Draw(big).polygon(pts, fill=255)
+    return big.resize((size, size), Image.LANCZOS)
+
+
+def squircle(size: int, art: Image.Image) -> Image.Image:
+    """macOS icon: white superellipse plate on transparency, art inset.
+
+    Apple's grid: the shape spans ~824/1024 of the canvas; the margin keeps the
+    icon at the same visual size as neighbours in the Dock. The corner is a true
+    squircle (see _squircle_mask), not a circular-arc rounded rectangle.
     """
     canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     rect = round(size * 824 / 1024)
     offset = (size - rect) // 2
-    radius = round(rect * 0.225)
-    plate = Image.new("RGBA", (rect, rect), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(plate)
-    draw.rounded_rectangle((0, 0, rect - 1, rect - 1), radius=radius,
-                           fill=WHITE)
+    plate = Image.new("RGBA", (rect, rect), WHITE)
+    plate.putalpha(_squircle_mask(rect))  # clip the white plate to the squircle
     inner = round(rect * 0.80)
     scaled = _for_size(art, size).resize((inner, inner), Image.LANCZOS)
     pad = (rect - inner) // 2

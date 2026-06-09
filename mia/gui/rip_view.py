@@ -38,9 +38,12 @@ class RipView(TaskView):
                                   command=self._import_zip)
         self.zip_btn.pack(side="left", padx=(8, 0))
 
+        self._session_open = False   # rip auto-loop open (idle-polls)
+        self._working = False        # a disc/import actively running
         self.controller = RipSessionController(
             self.app.root, self.panel, get_dest=self.dest.get,
-            on_state_changed=self._state, parent_widget=self)
+            on_state_changed=self._busy_state,
+            on_session_changed=self._session_state, parent_widget=self)
         self._import_cancel = None
 
     def _start(self) -> None:
@@ -49,20 +52,32 @@ class RipView(TaskView):
     def _import_folder(self) -> None:
         self._import_cancel = import_flow.start_folder_import(
             self.app.root, self.panel, get_dest=self.dest.get,
-            on_state=self._state, parent=self)
+            on_state=self._busy_state, parent=self)
 
     def _import_zip(self) -> None:
         self._import_cancel = import_flow.start_zip_import(
             self.app.root, self.panel, get_dest=self.dest.get,
-            on_state=self._state, parent=self)
+            on_state=self._busy_state, parent=self)
 
-    def _state(self, running: bool) -> None:
-        state = "disabled" if running else "normal"
+    def _busy_state(self, running: bool) -> None:
+        self._working = running
+        self._sync()
+
+    def _session_state(self, active: bool) -> None:
+        self._session_open = active
+        self._sync()
+
+    def _sync(self) -> None:
+        # Active = the auto-loop is open OR a job is running. Stop stays
+        # available the whole time the session is open (even while idle-polling
+        # between discs), so the user can always end it.
+        active = self._session_open or self._working
+        state = "disabled" if active else "normal"
         for btn in (self.start_btn, self.folder_btn, self.zip_btn):
             btn.configure(state=state)
-        self.dest.set_enabled(not running)
-        self.stop_btn.configure(state="normal" if running else "disabled")
-        self.back_btn.configure(state="disabled" if running else "normal")
+        self.dest.set_enabled(not active)
+        self.stop_btn.configure(state="normal" if active else "disabled")
+        self.back_btn.configure(state="disabled" if active else "normal")
 
     def stop(self) -> None:
         self.controller.stop()

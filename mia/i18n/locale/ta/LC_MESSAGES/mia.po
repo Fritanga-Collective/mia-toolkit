@@ -967,3 +967,26 @@ msgstr ""
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "{f} கோப்பு(கள்) நகலெடுக்க முடியவில்லை."
+
+msgid "Copy this drive?"
+msgstr "இந்த இயக்ககத்தை நகலெடுக்கவா?"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "“{name}” இயக்ககத்தை நகலெடுக்கவா?"
+
+msgid "Already added"
+msgstr "ஏற்கனவே சேர்க்கப்பட்டது"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}” ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் நகலெடுக்கவா?"
+
+msgid "These studies look already added. Import again?"
+msgstr ""
+"இந்த ஆய்வுகள் ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் இறக்குமதி "
+"செய்யவா?"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "ஏற்கனவே சேர்க்கப்பட்டது — “{name}” தவிர்க்கப்படுகிறது."
