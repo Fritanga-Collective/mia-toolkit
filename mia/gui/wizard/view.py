@@ -12,8 +12,10 @@ from ..i18n import N_, _
 from ..project import Project
 
 STEP_TITLES = [N_("Welcome"), N_("Add your studies"), N_("Review"),
-               N_("Build & deliver"), N_("Done")]
+               N_("Add documents"), N_("Build & deliver"), N_("Done")]
 LAST = len(STEP_TITLES) - 1
+# Index of the Build & deliver step (Welcome's "skip to building" jumps here).
+BUILD_STEP = 4
 
 
 class WizardView(ttk.Frame):
@@ -27,6 +29,8 @@ class WizardView(ttk.Frame):
         self.archive_result = None
         self.deliver_result = None
         self.delivered_path: Optional[str] = None
+        self.inventory_result = None        # set by InventoryStep, read by docs
+        self.documents_plan: list = []       # set by AddDocumentsStep
 
         self._busy = False
         self._steps: dict[int, Any] = {}
@@ -63,10 +67,10 @@ class WizardView(ttk.Frame):
     # ----- step access ----------------------------------------------------
 
     def _classes(self):
-        from .steps import (AddStudiesStep, ArchiveStep, DoneStep,
-                            InventoryStep, WelcomeStep)
-        return [WelcomeStep, AddStudiesStep, InventoryStep, ArchiveStep,
-                DoneStep]
+        from .steps import (AddDocumentsStep, AddStudiesStep, ArchiveStep,
+                            DoneStep, InventoryStep, WelcomeStep)
+        return [WelcomeStep, AddStudiesStep, InventoryStep, AddDocumentsStep,
+                ArchiveStep, DoneStep]
 
     def _get(self, i: int):
         if i not in self._steps:

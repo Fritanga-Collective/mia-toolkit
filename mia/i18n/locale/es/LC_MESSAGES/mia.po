@@ -673,6 +673,7 @@ msgstr ""
 "3.  Crea un solo archivo y cópialo a una USB para tu médico"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "Fuentes agregadas hasta ahora: {n}"
 
@@ -697,6 +698,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "No se encontraron imágenes médicas aquí. ¿Copiar de todas formas?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -709,6 +711,7 @@ msgstr ""
 "¿Copiar todo a tu proyecto?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -733,6 +736,7 @@ msgstr ""
 "diferente."
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr ""
@@ -740,6 +744,7 @@ msgstr ""
 "libres {free})."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "Importando “{name}”…"
 
@@ -748,6 +753,7 @@ msgid "Couldn't import this source."
 msgstr "No se pudo importar esta fuente."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr "✓ Importado: {c} archivos OK, {f} no se pudieron leer."
 
@@ -852,10 +858,12 @@ msgid "Check for Updates…"
 msgstr "Buscar actualizaciones…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Tienes la versión más reciente ({v})."
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -868,3 +876,93 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "No se pudo buscar actualizaciones. Inténtalo más tarde."
+
+msgid "Add documents"
+msgstr "Agregar documentos"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"Agrega el informe del radiólogo o los resultados de laboratorio/análisis de "
+"sangre (PDF). Viajan con los estudios como archivos que tu médico puede "
+"abrir, y los PDF también pueden incrustarse en el archivo de imágenes para "
+"un PACS. Opcional: haz clic en Siguiente para omitir."
+
+msgid "Add files…"
+msgstr "Agregar archivos…"
+
+msgid "No documents added yet."
+msgstr "Aún no se agregaron documentos."
+
+msgid "Just include the file"
+msgstr "Solo incluir el archivo"
+
+msgid "Choose reports or documents"
+msgstr "Elige informes o documentos"
+
+msgid "Documents"
+msgstr "Documentos"
+
+msgid "Add more files to the USB"
+msgstr "Agregar más archivos a la USB"
+
+#, python-brace-format
+msgid "Copied {n} file(s) to the USB."
+msgstr "Se copiaron {n} archivo(s) a la USB."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"Para incrustar informes en el archivo DICOM para un PACS, agrégalos antes de"
+" construir."
+
+#, python-brace-format
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr ""
+"Se encontraron {n} PDF de informes — revísalos en ‘Agregar documentos’."
+
+#, python-brace-format
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"No se pudo incrustar {name} en el archivo — se incluye igualmente como "
+"archivo."
+
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  Agrega tus estudios — CDs, carpetas USB o descargas ZIP\n"
+"2.  Revisa todo lo que encontramos\n"
+"3.  Agrega informes o PDF de laboratorio (opcional)\n"
+"4.  Crea un solo archivo y cópialo a una USB para tu médico"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "No se pudieron copiar {f} archivo(s)."
+
+msgid "Copy this drive?"
+msgstr "¿Copiar esta unidad?"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "¿Copiar esta unidad “{name}”?"
+
+msgid "Already added"
+msgstr "Ya agregado"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}” parece ya agregado. ¿Copiar de nuevo?"
+
+msgid "These studies look already added. Import again?"
+msgstr "Estos estudios parecen ya agregados. ¿Importar de nuevo?"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "Ya agregado — se omite “{name}”."

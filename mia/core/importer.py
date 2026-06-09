@@ -25,6 +25,7 @@ from .common import (
     is_dicom_file,
     manifest_safe,
 )
+from . import sources
 from .ripper import SKIP_DIR_NAMES, RipResult, rip_disc, sanitize_label
 
 # Pre-scan is synchronous in the GUI (it only stats files and reads 132 bytes
@@ -154,6 +155,8 @@ def _finish(rip: RipResult, *, source_type: str,
             f.write(f"DICOM files   : {dicom}\n")
     except OSError:
         pass
+    # Record this import's Study UIDs so future imports can dedup cheaply.
+    sources.record_study_uids(rip.disc_dir, rip.manifest_path)
     return ImportResult(
         disc_dir=rip.disc_dir, total_files=rip.total_files, copied=rip.copied,
         skipped=rip.skipped, failed=rip.failed, bytes_copied=rip.bytes_copied,
