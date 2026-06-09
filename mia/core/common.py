@@ -45,8 +45,12 @@ class Progress:
     rate: float = 0.0
     eta: float = 0.0
     note: Optional[str] = None
-    kind: str = "progress"  # "progress" | "info" | "retry" | "fail"
+    kind: str = "progress"  # "progress" | "info" | "retry" | "fail" | "debug"
     phase: str = ""
+    # When True the worker can't give a meaningful done/total ratio (e.g. an
+    # opaque OS bulk-copy): the UI should show an animated "working" bar, not a
+    # made-up percentage/ETA.
+    indeterminate: bool = False
 
     @property
     def pct(self) -> float:
@@ -54,6 +58,30 @@ class Progress:
 
 
 ProgressCallback = Callable[[Progress], None]
+
+
+# Process-global verbose switch. Workers consult is_verbose() before emitting
+# kind="debug" timing notes (extra detail for diagnosing slowness), so the
+# Help ▸ "Verbose technical log" toggle gates the noise at the source rather
+# than every consumer having to filter it.
+_VERBOSE = False
+
+
+def is_verbose() -> bool:
+    return _VERBOSE
+
+
+def set_verbose(on: bool) -> None:
+    global _VERBOSE
+    _VERBOSE = bool(on)
+
+
+def emit_debug(callback: Optional[ProgressCallback], note: str,
+               phase: str = "") -> None:
+    """Emit a kind="debug" note, but only when verbose mode is on. Cheap no-op
+    otherwise, so call sites can wrap timing details without their own guard."""
+    if callback is not None and _VERBOSE:
+        callback(Progress(0, 0, kind="debug", note=note, phase=phase))
 
 
 def emit(callback: Optional[ProgressCallback], progress: Progress) -> None:
@@ -128,7 +156,19 @@ class ConsoleProgress:
             if self.verbose and p.note is not None:
                 print(f"  {p.note}", flush=True)
             return
+        if p.kind == "debug":
+            if self.verbose and p.note is not None:
+                print(f"  [debug] {p.note}", flush=True)
+            return
         now = time.time()
+        if p.indeterminate:
+            # No meaningful ratio — show a plain "working" heartbeat, not a
+            # made-up percentage/ETA.
+            if self.verbose or (now - self._last) >= self.interval:
+                print(f"  copying… ({format_duration(p.elapsed)} elapsed)",
+                      flush=True)
+                self._last = now
+            return
         if self.verbose or (now - self._last) >= self.interval or p.done == p.total:
             print(
                 f"  [{p.done}/{p.total}] {p.pct:5.1f}%  "

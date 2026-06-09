@@ -36,6 +36,7 @@ from .common import (
     ProgressCallback,
     check_cancel,
     emit,
+    emit_debug,
 )
 from .ripper import copy_with_retry
 
@@ -113,7 +114,6 @@ class DeliverResult:
 
 
 def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
-                      total_bytes: int = 0, initial_free: int = 0,
                       progress: Optional[ProgressCallback] = None,
                       cancel: Optional[CancelToken] = None) -> bool:
     """Best-effort fast bulk copy with the OS's own tool (robocopy /MT on
@@ -122,11 +122,13 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
     Raises Cancelled if the user cancels mid-copy. Integrity is NOT assumed —
     the verify/fill pass always runs afterwards.
 
-    The tools don't expose per-file progress, so while it runs we estimate
-    bytes written from the drop in the destination volume's free space (O(1)
-    per poll; falls back to a dir_size walk only if free space can't be read)
-    and emit progress scaled to the file count — otherwise the UI looks frozen
-    during a long USB copy."""
+    The tools don't expose per-file progress, and the obvious proxy (the drop
+    in the destination volume's free space) jitters badly on USB/exFAT — free
+    space doesn't update live as the tool writes, so a derived done/ETA bounces
+    and reads as nonsense ("11974h"). So while the tool runs we emit an honest
+    *indeterminate* "Copying… (elapsed)" event every couple of seconds: an
+    animated bar with no fake percentage. The real determinate bar belongs to
+    the verify/fill pass that follows, which counts actual files."""
     system = platform.system()
     if system == "Windows":
         cmd = ["robocopy", src, dest, "/E", "/MT:8", "/R:1", "/W:1",
@@ -142,6 +144,7 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
         return False
     if shutil.which(cmd[0]) is None:
         return False
+    emit_debug(progress, f"native copy: {' '.join(cmd)}", phase="copy")
     try:
         proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
@@ -159,22 +162,20 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
                     proc.kill()
                 raise Cancelled()
             now = time.time()
-            if progress is not None and total_bytes > 0 and now - last_poll >= 1.0:
+            if progress is not None and now - last_poll >= 2.0:
                 last_poll = now
-                cur_free = free_space(dest)
-                if initial_free > 0 and cur_free > 0:
-                    written = max(0, initial_free - cur_free)   # O(1) estimate
-                else:
-                    written = dir_size(dest)                    # fallback walk
-                frac = min(1.0, written / total_bytes)
-                done = int(total_files * frac)
-                rate = done / (now - start) if now > start else 0
-                eta = (total_files - done) / rate if rate > 0 else 0
-                emit(progress, Progress(done, total_files, elapsed=now - start,
-                                        rate=rate, eta=eta, phase="copy"))
+                # No note/percentage — an honest indeterminate tick. The GUI
+                # builds the localized "Copying N files… (Xm elapsed)" status
+                # from total/elapsed; the CLI shows a plain elapsed line.
+                emit(progress, Progress(0, total_files, elapsed=now - start,
+                                        phase="copy", indeterminate=True))
             time.sleep(0.2)
     except Cancelled:
         raise
+    elapsed = time.time() - start
+    emit_debug(progress,
+               f"native copy finished: rc={proc.returncode} in {elapsed:.1f}s",
+               phase="copy")
     return proc.returncode in ok_codes
 
 
@@ -199,38 +200,30 @@ def copy_tree_verified(
     check_cancel(cancel)
 
     emit(progress, Progress(0, 0, kind="info", note=f"Preparing to copy to {dest}"))
+    walk_start = time.time()
     files = []
-    total_bytes = 0
     for dirpath, _, filenames in os.walk(src):
         for fn in filenames:
-            sp = os.path.join(dirpath, fn)
-            files.append(sp)
-            try:
-                # lstat (not getsize) — don't dereference symlinks, matching
-                # the copy path's follow_symlinks=False, so a link to a large
-                # target can't overcount the progress denominator.
-                total_bytes += os.lstat(sp).st_size
-            except OSError:
-                pass
+            files.append(os.path.join(dirpath, fn))
     total = len(files)
     start = time.time()
+    emit_debug(progress, f"walked {total} files in {start - walk_start:.1f}s")
 
-    # Pre-create the destination tree once (avoids races in the pool).
-    for d in {os.path.dirname(os.path.join(dest, os.path.relpath(f, src)))
-              for f in files}:
-        os.makedirs(d, exist_ok=True)
+    # No upfront destination-tree pre-create: on slow USB/exFAT that mkdir storm
+    # was minutes of dead time before the first byte moved. The native tool
+    # makes its own dirs; the verify/fill pass makes each parent lazily (below).
 
-    # Fast bulk copy with the OS tool (best-effort accelerator). It emits
-    # byte-based progress while running so the UI doesn't look frozen.
+    # Fast bulk copy with the OS tool (best-effort accelerator). It emits an
+    # indeterminate "working" tick while running so the UI doesn't look frozen.
     if prefer_native:
         emit(progress, Progress(0, total, kind="info",
                                 note=f"Fast-copying {total} files to {dest}…"))
-        _native_bulk_copy(src, dest, total_files=total, total_bytes=total_bytes,
-                          initial_free=free_space(dest),
+        _native_bulk_copy(src, dest, total_files=total,
                           progress=progress, cancel=cancel)  # may raise Cancelled
 
     emit(progress, Progress(0, total, kind="info",
                             note=f"Verifying {total} files…"))
+    verify_start = time.time()
 
     copied = skipped = failed = 0
     bytes_copied = 0
@@ -244,6 +237,12 @@ def copy_tree_verified(
         dp = os.path.join(dest, rel)
         if os.path.exists(dp) and _matches(sp, dp, thorough):
             return ("skip", rel, 0, None)
+        # Create the parent lazily (no upfront pre-create). exist_ok swallows
+        # the benign race between pool threads writing into the same folder.
+        try:
+            os.makedirs(os.path.dirname(dp), exist_ok=True)
+        except FileExistsError:
+            pass
         ok, note = copy_with_retry(sp, dp, cancel=cancel)
         verified = ok and _matches(sp, dp, thorough)
         if ok and not verified:                 # one retry on a bad write
@@ -292,6 +291,10 @@ def copy_tree_verified(
                                         rate=rate, eta=eta, phase="copy"))
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
+
+    emit_debug(progress,
+               f"verify/fill pass: {copied} copied, {skipped} skipped, "
+               f"{failed} failed in {time.time() - verify_start:.1f}s")
 
     return DeliverResult(
         dest=dest, total_files=total, files_copied=copied,

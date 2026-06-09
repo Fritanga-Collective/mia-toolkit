@@ -19,6 +19,11 @@ dependencies = [
 dev = [
     "pytest>=8.0",
 ]
+profile = [
+    "pyinstrument>=4.6",
+    "scalene>=1.5",
+    "snakeviz>=2.2",
+]
 build = [
     "pyinstaller>=6.0",
 ]

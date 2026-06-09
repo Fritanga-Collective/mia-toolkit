@@ -13,6 +13,7 @@ import webbrowser
 from tkinter import messagebox
 
 from .. import __version__
+from ..core import common
 from .i18n import LANGUAGES, N_, _, current_language
 
 SITE = "https://mia-toolkit.fritanga.co/"
@@ -109,7 +110,7 @@ def build_menubar(app) -> tk.Menu:
                          command=_open_project_folder)
     if not aqua:
         filemenu.add_separator()
-        filemenu.add_command(label=_("Exit"), command=root.destroy)
+        filemenu.add_command(label=_("Exit"), command=app.request_quit)
     menubar.add_cascade(label=_("File"), menu=filemenu)
 
     # ----- Edit (native clipboard behavior in text fields) ------------------
@@ -158,6 +159,12 @@ def build_menubar(app) -> tk.Menu:
     for label, url in LINKS:
         helpmenu.add_command(label=_(label),
                              command=lambda u=url: webbrowser.open(u))
+    helpmenu.add_separator()
+    verbose_var = tk.BooleanVar(value=common.is_verbose())
+    menubar._verbose_var = verbose_var  # keep a reference alive across rebuilds
+    helpmenu.add_checkbutton(
+        label=_("Verbose technical log"), variable=verbose_var,
+        command=lambda: common.set_verbose(verbose_var.get()))
     if not aqua:
         helpmenu.add_separator()
         helpmenu.add_command(label=_("Check for Updates…"),

@@ -30,6 +30,16 @@ class App:
         self.container.pack(fill="both", expand=True)
         self._current: tk.Widget | None = None
 
+        # Route every close path through one confirming handler: the window
+        # close button, macOS Cmd-Q / the Apple-menu Quit, and File ▸ Exit
+        # (wired in menubar.py). Tk would otherwise destroy the window
+        # immediately, killing a running copy/rip mid-stream.
+        self.root.protocol("WM_DELETE_WINDOW", self.request_quit)
+        try:
+            self.root.createcommand("tk::mac::Quit", self.request_quit)
+        except tk.TclError:
+            pass  # non-aqua: no such command
+
         self._menubar = build_menubar(self)
         self.show_launcher()
 
@@ -77,6 +87,51 @@ class App:
         self.root.title(_("MIA Toolkit"))
         self._menubar = build_menubar(self)  # relabel menus in the new language
         self.show_launcher()
+
+    def request_quit(self) -> None:
+        """Confirm before quitting, and stop any running work safely first.
+
+        Bound to the window close button, Cmd-Q / Apple-menu Quit, and the
+        non-aqua File ▸ Exit. Copies and rips are resume-safe (daemon worker
+        threads, verified/restartable transfers), so an interrupted job is
+        stopped at a safe point and picks up cleanly on the next run."""
+        current = self._current
+        is_busy = getattr(current, "is_busy", None)
+        busy = callable(is_busy) and is_busy()
+        if busy:
+            ok = messagebox.askyesno(
+                _("Quit MIA Toolkit?"),
+                _("Something is still running. If you quit now it will stop "
+                  "safely — you can resume it later.\n\nQuit anyway?"),
+                default="no", icon="warning")
+        else:
+            ok = messagebox.askyesno(
+                _("Quit MIA Toolkit?"), _("Quit MIA Toolkit?"), default="no")
+        if not ok:
+            return
+        if busy:
+            self._stop_current(current)
+        self.root.destroy()
+
+    @staticmethod
+    def _stop_current(view: tk.Widget) -> None:
+        """Best-effort: signal the active view to stop its work at a safe point
+        (sets cancel tokens, stops the rip poll loop) before we tear down."""
+        for name in ("stop", "on_leave"):
+            fn = getattr(view, name, None)
+            if callable(fn):
+                try:
+                    fn()
+                except Exception:  # pragma: no cover - shutdown best-effort
+                    pass
+        # The wizard delegates per-step cleanup to its active step.
+        step = getattr(view, "current", None)
+        on_leave = getattr(step, "on_leave", None)
+        if callable(on_leave):
+            try:
+                on_leave()
+            except Exception:  # pragma: no cover - shutdown best-effort
+                pass
 
     def run(self) -> None:
         self.root.mainloop()

@@ -93,10 +93,10 @@ def test_native_path_leaves_all_present(tmp_path):
             assert f.read() == data
 
 
-def test_native_copy_emits_progress(tmp_path, monkeypatch):
-    # The native phase must emit phase="copy" progress while the OS tool runs,
-    # so a long USB copy doesn't look frozen. Stub Popen to "run" for a couple
-    # of polls and free_space to show bytes being written.
+def test_native_copy_emits_indeterminate_progress(tmp_path, monkeypatch):
+    # While the OS tool runs we can't honestly count files (free space jitters
+    # on USB), so the native phase must emit an *indeterminate* "working" tick —
+    # an animated bar with no fake ETA — so a long USB copy doesn't look frozen.
     src = tmp_path / "src"
     dst = tmp_path / "dst"
     _tree(str(src))
@@ -114,16 +114,49 @@ def test_native_copy_emits_progress(tmp_path, monkeypatch):
     monkeypatch.setattr(deliver.subprocess, "Popen",
                         lambda *a, **k: FakeProc())
     monkeypatch.setattr(deliver.time, "sleep", lambda _s: None)
-    # initial_free high, then lower → "written" > 0 → frac advances.
-    freevals = iter([10_000_000, 9_000_000, 8_000_000, 8_000_000, 8_000_000])
-    monkeypatch.setattr(deliver, "free_space",
-                        lambda _p: next(freevals, 8_000_000))
 
     events = []
     deliver.copy_tree_verified(str(src), str(dst), prefer_native=True,
                                progress=events.append)
-    copy_phase = [e for e in events if e.phase == "copy" and e.total]
-    assert any(e.done > 0 for e in copy_phase)  # bar advanced during native copy
+    native = [e for e in events if e.phase == "copy" and e.indeterminate]
+    assert native, "native phase emitted no indeterminate working tick"
+    # Honest: no made-up percentage/ETA during the opaque native copy.
+    assert all(e.done == 0 and e.eta == 0 for e in native)
+
+
+def test_copy_creates_nested_dirs_without_upfront_precreate(tmp_path):
+    # We dropped the upfront dest-tree mkdir storm (minutes of dead time on
+    # USB). The verify/fill pass must still create each file's parent lazily,
+    # so a deep tree copies correctly with prefer_native off.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    files = _tree(str(src))  # includes sub/deep/c.dat
+    result = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+    assert result.failed == 0
+    assert (dst / "sub" / "deep" / "c.dat").exists()
+    assert result.files_copied == len(files)
+
+
+def test_verbose_gates_debug_emits(tmp_path):
+    from mia.core import common
+
+    src = tmp_path / "src"
+    _tree(str(src))
+
+    common.set_verbose(False)
+    try:
+        quiet = []
+        deliver.copy_tree_verified(str(src), str(tmp_path / "a"),
+                                   prefer_native=False, progress=quiet.append)
+        assert not [e for e in quiet if e.kind == "debug"]
+
+        common.set_verbose(True)
+        loud = []
+        deliver.copy_tree_verified(str(src), str(tmp_path / "b"),
+                                   prefer_native=False, progress=loud.append)
+        assert [e for e in loud if e.kind == "debug"]  # walk/verify timings
+    finally:
+        common.set_verbose(False)
 
 
 def test_cancellation(tmp_path):

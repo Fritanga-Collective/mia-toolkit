@@ -22,6 +22,11 @@ from .i18n import _
 from .messages import Presenter
 from .sysutil import reveal
 
+# Braille "working" frames (like Claude Code's). They render on the system
+# fonts of macOS/Windows/Linux; the panel falls back to nothing fancy if Tk
+# can't schedule (headless).
+_SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+
 
 class ProgressLogPanel(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -31,6 +36,11 @@ class ProgressLogPanel(ttk.Frame):
         self._tech_visible = False
         self._logfile = None
         self._logfile_path: Optional[str] = None
+        # Working-spinner state (animates the status line while a session runs).
+        self._base_status = _("Ready.")
+        self._spinning = False
+        self._spin_i = 0
+        self._spin_job: Optional[str] = None
         self._build()
 
     def _build(self) -> None:
@@ -84,6 +94,12 @@ class ProgressLogPanel(ttk.Frame):
     # ----- Event handling -------------------------------------------------
 
     def on_event(self, p: Progress) -> None:
+        # Verbose timing notes go straight to the technical pane (the worker
+        # only emits these when Help ▸ Verbose technical log is on).
+        if p.kind == "debug":
+            self.log_technical(p.note or "")
+            return
+
         # The DICOMDIR write is one long blocking call with no per-file
         # progress; switch to an indeterminate "working" bar until it finishes.
         if p.kind == "info" and p.phase == "write":
@@ -94,7 +110,19 @@ class ProgressLogPanel(ttk.Frame):
             self.log_technical(p.note or "")
             return
 
+        # An opaque "working" phase (e.g. the native USB bulk copy): no honest
+        # done/total ratio, so show an animated bar + elapsed, never a fake ETA.
+        if p.indeterminate:
+            if str(self.bar["mode"]) != "indeterminate":
+                self.set_indeterminate(True)
+            self.set_status(self._copy_status(p))
+            return
+
         if p.total:
+            # Leaving an indeterminate phase (e.g. native copy → verify pass):
+            # stop the animation before driving the real determinate bar.
+            if str(self.bar["mode"]) == "indeterminate":
+                self.set_indeterminate(False)
             self.set_progress(p.done, p.total)
         if p.kind == "progress" or p.elapsed:
             self.set_stats(p)
@@ -104,10 +132,61 @@ class ProgressLogPanel(ttk.Frame):
         if plain is not None:
             self.log_plain(plain, tag="fail" if p.kind == "fail" else None)
 
+    def _copy_status(self, p: Progress) -> str:
+        """Localized status for the indeterminate native-copy phase."""
+        mins = p.elapsed / 60.0
+        if mins >= 1:
+            return _("Copying {n} files… ({m:.0f}m elapsed)").format(
+                n=p.total, m=mins)
+        return _("Copying {n} files…").format(n=p.total)
+
     # ----- Widget helpers -------------------------------------------------
 
     def set_status(self, text: str) -> None:
-        self.status.configure(text=text)
+        # Keep the base text separate so the spinner can prefix a frame without
+        # the frames accumulating across updates.
+        self._base_status = text
+        self._render_status()
+
+    # ----- Working spinner ------------------------------------------------
+
+    def _render_status(self) -> None:
+        if self._spinning and self._base_status:
+            frame = _SPINNER[self._spin_i % len(_SPINNER)]
+            self.status.configure(text=f"{frame}  {self._base_status}")
+        else:
+            self.status.configure(text=self._base_status)
+
+    def _spin_tick(self) -> None:
+        if not self._spinning:
+            return
+        self._spin_i += 1
+        self._render_status()
+        try:
+            self._spin_job = self.after(120, self._spin_tick)
+        except tk.TclError:
+            self._spin_job = None
+
+    def _start_spinner(self) -> None:
+        if self._spinning:
+            return
+        self._spinning = True
+        self._spin_i = 0
+        self._render_status()
+        try:
+            self._spin_job = self.after(120, self._spin_tick)
+        except tk.TclError:
+            self._spin_job = None  # headless / no event loop — status still set
+
+    def _stop_spinner(self) -> None:
+        self._spinning = False
+        if self._spin_job is not None:
+            try:
+                self.after_cancel(self._spin_job)
+            except tk.TclError:
+                pass
+            self._spin_job = None
+        self._render_status()
 
     def set_progress(self, done: int, total: int) -> None:
         if str(self.bar["mode"]) != "determinate":
@@ -165,6 +244,10 @@ class ProgressLogPanel(ttk.Frame):
     # ----- Session log file ----------------------------------------------
 
     def start_session_log(self, log_dir: str) -> None:
+        # Animate the "working" spinner for the whole session so the user knows
+        # to wait (covers rip, import, inventory, build, delivery — they all
+        # bracket their work with start/close_session_log).
+        self._start_spinner()
         stamp = time.strftime("%Y%m%d-%H%M%S")
         name = f"mia_session_{stamp}.log"
         for candidate in (log_dir, tempfile.gettempdir()):
@@ -178,6 +261,7 @@ class ProgressLogPanel(ttk.Frame):
                 continue
 
     def close_session_log(self) -> None:
+        self._stop_spinner()
         if self._logfile is not None:
             try:
                 self._logfile.close()
