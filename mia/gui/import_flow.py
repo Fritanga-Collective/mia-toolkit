@@ -14,7 +14,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from typing import Any, Callable, Optional
 
-from mia.core import deliver, importer, ripper
+from mia.core import deliver, importer, ripper, sources
 from mia.core.common import format_bytes
 
 from . import jobs
@@ -38,6 +38,11 @@ def start_folder_import(root: Any, panel: Any, *,
         return None
     dest = _prepare_dest(get_dest, panel)
     if not dest or not _outside_project(src, dest, parent):
+        return None
+    if sources.looks_already_imported(src, dest) and not messagebox.askyesno(
+            _("Already added"),
+            _("These studies look already added. Import again?"),
+            default="no", parent=parent):
         return None
 
     scan = importer.scan_folder(src)  # synchronous but capped (metadata only)
