@@ -25,13 +25,23 @@ def sample_study_uids(root: str, *, max_files: int = 300,
                       max_seconds: float = 5.0,
                       cancel: Optional[CancelToken] = None) -> Set[str]:
     """StudyInstanceUIDs found under ``root`` — bounded so it's cheap even on
-    optical media (reads only the StudyInstanceUID tag, stops at the caps)."""
+    optical media (reads only the StudyInstanceUID tag, stops at the caps).
+
+    The time cap and a probe cap are checked on EVERY entry, not just DICOM
+    files — a tree full of non-DICOM files (each costs an ``is_dicom_file``
+    open) otherwise runs far past ``max_seconds``. ``max_files`` bounds DICOM
+    reads; a wider probe cap bounds the non-DICOM scanning."""
     uids: Set[str] = set()
-    seen = 0
+    read = 0          # DICOM files actually read
+    probed = 0        # entries examined (DICOM or not)
+    probe_cap = max_files * 50
     start = time.time()
     for dirpath, _dirnames, filenames in os.walk(root):
         for fn in filenames:
             check_cancel(cancel)
+            probed += 1
+            if probed > probe_cap or time.time() - start > max_seconds:
+                return uids
             path = os.path.join(dirpath, fn)
             if not is_dicom_file(path):
                 continue
@@ -43,8 +53,8 @@ def sample_study_uids(root: str, *, max_files: int = 300,
                 uid = ""
             if uid:
                 uids.add(uid)
-            seen += 1
-            if seen >= max_files or time.time() - start > max_seconds:
+            read += 1
+            if read >= max_files:
                 return uids
     return uids
 
@@ -54,8 +64,9 @@ def _manifest_path(disc_dir: str, manifest_path: str = "") -> str:
 
 
 def record_study_uids(disc_dir: str, manifest_path: str = "") -> Set[str]:
-    """Sample ``disc_dir`` and append a ``Study UIDs:`` line to its manifest so
-    later dedup checks are a cheap manifest read. Returns the sampled UIDs."""
+    """Sample ``disc_dir`` and append the ``_MANIFEST_PREFIX`` line (``Study
+    UIDs   :``) to its manifest so later dedup checks are a cheap manifest
+    read. Returns the sampled UIDs."""
     uids = sample_study_uids(disc_dir)
     if not uids:
         return uids
@@ -100,8 +111,18 @@ def project_study_uids(raw_discs_dir: str) -> Set[str]:
 
 def looks_already_imported(src: str, raw_discs_dir: str) -> bool:
     """True when every study on ``src`` is already in the project — i.e. this
-    source has effectively been imported before."""
-    src_uids = sample_study_uids(src)
-    if not src_uids:
+    source has effectively been imported before.
+
+    The fast pass uses a capped sample; if it *says* already-imported, confirm
+    with a deeper sample before claiming it, so a capped sample that missed a
+    not-yet-imported study can't cause new data to be skipped (the deeper pass
+    only runs in the rare positive case, so the common 'new source' path stays
+    cheap)."""
+    quick = sample_study_uids(src)
+    if not quick:
         return False
-    return src_uids <= project_study_uids(raw_discs_dir)
+    project = project_study_uids(raw_discs_dir)
+    if not quick <= project:
+        return False
+    deep = sample_study_uids(src, max_files=5000, max_seconds=30.0)
+    return bool(deep) and deep <= project

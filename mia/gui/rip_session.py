@@ -147,7 +147,7 @@ class RipSessionController:
         if messagebox.askyesno(
                 _("Copy this drive?"),
                 _("Copy this drive “{name}”?").format(name=name),
-                parent=self._parent):
+                default="no", parent=self._parent):  # Enter = the safe "No"
             return mount
         return None
 
