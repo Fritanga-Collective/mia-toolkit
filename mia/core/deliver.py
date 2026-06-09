@@ -112,13 +112,19 @@ class DeliverResult:
         return self.failed == 0
 
 
-def _native_bulk_copy(src: str, dest: str,
-                      cancel: Optional[CancelToken]) -> bool:
+def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
+                      total_bytes: int = 0,
+                      progress: Optional[ProgressCallback] = None,
+                      cancel: Optional[CancelToken] = None) -> bool:
     """Best-effort fast bulk copy with the OS's own tool (robocopy /MT on
     Windows, ditto on macOS, cp -a on Linux). Returns True if a tool ran to
     completion; False (tool missing/failed) so the verify pass copies it all.
     Raises Cancelled if the user cancels mid-copy. Integrity is NOT assumed —
-    the verify/fill pass always runs afterwards."""
+    the verify/fill pass always runs afterwards.
+
+    The tools don't expose per-file progress, so while it runs we poll the
+    growing destination size and emit byte-based progress (scaled to the file
+    count) — otherwise the UI looks frozen during a long USB copy."""
     system = platform.system()
     if system == "Windows":
         cmd = ["robocopy", src, dest, "/E", "/MT:8", "/R:1", "/W:1",
@@ -139,6 +145,8 @@ def _native_bulk_copy(src: str, dest: str,
                                 stderr=subprocess.DEVNULL)
     except OSError:
         return False
+    start = time.time()
+    last_poll = 0.0
     try:
         while proc.poll() is None:
             if cancel is not None and cancel.is_set():
@@ -148,7 +156,16 @@ def _native_bulk_copy(src: str, dest: str,
                 except subprocess.TimeoutExpired:
                     proc.kill()
                 raise Cancelled()
-            time.sleep(0.1)
+            now = time.time()
+            if progress is not None and total_bytes > 0 and now - last_poll >= 1.0:
+                last_poll = now
+                frac = min(1.0, dir_size(dest) / total_bytes)
+                done = int(total_files * frac)
+                rate = done / (now - start) if now > start else 0
+                eta = (total_files - done) / rate if rate > 0 else 0
+                emit(progress, Progress(done, total_files, elapsed=now - start,
+                                        rate=rate, eta=eta, phase="copy"))
+            time.sleep(0.2)
     except Cancelled:
         raise
     return proc.returncode in ok_codes
@@ -176,9 +193,15 @@ def copy_tree_verified(
 
     emit(progress, Progress(0, 0, kind="info", note=f"Preparing to copy to {dest}"))
     files = []
+    total_bytes = 0
     for dirpath, _, filenames in os.walk(src):
         for fn in filenames:
-            files.append(os.path.join(dirpath, fn))
+            sp = os.path.join(dirpath, fn)
+            files.append(sp)
+            try:
+                total_bytes += os.path.getsize(sp)
+            except OSError:
+                pass
     total = len(files)
     start = time.time()
 
@@ -187,11 +210,13 @@ def copy_tree_verified(
               for f in files}:
         os.makedirs(d, exist_ok=True)
 
-    # Fast bulk copy with the OS tool (best-effort accelerator).
+    # Fast bulk copy with the OS tool (best-effort accelerator). It emits
+    # byte-based progress while running so the UI doesn't look frozen.
     if prefer_native:
         emit(progress, Progress(0, total, kind="info",
                                 note=f"Fast-copying {total} files to {dest}…"))
-        _native_bulk_copy(src, dest, cancel)  # may raise Cancelled
+        _native_bulk_copy(src, dest, total_files=total, total_bytes=total_bytes,
+                          progress=progress, cancel=cancel)  # may raise Cancelled
 
     emit(progress, Progress(0, total, kind="info",
                             note=f"Verifying {total} files…"))
