@@ -967,3 +967,14 @@ msgstr "Kajian ini nampaknya sudah ditambah. Import lagi?"
 #, python-brace-format
 msgid "Already added — skipping “{name}”."
 msgstr "Sudah ditambah — melangkau “{name}”."
+
+msgid "Can't open file"
+msgstr "Tidak dapat membuka fail"
+
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"Fail ini tidak dapat ditemui lagi:\n"
+"{p}"

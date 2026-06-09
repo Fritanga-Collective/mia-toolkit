@@ -966,3 +966,14 @@ msgstr "Estos estudios parecen ya agregados. ¿Importar de nuevo?"
 #, python-brace-format
 msgid "Already added — skipping “{name}”."
 msgstr "Ya agregado — se omite “{name}”."
+
+msgid "Can't open file"
+msgstr "No se puede abrir el archivo"
+
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"Este archivo ya no se encuentra:\n"
+"{p}"

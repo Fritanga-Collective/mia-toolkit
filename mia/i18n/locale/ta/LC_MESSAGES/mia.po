@@ -990,3 +990,14 @@ msgstr ""
 #, python-brace-format
 msgid "Already added — skipping “{name}”."
 msgstr "ஏற்கனவே சேர்க்கப்பட்டது — “{name}” தவிர்க்கப்படுகிறது."
+
+msgid "Can't open file"
+msgstr "கோப்பைத் திறக்க முடியவில்லை"
+
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"இந்தக் கோப்பு இனி கிடைக்கவில்லை:\n"
+"{p}"
