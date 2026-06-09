@@ -449,8 +449,13 @@ class AddDocumentsStep(WizardStep):
         include = tk.BooleanVar(value=True)  # checked by default; uncheck to skip
         cb = ttk.Checkbutton(self.rows_frame, variable=include)
         cb.grid(row=r, column=0, sticky="w")
+        # Filename is a clickable link — open it to preview the contents before
+        # deciding whether to include/embed it.
         name = ("📄 " if found else "") + os.path.basename(path)
-        ttk.Label(self.rows_frame, text=name).grid(row=r, column=1, sticky="w")
+        link = ttk.Label(self.rows_frame, text=name, foreground="#0a58ca",
+                         cursor="hand2", font=("", 11, "underline"))
+        link.bind("<Button-1>", lambda _e, p=path: open_path(p))
+        link.grid(row=r, column=1, sticky="w")
         # Embed-target dropdown: index 0 = "just include"; index i = refs[i-1].
         # Selection is read back by index (not label) so two studies with the
         # same date+description label can't collide onto the wrong study.
