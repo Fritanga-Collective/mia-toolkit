@@ -949,3 +949,14 @@ msgstr "These studies look already added. Import again?"
 #, python-brace-format
 msgid "Already added — skipping “{name}”."
 msgstr "Already added — skipping “{name}”."
+
+msgid "Can't open file"
+msgstr "Can't open file"
+
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"This file can no longer be found:\n"
+"{p}"

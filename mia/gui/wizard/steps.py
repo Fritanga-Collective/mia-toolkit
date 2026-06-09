@@ -450,11 +450,14 @@ class AddDocumentsStep(WizardStep):
         cb = ttk.Checkbutton(self.rows_frame, variable=include)
         cb.grid(row=r, column=0, sticky="w")
         # Filename is a clickable link — open it to preview the contents before
-        # deciding whether to include/embed it.
+        # deciding whether to include/embed it. Focusable + Enter/Space for
+        # keyboard access.
         name = ("📄 " if found else "") + os.path.basename(path)
         link = ttk.Label(self.rows_frame, text=name, foreground="#0a58ca",
-                         cursor="hand2", font=("", 11, "underline"))
-        link.bind("<Button-1>", lambda _e, p=path: open_path(p))
+                         cursor="hand2", font=("", 11, "underline"),
+                         takefocus=True)
+        for seq in ("<Button-1>", "<Return>", "<space>"):
+            link.bind(seq, lambda _e, p=path: self._open_doc(p))
         link.grid(row=r, column=1, sticky="w")
         # Embed-target dropdown: index 0 = "just include"; index i = refs[i-1].
         # Selection is read back by index (not label) so two studies with the
@@ -473,6 +476,16 @@ class AddDocumentsStep(WizardStep):
         combo.grid(row=r, column=2, sticky="e", padx=(8, 0))
         self._rows.append({"path": path, "include": include, "combo": combo,
                            "refs": refs})
+
+    def _open_doc(self, path: str) -> None:
+        """Open a listed document to preview it; warn if it's gone."""
+        if not os.path.exists(path):
+            messagebox.showerror(
+                _("Can't open file"),
+                _("This file can no longer be found:\n{p}").format(p=path),
+                parent=self)
+            return
+        open_path(path)
 
     def _refresh_empty(self) -> None:
         self.empty_lbl.grid() if not self._rows else self.empty_lbl.grid_remove()

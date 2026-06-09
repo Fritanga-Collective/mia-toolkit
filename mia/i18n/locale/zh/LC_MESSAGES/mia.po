@@ -910,3 +910,14 @@ msgstr "这些检查似乎已添加。再次导入？"
 #, python-brace-format
 msgid "Already added — skipping “{name}”."
 msgstr "已添加——跳过“{name}”。"
+
+msgid "Can't open file"
+msgstr "无法打开文件"
+
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"找不到此文件：\n"
+"{p}"
