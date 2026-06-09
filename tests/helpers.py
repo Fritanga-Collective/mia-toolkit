@@ -17,6 +17,26 @@ MR_STORAGE = "1.2.840.10008.5.1.4.1.1.4"
 CT_STORAGE = "1.2.840.10008.5.1.4.1.1.2"
 
 
+def new_tk_root_or_skip():
+    """A withdrawn real ``tk.Tk()`` for widget-level GUI tests, or skip.
+
+    These are the only tests that create a live Tk root, so they need a real
+    window server. CI runners don't have one — the macOS runner in particular
+    *hangs* in ``tk.Tk()`` rather than failing — so we skip whenever ``CI`` is
+    set, and also skip cleanly if Tk can't init locally (no display)."""
+    import pytest
+
+    if os.environ.get("CI"):
+        pytest.skip("real-Tk GUI tests run locally only (CI has no window server)")
+    tk = pytest.importorskip("tkinter")
+    try:
+        root = tk.Tk()
+    except tk.TclError:
+        pytest.skip("no usable display")
+    root.withdraw()
+    return root
+
+
 def make_dicom(
     path,
     *,

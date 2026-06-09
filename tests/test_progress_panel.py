@@ -3,19 +3,16 @@ native-copy phase, and debug-note routing. Skipped where there's no display."""
 
 import pytest
 
-tk = pytest.importorskip("tkinter")
+pytest.importorskip("tkinter")
 
 from mia.core.common import Progress  # noqa: E402
 from mia.gui.progress_panel import ProgressLogPanel  # noqa: E402
+from tests.helpers import new_tk_root_or_skip  # noqa: E402
 
 
 @pytest.fixture
 def panel():
-    try:
-        root = tk.Tk()
-    except tk.TclError:
-        pytest.skip("no display")
-    root.withdraw()
+    root = new_tk_root_or_skip()
     p = ProgressLogPanel(root)
     yield p
     root.destroy()

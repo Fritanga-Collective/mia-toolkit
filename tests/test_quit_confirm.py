@@ -6,14 +6,16 @@ import pytest
 tk = pytest.importorskip("tkinter")
 
 from mia.gui import app as app_mod  # noqa: E402
+from tests.helpers import new_tk_root_or_skip  # noqa: E402
 
 
 @pytest.fixture
 def app():
-    try:
-        a = app_mod.App()
-    except tk.TclError:
-        pytest.skip("no display")
+    # Probe for a usable window server (and skip in CI) *before* building the
+    # App, which creates its own root — App() would otherwise hang on a runner.
+    probe = new_tk_root_or_skip()
+    probe.destroy()
+    a = app_mod.App()
     a.root.withdraw()
     yield a
     try:
