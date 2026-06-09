@@ -208,10 +208,10 @@ def copy_tree_verified(
         dp = os.path.join(dest, rel)
         if os.path.exists(dp) and _matches(sp, dp, thorough):
             return ("skip", rel, 0, None)
-        ok, note = copy_with_retry(sp, dp)
+        ok, note = copy_with_retry(sp, dp, cancel=cancel)
         verified = ok and _matches(sp, dp, thorough)
         if ok and not verified:                 # one retry on a bad write
-            ok, note = copy_with_retry(sp, dp)
+            ok, note = copy_with_retry(sp, dp, cancel=cancel)
             verified = ok and _matches(sp, dp, thorough)
         if verified:
             try:
@@ -221,37 +221,41 @@ def copy_tree_verified(
             return ("copy", rel, nbytes, note)
         return ("fail", rel, 0, note or "verification failed")
 
-    with ThreadPoolExecutor(max_workers=_MAX_WORKERS) as pool:
+    # Managed without `with`: a `with` block's __exit__ calls shutdown(wait=True),
+    # which would block on running copies and negate cancel_futures on cancel.
+    # We shutdown(wait=False, cancel_futures=True) so cancel returns promptly;
+    # in-flight tasks bail fast because copy_with_retry now sees the cancel
+    # token. Workers finish their current (single, small) file and exit.
+    pool = ThreadPoolExecutor(max_workers=_MAX_WORKERS)
+    try:
         futures = {pool.submit(handle, sp): sp for sp in files}
-        try:
-            for fut in as_completed(futures):
-                if cancel is not None and cancel.is_set():
-                    pool.shutdown(wait=False, cancel_futures=True)
-                    raise Cancelled()
-                status, rel, nbytes, note = fut.result()
-                done += 1
-                if status == "skip":
-                    skipped += 1
-                elif status == "copy":
-                    copied += 1
-                    bytes_copied += nbytes
-                    if note:
-                        emit(progress, Progress(done, total, kind="retry",
-                                                note=f"{rel} ({note})"))
-                else:
-                    failed += 1
-                    failures.append((rel, note))
-                    emit(progress, Progress(done, total, kind="fail",
+        for fut in as_completed(futures):
+            if cancel is not None and cancel.is_set():
+                raise Cancelled()
+            status, rel, nbytes, note = fut.result()
+            done += 1
+            if status == "skip":
+                skipped += 1
+            elif status == "copy":
+                copied += 1
+                bytes_copied += nbytes
+                if note:
+                    emit(progress, Progress(done, total, kind="retry",
                                             note=f"{rel} ({note})"))
-                now = time.time()
-                if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
-                    last_emit = now
-                    rate = done / (now - start) if now > start else 0
-                    eta = (total - done) / rate if rate > 0 else 0
-                    emit(progress, Progress(done, total, elapsed=now - start,
-                                            rate=rate, eta=eta, phase="copy"))
-        except Cancelled:
-            raise
+            else:
+                failed += 1
+                failures.append((rel, note))
+                emit(progress, Progress(done, total, kind="fail",
+                                        note=f"{rel} ({note})"))
+            now = time.time()
+            if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
+                last_emit = now
+                rate = done / (now - start) if now > start else 0
+                eta = (total - done) / rate if rate > 0 else 0
+                emit(progress, Progress(done, total, elapsed=now - start,
+                                        rate=rate, eta=eta, phase="copy"))
+    finally:
+        pool.shutdown(wait=False, cancel_futures=True)
 
     return DeliverResult(
         dest=dest, total_files=total, files_copied=copied,

@@ -48,4 +48,5 @@ def test_delivery_log_appends_second_entry(tmp_path):
 def test_delivery_log_handles_missing_result(tmp_path):
     path = dicomdir.write_delivery_log(str(tmp_path), None,
                                        when=datetime(2026, 6, 9, 0, 0, 0))
-    assert "[2026-06-09T00:00:00]  archive copied" in open(path).read()
+    assert ("[2026-06-09T00:00:00]  archive copied"
+            in open(path, encoding="utf-8").read())

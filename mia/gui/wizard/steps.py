@@ -376,8 +376,11 @@ class ArchiveStep(PanelStep):
                 if ar is not None:
                     dicomdir.write_readme(dest, ar, self.project.raw_discs_dir)
                 dicomdir.write_delivery_log(dest, ar)
-            except OSError:
-                pass
+            except OSError as e:
+                # Don't report a clean delivery if the doctor-facing docs
+                # couldn't be written (drive full / permissions).
+                result.failed += 1
+                result.failures.append(("README.txt / DELIVERY-LOG.txt", str(e)))
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root)
