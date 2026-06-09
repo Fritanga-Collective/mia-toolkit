@@ -93,6 +93,39 @@ def test_native_path_leaves_all_present(tmp_path):
             assert f.read() == data
 
 
+def test_native_copy_emits_progress(tmp_path, monkeypatch):
+    # The native phase must emit phase="copy" progress while the OS tool runs,
+    # so a long USB copy doesn't look frozen. Stub Popen to "run" for a couple
+    # of polls and free_space to show bytes being written.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+
+    class FakeProc:
+        def __init__(self):
+            self._polls = 0
+            self.returncode = 0
+
+        def poll(self):
+            self._polls += 1
+            return None if self._polls < 3 else 0  # alive for 2 iterations
+
+    monkeypatch.setattr(deliver.shutil, "which", lambda _c: "/bin/true")
+    monkeypatch.setattr(deliver.subprocess, "Popen",
+                        lambda *a, **k: FakeProc())
+    monkeypatch.setattr(deliver.time, "sleep", lambda _s: None)
+    # initial_free high, then lower → "written" > 0 → frac advances.
+    freevals = iter([10_000_000, 9_000_000, 8_000_000, 8_000_000, 8_000_000])
+    monkeypatch.setattr(deliver, "free_space",
+                        lambda _p: next(freevals, 8_000_000))
+
+    events = []
+    deliver.copy_tree_verified(str(src), str(dst), prefer_native=True,
+                               progress=events.append)
+    copy_phase = [e for e in events if e.phase == "copy" and e.total]
+    assert any(e.done > 0 for e in copy_phase)  # bar advanced during native copy
+
+
 def test_cancellation(tmp_path):
     src = tmp_path / "src"
     _tree(str(src))
