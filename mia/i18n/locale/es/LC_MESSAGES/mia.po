@@ -941,3 +941,7 @@ msgstr ""
 "2.  Revisa todo lo que encontramos\n"
 "3.  Agrega informes o PDF de laboratorio (opcional)\n"
 "4.  Crea un solo archivo y cópialo a una USB para tu médico"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "No se pudieron copiar {f} archivo(s)."

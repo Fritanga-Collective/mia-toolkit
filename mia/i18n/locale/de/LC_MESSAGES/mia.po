@@ -962,3 +962,7 @@ msgstr ""
 "2.  Alles Gefundene prüfen\n"
 "3.  Befund- oder Labor-PDFs hinzufügen (optional)\n"
 "4.  Ein Archiv erstellen und für Ihren Arzt auf einen USB-Stick kopieren"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "{f} Datei(en) konnten nicht kopiert werden."

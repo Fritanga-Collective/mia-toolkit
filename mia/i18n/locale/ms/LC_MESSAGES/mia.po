@@ -942,3 +942,7 @@ msgstr ""
 "2.  Semak semua yang kami jumpai\n"
 "3.  Tambah sebarang PDF laporan atau makmal (pilihan)\n"
 "4.  Bina satu arkib dan salin ke pemacu USB untuk doktor anda"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "{f} fail tidak dapat disalin."

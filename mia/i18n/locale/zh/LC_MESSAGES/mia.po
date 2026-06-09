@@ -885,3 +885,7 @@ msgstr ""
 "2.  查看我们找到的全部内容\n"
 "3.  添加任何报告或化验 PDF（可选）\n"
 "4.  生成一个存档并复制到 U 盘交给你的医生"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "有 {f} 个文件无法复制。"

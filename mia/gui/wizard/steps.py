@@ -8,6 +8,7 @@ import time
 import tkinter as tk
 import webbrowser
 from tkinter import filedialog, messagebox, ttk
+from types import SimpleNamespace
 
 # The tool and its installers are free. These open in the user's browser —
 # the only outbound links in the app (no telemetry, no background calls).
@@ -677,13 +678,16 @@ class DoneStep(WizardStep):
         if not paths:
             return
         plan = [{"path": p, "embed_study": None} for p in paths]
-        n = _copy_reports(plan, dp)
-        messagebox.showinfo(
-            _("Add more files to the USB"),
-            _("Copied {n} file(s) to the USB.").format(n=n)
-            + "\n\n"
-            + _("To embed reports into the DICOM archive for a PACS, add them "
-                "before building."))
+        acc = SimpleNamespace(failed=0, failures=[])  # capture copy failures
+        n = _copy_reports(plan, dp, acc)
+        msg = _("Copied {n} file(s) to the USB.").format(n=n)
+        if acc.failed:
+            msg += "\n\n" + _("{f} file(s) could not be copied.").format(
+                f=acc.failed)
+        msg += "\n\n" + _("To embed reports into the DICOM archive for a PACS, "
+                          "add them before building.")
+        show = messagebox.showwarning if acc.failed else messagebox.showinfo
+        show(_("Add more files to the USB"), msg)
 
     def _reveal(self) -> None:
         if self.wizard.delivered_path:
