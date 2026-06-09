@@ -660,6 +660,7 @@ msgstr ""
 "3.  Build one archive and copy it to a USB drive for your doctor"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "Sources added so far: {n}"
 
@@ -684,6 +685,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "No medical images were found here. Copy anyway?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -696,6 +698,7 @@ msgstr ""
 "Copy everything into your project?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -720,12 +723,14 @@ msgstr ""
 "folder."
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr ""
 "Not enough space on the project drive (need about {need}, free {free})."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "Importing “{name}”…"
 
@@ -734,6 +739,7 @@ msgid "Couldn't import this source."
 msgstr "Couldn't import this source."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr "✓ Imported: {c} files OK, {f} could not be read."
 
@@ -838,10 +844,12 @@ msgid "Check for Updates…"
 msgstr "Check for Updates…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "You're on the latest version ({v})."
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -854,6 +862,72 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "Couldn't check for updates. Try again later."
+
+msgid "Add documents"
+msgstr "Add documents"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+
+msgid "Add files…"
+msgstr "Add files…"
+
+msgid "No documents added yet."
+msgstr "No documents added yet."
+
+msgid "Just include the file"
+msgstr "Just include the file"
+
+msgid "Choose reports or documents"
+msgstr "Choose reports or documents"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Add more files to the USB"
+msgstr "Add more files to the USB"
+
+#, python-brace-format
+msgid "Copied {n} file(s) to the USB."
+msgstr "Copied {n} file(s) to the USB."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+
+#, python-brace-format
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr "Found {n} report PDF(s) — review them in ‘Add documents’."
+
+#, python-brace-format
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "{f} file(s) could not be copied."
 
 msgid "Copy this drive?"
 msgstr "Copy this drive?"

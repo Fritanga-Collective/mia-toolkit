@@ -35,6 +35,7 @@ msgid "Stopping…"
 msgstr "Wird angehalten…"
 
 #: mia/gui/rip_session.py:86
+#, python-brace-format
 msgid "Ripping session ended. {n} disc(s) copied."
 msgstr "Das Kopieren wurde beendet. {n} Disc(s) kopiert."
 
@@ -43,10 +44,12 @@ msgid "Insert a disc… (waiting)"
 msgstr "Legen Sie eine Disc ein… (warte)"
 
 #: mia/gui/rip_session.py:117
+#, python-brace-format
 msgid "Ripping disc {n}: {name}…"
 msgstr "Disc {n} wird kopiert: {name}…"
 
 #: mia/gui/rip_session.py:118
+#, python-brace-format
 msgid "Found disc “{name}”. Copying…"
 msgstr "Disc „{name}“ gefunden. Wird kopiert…"
 
@@ -61,12 +64,14 @@ msgstr ""
 "eine andere ein, oder drücken Sie auf Stopp."
 
 #: mia/gui/rip_session.py:146
+#, python-brace-format
 msgid "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
 msgstr ""
 "✓ Disc kopiert: {c} Dateien in Ordnung, {r} wiederhergestellt, {f} konnten "
 "nicht gelesen werden."
 
 #: mia/gui/rip_session.py:153
+#, python-brace-format
 msgid "✓ Disc {n} done. Insert the next disc…"
 msgstr "✓ Disc {n} fertig. Legen Sie die nächste Disc ein…"
 
@@ -134,18 +139,22 @@ msgstr ""
 "warten…"
 
 #: mia/gui/progress_panel.py:134
+#, python-brace-format
 msgid "files {done}/{total}"
 msgstr "Dateien {done}/{total}"
 
 #: mia/gui/progress_panel.py:137
+#, python-brace-format
 msgid "elapsed {t}"
 msgstr "vergangen {t}"
 
 #: mia/gui/progress_panel.py:139
+#, python-brace-format
 msgid "ETA {t}"
 msgstr "Restzeit {t}"
 
 #: mia/gui/progress_panel.py:141
+#, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/s"
 
@@ -174,18 +183,22 @@ msgid "⚠ Could not read a file (see technical details)."
 msgstr "⚠ Eine Datei konnte nicht gelesen werden (siehe technische Details)."
 
 #: mia/gui/messages.py:69
+#, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "Datei {done} von {total} wird kopiert…"
 
 #: mia/gui/messages.py:71
+#, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "Datei {done} von {total} wird geprüft…"
 
 #: mia/gui/messages.py:73
+#, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "Bild {done} von {total} wird erfasst…"
 
 #: mia/gui/messages.py:75
+#, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "Wird bearbeitet… {done} von {total}"
 
@@ -285,6 +298,7 @@ msgid "Scanning…"
 msgstr "Wird durchsucht…"
 
 #: mia/gui/inventory_view.py:45
+#, python-brace-format
 msgid "Looking through {f} for studies…"
 msgstr "{f} wird nach Untersuchungen durchsucht…"
 
@@ -298,10 +312,12 @@ msgstr ""
 "Keine Untersuchungen gefunden. Ist das der Ordner mit Ihren kopierten Discs?"
 
 #: mia/gui/inventory_view.py:61
+#, python-brace-format
 msgid "Done — {n} studies."
 msgstr "Fertig — {n} Untersuchungen."
 
 #: mia/gui/inventory_view.py:62
+#, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ {n} Untersuchungen gefunden. Die Tabelle wird geöffnet…"
 
@@ -347,6 +363,7 @@ msgid "Scanning for images…"
 msgstr "Wird nach Bildern durchsucht…"
 
 #: mia/gui/archive_view.py:60
+#, python-brace-format
 msgid "Looking for all DICOM images under {f}…"
 msgstr "Es wird nach allen DICOM-Bildern unter {f} gesucht…"
 
@@ -359,10 +376,12 @@ msgid "No images found. Is this the folder with your ripped discs?"
 msgstr "Keine Bilder gefunden. Ist das der Ordner mit Ihren kopierten Discs?"
 
 #: mia/gui/archive_view.py:78
+#, python-brace-format
 msgid "Archive ready — {s} studies, {n} images."
 msgstr "Archiv bereit — {s} Untersuchungen, {n} Bilder."
 
 #: mia/gui/archive_view.py:80
+#, python-brace-format
 msgid ""
 "✓ Archive complete: {s} studies, {n} images. Copy this folder to the USB "
 "drive and hand it to the doctor."
@@ -371,6 +390,7 @@ msgstr ""
 "auf den USB-Stick und geben Sie ihn dem Arzt."
 
 #: mia/gui/archive_view.py:84
+#, python-brace-format
 msgid "README: {p}"
 msgstr "README: {p}"
 
@@ -379,6 +399,7 @@ msgid "Not enough space"
 msgstr "Nicht genug Speicherplatz"
 
 #: mia/gui/wizard/steps.py:75
+#, python-brace-format
 msgid ""
 "This drive may not have enough room (need about {n}). Move your project to "
 "another drive with more space?"
@@ -413,6 +434,7 @@ msgid "Skip to building the archive"
 msgstr "Direkt zum Erstellen des Archivs springen"
 
 #: mia/gui/wizard/steps.py:118
+#, python-brace-format
 msgid ""
 "Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
 msgstr ""
@@ -441,6 +463,7 @@ msgid "Looking through your discs…"
 msgstr "Ihre Discs werden durchsucht…"
 
 #: mia/gui/wizard/steps.py:207
+#, python-brace-format
 msgid "We found {n} studies across your discs."
 msgstr "Wir haben {n} Untersuchungen auf Ihren Discs gefunden."
 
@@ -480,6 +503,7 @@ msgid "Ready to combine your discs into one archive."
 msgstr "Bereit, Ihre Discs zu einem Archiv zusammenzufassen."
 
 #: mia/gui/wizard/steps.py:280
+#, python-brace-format
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr ""
 "Archiv erstellt: {s} Untersuchungen, {n} Bilder. Kopieren Sie es jetzt auf "
@@ -490,6 +514,7 @@ msgid "Choose your USB drive"
 msgstr "Wählen Sie Ihren USB-Stick"
 
 #: mia/gui/wizard/steps.py:292
+#, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr ""
 "Dieses Laufwerk hat nicht genug Platz für das Archiv (benötigt etwa {n})."
@@ -501,6 +526,7 @@ msgstr ""
 "abzuschließen."
 
 #: mia/gui/wizard/steps.py:326
+#, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr "Kopiert mit {f} Problemdatei(en) — siehe technische Details."
 
@@ -538,6 +564,7 @@ msgid "☕  Buy us a coffee"
 msgstr "☕  Spendieren Sie uns einen Kaffee"
 
 #: mia/gui/wizard/steps.py:370
+#, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
 "{p}\n"
@@ -582,6 +609,7 @@ msgid "Next ›"
 msgstr "Weiter ›"
 
 #: mia/gui/wizard/view.py:91
+#, python-brace-format
 msgid "Step {n} of {m}:  {t}"
 msgstr "Schritt {n} von {m}:  {t}"
 
@@ -663,6 +691,7 @@ msgstr ""
 "3.  Erstellen Sie ein Archiv und kopieren Sie es für Ihren Arzt auf einen USB-Stick"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "Bisher hinzugefügte Quellen: {n}"
 
@@ -687,6 +716,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "Hier wurden keine medizinischen Bilder gefunden. Trotzdem kopieren?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -699,6 +729,7 @@ msgstr ""
 "Alles in Ihr Projekt kopieren?"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -723,6 +754,7 @@ msgstr ""
 "einen anderen Ordner."
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr ""
@@ -730,6 +762,7 @@ msgstr ""
 "{free})."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "„{name}“ wird importiert…"
 
@@ -738,6 +771,7 @@ msgid "Couldn't import this source."
 msgstr "Diese Quelle konnte nicht importiert werden."
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr ""
 "✓ Importiert: {c} Dateien in Ordnung, {f} konnten nicht gelesen werden."
@@ -845,10 +879,12 @@ msgid "Check for Updates…"
 msgstr "Nach Updates suchen…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Sie haben die neueste Version ({v})."
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -861,6 +897,75 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "Updates konnten nicht geprüft werden. Versuchen Sie es später erneut."
+
+msgid "Add documents"
+msgstr "Dokumente hinzufügen"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"Fügen Sie den Befund des Radiologen oder Labor-/Blutwerte (PDF) hinzu. Sie "
+"reisen als Dateien mit den Aufnahmen, die Ihr Arzt öffnen kann, und PDFs "
+"können zusätzlich für ein PACS in das Bildarchiv eingebettet werden. "
+"Optional — mit Weiter überspringen."
+
+msgid "Add files…"
+msgstr "Dateien hinzufügen…"
+
+msgid "No documents added yet."
+msgstr "Noch keine Dokumente hinzugefügt."
+
+msgid "Just include the file"
+msgstr "Nur die Datei beifügen"
+
+msgid "Choose reports or documents"
+msgstr "Berichte oder Dokumente wählen"
+
+msgid "Documents"
+msgstr "Dokumente"
+
+msgid "Add more files to the USB"
+msgstr "Weitere Dateien auf den USB-Stick"
+
+#, python-brace-format
+msgid "Copied {n} file(s) to the USB."
+msgstr "{n} Datei(en) auf den USB-Stick kopiert."
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"Um Berichte für ein PACS in das DICOM-Archiv einzubetten, fügen Sie sie vor "
+"dem Erstellen hinzu."
+
+#, python-brace-format
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr ""
+"{n} Bericht-PDF(s) gefunden — prüfen Sie sie unter ‘Dokumente hinzufügen’."
+
+#, python-brace-format
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"{name} konnte nicht in das Archiv eingebettet werden — es ist dennoch als "
+"Datei enthalten."
+
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  Studien hinzufügen — CDs, USB-Ordner oder ZIP-Downloads\n"
+"2.  Alles Gefundene prüfen\n"
+"3.  Befund- oder Labor-PDFs hinzufügen (optional)\n"
+"4.  Ein Archiv erstellen und für Ihren Arzt auf einen USB-Stick kopieren"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "{f} Datei(en) konnten nicht kopiert werden."
 
 msgid "Copy this drive?"
 msgstr "Dieses Laufwerk kopieren?"

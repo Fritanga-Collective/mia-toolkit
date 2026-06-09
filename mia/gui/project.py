@@ -31,6 +31,14 @@ class Project:
     def inventory_path(self) -> str:
         return os.path.join(self.root, "dicom_inventory.xlsx")
 
+    @property
+    def staged_docs_dir(self) -> str:
+        """Encapsulated-PDF DICOMs, under raw_discs so build_fileset includes
+        them. The leading underscore keeps it out of discs() (disc_NN_…).
+        Companion originals are copied straight to the USB Reports/ folder at
+        delivery — they are not staged in the project."""
+        return os.path.join(self.raw_discs_dir, "_documents")
+
     def ensure_dirs(self) -> None:
         os.makedirs(self.raw_discs_dir, exist_ok=True)
 

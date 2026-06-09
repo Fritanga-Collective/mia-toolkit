@@ -630,6 +630,7 @@ msgstr ""
 "3.  生成一个归档并复制到 U 盘交给医生"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Sources added so far: {n}"
 msgstr "已添加的来源：{n}"
 
@@ -654,6 +655,7 @@ msgid "No medical images were found here. Copy anyway?"
 msgstr "这里没有找到医学影像。仍要复制吗？"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size}\n"
 "{dicom} medical images detected.\n"
@@ -666,6 +668,7 @@ msgstr ""
 "要全部复制到你的项目中吗？"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "{files} files · {size} inside the ZIP.\n"
 "Medical images are detected during the import.\n"
@@ -688,11 +691,13 @@ msgid ""
 msgstr "该文件夹在你的项目内部（或包含你的项目）。请选择其他文件夹。"
 
 #: mia/gui:0
+#, python-brace-format
 msgid ""
 "Not enough space on the project drive (need about {need}, free {free})."
 msgstr "项目所在磁盘空间不足（约需 {need}，可用 {free}）。"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "Importing “{name}”…"
 msgstr "正在导入“{name}”…"
 
@@ -701,6 +706,7 @@ msgid "Couldn't import this source."
 msgstr "无法导入此来源。"
 
 #: mia/gui:0
+#, python-brace-format
 msgid "✓ Imported: {c} files OK, {f} could not be read."
 msgstr "✓ 导入完成：{c} 个文件成功，{f} 个无法读取。"
 
@@ -803,10 +809,12 @@ msgid "Check for Updates…"
 msgstr "检查更新…"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "你已是最新版本（{v}）。"
 
 #: mia/gui/menubar.py:0
+#, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
 "\n"
@@ -819,6 +827,68 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "无法检查更新。请稍后再试。"
+
+msgid "Add documents"
+msgstr "添加文档"
+
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"添加放射科报告或化验/血液检查结果（PDF）。它们会作为医生可打开的文件随影像一同保存，PDF 还可嵌入影像存档以供 PACS "
+"使用。可选——点击“下一步”可跳过。"
+
+msgid "Add files…"
+msgstr "添加文件…"
+
+msgid "No documents added yet."
+msgstr "尚未添加文档。"
+
+msgid "Just include the file"
+msgstr "仅包含该文件"
+
+msgid "Choose reports or documents"
+msgstr "选择报告或文档"
+
+msgid "Documents"
+msgstr "文档"
+
+msgid "Add more files to the USB"
+msgstr "向 U 盘添加更多文件"
+
+#, python-brace-format
+msgid "Copied {n} file(s) to the USB."
+msgstr "已将 {n} 个文件复制到 U 盘。"
+
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr "若要将报告嵌入用于 PACS 的 DICOM 存档，请在构建前添加它们。"
+
+#, python-brace-format
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr "发现 {n} 个报告 PDF——在“添加文档”中查看它们。"
+
+#, python-brace-format
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr "无法将 {name} 嵌入存档——它仍会作为文件包含在内。"
+
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  添加你的检查 —— CD、U 盘文件夹或 ZIP 下载\n"
+"2.  查看我们找到的全部内容\n"
+"3.  添加任何报告或化验 PDF（可选）\n"
+"4.  生成一个存档并复制到 U 盘交给你的医生"
+
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "有 {f} 个文件无法复制。"
 
 msgid "Copy this drive?"
 msgstr "复制此驱动器？"
