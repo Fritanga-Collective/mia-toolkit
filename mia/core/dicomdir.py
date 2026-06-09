@@ -278,6 +278,40 @@ def write_readme(output_path: str, result: DicomdirResult, source: str) -> str:
     return readme
 
 
+def write_delivery_log(root: str, result: Optional["DicomdirResult"],
+                       *, when: Optional[datetime] = None) -> str:
+    """Append a dated entry to ``root/DELIVERY-LOG.txt`` recording what was
+    copied to this USB and when. Appends (creating the file with a header if
+    needed) so re-delivering to the same drive builds a changelog. Returns the
+    log path."""
+    log = os.path.join(root, "DELIVERY-LOG.txt")
+    when = when or datetime.now()
+    stamp = when.isoformat(timespec="seconds")
+    new = not os.path.exists(log)
+    with open(log, "a", encoding="utf-8") as f:
+        if new:
+            f.write("MIA Toolkit — Delivery log\n")
+            f.write("==========================\n\n")
+            f.write("Each entry below records the studies copied to this "
+                    "drive and when.\n\n")
+        if result is not None:
+            f.write(f"[{stamp}]  {result.studies} studies, "
+                    f"{result.added} images copied\n")
+            sorted_studies = sorted(result.studies_info.items(),
+                                    key=lambda x: x[1]["date"])
+            for i, (_, info) in enumerate(sorted_studies, 1):
+                date = info["date"]
+                if len(date) == 8:
+                    date = f"{date[:4]}-{date[4:6]}-{date[6:8]}"
+                desc = info["description"][:55]
+                f.write(f"     [{i:2d}] {date}  {info['modality']:3s}  "
+                        f"{desc}  ({info['count']} images)\n")
+        else:
+            f.write(f"[{stamp}]  archive copied\n")
+        f.write("\n")
+    return log
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         description="Compile a DICOM archive with DICOMDIR from a folder tree.",

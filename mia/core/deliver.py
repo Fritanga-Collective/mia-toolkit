@@ -21,12 +21,16 @@ from __future__ import annotations
 
 import hashlib
 import os
+import platform
 import shutil
+import subprocess
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 
 from .common import (
+    Cancelled,
     CancelToken,
     Progress,
     ProgressCallback,
@@ -34,6 +38,12 @@ from .common import (
     emit,
 )
 from .ripper import copy_with_retry
+
+# Parallel workers for the verify/copy pass. USB write bandwidth is the real
+# ceiling; concurrency hides per-file latency (thousands of small DICOM files),
+# it doesn't push past the device — so keep it modest.
+_MAX_WORKERS = min(8, (os.cpu_count() or 4))
+_PROGRESS_MIN_INTERVAL = 0.2  # seconds; throttle per-file emits
 
 
 def free_space(path: str) -> int:
@@ -102,17 +112,67 @@ class DeliverResult:
         return self.failed == 0
 
 
+def _native_bulk_copy(src: str, dest: str,
+                      cancel: Optional[CancelToken]) -> bool:
+    """Best-effort fast bulk copy with the OS's own tool (robocopy /MT on
+    Windows, ditto on macOS, cp -a on Linux). Returns True if a tool ran to
+    completion; False (tool missing/failed) so the verify pass copies it all.
+    Raises Cancelled if the user cancels mid-copy. Integrity is NOT assumed —
+    the verify/fill pass always runs afterwards."""
+    system = platform.system()
+    if system == "Windows":
+        cmd = ["robocopy", src, dest, "/E", "/MT:8", "/R:1", "/W:1",
+               "/NFL", "/NDL", "/NJH", "/NP"]
+        ok_codes = range(0, 8)            # robocopy: <8 == success
+    elif system == "Darwin":
+        cmd = ["ditto", src, dest]
+        ok_codes = (0,)
+    elif system == "Linux":
+        cmd = ["cp", "-a", src + "/.", dest + "/"]
+        ok_codes = (0,)
+    else:
+        return False
+    if shutil.which(cmd[0]) is None:
+        return False
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+    except OSError:
+        return False
+    try:
+        while proc.poll() is None:
+            if cancel is not None and cancel.is_set():
+                proc.terminate()
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                raise Cancelled()
+            time.sleep(0.1)
+    except Cancelled:
+        raise
+    return proc.returncode in ok_codes
+
+
 def copy_tree_verified(
     src: str,
     dest: str,
     *,
     thorough: bool = False,
+    prefer_native: bool = True,
     progress: Optional[ProgressCallback] = None,
     cancel: Optional[CancelToken] = None,
 ) -> DeliverResult:
-    """Copy every file under ``src`` into ``dest``, verifying and resuming."""
+    """Copy every file under ``src`` into ``dest``, verifying and resuming.
+
+    A native tool (robocopy/ditto/cp) does the bulk copy fast when available;
+    then a parallel verify/fill pass guarantees every file is present and
+    size-correct (SHA-256 when ``thorough``), copying anything the native tool
+    missed. With no native tool the parallel pass does the whole copy itself.
+    """
     src = os.path.abspath(src)
     dest = os.path.abspath(dest)
+    check_cancel(cancel)
 
     emit(progress, Progress(0, 0, kind="info", note=f"Preparing to copy to {dest}"))
     files = []
@@ -120,50 +180,82 @@ def copy_tree_verified(
         for fn in filenames:
             files.append(os.path.join(dirpath, fn))
     total = len(files)
+    start = time.time()
+
+    # Pre-create the destination tree once (avoids races in the pool).
+    for d in {os.path.dirname(os.path.join(dest, os.path.relpath(f, src)))
+              for f in files}:
+        os.makedirs(d, exist_ok=True)
+
+    # Fast bulk copy with the OS tool (best-effort accelerator).
+    if prefer_native:
+        emit(progress, Progress(0, total, kind="info",
+                                note=f"Fast-copying {total} files to {dest}…"))
+        _native_bulk_copy(src, dest, cancel)  # may raise Cancelled
+
     emit(progress, Progress(0, total, kind="info",
-                            note=f"{total} files to copy"))
+                            note=f"Verifying {total} files…"))
 
     copied = skipped = failed = 0
     bytes_copied = 0
     failures: List[Tuple[str, str]] = []
-    start = time.time()
+    done = 0
+    last_emit = 0.0
 
-    for i, sp in enumerate(files, 1):
-        check_cancel(cancel)
+    def handle(sp: str) -> Tuple[str, str, int, Optional[str]]:
+        """Returns (status, rel, nbytes, note). status in skip/copy/fail."""
         rel = os.path.relpath(sp, src)
         dp = os.path.join(dest, rel)
-        os.makedirs(os.path.dirname(dp), exist_ok=True)
-
         if os.path.exists(dp) and _matches(sp, dp, thorough):
-            skipped += 1
-        else:
-            ok, note = copy_with_retry(sp, dp)
+            return ("skip", rel, 0, None)
+        ok, note = copy_with_retry(sp, dp, cancel=cancel)
+        verified = ok and _matches(sp, dp, thorough)
+        if ok and not verified:                 # one retry on a bad write
+            ok, note = copy_with_retry(sp, dp, cancel=cancel)
             verified = ok and _matches(sp, dp, thorough)
-            if ok and not verified:  # one more attempt on a bad write
-                ok, note = copy_with_retry(sp, dp)
-                verified = ok and _matches(sp, dp, thorough)
+        if verified:
+            try:
+                nbytes = os.path.getsize(dp)
+            except OSError:
+                nbytes = 0
+            return ("copy", rel, nbytes, note)
+        return ("fail", rel, 0, note or "verification failed")
 
-            if verified:
+    # Managed without `with`: a `with` block's __exit__ calls shutdown(wait=True),
+    # which would block on running copies and negate cancel_futures on cancel.
+    # We shutdown(wait=False, cancel_futures=True) so cancel returns promptly;
+    # in-flight tasks bail fast because copy_with_retry now sees the cancel
+    # token. Workers finish their current (single, small) file and exit.
+    pool = ThreadPoolExecutor(max_workers=_MAX_WORKERS)
+    try:
+        futures = {pool.submit(handle, sp): sp for sp in files}
+        for fut in as_completed(futures):
+            if cancel is not None and cancel.is_set():
+                raise Cancelled()
+            status, rel, nbytes, note = fut.result()
+            done += 1
+            if status == "skip":
+                skipped += 1
+            elif status == "copy":
                 copied += 1
-                try:
-                    bytes_copied += os.path.getsize(dp)
-                except OSError:
-                    pass
+                bytes_copied += nbytes
                 if note:
-                    emit(progress, Progress(i, total, kind="retry",
+                    emit(progress, Progress(done, total, kind="retry",
                                             note=f"{rel} ({note})"))
             else:
                 failed += 1
-                reason = note or "verification failed"
-                failures.append((rel, reason))
-                emit(progress, Progress(i, total, kind="fail",
-                                        note=f"{rel} ({reason})"))
-
-        elapsed = time.time() - start
-        rate = i / elapsed if elapsed > 0 else 0
-        eta = (total - i) / rate if rate > 0 else 0
-        emit(progress, Progress(i, total, elapsed=elapsed, rate=rate, eta=eta,
-                                phase="copy"))
+                failures.append((rel, note))
+                emit(progress, Progress(done, total, kind="fail",
+                                        note=f"{rel} ({note})"))
+            now = time.time()
+            if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
+                last_emit = now
+                rate = done / (now - start) if now > start else 0
+                eta = (total - done) / rate if rate > 0 else 0
+                emit(progress, Progress(done, total, elapsed=now - start,
+                                        rate=rate, eta=eta, phase="copy"))
+    finally:
+        pool.shutdown(wait=False, cancel_futures=True)
 
     return DeliverResult(
         dest=dest, total_files=total, files_copied=copied,

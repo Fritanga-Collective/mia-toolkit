@@ -594,6 +594,19 @@ class ArchiveStep(PanelStep):
             # plain file the doctor can open; embed copies already rode in the
             # Archive via _stage_documents).
             _copy_reports(self.wizard.documents_plan, dest, result)
+            # Doctor-facing docs at the CaseReview root (beside Archive/, never
+            # inside it — they must not perturb the DICOMDIR). README describes
+            # the archive; DELIVERY-LOG records what was copied and when.
+            ar = self.wizard.archive_result
+            try:
+                if ar is not None:
+                    dicomdir.write_readme(dest, ar, self.project.raw_discs_dir)
+                dicomdir.write_delivery_log(dest, ar)
+            except OSError as e:
+                # Don't report a clean delivery if the doctor-facing docs
+                # couldn't be written (drive full / permissions).
+                result.failed += 1
+                result.failures.append(("README.txt / DELIVERY-LOG.txt", str(e)))
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root)
