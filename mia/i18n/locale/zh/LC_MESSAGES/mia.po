@@ -819,3 +819,24 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "无法检查更新。请稍后再试。"
+
+msgid "Copy this drive?"
+msgstr "复制此驱动器？"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "复制此驱动器“{name}”？"
+
+msgid "Already added"
+msgstr "已添加"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}”似乎已添加。再次复制？"
+
+msgid "These studies look already added. Import again?"
+msgstr "这些检查似乎已添加。再次导入？"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "已添加——跳过“{name}”。"

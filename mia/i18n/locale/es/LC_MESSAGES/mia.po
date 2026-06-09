@@ -868,3 +868,24 @@ msgstr ""
 #: mia/gui/menubar.py:0
 msgid "Couldn't check for updates. Try again later."
 msgstr "No se pudo buscar actualizaciones. Inténtalo más tarde."
+
+msgid "Copy this drive?"
+msgstr "¿Copiar esta unidad?"
+
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "¿Copiar esta unidad “{name}”?"
+
+msgid "Already added"
+msgstr "Ya agregado"
+
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}” parece ya agregado. ¿Copiar de nuevo?"
+
+msgid "These studies look already added. Import again?"
+msgstr "Estos estudios parecen ya agregados. ¿Importar de nuevo?"
+
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "Ya agregado — se omite “{name}”."

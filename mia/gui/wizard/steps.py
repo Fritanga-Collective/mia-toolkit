@@ -159,10 +159,13 @@ class AddStudiesStep(PanelStep):
         self.count_lbl = ttk.Label(self, foreground="#0a7d28", text="")
         self.count_lbl.grid(row=2, column=0, sticky="w", pady=(0, 6))
         self.build_panel(3)
+        self._session_open = False   # rip auto-loop is open (idle-polls)
+        self._working = False        # a disc/import is actively running
         self.controller = RipSessionController(
             self.wizard.app.root, self.panel,
             get_dest=lambda: self.project.raw_discs_dir,
-            on_state_changed=self._state,
+            on_state_changed=self._busy_state,
+            on_session_changed=self._session_state,
             on_disc=lambda r: self._added(),
             parent_widget=self)
         self._import_cancel = None
@@ -186,13 +189,13 @@ class AddStudiesStep(PanelStep):
     def _import_folder(self) -> None:
         self._import_cancel = import_flow.start_folder_import(
             self.wizard.app.root, self.panel, get_dest=self._get_dest,
-            on_state=self._state, on_done=lambda r: self._added(),
+            on_state=self._busy_state, on_done=lambda r: self._added(),
             parent=self)
 
     def _import_zip(self) -> None:
         self._import_cancel = import_flow.start_zip_import(
             self.wizard.app.root, self.panel, get_dest=self._get_dest,
-            on_state=self._state, on_done=lambda r: self._added(),
+            on_state=self._busy_state, on_done=lambda r: self._added(),
             parent=self)
 
     def _added(self) -> None:
@@ -204,12 +207,25 @@ class AddStudiesStep(PanelStep):
         self.count_lbl.configure(
             text=_("Sources added so far: {n}").format(n=n) if n else "")
 
-    def _state(self, running: bool) -> None:
-        state = "disabled" if running else "normal"
+    # Two states drive the UI. _working = a disc/import is actively copying →
+    # gates Next (wizard busy). _session_open = the rip auto-loop is open (it
+    # idle-polls between discs) → must NOT gate Next, or the user can never
+    # advance after a rip. Both disable the source buttons while in effect.
+    def _busy_state(self, running: bool) -> None:
+        self._working = running
+        self._sync()
+
+    def _session_state(self, active: bool) -> None:
+        self._session_open = active
+        self._sync()
+
+    def _sync(self) -> None:
+        disabled = self._session_open or self._working
+        state = "disabled" if disabled else "normal"
         for btn in (self.start_btn, self.folder_btn, self.zip_btn):
             btn.configure(state=state)
-        self.wizard.set_busy(running)
-        if not running:
+        self.wizard.set_busy(self._working)   # Next gated by active work only
+        if not self._working:
             self._refresh_count()
 
     def on_leave(self) -> None:
