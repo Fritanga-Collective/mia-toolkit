@@ -21,8 +21,8 @@ def panel():
     root.destroy()
 
 
-def test_session_start_runs_spinner_and_close_stops_it(panel):
-    panel.start_session_log("/tmp/mia_test_logs")
+def test_session_start_runs_spinner_and_close_stops_it(panel, tmp_path):
+    panel.start_session_log(str(tmp_path / "logs"))
     panel.set_status("Working")
     panel.update()
     assert panel._spinning and panel._spin_job is not None

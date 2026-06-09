@@ -237,12 +237,15 @@ def copy_tree_verified(
         dp = os.path.join(dest, rel)
         if os.path.exists(dp) and _matches(sp, dp, thorough):
             return ("skip", rel, 0, None)
-        # Create the parent lazily (no upfront pre-create). exist_ok swallows
-        # the benign race between pool threads writing into the same folder.
+        # Create the parent lazily (no upfront pre-create). exist_ok already
+        # swallows the benign race between pool threads writing into the same
+        # folder; a surviving OSError is real (e.g. a path component is a file,
+        # or the drive is full/read-only) — count it as this file's failure so
+        # one bad path doesn't abort the whole delivery.
         try:
             os.makedirs(os.path.dirname(dp), exist_ok=True)
-        except FileExistsError:
-            pass
+        except OSError as e:
+            return ("fail", rel, 0, f"could not create folder: {e}")
         ok, note = copy_with_retry(sp, dp, cancel=cancel)
         verified = ok and _matches(sp, dp, thorough)
         if ok and not verified:                 # one retry on a bad write
