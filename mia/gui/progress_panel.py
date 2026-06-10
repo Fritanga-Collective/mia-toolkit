@@ -243,11 +243,16 @@ class ProgressLogPanel(ttk.Frame):
 
     # ----- Session log file ----------------------------------------------
 
-    def start_session_log(self, log_dir: str) -> None:
+    def start_session_log(self, log_dir: str,
+                          busy_label: Optional[str] = None) -> None:
         # Animate the "working" spinner for the whole session so the user knows
         # to wait (covers rip, import, inventory, build, delivery — they all
-        # bracket their work with start/close_session_log).
+        # bracket their work with start/close_session_log). The busy label sits
+        # beside the spinner so it reads e.g. "⠹  Copy in progress…" rather than
+        # the idle "Ready.".
         self._start_spinner()
+        if busy_label:
+            self.set_status(busy_label)
         stamp = time.strftime("%Y%m%d-%H%M%S")
         name = f"mia_session_{stamp}.log"
         for candidate in (log_dir, tempfile.gettempdir()):
@@ -260,8 +265,10 @@ class ProgressLogPanel(ttk.Frame):
             except OSError:
                 continue
 
-    def close_session_log(self) -> None:
+    def close_session_log(self, done_label: Optional[str] = None) -> None:
         self._stop_spinner()
+        if done_label:
+            self.set_status(done_label)   # e.g. "Copy complete." (spinner gone)
         if self._logfile is not None:
             try:
                 self._logfile.close()

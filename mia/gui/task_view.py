@@ -85,12 +85,16 @@ class TaskView(ttk.Frame):
     # ----- Running a job --------------------------------------------------
 
     def start_job(self, work: jobs.Work,
-                  on_finish: Callable[[str, Any], None], log_dir: str) -> None:
-        self.panel.start_session_log(log_dir)
+                  on_finish: Callable[[str, Any], None], log_dir: str,
+                  busy_label: Optional[str] = None,
+                  done_label: Optional[str] = None) -> None:
+        self.panel.start_session_log(log_dir,
+                                     busy_label=busy_label or _("Working…"))
         self._set_running(True)
         self.panel.set_indeterminate(False)
 
         def done(status: str, payload: Any) -> None:
+            final = None
             if status == "error":
                 self.log_plain(humanize_exception(payload), tag="fail")
                 self.log_technical(exception_detail(payload))
@@ -98,9 +102,11 @@ class TaskView(ttk.Frame):
             elif status == "cancelled":
                 self.set_status(_("Stopped."))
                 self.log_plain(_("Stopped by you."))
+            else:
+                final = done_label or _("Done.")
             self.panel.set_indeterminate(False)
             self._set_running(False)
-            self.panel.close_session_log()
+            self.panel.close_session_log(done_label=final)
             on_finish(status, payload)
 
         self._cancel = jobs.run_job(self.app.root, work, self.panel.on_event,

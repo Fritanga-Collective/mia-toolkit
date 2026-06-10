@@ -61,16 +61,24 @@ class PanelStep(WizardStep):
         self.rowconfigure(row, weight=1)
         self._cancel = None
 
-    def run_job(self, work, on_finish, log_dir: str) -> None:
+    def run_job(self, work, on_finish, log_dir: str, busy_label=None,
+                done_label=None) -> None:
         self.wizard.set_busy(True)
-        self.panel.start_session_log(log_dir)
+        self.panel.start_session_log(log_dir,
+                                     busy_label=busy_label or _("Working…"))
 
         def done(status, payload):
+            final = None
             if status == "error":
                 self.panel.log_plain(humanize_exception(payload), tag="fail")
                 self.panel.log_technical(exception_detail(payload))
+                self.panel.set_status(_("Stopped on an error."))
+            elif status == "cancelled":
+                self.panel.set_status(_("Stopped."))
+            else:
+                final = done_label or _("Done.")
             self.panel.set_indeterminate(False)
-            self.panel.close_session_log()
+            self.panel.close_session_log(done_label=final)
             self.wizard.set_busy(False)
             on_finish(status, payload)
 
@@ -574,7 +582,9 @@ class ArchiveStep(PanelStep):
             return dicomdir.build_fileset(self.project.raw_discs_dir, out,
                                           progress=emit, cancel=cancel)
 
-        self.run_job(work, self._build_done, self.project.root)
+        self.run_job(work, self._build_done, self.project.root,
+                     busy_label=_("Building the archive…"),
+                     done_label=_("Archive built."))
 
     def _stage_documents(self, emit) -> None:
         """Encapsulate embed-marked PDFs into raw_discs/_documents so the
@@ -691,7 +701,9 @@ class ArchiveStep(PanelStep):
                 result.failures.append(("README.txt / DELIVERY-LOG.txt", str(e)))
             return result, dest
 
-        self.run_job(work, self._deliver_done, self.project.root)
+        self.run_job(work, self._deliver_done, self.project.root,
+                     busy_label=_("Copy in progress…"),
+                     done_label=_("Copy complete."))
 
     def _deliver_done(self, status, payload) -> None:
         if status != "done":
@@ -703,6 +715,8 @@ class ArchiveStep(PanelStep):
             self.info.configure(text=_(
                 "✓ Copied to the USB and verified. Click Next to finish."))
         else:
+            # Override the generic "Copy complete." status — it wasn't clean.
+            self.panel.set_status(_("Copied with problems."))
             self.info.configure(text=_(
                 "Copied with {f} problem file(s) — see technical details.")
                 .format(f=result.failed))
