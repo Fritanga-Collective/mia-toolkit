@@ -94,8 +94,10 @@ class ProgressLogPanel(ttk.Frame):
     # ----- Event handling -------------------------------------------------
 
     def on_event(self, p: Progress) -> None:
-        # Verbose timing notes go straight to the technical pane (the worker
-        # only emits these when Help ▸ Verbose technical log is on).
+        # Verbose timing/per-file notes go straight to the technical pane,
+        # never the plain log. Workers emit these when common.is_verbose()
+        # (on by default — captured here but only shown when the user expands
+        # "technical details").
         if p.kind == "debug":
             self.log_technical(p.note or "")
             return

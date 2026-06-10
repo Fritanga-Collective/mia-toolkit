@@ -233,14 +233,17 @@ def build_fileset(
                             "count": 0,
                         }
                         # Announce each study as it's first encountered so the
-                        # build isn't an opaque file counter (discs are mostly
-                        # one study, so these read cleanly).
+                        # technical log isn't an opaque file counter. kind=debug
+                        # (not info): this English note belongs in the technical
+                        # pane, never the localized plain log — the user-facing
+                        # build progress is the Presenter's "Indexing image
+                        # {done} of {total}" ticks.
                         si = studies_info[study_uid]
                         desc = " ".join(p for p in (si["modality"],
                                                     si["description"]) if p)
-                        emit(progress, Progress(i, total, kind="info",
+                        emit(progress, Progress(i, total, kind="debug",
                              phase="index",
-                             note=f"Indexing study: {desc or 'study'}…"))
+                             note=f"indexing study: {desc or 'study'}"))
                     studies_info[study_uid]["count"] += 1
                 except Exception as e:
                     errors += 1

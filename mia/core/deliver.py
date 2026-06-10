@@ -167,12 +167,15 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
     emit_debug(progress, f"native copy: {' '.join(cmd)}", phase="copy")
     # Capture ditto's verbose stream so we can forward it; otherwise discard
     # both streams. (Only ditto streams useful per-file lines on -v here.)
+    # Pass text/errors only when capturing — `errors` implicitly enables text
+    # mode, which is meaningless (and confusing) for the DEVNULL path.
     capture = verbose and system == "Darwin"
+    text_kw = dict(text=True, errors="replace") if capture else {}
     try:
         proc = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL,
             stderr=subprocess.PIPE if capture else subprocess.DEVNULL,
-            text=True if capture else None, errors="replace")
+            **text_kw)
     except OSError:
         return False
 

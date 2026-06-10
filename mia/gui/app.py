@@ -92,9 +92,13 @@ class App:
         """Confirm before quitting, and stop any running work safely first.
 
         Bound to the window close button, Cmd-Q / Apple-menu Quit, and the
-        non-aqua File ▸ Exit. Copies and rips are resume-safe (daemon worker
-        threads, verified/restartable transfers), so an interrupted job is
-        stopped at a safe point and picks up cleanly on the next run."""
+        non-aqua File ▸ Exit. We signal the running work to cancel, then quit.
+        Workers run on *daemon* threads, so the process can exit before a worker
+        reaches its next between-files cancel check — the in-flight file may be
+        cut mid-write. That's intentionally fine: every copy/rip is resume-safe
+        and verified (size, plus a SHA-256 sample), so the next run recopies
+        anything left partial and nothing is corrupted. We don't block quit
+        waiting for the worker (a multi-minute copy must not wedge the close)."""
         current = self._current
         is_busy = getattr(current, "is_busy", None)
         busy = callable(is_busy) and is_busy()
@@ -115,8 +119,9 @@ class App:
 
     @staticmethod
     def _stop_current(view: tk.Widget) -> None:
-        """Best-effort: signal the active view to stop its work at a safe point
-        (sets cancel tokens, stops the rip poll loop) before we tear down."""
+        """Best-effort: signal the active view to cancel its work (sets cancel
+        tokens, stops the rip poll loop) before we tear down. Daemon workers may
+        not observe it before the process exits — resume-safety covers that."""
         for name in ("stop", "on_leave"):
             fn = getattr(view, name, None)
             if callable(fn):
