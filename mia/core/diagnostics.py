@@ -21,6 +21,21 @@ from typing import Dict, List, Optional, Tuple
 
 _HOME = os.path.expanduser("~")
 
+# Process-global "redact the displayed logs" switch, set by the --anonymize CLI
+# flag. When on, the GUI runs each log line through scrub() before showing or
+# writing it, so the technical pane, plain log, and session file are safe to
+# show on a screencast while still reading realistically. Off by default.
+_REDACT = False
+
+
+def set_redact(on: bool) -> None:
+    global _REDACT
+    _REDACT = bool(on)
+
+
+def redacting() -> bool:
+    return _REDACT
+
 # Path segments that are safe to keep — project/DICOM structure + code/runtime
 # anchors (so tracebacks stay readable). Patient data never matches these;
 # anything else in a path is redacted to <x>.

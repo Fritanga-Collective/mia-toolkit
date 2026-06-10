@@ -88,3 +88,21 @@ def test_build_report_is_anonymized_end_to_end():
 def test_environment_has_core_fields():
     env = dx.environment()
     assert set(env) >= {"app_version", "frozen", "os", "arch", "python"}
+
+
+def test_redact_toggle():
+    assert dx.redacting() is False
+    dx.set_redact(True)
+    try:
+        assert dx.redacting() is True
+    finally:
+        dx.set_redact(False)
+    assert dx.redacting() is False
+
+
+def test_build_report_caps_log_for_email_body():
+    log = [f"10:00:{i:02d}  step {i}" for i in range(10)]
+    report = dx.build_report("", log, max_log_lines=2)
+    assert "trimmed" in report                 # cap marker present
+    assert "step 9" in report                  # keeps the tail
+    assert "step 0" not in report              # drops the head

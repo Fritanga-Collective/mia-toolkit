@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 13:41-0600\n"
+"POT-Creation-Date: 2026-06-10 17:53-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -33,7 +33,7 @@ msgstr "வெளிப்படைத்தன்மை"
 msgid "Read our blog"
 msgstr "எங்கள் வலைப்பதிவைப் படிக்கவும்"
 
-#: mia/gui/menubar.py:43 mia/gui/menubar.py:116 mia/gui/menubar.py:185
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:101 mia/gui/menubar.py:170
 msgid "About MIA Toolkit"
 msgstr "MIA Toolkit பற்றி"
 
@@ -42,7 +42,7 @@ msgid "Made with ♥ by Fritanga"
 msgstr "Fritanga அன்புடன் ♥ உருவாக்கியது"
 
 #: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
-#: mia/gui/menubar.py:118 mia/gui/menubar.py:183
+#: mia/gui/menubar.py:103 mia/gui/menubar.py:168
 msgid "Check for Updates…"
 msgstr "புதுப்பிப்புகளைச் சரிபார்…"
 
@@ -66,75 +66,75 @@ msgstr ""
 msgid "You're on the latest version ({v})."
 msgstr "நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள் ({v})."
 
-#: mia/gui/menubar.py:125
+#: mia/gui/menubar.py:110
 msgid "Open Project Folder"
 msgstr "திட்டக் கோப்புறையைத் திற"
 
-#: mia/gui/menubar.py:129
+#: mia/gui/menubar.py:114
 msgid "Exit"
 msgstr "வெளியேறு"
 
-#: mia/gui/menubar.py:130
+#: mia/gui/menubar.py:115
 msgid "File"
 msgstr "கோப்பு"
 
-#: mia/gui/menubar.py:134
+#: mia/gui/menubar.py:119
 msgid "Cut"
 msgstr "வெட்டு"
 
-#: mia/gui/menubar.py:134 mia/gui/report.py:155
+#: mia/gui/menubar.py:119 mia/gui/report.py:162
 msgid "Copy"
 msgstr "நகலெடு"
 
-#: mia/gui/menubar.py:135
+#: mia/gui/menubar.py:120
 msgid "Paste"
 msgstr "ஒட்டு"
 
-#: mia/gui/menubar.py:139
+#: mia/gui/menubar.py:124
 msgid "Select All"
 msgstr "அனைத்தையும் தேர்ந்தெடு"
 
-#: mia/gui/menubar.py:141
+#: mia/gui/menubar.py:126
 msgid "Edit"
 msgstr "திருத்து"
 
-#: mia/gui/menubar.py:146
+#: mia/gui/menubar.py:131
 msgid "Home"
 msgstr "முகப்பு"
 
-#: mia/gui/menubar.py:147 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "வழிகாட்டப்பட்ட அமைப்பு"
 
-#: mia/gui/menubar.py:148 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:133 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
 
-#: mia/gui/menubar.py:149 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:134 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "பட்டியலை உருவாக்கு"
 
-#: mia/gui/menubar.py:150 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:135 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "மருத்துவருக்கான காப்பகத்தை உருவாக்கு"
 
-#: mia/gui/menubar.py:164
+#: mia/gui/menubar.py:149
 msgid "Language"
 msgstr "மொழி"
 
-#: mia/gui/menubar.py:165
+#: mia/gui/menubar.py:150
 msgid "Go"
 msgstr "செல்"
 
-#: mia/gui/menubar.py:170
+#: mia/gui/menubar.py:155
 msgid "Window"
 msgstr "சாளரம்"
 
-#: mia/gui/menubar.py:179 mia/gui/progress_panel.py:95
+#: mia/gui/menubar.py:164 mia/gui/progress_panel.py:96
 msgid "Report a problem…"
 msgstr "சிக்கலைப் புகாரளி…"
 
-#: mia/gui/menubar.py:187
+#: mia/gui/menubar.py:172
 msgid "Help"
 msgstr "உதவி"
 
@@ -270,67 +270,67 @@ msgstr "முடிந்தது."
 msgid "Choose…"
 msgstr "தேர்ந்தெடு…"
 
-#: mia/gui/progress_panel.py:40 mia/gui/progress_panel.py:50
+#: mia/gui/progress_panel.py:41 mia/gui/progress_panel.py:51
 msgid "Ready."
 msgstr "தயார்."
 
-#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:306
+#: mia/gui/progress_panel.py:73 mia/gui/progress_panel.py:311
 msgid "▸ Show technical details"
 msgstr "▸ தொழில்நுட்ப விவரங்களைக் காட்டு"
 
-#: mia/gui/progress_panel.py:89
+#: mia/gui/progress_panel.py:90
 msgid "Save log…"
 msgstr "பதிவைச் சேமி…"
 
-#: mia/gui/progress_panel.py:91
+#: mia/gui/progress_panel.py:92
 msgid "Open log folder"
 msgstr "பதிவுக் கோப்புறையைத் திற"
 
-#: mia/gui/progress_panel.py:113
+#: mia/gui/progress_panel.py:114
 msgid "Writing the archive… this can take several minutes."
 msgstr "காப்பகம் எழுதப்படுகிறது… இதற்குச் சில நிமிடங்கள் ஆகலாம்."
 
-#: mia/gui/progress_panel.py:114
+#: mia/gui/progress_panel.py:115
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr ""
 "இப்போது காப்பகம் எழுதப்படுகிறது. இதற்குச் சில நிமிடங்கள் ஆகலாம் — தயவுசெய்து"
 " காத்திருக்கவும்…"
 
-#: mia/gui/progress_panel.py:145
+#: mia/gui/progress_panel.py:146
 #, python-brace-format
 msgid "Copying {n} files… ({m:.0f}m elapsed)"
 msgstr "{n} கோப்புகள் நகலெடுக்கப்படுகிறது… ({m:.0f} நிமி கடந்தது)"
 
-#: mia/gui/progress_panel.py:147
+#: mia/gui/progress_panel.py:148
 #, python-brace-format
 msgid "Copying {n} files…"
 msgstr "{n} கோப்புகள் நகலெடுக்கப்படுகிறது…"
 
-#: mia/gui/progress_panel.py:219
+#: mia/gui/progress_panel.py:220
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "கோப்புகள் {done}/{total}"
 
-#: mia/gui/progress_panel.py:222
+#: mia/gui/progress_panel.py:223
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "கழிந்த நேரம் {t}"
 
-#: mia/gui/progress_panel.py:224
+#: mia/gui/progress_panel.py:225
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "மீதி நேரம் {t}"
 
-#: mia/gui/progress_panel.py:226
+#: mia/gui/progress_panel.py:227
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/வி"
 
-#: mia/gui/progress_panel.py:297
+#: mia/gui/progress_panel.py:302
 msgid "▾ Hide technical details"
 msgstr "▾ தொழில்நுட்ப விவரங்களை மறை"
 
-#: mia/gui/progress_panel.py:310
+#: mia/gui/progress_panel.py:315
 msgid "Save technical log"
 msgstr "தொழில்நுட்பப் பதிவைச் சேமி"
 
@@ -426,20 +426,28 @@ msgstr ""
 msgid "Something went wrong. See the technical details below."
 msgstr "ஏதோ தவறு நடந்தது. கீழே உள்ள தொழில்நுட்ப விவரங்களைப் பார்க்கவும்."
 
-#: mia/gui/app.py:21 mia/gui/app.py:54 mia/gui/app.py:87
+#: mia/gui/app.py:34 mia/gui/app.py:113
+msgid "Feedback"
+msgstr "கருத்து"
+
+#: mia/gui/app.py:63 mia/gui/app.py:119 mia/gui/app.py:179
 #: mia/gui/launcher.py:31
 msgid "MIA Toolkit"
 msgstr "MIA Toolkit"
 
-#: mia/gui/app.py:55
+#: mia/gui/app.py:64
 msgid "A task is still running — stop it or let it finish first."
 msgstr "ஒரு பணி இன்னும் இயங்குகிறது — அதை நிறுத்துங்கள் அல்லது முடியட்டும்."
 
-#: mia/gui/app.py:107 mia/gui/app.py:113
+#: mia/gui/app.py:120
+msgid "anonymized logs"
+msgstr "அநாமதேய பதிவுகள்"
+
+#: mia/gui/app.py:139 mia/gui/app.py:145
 msgid "Quit MIA Toolkit?"
 msgstr "MIA Toolkit-ஐ விட்டு வெளியேறவா?"
 
-#: mia/gui/app.py:108
+#: mia/gui/app.py:140
 msgid ""
 "Something is still running. If you quit now it will stop safely — you can resume it later.\n"
 "\n"
@@ -646,7 +654,7 @@ msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ {n} ஆய்வுகள் கிடைத்தன. விரிதாள் திறக்கப்படுகிறது…"
 
 #: mia/gui/report.py:46 mia/gui/report.py:101 mia/gui/report.py:111
-#: mia/gui/report.py:121 mia/gui/report.py:141
+#: mia/gui/report.py:121 mia/gui/report.py:148
 msgid "Report a problem"
 msgstr "சிக்கலைப் புகாரளி"
 
@@ -687,32 +695,30 @@ msgstr "அறிக்கையைச் சேமி"
 msgid "Saved."
 msgstr "சேமிக்கப்பட்டது."
 
-#: mia/gui/report.py:132
-msgid "MIA Toolkit problem report"
-msgstr "MIA Toolkit சிக்கல் அறிக்கை"
-
 #: mia/gui/report.py:133
 #, python-brace-format
 msgid ""
-"Please attach the report file or paste it below (it's also on your clipboard).\n"
 "\n"
-"Report saved at:\n"
-"{p}\n"
 "\n"
-"---\n"
+"(Full report saved at {p} and copied to your clipboard.)"
 msgstr ""
-"அறிக்கைக் கோப்பை இணைக்கவும் அல்லது கீழே ஒட்டவும் (இது உங்கள் கிளிப்போர்டிலும் உள்ளது).\n"
 "\n"
-"அறிக்கை இங்கே சேமிக்கப்பட்டது:\n"
-"{p}\n"
 "\n"
-"---\n"
+"(முழு அறிக்கை {p} இல் சேமிக்கப்பட்டு உங்கள் கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது.)"
 
-#: mia/gui/report.py:135 mia/gui/report.py:144
+#: mia/gui/report.py:134 mia/gui/report.py:151
 msgid "(not saved)"
 msgstr "(சேமிக்கப்படவில்லை)"
 
+#: mia/gui/report.py:138
+msgid "MIA Toolkit problem report"
+msgstr "MIA Toolkit சிக்கல் அறிக்கை"
+
 #: mia/gui/report.py:142
+msgid "(no description)"
+msgstr "(விளக்கம் இல்லை)"
+
+#: mia/gui/report.py:149
 #, python-brace-format
 msgid ""
 "Couldn't open your email app. The report is on your clipboard and saved at:\n"
@@ -725,15 +731,15 @@ msgstr ""
 "\n"
 "அதை {c} க்கு மின்னஞ்சல் செய்யவும்."
 
-#: mia/gui/report.py:149
+#: mia/gui/report.py:156
 msgid "Close"
 msgstr "மூடு"
 
-#: mia/gui/report.py:151
+#: mia/gui/report.py:158
 msgid "Email it to us"
 msgstr "எங்களுக்கு மின்னஞ்சல் செய்யவும்"
 
-#: mia/gui/report.py:153
+#: mia/gui/report.py:160
 msgid "Save…"
 msgstr "சேமி…"
 
@@ -1192,6 +1198,22 @@ msgstr "படி {n} / {m}:  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "முடி"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Please attach the report file or paste it below (it's also on your clipboard).\n"
+#~ "\n"
+#~ "Report saved at:\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
+#~ msgstr ""
+#~ "அறிக்கைக் கோப்பை இணைக்கவும் அல்லது கீழே ஒட்டவும் (இது உங்கள் கிளிப்போர்டிலும் உள்ளது).\n"
+#~ "\n"
+#~ "அறிக்கை இங்கே சேமிக்கப்பட்டது:\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
 
 #~ msgid "Verbose technical log"
 #~ msgstr "விரிவான தொழில்நுட்பப் பதிவு"

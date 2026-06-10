@@ -17,6 +17,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from typing import Optional
 
+from mia.core import diagnostics
 from mia.core.common import Progress, format_duration
 from .i18n import _
 from .messages import Presenter
@@ -227,12 +228,16 @@ class ProgressLogPanel(ttk.Frame):
         self.stats.configure(text="   ".join(parts))
 
     def log_plain(self, line: str, tag: Optional[str] = None) -> None:
+        if diagnostics.redacting():
+            line = diagnostics.scrub(line)
         self.plain_log.configure(state="normal")
         self.plain_log.insert("end", line + "\n", (tag,) if tag else ())
         self.plain_log.see("end")
         self.plain_log.configure(state="disabled")
 
     def log_technical(self, line: str) -> None:
+        if diagnostics.redacting():        # --anonymize: safe for screencasts
+            line = diagnostics.scrub(line)
         stamped = f"{time.strftime('%H:%M:%S')}  {line}"
         self._tech_lines.append(stamped)
         if self._logfile is not None:

@@ -122,18 +122,25 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
                                 _("Saved."), parent=win)
 
     def do_email() -> None:
-        # Save a copy (mailto can't attach), copy to clipboard, open the mail
-        # app prefilled. The user attaches the saved file or pastes.
+        # The full report → saved file + clipboard (no client length limit).
+        # The email body carries the report itself (mailto can't attach a file),
+        # with its log section capped so any mail client accepts it.
         tmp = os.path.join(tempfile.gettempdir(),
                            f"mia-report-{time.strftime('%Y%m%d-%H%M%S')}.txt")
         saved = save_to(tmp)
         win.clipboard_clear()
         win.clipboard_append(state["report"])
+        pointer = _("\n\n(Full report saved at {p} and copied to your "
+                    "clipboard.)").format(p=tmp if saved else _("(not saved)"))
+        body = diagnostics.build_report(
+            notes.get("1.0", "end").strip(), log_lines, extra=extra,
+            max_log_lines=60) + pointer
         subject = _("MIA Toolkit problem report")
-        body = _("Please attach the report file or paste it below "
-                 "(it's also on your clipboard).\n\nReport saved at:\n{p}\n\n"
-                 "---\n").format(p=tmp if saved else _("(not saved)"))
         url = f"mailto:{CONTACT}?subject={quote(subject)}&body={quote(body)}"
+        if len(url) > 6000:                      # too long for some mail clients
+            body = (notes.get("1.0", "end").strip()
+                    or _("(no description)")) + pointer
+            url = f"mailto:{CONTACT}?subject={quote(subject)}&body={quote(body)}"
         try:
             webbrowser.open(url)
         except Exception:

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 13:41-0600\n"
+"POT-Creation-Date: 2026-06-10 17:53-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -33,7 +33,7 @@ msgstr "Ketelusan"
 msgid "Read our blog"
 msgstr "Baca blog kami"
 
-#: mia/gui/menubar.py:43 mia/gui/menubar.py:116 mia/gui/menubar.py:185
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:101 mia/gui/menubar.py:170
 msgid "About MIA Toolkit"
 msgstr "Perihal MIA Toolkit"
 
@@ -42,7 +42,7 @@ msgid "Made with ♥ by Fritanga"
 msgstr "Dibuat dengan ♥ oleh Fritanga"
 
 #: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
-#: mia/gui/menubar.py:118 mia/gui/menubar.py:183
+#: mia/gui/menubar.py:103 mia/gui/menubar.py:168
 msgid "Check for Updates…"
 msgstr "Semak Kemas Kini…"
 
@@ -66,75 +66,75 @@ msgstr ""
 msgid "You're on the latest version ({v})."
 msgstr "Anda menggunakan versi terkini ({v})."
 
-#: mia/gui/menubar.py:125
+#: mia/gui/menubar.py:110
 msgid "Open Project Folder"
 msgstr "Buka Folder Projek"
 
-#: mia/gui/menubar.py:129
+#: mia/gui/menubar.py:114
 msgid "Exit"
 msgstr "Keluar"
 
-#: mia/gui/menubar.py:130
+#: mia/gui/menubar.py:115
 msgid "File"
 msgstr "Fail"
 
-#: mia/gui/menubar.py:134
+#: mia/gui/menubar.py:119
 msgid "Cut"
 msgstr "Potong"
 
-#: mia/gui/menubar.py:134 mia/gui/report.py:155
+#: mia/gui/menubar.py:119 mia/gui/report.py:162
 msgid "Copy"
 msgstr "Salin"
 
-#: mia/gui/menubar.py:135
+#: mia/gui/menubar.py:120
 msgid "Paste"
 msgstr "Tampal"
 
-#: mia/gui/menubar.py:139
+#: mia/gui/menubar.py:124
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: mia/gui/menubar.py:141
+#: mia/gui/menubar.py:126
 msgid "Edit"
 msgstr "Sunting"
 
-#: mia/gui/menubar.py:146
+#: mia/gui/menubar.py:131
 msgid "Home"
 msgstr "Laman Utama"
 
-#: mia/gui/menubar.py:147 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "Persediaan Berpandu"
 
-#: mia/gui/menubar.py:148 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:133 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "Tambah Kajian Anda"
 
-#: mia/gui/menubar.py:149 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:134 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "Bina Inventori"
 
-#: mia/gui/menubar.py:150 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:135 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "Bina Arkib untuk Doktor"
 
-#: mia/gui/menubar.py:164
+#: mia/gui/menubar.py:149
 msgid "Language"
 msgstr "Bahasa"
 
-#: mia/gui/menubar.py:165
+#: mia/gui/menubar.py:150
 msgid "Go"
 msgstr "Pergi"
 
-#: mia/gui/menubar.py:170
+#: mia/gui/menubar.py:155
 msgid "Window"
 msgstr "Tetingkap"
 
-#: mia/gui/menubar.py:179 mia/gui/progress_panel.py:95
+#: mia/gui/menubar.py:164 mia/gui/progress_panel.py:96
 msgid "Report a problem…"
 msgstr "Laporkan masalah…"
 
-#: mia/gui/menubar.py:187
+#: mia/gui/menubar.py:172
 msgid "Help"
 msgstr "Bantuan"
 
@@ -269,67 +269,67 @@ msgstr "Selesai."
 msgid "Choose…"
 msgstr "Pilih…"
 
-#: mia/gui/progress_panel.py:40 mia/gui/progress_panel.py:50
+#: mia/gui/progress_panel.py:41 mia/gui/progress_panel.py:51
 msgid "Ready."
 msgstr "Sedia."
 
-#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:306
+#: mia/gui/progress_panel.py:73 mia/gui/progress_panel.py:311
 msgid "▸ Show technical details"
 msgstr "▸ Tunjukkan butiran teknikal"
 
-#: mia/gui/progress_panel.py:89
+#: mia/gui/progress_panel.py:90
 msgid "Save log…"
 msgstr "Simpan log…"
 
-#: mia/gui/progress_panel.py:91
+#: mia/gui/progress_panel.py:92
 msgid "Open log folder"
 msgstr "Buka folder log"
 
-#: mia/gui/progress_panel.py:113
+#: mia/gui/progress_panel.py:114
 msgid "Writing the archive… this can take several minutes."
 msgstr "Sedang menulis arkib… ini boleh mengambil masa beberapa minit."
 
-#: mia/gui/progress_panel.py:114
+#: mia/gui/progress_panel.py:115
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr ""
 "Sedang menulis arkib sekarang. Ini boleh mengambil masa beberapa minit — "
 "sila tunggu…"
 
-#: mia/gui/progress_panel.py:145
+#: mia/gui/progress_panel.py:146
 #, python-brace-format
 msgid "Copying {n} files… ({m:.0f}m elapsed)"
 msgstr "Menyalin {n} fail… ({m:.0f} min berlalu)"
 
-#: mia/gui/progress_panel.py:147
+#: mia/gui/progress_panel.py:148
 #, python-brace-format
 msgid "Copying {n} files…"
 msgstr "Menyalin {n} fail…"
 
-#: mia/gui/progress_panel.py:219
+#: mia/gui/progress_panel.py:220
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "fail {done}/{total}"
 
-#: mia/gui/progress_panel.py:222
+#: mia/gui/progress_panel.py:223
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "berlalu {t}"
 
-#: mia/gui/progress_panel.py:224
+#: mia/gui/progress_panel.py:225
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "ETA {t}"
 
-#: mia/gui/progress_panel.py:226
+#: mia/gui/progress_panel.py:227
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/s"
 
-#: mia/gui/progress_panel.py:297
+#: mia/gui/progress_panel.py:302
 msgid "▾ Hide technical details"
 msgstr "▾ Sembunyikan butiran teknikal"
 
-#: mia/gui/progress_panel.py:310
+#: mia/gui/progress_panel.py:315
 msgid "Save technical log"
 msgstr "Simpan log teknikal"
 
@@ -421,20 +421,28 @@ msgstr "Lokasi itu baca-sahaja. Pilih folder destinasi yang lain."
 msgid "Something went wrong. See the technical details below."
 msgstr "Ada sesuatu yang tidak kena. Lihat butiran teknikal di bawah."
 
-#: mia/gui/app.py:21 mia/gui/app.py:54 mia/gui/app.py:87
+#: mia/gui/app.py:34 mia/gui/app.py:113
+msgid "Feedback"
+msgstr "Maklum balas"
+
+#: mia/gui/app.py:63 mia/gui/app.py:119 mia/gui/app.py:179
 #: mia/gui/launcher.py:31
 msgid "MIA Toolkit"
 msgstr "MIA Toolkit"
 
-#: mia/gui/app.py:55
+#: mia/gui/app.py:64
 msgid "A task is still running — stop it or let it finish first."
 msgstr "Tugasan masih berjalan — hentikan atau tunggu ia selesai."
 
-#: mia/gui/app.py:107 mia/gui/app.py:113
+#: mia/gui/app.py:120
+msgid "anonymized logs"
+msgstr "log tanpa nama"
+
+#: mia/gui/app.py:139 mia/gui/app.py:145
 msgid "Quit MIA Toolkit?"
 msgstr "Keluar dari MIA Toolkit?"
 
-#: mia/gui/app.py:108
+#: mia/gui/app.py:140
 msgid ""
 "Something is still running. If you quit now it will stop safely — you can resume it later.\n"
 "\n"
@@ -636,7 +644,7 @@ msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ Menjumpai {n} kajian. Sedang membuka hamparan…"
 
 #: mia/gui/report.py:46 mia/gui/report.py:101 mia/gui/report.py:111
-#: mia/gui/report.py:121 mia/gui/report.py:141
+#: mia/gui/report.py:121 mia/gui/report.py:148
 msgid "Report a problem"
 msgstr "Laporkan masalah"
 
@@ -677,32 +685,30 @@ msgstr "Simpan laporan"
 msgid "Saved."
 msgstr "Disimpan."
 
-#: mia/gui/report.py:132
-msgid "MIA Toolkit problem report"
-msgstr "Laporan masalah MIA Toolkit"
-
 #: mia/gui/report.py:133
 #, python-brace-format
 msgid ""
-"Please attach the report file or paste it below (it's also on your clipboard).\n"
 "\n"
-"Report saved at:\n"
-"{p}\n"
 "\n"
-"---\n"
+"(Full report saved at {p} and copied to your clipboard.)"
 msgstr ""
-"Sila lampirkan fail laporan atau tampalkannya di bawah (ia juga ada di papan keratan anda).\n"
 "\n"
-"Laporan disimpan di:\n"
-"{p}\n"
 "\n"
-"---\n"
+"(Laporan penuh disimpan di {p} dan disalin ke papan keratan anda.)"
 
-#: mia/gui/report.py:135 mia/gui/report.py:144
+#: mia/gui/report.py:134 mia/gui/report.py:151
 msgid "(not saved)"
 msgstr "(tidak disimpan)"
 
+#: mia/gui/report.py:138
+msgid "MIA Toolkit problem report"
+msgstr "Laporan masalah MIA Toolkit"
+
 #: mia/gui/report.py:142
+msgid "(no description)"
+msgstr "(tiada penerangan)"
+
+#: mia/gui/report.py:149
 #, python-brace-format
 msgid ""
 "Couldn't open your email app. The report is on your clipboard and saved at:\n"
@@ -715,15 +721,15 @@ msgstr ""
 "\n"
 "Sila e-melkannya kepada {c}."
 
-#: mia/gui/report.py:149
+#: mia/gui/report.py:156
 msgid "Close"
 msgstr "Tutup"
 
-#: mia/gui/report.py:151
+#: mia/gui/report.py:158
 msgid "Email it to us"
 msgstr "E-mel kepada kami"
 
-#: mia/gui/report.py:153
+#: mia/gui/report.py:160
 msgid "Save…"
 msgstr "Simpan…"
 
@@ -1169,6 +1175,22 @@ msgstr "Langkah {n} daripada {m}:  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "Selesai"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Please attach the report file or paste it below (it's also on your clipboard).\n"
+#~ "\n"
+#~ "Report saved at:\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
+#~ msgstr ""
+#~ "Sila lampirkan fail laporan atau tampalkannya di bawah (ia juga ada di papan keratan anda).\n"
+#~ "\n"
+#~ "Laporan disimpan di:\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
 
 #~ msgid "Verbose technical log"
 #~ msgstr "Log teknikal terperinci"
