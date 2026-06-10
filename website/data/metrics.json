@@ -29,15 +29,34 @@
    "total": 40,
    "views14": 0,
    "uniques14": 0
+  },
+  {
+   "date": "2026-06-10",
+   "total": 44,
+   "views14": 0,
+   "uniques14": 0
   }
  ],
  "releases": [
+  {
+   "tag": "v0.1.9",
+   "assets": [
+    {
+     "name": "MIA-Toolkit-0.1.9.dmg",
+     "count": 2
+    },
+    {
+     "name": "MIA-Toolkit-Setup-0.1.9.exe",
+     "count": 1
+    }
+   ]
+  },
   {
    "tag": "v0.1.8",
    "assets": [
     {
      "name": "MIA-Toolkit-0.1.8.dmg",
-     "count": 3
+     "count": 4
     },
     {
      "name": "MIA-Toolkit-Setup-0.1.8.exe",
@@ -151,5 +170,5 @@
   }
  ],
  "referrers": [],
- "updated": "2026-06-09"
+ "updated": "2026-06-10"
 }
