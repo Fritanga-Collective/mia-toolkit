@@ -396,6 +396,9 @@ class AddDocumentsStep(WizardStep):
     def _no_embed_label(self) -> str:
         return _("Just include the file")
 
+    def _skip_label(self) -> str:
+        return _("Skip this file")
+
     def _study_refs(self):
         if self._refs is None:
             inv = self.wizard.inventory_result
@@ -469,8 +472,9 @@ class AddDocumentsStep(WizardStep):
         # same date+description label can't collide onto the wrong study.
         is_pdf = path.lower().endswith(".pdf")
         values = [self._no_embed_label()] + [ref.label for ref in refs]
-        combo = ttk.Combobox(self.rows_frame, values=values, state="readonly"
-                             if (is_pdf and refs) else "disabled", width=28)
+        normal_state = "readonly" if (is_pdf and refs) else "disabled"
+        combo = ttk.Combobox(self.rows_frame, values=values, state=normal_state,
+                             width=28)
         default_idx = 0
         if is_pdf and refs and default_study is not None:
             for i, ref in enumerate(refs):
@@ -479,8 +483,24 @@ class AddDocumentsStep(WizardStep):
                     break
         combo.current(default_idx)
         combo.grid(row=r, column=2, sticky="e", padx=(8, 0))
-        self._rows.append({"path": path, "include": include, "combo": combo,
-                           "refs": refs})
+        row = {"path": path, "include": include, "combo": combo, "refs": refs,
+               "values": values, "state": normal_state, "saved_idx": default_idx}
+        self._rows.append(row)
+
+        # Unchecking "skips" the file: grey the dropdown out to a "Skip this
+        # file" label so it's obvious nothing will be added; re-checking
+        # restores the prior target choice.
+        def _toggle(row=row):
+            combo = row["combo"]
+            if row["include"].get():
+                combo.configure(values=row["values"], state=row["state"])
+                combo.current(row["saved_idx"])
+            else:
+                row["saved_idx"] = combo.current()
+                combo.configure(values=[self._skip_label()], state="disabled")
+                combo.current(0)
+        row["toggle"] = _toggle
+        cb.configure(command=_toggle)
 
     def _open_doc(self, path: str) -> None:
         """Open a listed document to preview it; warn if it's gone."""

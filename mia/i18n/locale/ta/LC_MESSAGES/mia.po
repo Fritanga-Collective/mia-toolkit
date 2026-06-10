@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 16:50-0600\n"
+"POT-Creation-Date: 2026-06-09 22:15-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -29,7 +29,7 @@ msgstr "திட்டத்தை ஆதரிக்கவும்"
 msgid "Transparency"
 msgstr "வெளிப்படைத்தன்மை"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:685
+#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:715
 msgid "Read our blog"
 msgstr "எங்கள் வலைப்பதிவைப் படிக்கவும்"
 
@@ -474,8 +474,8 @@ msgstr ""
 msgid "Choose the ZIP file to import"
 msgstr "இறக்குமதி செய்ய ZIP கோப்பைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:439
-#: mia/gui/wizard/steps.py:724
+#: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:442
+#: mia/gui/wizard/steps.py:754
 msgid "All files"
 msgstr "அனைத்துக் கோப்புகள்"
 
@@ -706,7 +706,7 @@ msgstr ""
 msgid "README: {p}"
 msgstr "README: {p}"
 
-#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:591
+#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:616
 msgid "Not enough space"
 msgstr "போதிய இடம் இல்லை"
 
@@ -846,19 +846,23 @@ msgstr "இன்னும் ஆவணங்கள் சேர்க்கப�
 msgid "Just include the file"
 msgstr "கோப்பை மட்டும் சேர்க்கவும்"
 
-#: mia/gui/wizard/steps.py:437 mia/gui/wizard/steps.py:722
+#: mia/gui/wizard/steps.py:400
+msgid "Skip this file"
+msgstr "இந்தக் கோப்பைத் தவிர்"
+
+#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:752
 msgid "Choose reports or documents"
 msgstr "அறிக்கைகள் அல்லது ஆவணங்களைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/wizard/steps.py:438 mia/gui/wizard/steps.py:723
+#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:753
 msgid "Documents"
 msgstr "ஆவணங்கள்"
 
-#: mia/gui/wizard/steps.py:484
+#: mia/gui/wizard/steps.py:509
 msgid "Can't open file"
 msgstr "கோப்பைத் திறக்க முடியவில்லை"
 
-#: mia/gui/wizard/steps.py:485
+#: mia/gui/wizard/steps.py:510
 #, python-brace-format
 msgid ""
 "This file can no longer be found:\n"
@@ -867,31 +871,31 @@ msgstr ""
 "இந்தக் கோப்பு இனி கிடைக்கவில்லை:\n"
 "{p}"
 
-#: mia/gui/wizard/steps.py:510
+#: mia/gui/wizard/steps.py:535
 msgid "Build the archive"
 msgstr "காப்பகத்தை உருவாக்கு"
 
-#: mia/gui/wizard/steps.py:513
+#: mia/gui/wizard/steps.py:538
 msgid "Choose USB & copy"
 msgstr "USB தேர்ந்தெடுத்து நகலெடு"
 
-#: mia/gui/wizard/steps.py:521
+#: mia/gui/wizard/steps.py:546
 msgid "No discs to build from. Go back and rip some discs first."
 msgstr ""
 "உருவாக்க வட்டுகள் எதுவும் இல்லை. பின்செல்ல்லி முதலில் சில வட்டுகளை "
 "நகலெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:527
+#: mia/gui/wizard/steps.py:552
 msgid "Archive already built. Choose a USB drive to copy it to."
 msgstr ""
 "காப்பகம் ஏற்கனவே உருவாக்கப்பட்டது. அதை நகலெடுக்க ஒரு USB இயக்ககத்தைத் "
 "தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:531
+#: mia/gui/wizard/steps.py:556
 msgid "Ready to combine your discs into one archive."
 msgstr "உங்கள் வட்டுகளை ஒரே காப்பகமாக ஒன்றிணைக்கத் தயார்."
 
-#: mia/gui/wizard/steps.py:571
+#: mia/gui/wizard/steps.py:596
 #, python-brace-format
 msgid ""
 "Couldn't embed {name} into the archive — it's still included as a file."
@@ -899,48 +903,48 @@ msgstr ""
 "{name}-ஐ காப்பகத்தில் உட்பொதிக்க முடியவில்லை — அது இன்னும் ஒரு கோப்பாகச் "
 "சேர்க்கப்படுகிறது."
 
-#: mia/gui/wizard/steps.py:580
+#: mia/gui/wizard/steps.py:605
 #, python-brace-format
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr ""
 "காப்பகம் உருவாக்கப்பட்டது: {s} ஆய்வுகள், {n} படங்கள். இப்போது அதை ஒரு USB "
 "இயக்ககத்திற்கு நகலெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:585
+#: mia/gui/wizard/steps.py:610
 msgid "Choose your USB drive"
 msgstr "உங்கள் USB இயக்ககத்தைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/wizard/steps.py:592
+#: mia/gui/wizard/steps.py:617
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr "அந்த இயக்ககத்தில் காப்பகத்திற்கு இடம் இல்லை (சுமார் {n} தேவை)."
 
-#: mia/gui/wizard/steps.py:640
+#: mia/gui/wizard/steps.py:670
 msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr ""
 "✓ USB-க்கு நகலெடுத்துச் சரிபார்க்கப்பட்டது. முடிக்க அடுத்து என்பதை "
 "அழுத்தவும்."
 
-#: mia/gui/wizard/steps.py:643
+#: mia/gui/wizard/steps.py:673
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr ""
 "{f} சிக்கல் கோப்பு(களு)டன் நகலெடுக்கப்பட்டது — தொழில்நுட்ப விவரங்களைப் "
 "பார்க்கவும்."
 
-#: mia/gui/wizard/steps.py:655
+#: mia/gui/wizard/steps.py:685
 msgid "Show the files on the USB"
 msgstr "USB-இல் உள்ள கோப்புகளைக் காட்டு"
 
-#: mia/gui/wizard/steps.py:658
+#: mia/gui/wizard/steps.py:688
 msgid "Open the inventory"
 msgstr "பட்டியலைத் திற"
 
-#: mia/gui/wizard/steps.py:662 mia/gui/wizard/steps.py:737
+#: mia/gui/wizard/steps.py:692 mia/gui/wizard/steps.py:767
 msgid "Add more files to the USB"
 msgstr "USB-க்கு மேலும் கோப்புகளைச் சேர்க்கவும்"
 
-#: mia/gui/wizard/steps.py:666
+#: mia/gui/wizard/steps.py:696
 msgid ""
 "Tip: include a one-page cover note with the patient's name, date of birth, a"
 " short history, and the specific questions you want the radiologist to "
@@ -950,7 +954,7 @@ msgstr ""
 "கதிரியக்க மருத்துவர் பதிலளிக்க வேண்டிய குறிப்பிட்ட கேள்விகள் அடங்கிய ஒரு "
 "பக்க அட்டைக் குறிப்பைச் சேர்க்கவும்."
 
-#: mia/gui/wizard/steps.py:676
+#: mia/gui/wizard/steps.py:706
 msgid ""
 "Was this useful? This tool is free and always will be. If it helped you, you"
 " can buy the dev team a coffee — it keeps the project alive and free for "
@@ -961,11 +965,11 @@ msgstr ""
 "தரலாம் — இது திட்டத்தை இயங்கச் செய்து, பணம் செலுத்த முடியாத குடும்பங்களுக்கு"
 " இலவசமாகவே வைத்திருக்க உதவுகிறது."
 
-#: mia/gui/wizard/steps.py:682
+#: mia/gui/wizard/steps.py:712
 msgid "☕  Buy us a coffee"
 msgstr "☕  எங்களுக்கு ஒரு காபி வாங்கித் தாருங்கள்"
 
-#: mia/gui/wizard/steps.py:692
+#: mia/gui/wizard/steps.py:722
 msgid ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
@@ -973,7 +977,7 @@ msgstr ""
 "கிளினிக் அல்லது மருத்துவமனையில் பயன்படுத்துகிறீர்களா? நிறுவன உரிமங்கள் "
 "நோயாளிகளின் இலவச அணுகலுக்கு நிதியளிக்கின்றன →"
 
-#: mia/gui/wizard/steps.py:707
+#: mia/gui/wizard/steps.py:737
 #, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
@@ -986,21 +990,21 @@ msgstr ""
 "\n"
 "இப்போது அதை உங்கள் மருத்துவரிடம் கொடுக்கலாம்."
 
-#: mia/gui/wizard/steps.py:712
+#: mia/gui/wizard/steps.py:742
 msgid "All done."
 msgstr "அனைத்தும் முடிந்தது."
 
-#: mia/gui/wizard/steps.py:730
+#: mia/gui/wizard/steps.py:760
 #, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "{n} கோப்பு(கள்) USB-க்கு நகலெடுக்கப்பட்டது."
 
-#: mia/gui/wizard/steps.py:732
+#: mia/gui/wizard/steps.py:762
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "{f} கோப்பு(கள்) நகலெடுக்க முடியவில்லை."
 
-#: mia/gui/wizard/steps.py:734
+#: mia/gui/wizard/steps.py:764
 msgid ""
 "To embed reports into the DICOM archive for a PACS, add them before "
 "building."
