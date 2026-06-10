@@ -86,6 +86,23 @@ def _open_project_folder() -> None:
     open_path(project.root)
 
 
+def _report_problem(app) -> None:
+    """Open the anonymized diagnostic-report dialog. Uses the current view's
+    live log if it has one, else the newest session log on disk."""
+    from .project import Project
+    from .report import latest_session_log_lines, open_report_dialog
+    view = getattr(app, "_current", None)
+    panel = getattr(view, "panel", None) or getattr(
+        getattr(view, "current", None), "panel", None)
+    lines = list(getattr(panel, "_tech_lines", []) or [])
+    if not lines:
+        try:
+            lines = latest_session_log_lines(Project().root)
+        except Exception:
+            lines = []
+    open_report_dialog(app.root, lines)
+
+
 def build_menubar(app) -> tk.Menu:
     """Build (or rebuild) the menu bar for the current UI language."""
     root = app.root
@@ -158,6 +175,9 @@ def build_menubar(app) -> tk.Menu:
     for label, url in LINKS:
         helpmenu.add_command(label=_(label),
                              command=lambda u=url: webbrowser.open(u))
+    helpmenu.add_separator()
+    helpmenu.add_command(label=_("Report a problem…"),
+                         command=lambda: _report_problem(app))
     if not aqua:
         helpmenu.add_separator()
         helpmenu.add_command(label=_("Check for Updates…"),

@@ -90,6 +90,10 @@ class ProgressLogPanel(ttk.Frame):
                    command=self._save_log).pack(side="right")
         ttk.Button(logbtns, text=_("Open log folder"),
                    command=self._open_log).pack(side="right", padx=(0, 8))
+        # Report a problem: an anonymized, user-reviewed diagnostic report
+        # built from this session's technical log (no auto-collection).
+        ttk.Button(logbtns, text=_("Report a problem…"),
+                   command=self._report_problem).pack(side="left")
 
     # ----- Event handling -------------------------------------------------
 
@@ -279,6 +283,10 @@ class ProgressLogPanel(ttk.Frame):
             self._logfile = None
 
     # ----- Internal -------------------------------------------------------
+
+    def _report_problem(self) -> None:
+        from .report import open_report_dialog
+        open_report_dialog(self, list(self._tech_lines))
 
     def _toggle_tech(self) -> None:
         self._tech_visible = not self._tech_visible

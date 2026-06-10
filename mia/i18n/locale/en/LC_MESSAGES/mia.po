@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:57-0600\n"
+"POT-Creation-Date: 2026-06-10 13:41-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -37,7 +37,7 @@ msgstr "Transparency"
 msgid "Read our blog"
 msgstr "Read our blog"
 
-#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:116 mia/gui/menubar.py:185
 msgid "About MIA Toolkit"
 msgstr "About MIA Toolkit"
 
@@ -46,7 +46,7 @@ msgid "Made with ♥ by Fritanga"
 msgstr "Made with ♥ by Fritanga"
 
 #: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
-#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
+#: mia/gui/menubar.py:118 mia/gui/menubar.py:183
 msgid "Check for Updates…"
 msgstr "Check for Updates…"
 
@@ -70,71 +70,75 @@ msgstr ""
 msgid "You're on the latest version ({v})."
 msgstr "You're on the latest version ({v})."
 
-#: mia/gui/menubar.py:108
+#: mia/gui/menubar.py:125
 msgid "Open Project Folder"
 msgstr "Open Project Folder"
 
-#: mia/gui/menubar.py:112
+#: mia/gui/menubar.py:129
 msgid "Exit"
 msgstr "Exit"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:130
 msgid "File"
 msgstr "File"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:134
 msgid "Cut"
 msgstr "Cut"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:134 mia/gui/report.py:155
 msgid "Copy"
 msgstr "Copy"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:135
 msgid "Paste"
 msgstr "Paste"
 
-#: mia/gui/menubar.py:122
+#: mia/gui/menubar.py:139
 msgid "Select All"
 msgstr "Select All"
 
-#: mia/gui/menubar.py:124
+#: mia/gui/menubar.py:141
 msgid "Edit"
 msgstr "Edit"
 
-#: mia/gui/menubar.py:129
+#: mia/gui/menubar.py:146
 msgid "Home"
 msgstr "Home"
 
-#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:147 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "Guided Setup"
 
-#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:148 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "Add Your Studies"
 
-#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:149 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "Build Inventory"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:150 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "Build Archive for Doctor"
 
-#: mia/gui/menubar.py:147
+#: mia/gui/menubar.py:164
 msgid "Language"
 msgstr "Language"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:165
 msgid "Go"
 msgstr "Go"
 
-#: mia/gui/menubar.py:153
+#: mia/gui/menubar.py:170
 msgid "Window"
 msgstr "Window"
 
-#: mia/gui/menubar.py:167
+#: mia/gui/menubar.py:179 mia/gui/progress_panel.py:95
+msgid "Report a problem…"
+msgstr "Report a problem…"
+
+#: mia/gui/menubar.py:187
 msgid "Help"
 msgstr "Help"
 
@@ -268,7 +272,7 @@ msgstr "Choose…"
 msgid "Ready."
 msgstr "Ready."
 
-#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:296
+#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:306
 msgid "▸ Show technical details"
 msgstr "▸ Show technical details"
 
@@ -280,49 +284,49 @@ msgstr "Save log…"
 msgid "Open log folder"
 msgstr "Open log folder"
 
-#: mia/gui/progress_panel.py:107
+#: mia/gui/progress_panel.py:113
 msgid "Writing the archive… this can take several minutes."
 msgstr "Writing the archive… this can take several minutes."
 
-#: mia/gui/progress_panel.py:108
+#: mia/gui/progress_panel.py:114
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr "Writing the archive now. This can take several minutes — please wait…"
 
-#: mia/gui/progress_panel.py:139
+#: mia/gui/progress_panel.py:145
 #, python-brace-format
 msgid "Copying {n} files… ({m:.0f}m elapsed)"
 msgstr "Copying {n} files… ({m:.0f}m elapsed)"
 
-#: mia/gui/progress_panel.py:141
+#: mia/gui/progress_panel.py:147
 #, python-brace-format
 msgid "Copying {n} files…"
 msgstr "Copying {n} files…"
 
-#: mia/gui/progress_panel.py:213
+#: mia/gui/progress_panel.py:219
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "files {done}/{total}"
 
-#: mia/gui/progress_panel.py:216
+#: mia/gui/progress_panel.py:222
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "elapsed {t}"
 
-#: mia/gui/progress_panel.py:218
+#: mia/gui/progress_panel.py:224
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "ETA {t}"
 
-#: mia/gui/progress_panel.py:220
+#: mia/gui/progress_panel.py:226
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/s"
 
-#: mia/gui/progress_panel.py:287
+#: mia/gui/progress_panel.py:297
 msgid "▾ Hide technical details"
 msgstr "▾ Hide technical details"
 
-#: mia/gui/progress_panel.py:300
+#: mia/gui/progress_panel.py:310
 msgid "Save technical log"
 msgstr "Save technical log"
 
@@ -420,11 +424,11 @@ msgstr "MIA Toolkit"
 msgid "A task is still running — stop it or let it finish first."
 msgstr "A task is still running — stop it or let it finish first."
 
-#: mia/gui/app.py:103 mia/gui/app.py:109
+#: mia/gui/app.py:107 mia/gui/app.py:113
 msgid "Quit MIA Toolkit?"
 msgstr "Quit MIA Toolkit?"
 
-#: mia/gui/app.py:104
+#: mia/gui/app.py:108
 msgid ""
 "Something is still running. If you quit now it will stop safely — you can resume it later.\n"
 "\n"
@@ -621,6 +625,97 @@ msgstr "Done — {n} studies."
 #, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ Found {n} studies. Opening the spreadsheet…"
+
+#: mia/gui/report.py:46 mia/gui/report.py:101 mia/gui/report.py:111
+#: mia/gui/report.py:121 mia/gui/report.py:141
+msgid "Report a problem"
+msgstr "Report a problem"
+
+#: mia/gui/report.py:52
+msgid ""
+"Send us a report to help diagnose a problem. It's anonymized — no patient "
+"names, no file contents — and it's sent only when you choose. Review exactly"
+" what will be sent below."
+msgstr ""
+"Send us a report to help diagnose a problem. It's anonymized — no patient "
+"names, no file contents — and it's sent only when you choose. Review exactly"
+" what will be sent below."
+
+#: mia/gui/report.py:57
+msgid "What happened? Steps to reproduce? (optional)"
+msgstr "What happened? Steps to reproduce? (optional)"
+
+#: mia/gui/report.py:62
+msgid "Report preview — this is exactly what will be sent:"
+msgstr "Report preview — this is exactly what will be sent:"
+
+#: mia/gui/report.py:102
+#, python-brace-format
+msgid "Report copied to the clipboard — paste it into an email to {c}."
+msgstr "Report copied to the clipboard — paste it into an email to {c}."
+
+#: mia/gui/report.py:112
+#, python-brace-format
+msgid "Couldn't save the report: {e}"
+msgstr "Couldn't save the report: {e}"
+
+#: mia/gui/report.py:118
+msgid "Save report"
+msgstr "Save report"
+
+#: mia/gui/report.py:122
+msgid "Saved."
+msgstr "Saved."
+
+#: mia/gui/report.py:132
+msgid "MIA Toolkit problem report"
+msgstr "MIA Toolkit problem report"
+
+#: mia/gui/report.py:133
+#, python-brace-format
+msgid ""
+"Please attach the report file or paste it below (it's also on your clipboard).\n"
+"\n"
+"Report saved at:\n"
+"{p}\n"
+"\n"
+"---\n"
+msgstr ""
+"Please attach the report file or paste it below (it's also on your clipboard).\n"
+"\n"
+"Report saved at:\n"
+"{p}\n"
+"\n"
+"---\n"
+
+#: mia/gui/report.py:135 mia/gui/report.py:144
+msgid "(not saved)"
+msgstr "(not saved)"
+
+#: mia/gui/report.py:142
+#, python-brace-format
+msgid ""
+"Couldn't open your email app. The report is on your clipboard and saved at:\n"
+"{p}\n"
+"\n"
+"Please email it to {c}."
+msgstr ""
+"Couldn't open your email app. The report is on your clipboard and saved at:\n"
+"{p}\n"
+"\n"
+"Please email it to {c}."
+
+#: mia/gui/report.py:149
+msgid "Close"
+msgstr "Close"
+
+#: mia/gui/report.py:151
+msgid "Email it to us"
+msgstr "Email it to us"
+
+#: mia/gui/report.py:153
+msgid "Save…"
+msgstr "Save…"
 
 #: mia/gui/archive_view.py:20
 msgid ""

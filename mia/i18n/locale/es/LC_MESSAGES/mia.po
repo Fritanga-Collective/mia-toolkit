@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:57-0600\n"
+"POT-Creation-Date: 2026-06-10 13:41-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Español (Mexico)\n"
@@ -37,7 +37,7 @@ msgstr "Transparencia"
 msgid "Read our blog"
 msgstr "Lee nuestro blog"
 
-#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:116 mia/gui/menubar.py:185
 msgid "About MIA Toolkit"
 msgstr "Acerca de MIA Toolkit"
 
@@ -46,7 +46,7 @@ msgid "Made with ♥ by Fritanga"
 msgstr "Hecho con ♥ por Fritanga"
 
 #: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
-#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
+#: mia/gui/menubar.py:118 mia/gui/menubar.py:183
 msgid "Check for Updates…"
 msgstr "Buscar actualizaciones…"
 
@@ -70,71 +70,75 @@ msgstr ""
 msgid "You're on the latest version ({v})."
 msgstr "Tienes la versión más reciente ({v})."
 
-#: mia/gui/menubar.py:108
+#: mia/gui/menubar.py:125
 msgid "Open Project Folder"
 msgstr "Abrir carpeta del proyecto"
 
-#: mia/gui/menubar.py:112
+#: mia/gui/menubar.py:129
 msgid "Exit"
 msgstr "Salir"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:130
 msgid "File"
 msgstr "Archivo"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:134
 msgid "Cut"
 msgstr "Cortar"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:134 mia/gui/report.py:155
 msgid "Copy"
 msgstr "Copiar"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:135
 msgid "Paste"
 msgstr "Pegar"
 
-#: mia/gui/menubar.py:122
+#: mia/gui/menubar.py:139
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: mia/gui/menubar.py:124
+#: mia/gui/menubar.py:141
 msgid "Edit"
 msgstr "Edición"
 
-#: mia/gui/menubar.py:129
+#: mia/gui/menubar.py:146
 msgid "Home"
 msgstr "Inicio"
 
-#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:147 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "Configuración guiada"
 
-#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:148 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "Agregar tus estudios"
 
-#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:149 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "Crear inventario"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:150 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "Crear archivo para el médico"
 
-#: mia/gui/menubar.py:147
+#: mia/gui/menubar.py:164
 msgid "Language"
 msgstr "Idioma"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:165
 msgid "Go"
 msgstr "Ir"
 
-#: mia/gui/menubar.py:153
+#: mia/gui/menubar.py:170
 msgid "Window"
 msgstr "Ventana"
 
-#: mia/gui/menubar.py:167
+#: mia/gui/menubar.py:179 mia/gui/progress_panel.py:95
+msgid "Report a problem…"
+msgstr "Reportar un problema…"
+
+#: mia/gui/menubar.py:187
 msgid "Help"
 msgstr "Ayuda"
 
@@ -271,7 +275,7 @@ msgstr "Elegir…"
 msgid "Ready."
 msgstr "Listo."
 
-#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:296
+#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:306
 msgid "▸ Show technical details"
 msgstr "▸ Mostrar detalles técnicos"
 
@@ -283,51 +287,51 @@ msgstr "Guardar registro…"
 msgid "Open log folder"
 msgstr "Abrir carpeta del registro"
 
-#: mia/gui/progress_panel.py:107
+#: mia/gui/progress_panel.py:113
 msgid "Writing the archive… this can take several minutes."
 msgstr "Escribiendo el archivo… esto puede tardar varios minutos."
 
-#: mia/gui/progress_panel.py:108
+#: mia/gui/progress_panel.py:114
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr ""
 "Escribiendo el archivo ahora. Esto puede tardar varios minutos — por favor "
 "espera…"
 
-#: mia/gui/progress_panel.py:139
+#: mia/gui/progress_panel.py:145
 #, python-brace-format
 msgid "Copying {n} files… ({m:.0f}m elapsed)"
 msgstr "Copiando {n} archivos… ({m:.0f} min transcurridos)"
 
-#: mia/gui/progress_panel.py:141
+#: mia/gui/progress_panel.py:147
 #, python-brace-format
 msgid "Copying {n} files…"
 msgstr "Copiando {n} archivos…"
 
-#: mia/gui/progress_panel.py:213
+#: mia/gui/progress_panel.py:219
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "archivos {done}/{total}"
 
-#: mia/gui/progress_panel.py:216
+#: mia/gui/progress_panel.py:222
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "transcurrido {t}"
 
-#: mia/gui/progress_panel.py:218
+#: mia/gui/progress_panel.py:224
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "faltan {t}"
 
-#: mia/gui/progress_panel.py:220
+#: mia/gui/progress_panel.py:226
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/s"
 
-#: mia/gui/progress_panel.py:287
+#: mia/gui/progress_panel.py:297
 msgid "▾ Hide technical details"
 msgstr "▾ Ocultar detalles técnicos"
 
-#: mia/gui/progress_panel.py:300
+#: mia/gui/progress_panel.py:310
 msgid "Save technical log"
 msgstr "Guardar registro técnico"
 
@@ -427,11 +431,11 @@ msgstr "MIA Toolkit"
 msgid "A task is still running — stop it or let it finish first."
 msgstr "Hay una tarea en curso — deténla o espera a que termine."
 
-#: mia/gui/app.py:103 mia/gui/app.py:109
+#: mia/gui/app.py:107 mia/gui/app.py:113
 msgid "Quit MIA Toolkit?"
 msgstr "¿Salir de MIA Toolkit?"
 
-#: mia/gui/app.py:104
+#: mia/gui/app.py:108
 msgid ""
 "Something is still running. If you quit now it will stop safely — you can resume it later.\n"
 "\n"
@@ -630,6 +634,97 @@ msgstr "Listo — {n} estudios."
 #, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ Se encontraron {n} estudios. Abriendo la hoja de cálculo…"
+
+#: mia/gui/report.py:46 mia/gui/report.py:101 mia/gui/report.py:111
+#: mia/gui/report.py:121 mia/gui/report.py:141
+msgid "Report a problem"
+msgstr "Reportar un problema"
+
+#: mia/gui/report.py:52
+msgid ""
+"Send us a report to help diagnose a problem. It's anonymized — no patient "
+"names, no file contents — and it's sent only when you choose. Review exactly"
+" what will be sent below."
+msgstr ""
+"Envíanos un reporte para ayudarnos a diagnosticar un problema. Es anónimo "
+"—sin nombres de pacientes ni contenido de archivos— y se envía solo si tú lo"
+" decides. Revisa abajo exactamente lo que se enviará."
+
+#: mia/gui/report.py:57
+msgid "What happened? Steps to reproduce? (optional)"
+msgstr "¿Qué pasó? ¿Pasos para reproducirlo? (opcional)"
+
+#: mia/gui/report.py:62
+msgid "Report preview — this is exactly what will be sent:"
+msgstr "Vista previa del reporte — esto es exactamente lo que se enviará:"
+
+#: mia/gui/report.py:102
+#, python-brace-format
+msgid "Report copied to the clipboard — paste it into an email to {c}."
+msgstr "Reporte copiado al portapapeles — pégalo en un correo a {c}."
+
+#: mia/gui/report.py:112
+#, python-brace-format
+msgid "Couldn't save the report: {e}"
+msgstr "No se pudo guardar el reporte: {e}"
+
+#: mia/gui/report.py:118
+msgid "Save report"
+msgstr "Guardar reporte"
+
+#: mia/gui/report.py:122
+msgid "Saved."
+msgstr "Guardado."
+
+#: mia/gui/report.py:132
+msgid "MIA Toolkit problem report"
+msgstr "Reporte de problema de MIA Toolkit"
+
+#: mia/gui/report.py:133
+#, python-brace-format
+msgid ""
+"Please attach the report file or paste it below (it's also on your clipboard).\n"
+"\n"
+"Report saved at:\n"
+"{p}\n"
+"\n"
+"---\n"
+msgstr ""
+"Adjunta el archivo del reporte o pégalo abajo (también está en tu portapapeles).\n"
+"\n"
+"Reporte guardado en:\n"
+"{p}\n"
+"\n"
+"---\n"
+
+#: mia/gui/report.py:135 mia/gui/report.py:144
+msgid "(not saved)"
+msgstr "(no guardado)"
+
+#: mia/gui/report.py:142
+#, python-brace-format
+msgid ""
+"Couldn't open your email app. The report is on your clipboard and saved at:\n"
+"{p}\n"
+"\n"
+"Please email it to {c}."
+msgstr ""
+"No se pudo abrir tu app de correo. El reporte está en tu portapapeles y guardado en:\n"
+"{p}\n"
+"\n"
+"Envíalo por correo a {c}."
+
+#: mia/gui/report.py:149
+msgid "Close"
+msgstr "Cerrar"
+
+#: mia/gui/report.py:151
+msgid "Email it to us"
+msgstr "Enviárnoslo por correo"
+
+#: mia/gui/report.py:153
+msgid "Save…"
+msgstr "Guardar…"
 
 #: mia/gui/archive_view.py:20
 msgid ""
