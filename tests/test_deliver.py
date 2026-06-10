@@ -232,6 +232,64 @@ def test_verbose_gates_debug_emits(tmp_path):
         common.set_verbose(False)
 
 
+def test_verify_sample_detects_corruption_in_sampled_files(tmp_path):
+    # A same-size content corruption is invisible to size-only verification but
+    # caught when the file is in the SHA-256 sample. verify_sample >= total puts
+    # every file in the sample, so the corrupted one is detected and recopied.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+    deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+
+    target = dst / "sub" / "b.bin"
+    size = target.stat().st_size
+    with open(target, "wb") as f:
+        f.write(b"\xff" * size)                 # same size, wrong bytes
+
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False,
+                                     verify_sample=999)
+    assert res.files_copied == 1                 # the corrupt file was repaired
+    assert res.content_verified == 3             # all 3 files sampled
+    with open(src / "sub" / "b.bin", "rb") as a, open(target, "rb") as b:
+        assert a.read() == b.read()
+
+
+def test_verify_sample_zero_is_size_only(tmp_path):
+    # The default (no sample) can't see a same-size corruption — proving the
+    # sample is what adds the content check, not the size pass.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+    deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+    target = dst / "sub" / "b.bin"
+    size = target.stat().st_size                 # read size BEFORE truncating
+    with open(target, "wb") as f:
+        f.write(b"\xff" * size)                  # same size, wrong bytes
+
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+    assert res.files_copied == 0                 # size matched -> not detected
+    assert res.content_verified == 0
+
+
+def test_verify_sample_caps_at_file_count(tmp_path, monkeypatch):
+    # The sample size is min(verify_sample, total); random.sample is asked for a
+    # valid count, and content_verified reports how many were checked.
+    src = tmp_path / "src"
+    _tree(str(src))  # 3 files
+    asked = {}
+    real_sample = deliver.random.sample
+
+    def spy(pop, k):
+        asked["k"] = k
+        return real_sample(pop, k)
+
+    monkeypatch.setattr(deliver.random, "sample", spy)
+    res = deliver.copy_tree_verified(str(src), str(tmp_path / "d"),
+                                     prefer_native=False, verify_sample=2)
+    assert asked["k"] == 2
+    assert res.content_verified == 2
+
+
 def test_cancellation(tmp_path):
     src = tmp_path / "src"
     _tree(str(src))

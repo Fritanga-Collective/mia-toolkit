@@ -22,6 +22,7 @@ from __future__ import annotations
 import hashlib
 import os
 import platform
+import random
 import shutil
 import subprocess
 import threading
@@ -47,6 +48,14 @@ from .ripper import copy_with_retry
 # it doesn't push past the device — so keep it modest.
 _MAX_WORKERS = min(8, (os.cpu_count() or 4))
 _PROGRESS_MIN_INTERVAL = 0.2  # seconds; throttle per-file emits
+
+# How many random files to content-verify (SHA-256) when sampled verification
+# is on. A failing drive corrupts broadly, so a small random sample reliably
+# catches it: P(catch | fraction f corrupt) = 1 - (1-f)**N, so N≈64 gives ~96%
+# detection of any 5%-corruption event for a few seconds of read-back — almost
+# the assurance of hashing everything, at a tiny fraction of the cost. Full
+# per-file hashing stays available via thorough=True.
+DEFAULT_VERIFY_SAMPLE = 64
 
 
 def free_space(path: str) -> int:
@@ -108,6 +117,7 @@ class DeliverResult:
     bytes_copied: int
     elapsed: float
     thorough: bool
+    content_verified: int = 0   # files checked by SHA-256 (all if thorough)
     failures: List[Tuple[str, str]] = field(default_factory=list)
 
     @property
@@ -217,6 +227,7 @@ def copy_tree_verified(
     dest: str,
     *,
     thorough: bool = False,
+    verify_sample: int = 0,
     prefer_native: bool = True,
     progress: Optional[ProgressCallback] = None,
     cancel: Optional[CancelToken] = None,
@@ -225,8 +236,15 @@ def copy_tree_verified(
 
     A native tool (robocopy/ditto/cp) does the bulk copy fast when available;
     then a parallel verify/fill pass guarantees every file is present and
-    size-correct (SHA-256 when ``thorough``), copying anything the native tool
-    missed. With no native tool the parallel pass does the whole copy itself.
+    size-correct, copying anything the native tool missed. With no native tool
+    the parallel pass does the whole copy itself.
+
+    Content (SHA-256) verification has three levels: ``thorough=True`` hashes
+    every file; ``verify_sample=N`` hashes N random files (cheap insurance that
+    catches a broadly-failing drive — see ``DEFAULT_VERIFY_SAMPLE``); neither
+    means size-only. Size verification can't detect a write that returned the
+    right length but the wrong bytes (e.g. a counterfeit/fake-capacity stick),
+    which is what the content sample is for.
     """
     src = os.path.abspath(src)
     dest = os.path.abspath(dest)
@@ -241,6 +259,19 @@ def copy_tree_verified(
     total = len(files)
     start = time.time()
     emit_debug(progress, f"walked {total} files in {start - walk_start:.1f}s")
+
+    # Pick the files to content-verify (SHA-256). thorough = all of them;
+    # otherwise a random sample so a broadly-failing drive is still caught
+    # cheaply. A set for O(1) per-file lookup in the pool.
+    if thorough:
+        sampled = set(files)
+    elif verify_sample > 0 and files:
+        sampled = set(random.sample(files, min(verify_sample, len(files))))
+    else:
+        sampled = set()
+    if sampled and not thorough:
+        emit_debug(progress, f"content-verifying {len(sampled)} of {total} "
+                             "files (random sample)")
 
     # No upfront destination-tree pre-create: on slow USB/exFAT that mkdir storm
     # was minutes of dead time before the first byte moved. The native tool
@@ -268,7 +299,8 @@ def copy_tree_verified(
         """Returns (status, rel, nbytes, note). status in skip/copy/fail."""
         rel = os.path.relpath(sp, src)
         dp = os.path.join(dest, rel)
-        if os.path.exists(dp) and _matches(sp, dp, thorough):
+        deep = sp in sampled            # content-check this file, not just size
+        if os.path.exists(dp) and _matches(sp, dp, deep):
             return ("skip", rel, 0, None)
         # Create the parent lazily (no upfront pre-create). exist_ok already
         # swallows the benign race between pool threads writing into the same
@@ -280,10 +312,10 @@ def copy_tree_verified(
         except OSError as e:
             return ("fail", rel, 0, f"could not create folder: {e}")
         ok, note = copy_with_retry(sp, dp, cancel=cancel)
-        verified = ok and _matches(sp, dp, thorough)
+        verified = ok and _matches(sp, dp, deep)
         if ok and not verified:                 # one retry on a bad write
             ok, note = copy_with_retry(sp, dp, cancel=cancel)
-            verified = ok and _matches(sp, dp, thorough)
+            verified = ok and _matches(sp, dp, deep)
         if verified:
             try:
                 nbytes = os.path.getsize(dp)
@@ -335,5 +367,6 @@ def copy_tree_verified(
     return DeliverResult(
         dest=dest, total_files=total, files_copied=copied,
         files_skipped=skipped, failed=failed, bytes_copied=bytes_copied,
-        elapsed=time.time() - start, thorough=thorough, failures=failures,
+        elapsed=time.time() - start, thorough=thorough,
+        content_verified=len(sampled), failures=failures,
     )
