@@ -451,14 +451,19 @@ class AddDocumentsStep(WizardStep):
         cb.grid(row=r, column=0, sticky="w")
         # Filename is a clickable link — open it to preview the contents before
         # deciding whether to include/embed it. Focusable + Enter/Space for
-        # keyboard access.
-        name = ("📄 " if found else "") + os.path.basename(path)
-        link = ttk.Label(self.rows_frame, text=name, foreground="#0a58ca",
-                         cursor="hand2", font=("", 11, "underline"),
-                         takefocus=True)
+        # keyboard access. The 📄 marker stays a plain (non-link) prefix so only
+        # the filename itself is underlined/clickable — clearer than linking the
+        # emoji too.
+        namebox = ttk.Frame(self.rows_frame)
+        namebox.grid(row=r, column=1, sticky="w")
+        if found:
+            ttk.Label(namebox, text="📄").pack(side="left", padx=(0, 4))
+        link = ttk.Label(namebox, text=os.path.basename(path),
+                         foreground="#0a58ca", cursor="hand2",
+                         font=("", 11, "underline"), takefocus=True)
         for seq in ("<Button-1>", "<Return>", "<space>"):
             link.bind(seq, lambda _e, p=path: self._open_doc(p))
-        link.grid(row=r, column=1, sticky="w")
+        link.pack(side="left")
         # Embed-target dropdown: index 0 = "just include"; index i = refs[i-1].
         # Selection is read back by index (not label) so two studies with the
         # same date+description label can't collide onto the wrong study.
@@ -596,8 +601,13 @@ class ArchiveStep(PanelStep):
         inv = self.project.inventory_path
 
         def work(emit, cancel):
+            # Sample a handful of files for SHA-256 content verification (cheap
+            # insurance against a drive that writes the wrong bytes at the right
+            # size — counterfeit/failing sticks); the rest are size-verified.
             result = deliver.copy_tree_verified(
-                src, os.path.join(dest, "Archive"), progress=emit, cancel=cancel)
+                src, os.path.join(dest, "Archive"),
+                verify_sample=deliver.DEFAULT_VERIFY_SAMPLE,
+                progress=emit, cancel=cancel)
             if os.path.exists(inv):
                 os.makedirs(dest, exist_ok=True)
                 dst_inv = os.path.join(dest, os.path.basename(inv))
