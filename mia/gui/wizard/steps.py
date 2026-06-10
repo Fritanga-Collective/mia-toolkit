@@ -61,16 +61,24 @@ class PanelStep(WizardStep):
         self.rowconfigure(row, weight=1)
         self._cancel = None
 
-    def run_job(self, work, on_finish, log_dir: str) -> None:
+    def run_job(self, work, on_finish, log_dir: str, busy_label=None,
+                done_label=None) -> None:
         self.wizard.set_busy(True)
-        self.panel.start_session_log(log_dir)
+        self.panel.start_session_log(log_dir,
+                                     busy_label=busy_label or _("Working…"))
 
         def done(status, payload):
+            final = None
             if status == "error":
                 self.panel.log_plain(humanize_exception(payload), tag="fail")
                 self.panel.log_technical(exception_detail(payload))
+                self.panel.set_status(_("Stopped on an error."))
+            elif status == "cancelled":
+                self.panel.set_status(_("Stopped."))
+            else:
+                final = done_label or _("Done.")
             self.panel.set_indeterminate(False)
-            self.panel.close_session_log()
+            self.panel.close_session_log(done_label=final)
             self.wizard.set_busy(False)
             on_finish(status, payload)
 
@@ -396,6 +404,9 @@ class AddDocumentsStep(WizardStep):
     def _no_embed_label(self) -> str:
         return _("Just include the file")
 
+    def _skip_label(self) -> str:
+        return _("Skip this file")
+
     def _study_refs(self):
         if self._refs is None:
             inv = self.wizard.inventory_result
@@ -451,21 +462,27 @@ class AddDocumentsStep(WizardStep):
         cb.grid(row=r, column=0, sticky="w")
         # Filename is a clickable link — open it to preview the contents before
         # deciding whether to include/embed it. Focusable + Enter/Space for
-        # keyboard access.
-        name = ("📄 " if found else "") + os.path.basename(path)
-        link = ttk.Label(self.rows_frame, text=name, foreground="#0a58ca",
-                         cursor="hand2", font=("", 11, "underline"),
-                         takefocus=True)
+        # keyboard access. The 📄 marker stays a plain (non-link) prefix so only
+        # the filename itself is underlined/clickable — clearer than linking the
+        # emoji too.
+        namebox = ttk.Frame(self.rows_frame)
+        namebox.grid(row=r, column=1, sticky="w")
+        if found:
+            ttk.Label(namebox, text="📄").pack(side="left", padx=(0, 4))
+        link = ttk.Label(namebox, text=os.path.basename(path),
+                         foreground="#0a58ca", cursor="hand2",
+                         font=("", 11, "underline"), takefocus=True)
         for seq in ("<Button-1>", "<Return>", "<space>"):
             link.bind(seq, lambda _e, p=path: self._open_doc(p))
-        link.grid(row=r, column=1, sticky="w")
+        link.pack(side="left")
         # Embed-target dropdown: index 0 = "just include"; index i = refs[i-1].
         # Selection is read back by index (not label) so two studies with the
         # same date+description label can't collide onto the wrong study.
         is_pdf = path.lower().endswith(".pdf")
         values = [self._no_embed_label()] + [ref.label for ref in refs]
-        combo = ttk.Combobox(self.rows_frame, values=values, state="readonly"
-                             if (is_pdf and refs) else "disabled", width=28)
+        normal_state = "readonly" if (is_pdf and refs) else "disabled"
+        combo = ttk.Combobox(self.rows_frame, values=values, state=normal_state,
+                             width=28)
         default_idx = 0
         if is_pdf and refs and default_study is not None:
             for i, ref in enumerate(refs):
@@ -474,8 +491,24 @@ class AddDocumentsStep(WizardStep):
                     break
         combo.current(default_idx)
         combo.grid(row=r, column=2, sticky="e", padx=(8, 0))
-        self._rows.append({"path": path, "include": include, "combo": combo,
-                           "refs": refs})
+        row = {"path": path, "include": include, "combo": combo, "refs": refs,
+               "values": values, "state": normal_state, "saved_idx": default_idx}
+        self._rows.append(row)
+
+        # Unchecking "skips" the file: grey the dropdown out to a "Skip this
+        # file" label so it's obvious nothing will be added; re-checking
+        # restores the prior target choice.
+        def _toggle(row=row):
+            combo = row["combo"]
+            if row["include"].get():
+                combo.configure(values=row["values"], state=row["state"])
+                combo.current(row["saved_idx"])
+            else:
+                row["saved_idx"] = combo.current()
+                combo.configure(values=[self._skip_label()], state="disabled")
+                combo.current(0)
+        row["toggle"] = _toggle
+        cb.configure(command=_toggle)
 
     def _open_doc(self, path: str) -> None:
         """Open a listed document to preview it; warn if it's gone."""
@@ -549,7 +582,9 @@ class ArchiveStep(PanelStep):
             return dicomdir.build_fileset(self.project.raw_discs_dir, out,
                                           progress=emit, cancel=cancel)
 
-        self.run_job(work, self._build_done, self.project.root)
+        self.run_job(work, self._build_done, self.project.root,
+                     busy_label=_("Building the archive…"),
+                     done_label=_("Archive built."))
 
     def _stage_documents(self, emit) -> None:
         """Encapsulate embed-marked PDFs into raw_discs/_documents so the
@@ -581,6 +616,36 @@ class ArchiveStep(PanelStep):
                 "drive.").format(s=result.studies, n=result.added))
         self.usb_btn.configure(state="normal")
 
+    @staticmethod
+    def _fmt_study_date(d: str) -> str:
+        d = (d or "").strip()
+        return f"{d[:4]}-{d[4:6]}-{d[6:]}" if len(d) == 8 and d.isdigit() else d
+
+    def _copy_groups(self, src: str):
+        """Localized (label, paths) groups so the copy announces progress per
+        study. Returns None (flat copy) if the archive index can't be read."""
+        try:
+            studies = dicomdir.study_groups(src)
+        except Exception:
+            studies = []
+        if not studies:
+            return None
+        n = len(studies)
+        groups = []
+        for i, s in enumerate(studies, 1):
+            name = " ".join(p for p in (s.get("modality"),
+                                        s.get("description")) if p)
+            date = self._fmt_study_date(s.get("date", ""))
+            if date:
+                name = f"{name} · {date}".strip(" ·") if name else date
+            name = name or _("Study")
+            label = _("{name} ({count} images)").format(
+                name=name, count=s.get("count", 0))
+            milestone = _("Copying study {i} of {n}: {label}…").format(
+                i=i, n=n, label=label)
+            groups.append((milestone, s["paths"]))
+        return groups
+
     def _deliver(self) -> None:
         usb = filedialog.askdirectory(title=_("Choose your USB drive"))
         if not usb:
@@ -596,8 +661,17 @@ class ArchiveStep(PanelStep):
         inv = self.project.inventory_path
 
         def work(emit, cancel):
+            # Copy study-by-study (prefer_native=False so the in-process pass
+            # does the real copying and the per-study milestones track it live,
+            # not flash by after an opaque ditto run — the two copiers are
+            # device-bound-equivalent). Sample a handful of files for SHA-256
+            # content verification (cheap insurance against a drive that writes
+            # the wrong bytes at the right size — counterfeit/failing sticks).
             result = deliver.copy_tree_verified(
-                src, os.path.join(dest, "Archive"), progress=emit, cancel=cancel)
+                src, os.path.join(dest, "Archive"),
+                prefer_native=False, groups=self._copy_groups(src),
+                verify_sample=deliver.DEFAULT_VERIFY_SAMPLE,
+                progress=emit, cancel=cancel)
             if os.path.exists(inv):
                 os.makedirs(dest, exist_ok=True)
                 dst_inv = os.path.join(dest, os.path.basename(inv))
@@ -627,7 +701,9 @@ class ArchiveStep(PanelStep):
                 result.failures.append(("README.txt / DELIVERY-LOG.txt", str(e)))
             return result, dest
 
-        self.run_job(work, self._deliver_done, self.project.root)
+        self.run_job(work, self._deliver_done, self.project.root,
+                     busy_label=_("Copy in progress…"),
+                     done_label=_("Copy complete."))
 
     def _deliver_done(self, status, payload) -> None:
         if status != "done":
@@ -639,6 +715,8 @@ class ArchiveStep(PanelStep):
             self.info.configure(text=_(
                 "✓ Copied to the USB and verified. Click Next to finish."))
         else:
+            # Override the generic "Copy complete." status — it wasn't clean.
+            self.panel.set_status(_("Copied with problems."))
             self.info.configure(text=_(
                 "Copied with {f} problem file(s) — see technical details.")
                 .format(f=result.failed))

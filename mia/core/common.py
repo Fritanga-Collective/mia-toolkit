@@ -45,8 +45,17 @@ class Progress:
     rate: float = 0.0
     eta: float = 0.0
     note: Optional[str] = None
-    kind: str = "progress"  # "progress" | "info" | "retry" | "fail"
+    kind: str = "progress"  # "progress" | "info" | "retry" | "fail" | "debug"
     phase: str = ""
+    # When True the worker can't give a meaningful done/total ratio (e.g. an
+    # opaque OS bulk-copy): the UI should show an animated "working" bar, not a
+    # made-up percentage/ETA.
+    indeterminate: bool = False
+    # Position within the current named group (e.g. one DICOM study) when the
+    # work is chunked: done/total still drive the overall bar, but a consumer
+    # can show "image {group_done} of {group_total}" for the chunk in progress.
+    group_done: int = 0
+    group_total: int = 0
 
     @property
     def pct(self) -> float:
@@ -54,6 +63,41 @@ class Progress:
 
 
 ProgressCallback = Callable[[Progress], None]
+# THREADING CONTRACT: a ProgressCallback may be invoked from more than one
+# thread for a single operation — e.g. ``deliver.copy_tree_verified`` emits the
+# per-file debug stream from its ThreadPoolExecutor workers and ditto's verbose
+# output from a stderr reader thread, alongside main-thread ticks. Callbacks
+# MUST be thread-safe / self-marshalling. The GUI satisfies this: ``jobs`` hands
+# workers an emitter that only does ``queue.Queue.put`` (thread-safe) and drains
+# it on the Tk thread via ``root.after``; ``ConsoleProgress`` just prints. Don't
+# touch Tk widgets or non-thread-safe aggregators directly from a callback.
+
+
+# Process-global verbose switch. Workers consult is_verbose() before emitting
+# kind="debug" timing/per-file notes (extra detail for diagnosing slowness), so
+# the gating happens at the source rather than every consumer filtering it. On
+# by default: the detail is captured into the collapsed technical pane + session
+# log and only shown when the user expands "technical details", so the main view
+# stays clean while the diagnostic trail is always there. (The CLI exposes a
+# --verbose flag via ConsoleProgress; the GUI has no separate toggle.)
+_VERBOSE = True
+
+
+def is_verbose() -> bool:
+    return _VERBOSE
+
+
+def set_verbose(on: bool) -> None:
+    global _VERBOSE
+    _VERBOSE = bool(on)
+
+
+def emit_debug(callback: Optional[ProgressCallback], note: str,
+               phase: str = "") -> None:
+    """Emit a kind="debug" note, but only when verbose mode is on. Cheap no-op
+    otherwise, so call sites can wrap timing details without their own guard."""
+    if callback is not None and _VERBOSE:
+        callback(Progress(0, 0, kind="debug", note=note, phase=phase))
 
 
 def emit(callback: Optional[ProgressCallback], progress: Progress) -> None:
@@ -128,7 +172,19 @@ class ConsoleProgress:
             if self.verbose and p.note is not None:
                 print(f"  {p.note}", flush=True)
             return
+        if p.kind == "debug":
+            if self.verbose and p.note is not None:
+                print(f"  [debug] {p.note}", flush=True)
+            return
         now = time.time()
+        if p.indeterminate:
+            # No meaningful ratio — show a plain "working" heartbeat, not a
+            # made-up percentage/ETA.
+            if self.verbose or (now - self._last) >= self.interval:
+                print(f"  copying… ({format_duration(p.elapsed)} elapsed)",
+                      flush=True)
+                self._last = now
+            return
         if self.verbose or (now - self._last) >= self.interval or p.done == p.total:
             print(
                 f"  [{p.done}/{p.total}] {p.pct:5.1f}%  "

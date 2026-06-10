@@ -110,6 +110,45 @@ def find_dicom_files(root: str) -> Iterator[str]:
                 yield full
 
 
+def study_groups(archive_dir: str) -> List[dict]:
+    """Group an already-written archive's files by study, for per-study
+    progress during delivery.
+
+    Reads the DICOMDIR index (not the pixel data) and returns an ordered list
+    of ``{uid, date, modality, description, count, paths}`` — paths absolute,
+    sorted by study date. Returns ``[]`` when the index can't be read so the
+    caller can fall back to a flat copy. The values are raw (un-localized);
+    the GUI formats the user-facing label.
+    """
+    try:
+        ds = pydicom.dcmread(os.path.join(archive_dir, "DICOMDIR"))
+        fs = FileSet(ds)
+    except Exception:
+        return []
+    groups: Dict[str, dict] = {}
+    order: List[str] = []
+    for inst in fs:
+        uid = str(getattr(inst, "StudyInstanceUID", "") or "unknown")
+        g = groups.get(uid)
+        if g is None:
+            g = {"uid": uid,
+                 "date": str(getattr(inst, "StudyDate", "") or ""),
+                 "modality": str(getattr(inst, "Modality", "") or ""),
+                 "description": str(getattr(inst, "StudyDescription", "") or ""),
+                 "count": 0, "paths": []}
+            groups[uid] = g
+            order.append(uid)
+        try:
+            g["paths"].append(os.path.abspath(str(inst.path)))
+            g["count"] += 1
+        except Exception:
+            continue
+    result = [groups[u] for u in order]
+    # Stable, human-meaningful order: by study date (undated last).
+    result.sort(key=lambda g: (g["date"] or "99999999", g["uid"]))
+    return result
+
+
 def ensure_required_tags(ds) -> List[str]:
     """Fill missing/empty tags with placeholders so FileSet.add() accepts the dataset."""
     repaired = []
@@ -193,6 +232,18 @@ def build_fileset(
                             "description": str(getattr(ds, "StudyDescription", "")),
                             "count": 0,
                         }
+                        # Announce each study as it's first encountered so the
+                        # technical log isn't an opaque file counter. kind=debug
+                        # (not info): this English note belongs in the technical
+                        # pane, never the localized plain log — the user-facing
+                        # build progress is the Presenter's "Indexing image
+                        # {done} of {total}" ticks.
+                        si = studies_info[study_uid]
+                        desc = " ".join(p for p in (si["modality"],
+                                                    si["description"]) if p)
+                        emit(progress, Progress(i, total, kind="debug",
+                             phase="index",
+                             note=f"indexing study: {desc or 'study'}"))
                     studies_info[study_uid]["count"] += 1
                 except Exception as e:
                     errors += 1
@@ -211,8 +262,9 @@ def build_fileset(
 
     # Write the file-set: copies files into standard structure + creates DICOMDIR
     emit(progress, Progress(total, total, kind="info", phase="write",
-                            note=("Writing DICOMDIR and copying files to "
-                                  f"{output} (this is the slow part)")))
+                            note=(f"Writing {len(studies_info)} studies "
+                                  f"({added} images) to the archive — this is "
+                                  "the slow part")))
 
     os.makedirs(output, exist_ok=True)
     fs.write(output)

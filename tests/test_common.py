@@ -3,9 +3,16 @@ from mia.core.common import (
     format_bytes,
     format_duration,
     is_dicom_file,
+    is_verbose,
 )
 from tests.helpers import make_dicom
 from pydicom.uid import generate_uid
+
+
+def test_verbose_on_by_default():
+    # Verbose detail is captured by default (shown only when the user expands
+    # "technical details"); the Help toggle turns it off.
+    assert is_verbose() is True
 
 
 def test_format_bytes():

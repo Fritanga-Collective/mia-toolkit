@@ -30,6 +30,16 @@ class App:
         self.container.pack(fill="both", expand=True)
         self._current: tk.Widget | None = None
 
+        # Route every close path through one confirming handler: the window
+        # close button, macOS Cmd-Q / the Apple-menu Quit, and File ▸ Exit
+        # (wired in menubar.py). Tk would otherwise destroy the window
+        # immediately, killing a running copy/rip mid-stream.
+        self.root.protocol("WM_DELETE_WINDOW", self.request_quit)
+        try:
+            self.root.createcommand("tk::mac::Quit", self.request_quit)
+        except tk.TclError:
+            pass  # non-aqua: no such command
+
         self._menubar = build_menubar(self)
         self.show_launcher()
 
@@ -77,6 +87,56 @@ class App:
         self.root.title(_("MIA Toolkit"))
         self._menubar = build_menubar(self)  # relabel menus in the new language
         self.show_launcher()
+
+    def request_quit(self) -> None:
+        """Confirm before quitting, and stop any running work safely first.
+
+        Bound to the window close button, Cmd-Q / Apple-menu Quit, and the
+        non-aqua File ▸ Exit. We signal the running work to cancel, then quit.
+        Workers run on *daemon* threads, so the process can exit before a worker
+        reaches its next between-files cancel check — the in-flight file may be
+        cut mid-write. That's intentionally fine: every copy/rip is resume-safe
+        and verified (size, plus a SHA-256 sample), so the next run recopies
+        anything left partial and nothing is corrupted. We don't block quit
+        waiting for the worker (a multi-minute copy must not wedge the close)."""
+        current = self._current
+        is_busy = getattr(current, "is_busy", None)
+        busy = callable(is_busy) and is_busy()
+        if busy:
+            ok = messagebox.askyesno(
+                _("Quit MIA Toolkit?"),
+                _("Something is still running. If you quit now it will stop "
+                  "safely — you can resume it later.\n\nQuit anyway?"),
+                default="no", icon="warning")
+        else:
+            ok = messagebox.askyesno(
+                _("Quit MIA Toolkit?"), _("Quit MIA Toolkit?"), default="no")
+        if not ok:
+            return
+        if busy:
+            self._stop_current(current)
+        self.root.destroy()
+
+    @staticmethod
+    def _stop_current(view: tk.Widget) -> None:
+        """Best-effort: signal the active view to cancel its work (sets cancel
+        tokens, stops the rip poll loop) before we tear down. Daemon workers may
+        not observe it before the process exits — resume-safety covers that."""
+        for name in ("stop", "on_leave"):
+            fn = getattr(view, name, None)
+            if callable(fn):
+                try:
+                    fn()
+                except Exception:  # pragma: no cover - shutdown best-effort
+                    pass
+        # The wizard delegates per-step cleanup to its active step.
+        step = getattr(view, "current", None)
+        on_leave = getattr(step, "on_leave", None)
+        if callable(on_leave):
+            try:
+                on_leave()
+            except Exception:  # pragma: no cover - shutdown best-effort
+                pass
 
     def run(self) -> None:
         self.root.mainloop()

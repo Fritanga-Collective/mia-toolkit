@@ -66,6 +66,12 @@ class Presenter:
     @staticmethod
     def _plain_tick(p: Progress) -> str:
         if p.phase == "copy":
+            # When copying study-by-study, count images within the current
+            # study (the milestone above names which one) instead of an opaque
+            # "file 1212 of 11165".
+            if p.group_total:
+                return _("Copying image {done} of {total}…").format(
+                    done=p.group_done, total=p.group_total)
             tmpl = _("Copying file {done} of {total}…")
         elif p.phase == "scan":
             tmpl = _("Scanning file {done} of {total}…")

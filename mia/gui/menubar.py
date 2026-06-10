@@ -109,7 +109,7 @@ def build_menubar(app) -> tk.Menu:
                          command=_open_project_folder)
     if not aqua:
         filemenu.add_separator()
-        filemenu.add_command(label=_("Exit"), command=root.destroy)
+        filemenu.add_command(label=_("Exit"), command=app.request_quit)
     menubar.add_cascade(label=_("File"), menu=filemenu)
 
     # ----- Edit (native clipboard behavior in text fields) ------------------

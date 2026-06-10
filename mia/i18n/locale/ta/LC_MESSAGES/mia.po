@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 23:45-0600\n"
+"POT-Creation-Date: 2026-06-09 22:57-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -13,86 +13,232 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mia/gui/rip_session.py:53
+#: mia/gui/menubar.py:20
+msgid "Website"
+msgstr "இணையதளம்"
+
+#: mia/gui/menubar.py:21
+msgid "Privacy policy"
+msgstr "தனியுரிமைக் கொள்கை"
+
+#: mia/gui/menubar.py:22
+msgid "Support the project"
+msgstr "திட்டத்தை ஆதரிக்கவும்"
+
+#: mia/gui/menubar.py:23
+msgid "Transparency"
+msgstr "வெளிப்படைத்தன்மை"
+
+#: mia/gui/menubar.py:24 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:763
+msgid "Read our blog"
+msgstr "எங்கள் வலைப்பதிவைப் படிக்கவும்"
+
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
+msgid "About MIA Toolkit"
+msgstr "MIA Toolkit பற்றி"
+
+#: mia/gui/menubar.py:45 mia/gui/launcher.py:71
+msgid "Made with ♥ by Fritanga"
+msgstr "Fritanga அன்புடன் ♥ உருவாக்கியது"
+
+#: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
+#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
+msgid "Check for Updates…"
+msgstr "புதுப்பிப்புகளைச் சரிபார்…"
+
+#: mia/gui/menubar.py:63
+msgid "Couldn't check for updates. Try again later."
+msgstr "புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. பின்னர் முயற்சிக்கவும்."
+
+#: mia/gui/menubar.py:68
+#, python-brace-format
+msgid ""
+"Version {new} is available — you have {cur}.\n"
+"\n"
+"Open the download page?"
+msgstr ""
+"பதிப்பு {new} கிடைக்கிறது — உங்களிடம் {cur} உள்ளது.\n"
+"\n"
+"பதிவிறக்கப் பக்கத்தைத் திறக்கவா?"
+
+#: mia/gui/menubar.py:75
+#, python-brace-format
+msgid "You're on the latest version ({v})."
+msgstr "நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள் ({v})."
+
+#: mia/gui/menubar.py:108
+msgid "Open Project Folder"
+msgstr "திட்டக் கோப்புறையைத் திற"
+
+#: mia/gui/menubar.py:112
+msgid "Exit"
+msgstr "வெளியேறு"
+
+#: mia/gui/menubar.py:113
+msgid "File"
+msgstr "கோப்பு"
+
+#: mia/gui/menubar.py:117
+msgid "Cut"
+msgstr "வெட்டு"
+
+#: mia/gui/menubar.py:117
+msgid "Copy"
+msgstr "நகலெடு"
+
+#: mia/gui/menubar.py:118
+msgid "Paste"
+msgstr "ஒட்டு"
+
+#: mia/gui/menubar.py:122
+msgid "Select All"
+msgstr "அனைத்தையும் தேர்ந்தெடு"
+
+#: mia/gui/menubar.py:124
+msgid "Edit"
+msgstr "திருத்து"
+
+#: mia/gui/menubar.py:129
+msgid "Home"
+msgstr "முகப்பு"
+
+#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+msgid "Guided Setup"
+msgstr "வழிகாட்டப்பட்ட அமைப்பு"
+
+#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+msgid "Add Your Studies"
+msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
+
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+msgid "Build Inventory"
+msgstr "பட்டியலை உருவாக்கு"
+
+#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+msgid "Build Archive for Doctor"
+msgstr "மருத்துவருக்கான காப்பகத்தை உருவாக்கு"
+
+#: mia/gui/menubar.py:147
+msgid "Language"
+msgstr "மொழி"
+
+#: mia/gui/menubar.py:148
+msgid "Go"
+msgstr "செல்"
+
+#: mia/gui/menubar.py:153
+msgid "Window"
+msgstr "சாளரம்"
+
+#: mia/gui/menubar.py:167
+msgid "Help"
+msgstr "உதவி"
+
+#: mia/gui/rip_session.py:62 mia/gui/import_flow.py:119
 msgid "Please choose a folder to save copies to."
 msgstr "நகல்களைச் சேமிக்க ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/rip_session.py:58
+#: mia/gui/rip_session.py:67 mia/gui/import_flow.py:124
 msgid "Couldn't create that folder. Choose another."
 msgstr ""
 "அந்தக் கோப்புறையை உருவாக்க முடியவில்லை. வேறு ஒன்றைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/rip_session.py:66
+#: mia/gui/rip_session.py:76
 msgid "Insert a disc…"
 msgstr "ஒரு வட்டை (disc) உள்ளே போடவும்…"
 
-#: mia/gui/rip_session.py:67
+#: mia/gui/rip_session.py:77
 msgid "Ripping session started. Insert your first disc."
 msgstr "நகலெடுக்கும் அமர்வு தொடங்கியது. உங்கள் முதல் வட்டை உள்ளே போடவும்."
 
-#: mia/gui/rip_session.py:75 mia/gui/task_view.py:112
+#: mia/gui/rip_session.py:85 mia/gui/task_view.py:123
 msgid "Stopping…"
 msgstr "நிறுத்துகிறது…"
 
-#: mia/gui/rip_session.py:86
+#: mia/gui/rip_session.py:97
 #, python-brace-format
 msgid "Ripping session ended. {n} disc(s) copied."
 msgstr "நகலெடுக்கும் அமர்வு முடிந்தது. {n} வட்டு(கள்) நகலெடுக்கப்பட்டன."
 
-#: mia/gui/rip_session.py:100
+#: mia/gui/rip_session.py:126
 msgid "Insert a disc… (waiting)"
 msgstr "ஒரு வட்டை உள்ளே போடவும்… (காத்திருக்கிறது)"
 
-#: mia/gui/rip_session.py:117
+#: mia/gui/rip_session.py:133 mia/gui/import_flow.py:43
+msgid "Already added"
+msgstr "ஏற்கனவே சேர்க்கப்பட்டது"
+
+#: mia/gui/rip_session.py:134
+#, python-brace-format
+msgid "“{name}” looks already added. Copy again?"
+msgstr "“{name}” ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் நகலெடுக்கவா?"
+
+#: mia/gui/rip_session.py:138
+#, python-brace-format
+msgid "Already added — skipping “{name}”."
+msgstr "ஏற்கனவே சேர்க்கப்பட்டது — “{name}” தவிர்க்கப்படுகிறது."
+
+#: mia/gui/rip_session.py:148
+msgid "Copy this drive?"
+msgstr "இந்த இயக்ககத்தை நகலெடுக்கவா?"
+
+#: mia/gui/rip_session.py:149
+#, python-brace-format
+msgid "Copy this drive “{name}”?"
+msgstr "“{name}” இயக்ககத்தை நகலெடுக்கவா?"
+
+#: mia/gui/rip_session.py:160
 #, python-brace-format
 msgid "Ripping disc {n}: {name}…"
 msgstr "வட்டு {n} நகலெடுக்கப்படுகிறது: {name}…"
 
-#: mia/gui/rip_session.py:118
+#: mia/gui/rip_session.py:161
 #, python-brace-format
 msgid "Found disc “{name}”. Copying…"
 msgstr "“{name}” வட்டு கண்டுபிடிக்கப்பட்டது. நகலெடுக்கிறது…"
 
-#: mia/gui/rip_session.py:134 mia/gui/task_view.py:99
+#: mia/gui/rip_session.py:178 mia/gui/task_view.py:103
+#: mia/gui/import_flow.py:177 mia/gui/import_flow.py:178
+#: mia/gui/wizard/steps.py:77
 msgid "Stopped."
 msgstr "நிறுத்தப்பட்டது."
 
-#: mia/gui/rip_session.py:140
+#: mia/gui/rip_session.py:184
 msgid "Couldn't rip this disc. Remove it and insert another, or press Stop."
 msgstr ""
 "இந்த வட்டை நகலெடுக்க முடியவில்லை. அதை எடுத்துவிட்டு வேறு ஒன்றை உள்ளே "
 "போடவும், அல்லது நிறுத்து என்பதை அழுத்தவும்."
 
-#: mia/gui/rip_session.py:146
+#: mia/gui/rip_session.py:190
 #, python-brace-format
 msgid "✓ Disc copied: {c} files OK, {r} recovered, {f} could not be read."
 msgstr ""
 "✓ வட்டு நகலெடுக்கப்பட்டது: {c} கோப்புகள் சரி, {r} மீட்கப்பட்டன, {f} படிக்க "
 "முடியவில்லை."
 
-#: mia/gui/rip_session.py:153
+#: mia/gui/rip_session.py:198
 #, python-brace-format
 msgid "✓ Disc {n} done. Insert the next disc…"
 msgstr "✓ வட்டு {n} முடிந்தது. அடுத்த வட்டை உள்ளே போடவும்…"
 
-#: mia/gui/rip_session.py:162
+#: mia/gui/rip_session.py:207
 msgid "Choose a disc"
 msgstr "ஒரு வட்டைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/rip_session.py:166
+#: mia/gui/rip_session.py:211
 msgid "More than one drive looks like a disc. Which one should I copy?"
 msgstr ""
 "ஒன்றுக்கு மேற்பட்ட இயக்ககங்கள் வட்டாகத் தெரிகின்றன. எதை நகலெடுக்க வேண்டும்?"
 
-#: mia/gui/rip_session.py:180
+#: mia/gui/rip_session.py:225
 msgid "Rip this one"
 msgstr "இதை நகலெடுக்கவும்"
 
-#: mia/gui/rip_session.py:182
+#: mia/gui/rip_session.py:227
 msgid "Skip for now"
 msgstr "இப்போதைக்கு தவிர்க்கவும்"
 
-#: mia/gui/task_view.py:38 mia/gui/wizard/view.py:58
+#: mia/gui/task_view.py:38 mia/gui/wizard/view.py:62
 msgid "‹ Back"
 msgstr "‹ பின்செல்"
 
@@ -100,79 +246,114 @@ msgstr "‹ பின்செல்"
 msgid "Stop"
 msgstr "நிறுத்து"
 
-#: mia/gui/task_view.py:97
+#: mia/gui/task_view.py:92 mia/gui/wizard/steps.py:68
+msgid "Working…"
+msgstr "செயலாக்கப்படுகிறது…"
+
+#: mia/gui/task_view.py:101 mia/gui/wizard/steps.py:75
 msgid "Stopped on an error."
 msgstr "ஒரு பிழையால் நிறுத்தப்பட்டது."
 
-#: mia/gui/task_view.py:100
+#: mia/gui/task_view.py:104
 msgid "Stopped by you."
 msgstr "உங்களால் நிறுத்தப்பட்டது."
+
+#: mia/gui/task_view.py:106 mia/gui/wizard/steps.py:79
+msgid "Done."
+msgstr "முடிந்தது."
 
 #: mia/gui/widgets.py:32
 msgid "Choose…"
 msgstr "தேர்ந்தெடு…"
 
-#: mia/gui/progress_panel.py:40
+#: mia/gui/progress_panel.py:40 mia/gui/progress_panel.py:50
 msgid "Ready."
 msgstr "தயார்."
 
-#: mia/gui/progress_panel.py:62 mia/gui/progress_panel.py:205
+#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:296
 msgid "▸ Show technical details"
 msgstr "▸ தொழில்நுட்ப விவரங்களைக் காட்டு"
 
-#: mia/gui/progress_panel.py:79
+#: mia/gui/progress_panel.py:89
 msgid "Save log…"
 msgstr "பதிவைச் சேமி…"
 
-#: mia/gui/progress_panel.py:81
+#: mia/gui/progress_panel.py:91
 msgid "Open log folder"
 msgstr "பதிவுக் கோப்புறையைத் திற"
 
-#: mia/gui/progress_panel.py:91
+#: mia/gui/progress_panel.py:107
 msgid "Writing the archive… this can take several minutes."
 msgstr "காப்பகம் எழுதப்படுகிறது… இதற்குச் சில நிமிடங்கள் ஆகலாம்."
 
-#: mia/gui/progress_panel.py:92
+#: mia/gui/progress_panel.py:108
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr ""
 "இப்போது காப்பகம் எழுதப்படுகிறது. இதற்குச் சில நிமிடங்கள் ஆகலாம் — தயவுசெய்து"
 " காத்திருக்கவும்…"
 
-#: mia/gui/progress_panel.py:134
+#: mia/gui/progress_panel.py:139
+#, python-brace-format
+msgid "Copying {n} files… ({m:.0f}m elapsed)"
+msgstr "{n} கோப்புகள் நகலெடுக்கப்படுகிறது… ({m:.0f} நிமி கடந்தது)"
+
+#: mia/gui/progress_panel.py:141
+#, python-brace-format
+msgid "Copying {n} files…"
+msgstr "{n} கோப்புகள் நகலெடுக்கப்படுகிறது…"
+
+#: mia/gui/progress_panel.py:213
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "கோப்புகள் {done}/{total}"
 
-#: mia/gui/progress_panel.py:137
+#: mia/gui/progress_panel.py:216
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "கழிந்த நேரம் {t}"
 
-#: mia/gui/progress_panel.py:139
+#: mia/gui/progress_panel.py:218
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "மீதி நேரம் {t}"
 
-#: mia/gui/progress_panel.py:141
+#: mia/gui/progress_panel.py:220
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/வி"
 
-#: mia/gui/progress_panel.py:196
+#: mia/gui/progress_panel.py:287
 msgid "▾ Hide technical details"
 msgstr "▾ தொழில்நுட்ப விவரங்களை மறை"
 
-#: mia/gui/progress_panel.py:209
+#: mia/gui/progress_panel.py:300
 msgid "Save technical log"
 msgstr "தொழில்நுட்பப் பதிவைச் சேமி"
+
+#: mia/gui/rip_view.py:19
+msgid ""
+"Insert a CD — it copies and ejects automatically. You can also add studies "
+"from a USB drive, a folder, or a downloaded ZIP."
+msgstr ""
+"ஒரு CD-யை உள்ளே போடவும் — அது தானாகவே நகலெடுத்து வெளியேற்றும். ஒரு USB "
+"இயக்ககம், ஒரு கோப்புறை, அல்லது பதிவிறக்கிய ZIP-இலிருந்தும் ஆய்வுகளைச் "
+"சேர்க்கலாம்."
 
 #: mia/gui/rip_view.py:23
 msgid "Save copies to:"
 msgstr "நகல்களைச் சேமிக்க:"
 
-#: mia/gui/rip_view.py:27 mia/gui/wizard/steps.py:132
+#: mia/gui/rip_view.py:30 mia/gui/wizard/steps.py:160
 msgid "Start ripping"
 msgstr "நகலெடுக்கத் தொடங்கு"
+
+#: mia/gui/rip_view.py:34 mia/gui/wizard/steps.py:164
+msgid "From a folder or USB"
+msgstr "ஒரு கோப்புறை அல்லது USB-இலிருந்து"
+
+#: mia/gui/rip_view.py:37 mia/gui/wizard/steps.py:167
+msgid "From a ZIP file"
+msgstr "ஒரு ZIP கோப்பிலிருந்து"
 
 #: mia/gui/messages.py:61
 msgid "Recovered a file after a retry."
@@ -183,27 +364,32 @@ msgid "⚠ Could not read a file (see technical details)."
 msgstr ""
 "⚠ ஒரு கோப்பைப் படிக்க முடியவில்லை (தொழில்நுட்ப விவரங்களைப் பார்க்கவும்)."
 
-#: mia/gui/messages.py:69
+#: mia/gui/messages.py:73
+#, python-brace-format
+msgid "Copying image {done} of {total}…"
+msgstr "படம் {done}/{total} நகலெடுக்கப்படுகிறது…"
+
+#: mia/gui/messages.py:75
 #, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "கோப்பு {done} / {total} நகலெடுக்கப்படுகிறது…"
 
-#: mia/gui/messages.py:71
+#: mia/gui/messages.py:77
 #, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "கோப்பு {done} / {total} வருடப்படுகிறது…"
 
-#: mia/gui/messages.py:73
+#: mia/gui/messages.py:79
 #, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "படம் {done} / {total} அட்டவணைப்படுத்தப்படுகிறது…"
 
-#: mia/gui/messages.py:75
+#: mia/gui/messages.py:81
 #, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "வேலை நடக்கிறது… {total}-இல் {done}"
 
-#: mia/gui/messages.py:82
+#: mia/gui/messages.py:88
 msgid ""
 "Permission denied. The destination may be read-only or locked. Try a "
 "different folder, or check the drive isn't write-protected."
@@ -212,7 +398,7 @@ msgstr ""
 "பூட்டப்பட்டிருக்கலாம். வேறு கோப்புறையை முயற்சிக்கவும், அல்லது இயக்ககம் "
 "எழுத-தடைசெய்யப்படவில்லை என்பதைச் சரிபார்க்கவும்."
 
-#: mia/gui/messages.py:85
+#: mia/gui/messages.py:91
 msgid ""
 "A needed file or folder was not found. A disc may have been ejected too "
 "early, or a folder was moved."
@@ -221,55 +407,188 @@ msgstr ""
 "விரைவாக வெளியேற்றப்பட்டிருக்கலாம், அல்லது ஒரு கோப்புறை "
 "நகர்த்தப்பட்டிருக்கலாம்."
 
-#: mia/gui/messages.py:88
+#: mia/gui/messages.py:94
 msgid "The disk is full. Free up space or choose a drive with more room."
 msgstr ""
 "வட்டு நிரம்பிவிட்டது. இடத்தைக் காலி செய்யவும் அல்லது அதிக இடமுள்ள "
 "இயக்ககத்தைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/messages.py:90
+#: mia/gui/messages.py:96
 msgid "That location is read-only. Choose a different destination folder."
 msgstr ""
 "அந்த இடம் படிக்க-மட்டும். வேறு ஒரு சேருமிடக் கோப்புறையைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/messages.py:91
+#: mia/gui/messages.py:97
 msgid "Something went wrong. See the technical details below."
 msgstr "ஏதோ தவறு நடந்தது. கீழே உள்ள தொழில்நுட்ப விவரங்களைப் பார்க்கவும்."
 
-#: mia/gui/app.py:15 mia/gui/app.py:55 mia/gui/launcher.py:27
+#: mia/gui/app.py:21 mia/gui/app.py:54 mia/gui/app.py:87
+#: mia/gui/launcher.py:31
 msgid "MIA Toolkit"
 msgstr "MIA Toolkit"
 
-#: mia/gui/launcher.py:28
+#: mia/gui/app.py:55
+msgid "A task is still running — stop it or let it finish first."
+msgstr "ஒரு பணி இன்னும் இயங்குகிறது — அதை நிறுத்துங்கள் அல்லது முடியட்டும்."
+
+#: mia/gui/app.py:103 mia/gui/app.py:109
+msgid "Quit MIA Toolkit?"
+msgstr "MIA Toolkit-ஐ விட்டு வெளியேறவா?"
+
+#: mia/gui/app.py:104
+msgid ""
+"Something is still running. If you quit now it will stop safely — you can resume it later.\n"
+"\n"
+"Quit anyway?"
+msgstr ""
+"ஏதோ ஒன்று இன்னும் இயங்குகிறது. இப்போது வெளியேறினால் அது பாதுகாப்பாக நிறுத்தப்படும் — பின்னர் தொடரலாம்.\n"
+"\n"
+"இருப்பினும் வெளியேறவா?"
+
+#: mia/gui/import_flow.py:36
+msgid "Choose the folder or USB drive to import"
+msgstr "இறக்குமதி செய்ய கோப்புறை அல்லது USB இயக்ககத்தைத் தேர்ந்தெடுக்கவும்"
+
+#: mia/gui/import_flow.py:44
+msgid "These studies look already added. Import again?"
+msgstr ""
+"இந்த ஆய்வுகள் ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் இறக்குமதி "
+"செய்யவா?"
+
+#: mia/gui/import_flow.py:56 mia/gui/import_flow.py:64
+#: mia/gui/import_flow.py:95 mia/gui/import_flow.py:104
+#: mia/gui/import_flow.py:135 mia/gui/import_flow.py:148
+#: mia/gui/import_flow.py:194
+msgid "Import"
+msgstr "இறக்குமதி"
+
+#: mia/gui/import_flow.py:57
+msgid "No medical images were found here. Copy anyway?"
+msgstr ""
+"இங்கே மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை. எப்படியும் நகலெடுக்கவா?"
+
+#: mia/gui/import_flow.py:65
+#, python-brace-format
+msgid ""
+"{files} files · {size}\n"
+"{dicom} medical images detected.\n"
+"\n"
+"Copy everything into your project?"
+msgstr ""
+"{files} கோப்புகள் · {size}\n"
+"{dicom} மருத்துவப் படங்கள் கண்டறியப்பட்டன.\n"
+"\n"
+"அனைத்தையும் உங்கள் திட்டத்திற்கு நகலெடுக்கவா?"
+
+#: mia/gui/import_flow.py:83
+msgid "Choose the ZIP file to import"
+msgstr "இறக்குமதி செய்ய ZIP கோப்பைத் தேர்ந்தெடுக்கவும்"
+
+#: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:450
+#: mia/gui/wizard/steps.py:802
+msgid "All files"
+msgstr "அனைத்துக் கோப்புகள்"
+
+#: mia/gui/import_flow.py:95
+msgid "This doesn't look like a ZIP file."
+msgstr "இது ஒரு ZIP கோப்பாகத் தெரியவில்லை."
+
+#: mia/gui/import_flow.py:105
+#, python-brace-format
+msgid ""
+"{files} files · {size} inside the ZIP.\n"
+"Medical images are detected during the import.\n"
+"\n"
+"Import it into your project?"
+msgstr ""
+"ZIP-இன் உள்ளே {files} கோப்புகள் · {size}.\n"
+"இறக்குமதியின் போது மருத்துவப் படங்கள் கண்டறியப்படுகின்றன.\n"
+"\n"
+"அதை உங்கள் திட்டத்திற்கு இறக்குமதி செய்யவா?"
+
+#: mia/gui/import_flow.py:136
+msgid ""
+"That folder is inside your project (or contains it). Choose a different "
+"folder."
+msgstr ""
+"அந்தக் கோப்புறை உங்கள் திட்டத்தின் உள்ளே உள்ளது (அல்லது அதைக் கொண்டுள்ளது). "
+"வேறு ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்."
+
+#: mia/gui/import_flow.py:149
+#, python-brace-format
+msgid ""
+"Not enough space on the project drive (need about {need}, free {free})."
+msgstr ""
+"திட்ட இயக்ககத்தில் போதிய இடம் இல்லை (சுமார் {need} தேவை, காலி {free})."
+
+#: mia/gui/import_flow.py:162 mia/gui/import_flow.py:163
+#, python-brace-format
+msgid "Importing “{name}”…"
+msgstr "“{name}” இறக்குமதி செய்யப்படுகிறது…"
+
+#: mia/gui/import_flow.py:183
+msgid "Couldn't import this source."
+msgstr "இந்த மூலத்தை இறக்குமதி செய்ய முடியவில்லை."
+
+#: mia/gui/import_flow.py:187
+#, python-brace-format
+msgid "✓ Imported: {c} files OK, {f} could not be read."
+msgstr "✓ இறக்குமதி செய்யப்பட்டது: {c} கோப்புகள் சரி, {f} படிக்க முடியவில்லை."
+
+#: mia/gui/import_flow.py:191
+msgid "⚠ No medical images were found in this import."
+msgstr "⚠ இந்த இறக்குமதியில் மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை."
+
+#: mia/gui/import_flow.py:195
+msgid "No medical images were found in this import."
+msgstr "இந்த இறக்குமதியில் மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை."
+
+#: mia/gui/import_flow.py:197
+msgid "✓ Import done. Add another source or continue."
+msgstr "✓ இறக்குமதி முடிந்தது. மற்றொரு மூலத்தைச் சேர்க்கவும் அல்லது தொடரவும்."
+
+#: mia/gui/launcher.py:32
 msgid "Organize your imaging CDs into one archive for your doctor."
 msgstr ""
 "உங்கள் ஸ்கேன் CD-களை உங்கள் மருத்துவருக்காக ஒரே காப்பகமாக ஒழுங்கமைக்கவும்."
 
-#: mia/gui/launcher.py:33
+#: mia/gui/launcher.py:37
 msgid "Walk me through it, step by step (recommended)."
 msgstr "படிப்படியாக எனக்கு வழிகாட்டவும் (பரிந்துரைக்கப்படுகிறது)."
 
-#: mia/gui/launcher.py:36
+#: mia/gui/launcher.py:40
 msgid "Or use a single tool:"
 msgstr "அல்லது ஒரே ஒரு கருவியைப் பயன்படுத்தவும்:"
 
-#: mia/gui/launcher.py:40 mia/gui/inventory_view.py:17
-msgid "Build Inventory"
-msgstr "பட்டியலை உருவாக்கு"
+#: mia/gui/launcher.py:43
+msgid "Copy discs, USB folders, or ZIP downloads into your project."
+msgstr ""
+"வட்டுகள், USB கோப்புறைகள், அல்லது ZIP பதிவிறக்கங்களை உங்கள் திட்டத்திற்கு "
+"நகலெடுக்கவும்."
 
-#: mia/gui/launcher.py:41
+#: mia/gui/launcher.py:46
 msgid "List every study in a spreadsheet."
 msgstr "ஒவ்வொரு ஆய்வையும் ஒரு விரிதாளில் பட்டியலிடவும்."
 
-#: mia/gui/launcher.py:42 mia/gui/archive_view.py:16
-msgid "Build Archive for Doctor"
-msgstr "மருத்துவருக்கான காப்பகத்தை உருவாக்கு"
-
-#: mia/gui/launcher.py:43
+#: mia/gui/launcher.py:48
 msgid "Combine everything onto a USB drive."
 msgstr "அனைத்தையும் ஒரு USB இயக்ககத்தில் ஒன்றிணைக்கவும்."
 
-#: mia/gui/launcher.py:50
+#: mia/gui/launcher.py:59
+msgid ""
+"This software helps you organize and deliver your own medical images. It "
+"does not interpret images, is not a medical device, and does not replace "
+"professional radiological review. No warranty."
+msgstr ""
+"இந்த மென்பொருள் உங்கள் சொந்த மருத்துவப் படங்களை ஒழுங்கமைத்து வழங்க "
+"உதவுகிறது. இது படங்களை விளக்கம் அளிக்காது, மருத்துவ சாதனம் அல்ல, மற்றும் "
+"தொழில்முறை கதிரியக்க மறுபார்வைக்குப் பதிலாகாது. எந்த உத்தரவாதமும் இல்லை."
+
+#: mia/gui/launcher.py:67
+msgid "Open source · Private by design · No tracking"
+msgstr "திறந்த மூலம் · வடிவமைப்பால் தனிப்பட்டது · கண்காணிப்பு இல்லை"
+
+#: mia/gui/launcher.py:86
 msgid "Language:"
 msgstr "மொழி:"
 
@@ -397,11 +716,11 @@ msgstr ""
 msgid "README: {p}"
 msgstr "README: {p}"
 
-#: mia/gui/wizard/steps.py:74 mia/gui/wizard/steps.py:291
+#: mia/gui/wizard/steps.py:94 mia/gui/wizard/steps.py:656
 msgid "Not enough space"
 msgstr "போதிய இடம் இல்லை"
 
-#: mia/gui/wizard/steps.py:75
+#: mia/gui/wizard/steps.py:95
 #, python-brace-format
 msgid ""
 "This drive may not have enough room (need about {n}). Move your project to "
@@ -410,31 +729,43 @@ msgstr ""
 "இந்த இயக்ககத்தில் போதிய இடம் இல்லாமல் இருக்கலாம் (சுமார் {n} தேவை). உங்கள் "
 "திட்டத்தை அதிக இடமுள்ள வேறு இயக்ககத்திற்கு நகர்த்தவா?"
 
-#: mia/gui/wizard/steps.py:78
+#: mia/gui/wizard/steps.py:98
 msgid "Cancelled — not enough space."
 msgstr "ரத்து செய்யப்பட்டது — போதிய இடம் இல்லை."
 
-#: mia/gui/wizard/steps.py:81
+#: mia/gui/wizard/steps.py:101
 msgid "Choose a drive or folder with more space"
 msgstr "அதிக இடமுள்ள ஒரு இயக்ககம் அல்லது கோப்புறையைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/wizard/steps.py:83
+#: mia/gui/wizard/steps.py:103
 msgid "Cancelled."
 msgstr "ரத்து செய்யப்பட்டது."
 
-#: mia/gui/wizard/steps.py:94
+#: mia/gui/wizard/steps.py:114
 msgid "Could not move the project. Try another drive."
 msgstr "திட்டத்தை நகர்த்த முடியவில்லை. வேறு இயக்ககத்தை முயற்சிக்கவும்."
 
-#: mia/gui/wizard/steps.py:102
+#: mia/gui/wizard/steps.py:122
 msgid "This will help you, step by step:"
 msgstr "இது உங்களுக்குப் படிப்படியாக உதவும்:"
 
-#: mia/gui/wizard/steps.py:111
+#: mia/gui/wizard/steps.py:125
+msgid ""
+"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+"2.  Review everything we found\n"
+"3.  Add any report or lab PDFs (optional)\n"
+"4.  Build one archive and copy it to a USB drive for your doctor"
+msgstr ""
+"1.  உங்கள் ஆய்வுகளைச் சேர்க்கவும் — CD, USB கோப்புறைகள் அல்லது ZIP பதிவிறக்கங்கள்\n"
+"2.  நாங்கள் கண்டறிந்த அனைத்தையும் பரிசீலிக்கவும்\n"
+"3.  ஏதேனும் அறிக்கை அல்லது ஆய்வக PDF-களைச் சேர்க்கவும் (விருப்பத்தேர்வு)\n"
+"4.  ஒரே காப்பகத்தை உருவாக்கி உங்கள் மருத்துவருக்கு USB-யில் நகலெடுக்கவும்"
+
+#: mia/gui/wizard/steps.py:133
 msgid "Skip to building the archive"
 msgstr "காப்பகத்தை உருவாக்கச் செல்லவும்"
 
-#: mia/gui/wizard/steps.py:118
+#: mia/gui/wizard/steps.py:140
 #, python-brace-format
 msgid ""
 "Welcome back — you already have {n} disc(s) copied. Continue with Next, or:"
@@ -442,34 +773,56 @@ msgstr ""
 "மீண்டும் வரவேற்கிறோம் — உங்களிடம் ஏற்கனவே {n} வட்டு(கள்) "
 "நகலெடுக்கப்பட்டுள்ளன. அடுத்து என்பதுடன் தொடரவும், அல்லது:"
 
-#: mia/gui/wizard/steps.py:145
+#: mia/gui/wizard/steps.py:153
+msgid ""
+"Insert each CD — it copies and ejects automatically. You can also add "
+"studies from a USB drive, a folder, or a ZIP downloaded from a hospital "
+"portal. When everything's added, click Next."
+msgstr ""
+"ஒவ்வொரு CD-யையும் உள்ளே போடவும் — அது தானாகவே நகலெடுத்து வெளியேற்றும். ஒரு "
+"USB இயக்ககம், ஒரு கோப்புறை, அல்லது மருத்துவமனை இணையதளத்திலிருந்து "
+"பதிவிறக்கிய ZIP-இலிருந்தும் ஆய்வுகளைச் சேர்க்கலாம். அனைத்தும் "
+"சேர்க்கப்பட்டதும், அடுத்து என்பதை அழுத்தவும்."
+
+#: mia/gui/wizard/steps.py:186
 msgid "Ready. Insert a disc, then click Start ripping."
 msgstr ""
 "தயார். ஒரு வட்டை உள்ளே போட்டு, பிறகு நகலெடுக்கத் தொடங்கு என்பதை அழுத்தவும்."
 
-#: mia/gui/wizard/steps.py:172
+#: mia/gui/wizard/steps.py:231
+#, python-brace-format
+msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
+msgstr ""
+"{n} அறிக்கை PDF கண்டறியப்பட்டது — ‘ஆவணங்களைச் சேர்’ என்பதில் பார்க்கவும்."
+
+#: mia/gui/wizard/steps.py:239
+#, python-brace-format
+msgid "Sources added so far: {n}"
+msgstr "இதுவரை சேர்க்கப்பட்ட மூலங்கள்: {n}"
+
+#: mia/gui/wizard/steps.py:279
 msgid "Re-scan"
 msgstr "மீண்டும் வருடு"
 
-#: mia/gui/wizard/steps.py:174
+#: mia/gui/wizard/steps.py:281
 msgid "Open spreadsheet"
 msgstr "விரிதாளைத் திற"
 
-#: mia/gui/wizard/steps.py:183
+#: mia/gui/wizard/steps.py:290
 msgid "No discs copied yet — you can skip this step."
 msgstr ""
 "இன்னும் வட்டுகள் எதுவும் நகலெடுக்கப்படவில்லை — இந்தப் படியைத் தவிர்க்கலாம்."
 
-#: mia/gui/wizard/steps.py:191
+#: mia/gui/wizard/steps.py:298
 msgid "Looking through your discs…"
 msgstr "உங்கள் வட்டுகள் தேடப்படுகின்றன…"
 
-#: mia/gui/wizard/steps.py:207
+#: mia/gui/wizard/steps.py:315
 #, python-brace-format
 msgid "We found {n} studies across your discs."
 msgstr "உங்கள் வட்டுகளில் {n} ஆய்வுகளைக் கண்டுபிடித்தோம்."
 
-#: mia/gui/wizard/steps.py:217
+#: mia/gui/wizard/steps.py:325
 msgid ""
 "⚠ More than one patient appears across these discs. Open the spreadsheet's "
 "‘Consistency Check’ to be sure a stranger's disc wasn't mixed in (often it's"
@@ -480,68 +833,162 @@ msgstr ""
 "Check’-ஐ திறக்கவும் (பெரும்பாலும் இது ஒரே நபர் வேறுவிதமாகப் பதிவு "
 "செய்யப்பட்டதே)."
 
-#: mia/gui/wizard/steps.py:233
+#: mia/gui/wizard/steps.py:386
+msgid ""
+"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
+"with the scans as files your doctor can open, and PDFs can also be embedded "
+"into the imaging archive for a PACS. Optional — click Next to skip."
+msgstr ""
+"கதிரியக்க மருத்துவரின் அறிக்கை அல்லது ஆய்வக/இரத்தப் பரிசோதனை முடிவுகளை (PDF)"
+" சேர்க்கவும். அவை உங்கள் மருத்துவர் திறக்கக்கூடிய கோப்புகளாக ஸ்கேன்களுடன் "
+"செல்கின்றன; PDF-களை PACS-க்காக படிமக் காப்பகத்திலும் உட்பொதிக்கலாம். "
+"விருப்பத்தேர்வு — தவிர்க்க ‘அடுத்து’ என்பதைக் கிளிக் செய்யவும்."
+
+#: mia/gui/wizard/steps.py:391
+msgid "Add files…"
+msgstr "கோப்புகளைச் சேர்க்கவும்…"
+
+#: mia/gui/wizard/steps.py:397
+msgid "No documents added yet."
+msgstr "இன்னும் ஆவணங்கள் சேர்க்கப்படவில்லை."
+
+#: mia/gui/wizard/steps.py:405
+msgid "Just include the file"
+msgstr "கோப்பை மட்டும் சேர்க்கவும்"
+
+#: mia/gui/wizard/steps.py:408
+msgid "Skip this file"
+msgstr "இந்தக் கோப்பைத் தவிர்"
+
+#: mia/gui/wizard/steps.py:448 mia/gui/wizard/steps.py:800
+msgid "Choose reports or documents"
+msgstr "அறிக்கைகள் அல்லது ஆவணங்களைத் தேர்ந்தெடுக்கவும்"
+
+#: mia/gui/wizard/steps.py:449 mia/gui/wizard/steps.py:801
+msgid "Documents"
+msgstr "ஆவணங்கள்"
+
+#: mia/gui/wizard/steps.py:517
+msgid "Can't open file"
+msgstr "கோப்பைத் திறக்க முடியவில்லை"
+
+#: mia/gui/wizard/steps.py:518
+#, python-brace-format
+msgid ""
+"This file can no longer be found:\n"
+"{p}"
+msgstr ""
+"இந்தக் கோப்பு இனி கிடைக்கவில்லை:\n"
+"{p}"
+
+#: mia/gui/wizard/steps.py:543
 msgid "Build the archive"
 msgstr "காப்பகத்தை உருவாக்கு"
 
-#: mia/gui/wizard/steps.py:236
+#: mia/gui/wizard/steps.py:546
 msgid "Choose USB & copy"
 msgstr "USB தேர்ந்தெடுத்து நகலெடு"
 
-#: mia/gui/wizard/steps.py:244
+#: mia/gui/wizard/steps.py:554
 msgid "No discs to build from. Go back and rip some discs first."
 msgstr ""
 "உருவாக்க வட்டுகள் எதுவும் இல்லை. பின்செல்ல்லி முதலில் சில வட்டுகளை "
 "நகலெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:250
+#: mia/gui/wizard/steps.py:560
 msgid "Archive already built. Choose a USB drive to copy it to."
 msgstr ""
 "காப்பகம் ஏற்கனவே உருவாக்கப்பட்டது. அதை நகலெடுக்க ஒரு USB இயக்ககத்தைத் "
 "தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:254
+#: mia/gui/wizard/steps.py:564
 msgid "Ready to combine your discs into one archive."
 msgstr "உங்கள் வட்டுகளை ஒரே காப்பகமாக ஒன்றிணைக்கத் தயார்."
 
-#: mia/gui/wizard/steps.py:280
+#: mia/gui/wizard/steps.py:586
+msgid "Building the archive…"
+msgstr "காப்பகம் உருவாக்கப்படுகிறது…"
+
+#: mia/gui/wizard/steps.py:587
+msgid "Archive built."
+msgstr "காப்பகம் உருவாக்கப்பட்டது."
+
+#: mia/gui/wizard/steps.py:606
+#, python-brace-format
+msgid ""
+"Couldn't embed {name} into the archive — it's still included as a file."
+msgstr ""
+"{name}-ஐ காப்பகத்தில் உட்பொதிக்க முடியவில்லை — அது இன்னும் ஒரு கோப்பாகச் "
+"சேர்க்கப்படுகிறது."
+
+#: mia/gui/wizard/steps.py:615
 #, python-brace-format
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr ""
 "காப்பகம் உருவாக்கப்பட்டது: {s} ஆய்வுகள், {n} படங்கள். இப்போது அதை ஒரு USB "
 "இயக்ககத்திற்கு நகலெடுக்கவும்."
 
-#: mia/gui/wizard/steps.py:285
+#: mia/gui/wizard/steps.py:641
+msgid "Study"
+msgstr "ஆய்வு"
+
+#: mia/gui/wizard/steps.py:642
+#, python-brace-format
+msgid "{name} ({count} images)"
+msgstr "{name} ({count} படங்கள்)"
+
+#: mia/gui/wizard/steps.py:644
+#, python-brace-format
+msgid "Copying study {i} of {n}: {label}…"
+msgstr "ஆய்வு {i}/{n} நகலெடுக்கப்படுகிறது: {label}…"
+
+#: mia/gui/wizard/steps.py:650
 msgid "Choose your USB drive"
 msgstr "உங்கள் USB இயக்ககத்தைத் தேர்ந்தெடுக்கவும்"
 
-#: mia/gui/wizard/steps.py:292
+#: mia/gui/wizard/steps.py:657
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr "அந்த இயக்ககத்தில் காப்பகத்திற்கு இடம் இல்லை (சுமார் {n} தேவை)."
 
-#: mia/gui/wizard/steps.py:323
+#: mia/gui/wizard/steps.py:705
+msgid "Copy in progress…"
+msgstr "நகலெடுப்பு நடைபெறுகிறது…"
+
+#: mia/gui/wizard/steps.py:706
+msgid "Copy complete."
+msgstr "நகலெடுப்பு முடிந்தது."
+
+#: mia/gui/wizard/steps.py:716
 msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr ""
 "✓ USB-க்கு நகலெடுத்துச் சரிபார்க்கப்பட்டது. முடிக்க அடுத்து என்பதை "
 "அழுத்தவும்."
 
-#: mia/gui/wizard/steps.py:326
+#: mia/gui/wizard/steps.py:719
+msgid "Copied with problems."
+msgstr "சிக்கல்களுடன் நகலெடுக்கப்பட்டது."
+
+#: mia/gui/wizard/steps.py:721
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr ""
 "{f} சிக்கல் கோப்பு(களு)டன் நகலெடுக்கப்பட்டது — தொழில்நுட்ப விவரங்களைப் "
 "பார்க்கவும்."
 
-#: mia/gui/wizard/steps.py:338
+#: mia/gui/wizard/steps.py:733
 msgid "Show the files on the USB"
 msgstr "USB-இல் உள்ள கோப்புகளைக் காட்டு"
 
-#: mia/gui/wizard/steps.py:341
+#: mia/gui/wizard/steps.py:736
 msgid "Open the inventory"
 msgstr "பட்டியலைத் திற"
 
-#: mia/gui/wizard/steps.py:345
+#: mia/gui/wizard/steps.py:740 mia/gui/wizard/steps.py:815
+msgid "Add more files to the USB"
+msgstr "USB-க்கு மேலும் கோப்புகளைச் சேர்க்கவும்"
+
+#: mia/gui/wizard/steps.py:744
 msgid ""
 "Tip: include a one-page cover note with the patient's name, date of birth, a"
 " short history, and the specific questions you want the radiologist to "
@@ -551,7 +998,7 @@ msgstr ""
 "கதிரியக்க மருத்துவர் பதிலளிக்க வேண்டிய குறிப்பிட்ட கேள்விகள் அடங்கிய ஒரு "
 "பக்க அட்டைக் குறிப்பைச் சேர்க்கவும்."
 
-#: mia/gui/wizard/steps.py:355
+#: mia/gui/wizard/steps.py:754
 msgid ""
 "Was this useful? This tool is free and always will be. If it helped you, you"
 " can buy the dev team a coffee — it keeps the project alive and free for "
@@ -562,11 +1009,19 @@ msgstr ""
 "தரலாம் — இது திட்டத்தை இயங்கச் செய்து, பணம் செலுத்த முடியாத குடும்பங்களுக்கு"
 " இலவசமாகவே வைத்திருக்க உதவுகிறது."
 
-#: mia/gui/wizard/steps.py:359
+#: mia/gui/wizard/steps.py:760
 msgid "☕  Buy us a coffee"
 msgstr "☕  எங்களுக்கு ஒரு காபி வாங்கித் தாருங்கள்"
 
-#: mia/gui/wizard/steps.py:370
+#: mia/gui/wizard/steps.py:770
+msgid ""
+"Deploying at a clinic or hospital? Institutional licenses fund free access "
+"for patients →"
+msgstr ""
+"கிளினிக் அல்லது மருத்துவமனையில் பயன்படுத்துகிறீர்களா? நிறுவன உரிமங்கள் "
+"நோயாளிகளின் இலவச அணுகலுக்கு நிதியளிக்கின்றன →"
+
+#: mia/gui/wizard/steps.py:785
 #, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
@@ -579,17 +1034,43 @@ msgstr ""
 "\n"
 "இப்போது அதை உங்கள் மருத்துவரிடம் கொடுக்கலாம்."
 
-#: mia/gui/wizard/steps.py:374
+#: mia/gui/wizard/steps.py:790
 msgid "All done."
 msgstr "அனைத்தும் முடிந்தது."
+
+#: mia/gui/wizard/steps.py:808
+#, python-brace-format
+msgid "Copied {n} file(s) to the USB."
+msgstr "{n} கோப்பு(கள்) USB-க்கு நகலெடுக்கப்பட்டது."
+
+#: mia/gui/wizard/steps.py:810
+#, python-brace-format
+msgid "{f} file(s) could not be copied."
+msgstr "{f} கோப்பு(கள்) நகலெடுக்க முடியவில்லை."
+
+#: mia/gui/wizard/steps.py:812
+msgid ""
+"To embed reports into the DICOM archive for a PACS, add them before "
+"building."
+msgstr ""
+"PACS-க்கான DICOM காப்பகத்தில் அறிக்கைகளை உட்பொதிக்க, உருவாக்குவதற்கு முன் "
+"அவற்றைச் சேர்க்கவும்."
 
 #: mia/gui/wizard/view.py:14
 msgid "Welcome"
 msgstr "வரவேற்பு"
 
 #: mia/gui/wizard/view.py:14
+msgid "Add your studies"
+msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
+
+#: mia/gui/wizard/view.py:14
 msgid "Review"
 msgstr "மறுபார்வை"
+
+#: mia/gui/wizard/view.py:15
+msgid "Add documents"
+msgstr "ஆவணங்களைச் சேர்க்கவும்"
 
 #: mia/gui/wizard/view.py:15
 msgid "Build & deliver"
@@ -599,405 +1080,31 @@ msgstr "உருவாக்கி வழங்கு"
 msgid "Done"
 msgstr "முடிந்தது"
 
-#: mia/gui/wizard/view.py:41
-msgid "Guided Setup"
-msgstr "வழிகாட்டப்பட்ட அமைப்பு"
-
-#: mia/gui/wizard/view.py:53
+#: mia/gui/wizard/view.py:57
 msgid "Exit to Home"
 msgstr "முகப்புக்குச் செல்"
 
-#: mia/gui/wizard/view.py:56 mia/gui/wizard/view.py:131
+#: mia/gui/wizard/view.py:60 mia/gui/wizard/view.py:140
 msgid "Next ›"
 msgstr "அடுத்து ›"
 
-#: mia/gui/wizard/view.py:91
+#: mia/gui/wizard/view.py:96
 #, python-brace-format
 msgid "Step {n} of {m}:  {t}"
 msgstr "படி {n} / {m}:  {t}"
 
-#: mia/gui/wizard/view.py:131
+#: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "முடி"
 
-#: mia/gui/launcher.py:0
-msgid ""
-"This software helps you organize and deliver your own medical images. It "
-"does not interpret images, is not a medical device, and does not replace "
-"professional radiological review. No warranty."
-msgstr ""
-"இந்த மென்பொருள் உங்கள் சொந்த மருத்துவப் படங்களை ஒழுங்கமைத்து வழங்க "
-"உதவுகிறது. இது படங்களை விளக்கம் அளிக்காது, மருத்துவ சாதனம் அல்ல, மற்றும் "
-"தொழில்முறை கதிரியக்க மறுபார்வைக்குப் பதிலாகாது. எந்த உத்தரவாதமும் இல்லை."
-
-#: mia/gui/launcher.py:0
-msgid "Open source · Private by design · No tracking"
-msgstr "திறந்த மூலம் · வடிவமைப்பால் தனிப்பட்டது · கண்காணிப்பு இல்லை"
-
-#: mia/gui/launcher.py:0
-msgid "Made with ♥ by Fritanga"
-msgstr "Fritanga அன்புடன் ♥ உருவாக்கியது"
-
-#: mia/gui/launcher.py:0 mia/gui/wizard/steps.py:0
-msgid "Read our blog"
-msgstr "எங்கள் வலைப்பதிவைப் படிக்கவும்"
-
-#: mia/gui:0
-msgid "Add your studies"
-msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
-
-#: mia/gui:0
-msgid "Add Your Studies"
-msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
-
-#: mia/gui:0
-msgid "Copy discs, USB folders, or ZIP downloads into your project."
-msgstr ""
-"வட்டுகள், USB கோப்புறைகள், அல்லது ZIP பதிவிறக்கங்களை உங்கள் திட்டத்திற்கு "
-"நகலெடுக்கவும்."
-
-#: mia/gui:0
-msgid "From a folder or USB"
-msgstr "ஒரு கோப்புறை அல்லது USB-இலிருந்து"
-
-#: mia/gui:0
-msgid "From a ZIP file"
-msgstr "ஒரு ZIP கோப்பிலிருந்து"
-
-#: mia/gui:0
-msgid ""
-"Insert each CD — it copies and ejects automatically. You can also add "
-"studies from a USB drive, a folder, or a ZIP downloaded from a hospital "
-"portal. When everything's added, click Next."
-msgstr ""
-"ஒவ்வொரு CD-யையும் உள்ளே போடவும் — அது தானாகவே நகலெடுத்து வெளியேற்றும். ஒரு "
-"USB இயக்ககம், ஒரு கோப்புறை, அல்லது மருத்துவமனை இணையதளத்திலிருந்து "
-"பதிவிறக்கிய ZIP-இலிருந்தும் ஆய்வுகளைச் சேர்க்கலாம். அனைத்தும் "
-"சேர்க்கப்பட்டதும், அடுத்து என்பதை அழுத்தவும்."
-
-#: mia/gui:0
-msgid ""
-"Insert a CD — it copies and ejects automatically. You can also add studies "
-"from a USB drive, a folder, or a downloaded ZIP."
-msgstr ""
-"ஒரு CD-யை உள்ளே போடவும் — அது தானாகவே நகலெடுத்து வெளியேற்றும். ஒரு USB "
-"இயக்ககம், ஒரு கோப்புறை, அல்லது பதிவிறக்கிய ZIP-இலிருந்தும் ஆய்வுகளைச் "
-"சேர்க்கலாம்."
-
-#: mia/gui:0
-msgid ""
-"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
-"2.  Review everything we found\n"
-"3.  Build one archive and copy it to a USB drive for your doctor"
-msgstr ""
-"1.  உங்கள் ஆய்வுகளைச் சேர்க்கவும் — CD-கள், USB கோப்புறைகள், அல்லது ZIP பதிவிறக்கங்கள்\n"
-"2.  நாங்கள் கண்டறிந்த அனைத்தையும் மறுபார்வை செய்யவும்\n"
-"3.  ஒரே காப்பகத்தை உருவாக்கி உங்கள் மருத்துவருக்காக ஒரு USB இயக்ககத்திற்கு நகலெடுக்கவும்"
-
-#: mia/gui:0
-#, python-brace-format
-msgid "Sources added so far: {n}"
-msgstr "இதுவரை சேர்க்கப்பட்ட மூலங்கள்: {n}"
-
-#: mia/gui:0
-msgid "Choose the folder or USB drive to import"
-msgstr "இறக்குமதி செய்ய கோப்புறை அல்லது USB இயக்ககத்தைத் தேர்ந்தெடுக்கவும்"
-
-#: mia/gui:0
-msgid "Choose the ZIP file to import"
-msgstr "இறக்குமதி செய்ய ZIP கோப்பைத் தேர்ந்தெடுக்கவும்"
-
-#: mia/gui:0
-msgid "Import"
-msgstr "இறக்குமதி"
-
-#: mia/gui:0
-msgid "All files"
-msgstr "அனைத்துக் கோப்புகள்"
-
-#: mia/gui:0
-msgid "No medical images were found here. Copy anyway?"
-msgstr ""
-"இங்கே மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை. எப்படியும் நகலெடுக்கவா?"
-
-#: mia/gui:0
-#, python-brace-format
-msgid ""
-"{files} files · {size}\n"
-"{dicom} medical images detected.\n"
-"\n"
-"Copy everything into your project?"
-msgstr ""
-"{files} கோப்புகள் · {size}\n"
-"{dicom} மருத்துவப் படங்கள் கண்டறியப்பட்டன.\n"
-"\n"
-"அனைத்தையும் உங்கள் திட்டத்திற்கு நகலெடுக்கவா?"
-
-#: mia/gui:0
-#, python-brace-format
-msgid ""
-"{files} files · {size} inside the ZIP.\n"
-"Medical images are detected during the import.\n"
-"\n"
-"Import it into your project?"
-msgstr ""
-"ZIP-இன் உள்ளே {files} கோப்புகள் · {size}.\n"
-"இறக்குமதியின் போது மருத்துவப் படங்கள் கண்டறியப்படுகின்றன.\n"
-"\n"
-"அதை உங்கள் திட்டத்திற்கு இறக்குமதி செய்யவா?"
-
-#: mia/gui:0
-msgid "This doesn't look like a ZIP file."
-msgstr "இது ஒரு ZIP கோப்பாகத் தெரியவில்லை."
-
-#: mia/gui:0
-msgid ""
-"That folder is inside your project (or contains it). Choose a different "
-"folder."
-msgstr ""
-"அந்தக் கோப்புறை உங்கள் திட்டத்தின் உள்ளே உள்ளது (அல்லது அதைக் கொண்டுள்ளது). "
-"வேறு ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்."
-
-#: mia/gui:0
-#, python-brace-format
-msgid ""
-"Not enough space on the project drive (need about {need}, free {free})."
-msgstr ""
-"திட்ட இயக்ககத்தில் போதிய இடம் இல்லை (சுமார் {need} தேவை, காலி {free})."
-
-#: mia/gui:0
-#, python-brace-format
-msgid "Importing “{name}”…"
-msgstr "“{name}” இறக்குமதி செய்யப்படுகிறது…"
-
-#: mia/gui:0
-msgid "Couldn't import this source."
-msgstr "இந்த மூலத்தை இறக்குமதி செய்ய முடியவில்லை."
-
-#: mia/gui:0
-#, python-brace-format
-msgid "✓ Imported: {c} files OK, {f} could not be read."
-msgstr "✓ இறக்குமதி செய்யப்பட்டது: {c} கோப்புகள் சரி, {f} படிக்க முடியவில்லை."
-
-#: mia/gui:0
-msgid "⚠ No medical images were found in this import."
-msgstr "⚠ இந்த இறக்குமதியில் மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை."
-
-#: mia/gui:0
-msgid "No medical images were found in this import."
-msgstr "இந்த இறக்குமதியில் மருத்துவப் படங்கள் எதுவும் கிடைக்கவில்லை."
-
-#: mia/gui:0
-msgid "✓ Import done. Add another source or continue."
-msgstr "✓ இறக்குமதி முடிந்தது. மற்றொரு மூலத்தைச் சேர்க்கவும் அல்லது தொடரவும்."
-
-#: mia/gui/wizard/steps.py:0
-msgid ""
-"Deploying at a clinic or hospital? Institutional licenses fund free access "
-"for patients →"
-msgstr ""
-"கிளினிக் அல்லது மருத்துவமனையில் பயன்படுத்துகிறீர்களா? நிறுவன உரிமங்கள் "
-"நோயாளிகளின் இலவச அணுகலுக்கு நிதியளிக்கின்றன →"
-
-#: mia/gui/menubar.py:0
-msgid "File"
-msgstr "கோப்பு"
-
-#: mia/gui/menubar.py:0
-msgid "Edit"
-msgstr "திருத்து"
-
-#: mia/gui/menubar.py:0
-msgid "Cut"
-msgstr "வெட்டு"
-
-#: mia/gui/menubar.py:0
-msgid "Copy"
-msgstr "நகலெடு"
-
-#: mia/gui/menubar.py:0
-msgid "Paste"
-msgstr "ஒட்டு"
-
-#: mia/gui/menubar.py:0
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்ந்தெடு"
-
-#: mia/gui/menubar.py:0
-msgid "Go"
-msgstr "செல்"
-
-#: mia/gui/menubar.py:0
-msgid "Home"
-msgstr "முகப்பு"
-
-#: mia/gui/menubar.py:0
-msgid "Language"
-msgstr "மொழி"
-
-#: mia/gui/menubar.py:0
-msgid "Window"
-msgstr "சாளரம்"
-
-#: mia/gui/menubar.py:0
-msgid "Help"
-msgstr "உதவி"
-
-#: mia/gui/menubar.py:0
-msgid "Website"
-msgstr "இணையதளம்"
-
-#: mia/gui/menubar.py:0
-msgid "Privacy policy"
-msgstr "தனியுரிமைக் கொள்கை"
-
-#: mia/gui/menubar.py:0
-msgid "Support the project"
-msgstr "திட்டத்தை ஆதரிக்கவும்"
-
-#: mia/gui/menubar.py:0
-msgid "Transparency"
-msgstr "வெளிப்படைத்தன்மை"
-
-#: mia/gui/menubar.py:0
-msgid "Open Project Folder"
-msgstr "திட்டக் கோப்புறையைத் திற"
-
-#: mia/gui/menubar.py:0
-msgid "Exit"
-msgstr "வெளியேறு"
-
-#: mia/gui/menubar.py:0
-msgid "About MIA Toolkit"
-msgstr "MIA Toolkit பற்றி"
-
-#: mia/gui/menubar.py:0
-msgid "A task is still running — stop it or let it finish first."
-msgstr "ஒரு பணி இன்னும் இயங்குகிறது — அதை நிறுத்துங்கள் அல்லது முடியட்டும்."
-
-#: mia/gui/menubar.py:0
-msgid "Check for Updates…"
-msgstr "புதுப்பிப்புகளைச் சரிபார்…"
-
-#: mia/gui/menubar.py:0
-#, python-brace-format
-msgid "You're on the latest version ({v})."
-msgstr "நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள் ({v})."
-
-#: mia/gui/menubar.py:0
-#, python-brace-format
-msgid ""
-"Version {new} is available — you have {cur}.\n"
-"\n"
-"Open the download page?"
-msgstr ""
-"பதிப்பு {new} கிடைக்கிறது — உங்களிடம் {cur} உள்ளது.\n"
-"\n"
-"பதிவிறக்கப் பக்கத்தைத் திறக்கவா?"
-
-#: mia/gui/menubar.py:0
-msgid "Couldn't check for updates. Try again later."
-msgstr "புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. பின்னர் முயற்சிக்கவும்."
-
-msgid "Add documents"
-msgstr "ஆவணங்களைச் சேர்க்கவும்"
-
-msgid ""
-"Add the radiologist's report or lab/blood-work results (PDFs). They travel "
-"with the scans as files your doctor can open, and PDFs can also be embedded "
-"into the imaging archive for a PACS. Optional — click Next to skip."
-msgstr ""
-"கதிரியக்க மருத்துவரின் அறிக்கை அல்லது ஆய்வக/இரத்தப் பரிசோதனை முடிவுகளை (PDF)"
-" சேர்க்கவும். அவை உங்கள் மருத்துவர் திறக்கக்கூடிய கோப்புகளாக ஸ்கேன்களுடன் "
-"செல்கின்றன; PDF-களை PACS-க்காக படிமக் காப்பகத்திலும் உட்பொதிக்கலாம். "
-"விருப்பத்தேர்வு — தவிர்க்க ‘அடுத்து’ என்பதைக் கிளிக் செய்யவும்."
-
-msgid "Add files…"
-msgstr "கோப்புகளைச் சேர்க்கவும்…"
-
-msgid "No documents added yet."
-msgstr "இன்னும் ஆவணங்கள் சேர்க்கப்படவில்லை."
-
-msgid "Just include the file"
-msgstr "கோப்பை மட்டும் சேர்க்கவும்"
-
-msgid "Choose reports or documents"
-msgstr "அறிக்கைகள் அல்லது ஆவணங்களைத் தேர்ந்தெடுக்கவும்"
-
-msgid "Documents"
-msgstr "ஆவணங்கள்"
-
-msgid "Add more files to the USB"
-msgstr "USB-க்கு மேலும் கோப்புகளைச் சேர்க்கவும்"
-
-#, python-brace-format
-msgid "Copied {n} file(s) to the USB."
-msgstr "{n} கோப்பு(கள்) USB-க்கு நகலெடுக்கப்பட்டது."
-
-msgid ""
-"To embed reports into the DICOM archive for a PACS, add them before "
-"building."
-msgstr ""
-"PACS-க்கான DICOM காப்பகத்தில் அறிக்கைகளை உட்பொதிக்க, உருவாக்குவதற்கு முன் "
-"அவற்றைச் சேர்க்கவும்."
-
-#, python-brace-format
-msgid "Found {n} report PDF(s) — review them in ‘Add documents’."
-msgstr ""
-"{n} அறிக்கை PDF கண்டறியப்பட்டது — ‘ஆவணங்களைச் சேர்’ என்பதில் பார்க்கவும்."
-
-#, python-brace-format
-msgid ""
-"Couldn't embed {name} into the archive — it's still included as a file."
-msgstr ""
-"{name}-ஐ காப்பகத்தில் உட்பொதிக்க முடியவில்லை — அது இன்னும் ஒரு கோப்பாகச் "
-"சேர்க்கப்படுகிறது."
-
-msgid ""
-"1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
-"2.  Review everything we found\n"
-"3.  Add any report or lab PDFs (optional)\n"
-"4.  Build one archive and copy it to a USB drive for your doctor"
-msgstr ""
-"1.  உங்கள் ஆய்வுகளைச் சேர்க்கவும் — CD, USB கோப்புறைகள் அல்லது ZIP பதிவிறக்கங்கள்\n"
-"2.  நாங்கள் கண்டறிந்த அனைத்தையும் பரிசீலிக்கவும்\n"
-"3.  ஏதேனும் அறிக்கை அல்லது ஆய்வக PDF-களைச் சேர்க்கவும் (விருப்பத்தேர்வு)\n"
-"4.  ஒரே காப்பகத்தை உருவாக்கி உங்கள் மருத்துவருக்கு USB-யில் நகலெடுக்கவும்"
-
-#, python-brace-format
-msgid "{f} file(s) could not be copied."
-msgstr "{f} கோப்பு(கள்) நகலெடுக்க முடியவில்லை."
-
-msgid "Copy this drive?"
-msgstr "இந்த இயக்ககத்தை நகலெடுக்கவா?"
-
-#, python-brace-format
-msgid "Copy this drive “{name}”?"
-msgstr "“{name}” இயக்ககத்தை நகலெடுக்கவா?"
-
-msgid "Already added"
-msgstr "ஏற்கனவே சேர்க்கப்பட்டது"
-
-#, python-brace-format
-msgid "“{name}” looks already added. Copy again?"
-msgstr "“{name}” ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் நகலெடுக்கவா?"
-
-msgid "These studies look already added. Import again?"
-msgstr ""
-"இந்த ஆய்வுகள் ஏற்கனவே சேர்க்கப்பட்டதாகத் தெரிகிறது. மீண்டும் இறக்குமதி "
-"செய்யவா?"
-
-#, python-brace-format
-msgid "Already added — skipping “{name}”."
-msgstr "ஏற்கனவே சேர்க்கப்பட்டது — “{name}” தவிர்க்கப்படுகிறது."
-
-msgid "Can't open file"
-msgstr "கோப்பைத் திறக்க முடியவில்லை"
-
-#, python-brace-format
-msgid ""
-"This file can no longer be found:\n"
-"{p}"
-msgstr ""
-"இந்தக் கோப்பு இனி கிடைக்கவில்லை:\n"
-"{p}"
+#~ msgid "Verbose technical log"
+#~ msgstr "விரிவான தொழில்நுட்பப் பதிவு"
+
+#~ msgid ""
+#~ "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
+#~ "2.  Review everything we found\n"
+#~ "3.  Build one archive and copy it to a USB drive for your doctor"
+#~ msgstr ""
+#~ "1.  உங்கள் ஆய்வுகளைச் சேர்க்கவும் — CD-கள், USB கோப்புறைகள், அல்லது ZIP பதிவிறக்கங்கள்\n"
+#~ "2.  நாங்கள் கண்டறிந்த அனைத்தையும் மறுபார்வை செய்யவும்\n"
+#~ "3.  ஒரே காப்பகத்தை உருவாக்கி உங்கள் மருத்துவருக்காக ஒரு USB இயக்ககத்திற்கு நகலெடுக்கவும்"

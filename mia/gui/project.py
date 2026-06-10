@@ -78,14 +78,15 @@ class Project:
 
         new_root = os.path.abspath(os.path.expanduser(new_root))
         result = None
+        sample = deliver.DEFAULT_VERIFY_SAMPLE  # content-check a few files too
         if os.path.isdir(self.raw_discs_dir) and self.has_discs():
             result = deliver.copy_tree_verified(
                 self.raw_discs_dir, os.path.join(new_root, "raw_discs"),
-                progress=progress, cancel=cancel)
+                verify_sample=sample, progress=progress, cancel=cancel)
         if self.has_archive():
             deliver.copy_tree_verified(
                 self.archive_dir, os.path.join(new_root, "Archive"),
-                progress=progress, cancel=cancel)
+                verify_sample=sample, progress=progress, cancel=cancel)
         if os.path.exists(self.inventory_path):
             os.makedirs(new_root, exist_ok=True)
             copy_with_retry(
