@@ -606,6 +606,36 @@ class ArchiveStep(PanelStep):
                 "drive.").format(s=result.studies, n=result.added))
         self.usb_btn.configure(state="normal")
 
+    @staticmethod
+    def _fmt_study_date(d: str) -> str:
+        d = (d or "").strip()
+        return f"{d[:4]}-{d[4:6]}-{d[6:]}" if len(d) == 8 and d.isdigit() else d
+
+    def _copy_groups(self, src: str):
+        """Localized (label, paths) groups so the copy announces progress per
+        study. Returns None (flat copy) if the archive index can't be read."""
+        try:
+            studies = dicomdir.study_groups(src)
+        except Exception:
+            studies = []
+        if not studies:
+            return None
+        n = len(studies)
+        groups = []
+        for i, s in enumerate(studies, 1):
+            name = " ".join(p for p in (s.get("modality"),
+                                        s.get("description")) if p)
+            date = self._fmt_study_date(s.get("date", ""))
+            if date:
+                name = f"{name} · {date}".strip(" ·") if name else date
+            name = name or _("Study")
+            label = _("{name} ({count} images)").format(
+                name=name, count=s.get("count", 0))
+            milestone = _("Copying study {i} of {n}: {label}…").format(
+                i=i, n=n, label=label)
+            groups.append((milestone, s["paths"]))
+        return groups
+
     def _deliver(self) -> None:
         usb = filedialog.askdirectory(title=_("Choose your USB drive"))
         if not usb:
@@ -621,11 +651,15 @@ class ArchiveStep(PanelStep):
         inv = self.project.inventory_path
 
         def work(emit, cancel):
-            # Sample a handful of files for SHA-256 content verification (cheap
-            # insurance against a drive that writes the wrong bytes at the right
-            # size — counterfeit/failing sticks); the rest are size-verified.
+            # Copy study-by-study (prefer_native=False so the in-process pass
+            # does the real copying and the per-study milestones track it live,
+            # not flash by after an opaque ditto run — the two copiers are
+            # device-bound-equivalent). Sample a handful of files for SHA-256
+            # content verification (cheap insurance against a drive that writes
+            # the wrong bytes at the right size — counterfeit/failing sticks).
             result = deliver.copy_tree_verified(
                 src, os.path.join(dest, "Archive"),
+                prefer_native=False, groups=self._copy_groups(src),
                 verify_sample=deliver.DEFAULT_VERIFY_SAMPLE,
                 progress=emit, cancel=cancel)
             if os.path.exists(inv):

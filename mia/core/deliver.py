@@ -229,6 +229,7 @@ def copy_tree_verified(
     thorough: bool = False,
     verify_sample: int = 0,
     prefer_native: bool = True,
+    groups: Optional[List[Tuple[str, List[str]]]] = None,
     progress: Optional[ProgressCallback] = None,
     cancel: Optional[CancelToken] = None,
 ) -> DeliverResult:
@@ -245,6 +246,15 @@ def copy_tree_verified(
     means size-only. Size verification can't detect a write that returned the
     right length but the wrong bytes (e.g. a counterfeit/fake-capacity stick),
     which is what the content sample is for.
+
+    ``groups`` lets the caller announce progress in meaningful chunks (e.g. one
+    per DICOM study): an ordered list of ``(label, [absolute source paths])``.
+    The verify/fill pass then runs group-by-group, emitting the (already
+    localized) ``label`` as an ``info`` milestone before each, while the overall
+    bar still tracks every file. Files under ``src`` not in any group are copied
+    last without a milestone. ``groups=None`` is the original flat behavior.
+    To see per-group milestones tracking the *real* copy, pass
+    ``prefer_native=False`` so the in-process pass does the copying.
     """
     src = os.path.abspath(src)
     dest = os.path.abspath(dest)
@@ -311,6 +321,7 @@ def copy_tree_verified(
             os.makedirs(os.path.dirname(dp), exist_ok=True)
         except OSError as e:
             return ("fail", rel, 0, f"could not create folder: {e}")
+        emit_debug(progress, f"copying {rel}", phase="copy")  # per-file stream
         ok, note = copy_with_retry(sp, dp, cancel=cancel)
         verified = ok and _matches(sp, dp, deep)
         if ok and not verified:                 # one retry on a bad write
@@ -324,6 +335,35 @@ def copy_tree_verified(
             return ("copy", rel, nbytes, note)
         return ("fail", rel, 0, note or "verification failed")
 
+    # Order the work into (optionally labeled) groups so the pass can announce
+    # progress per group (e.g. per study). Each caller group keeps only files
+    # actually under src; anything left over (DICOMDIR, README…) trails in a
+    # final unlabeled group. No groups -> one anonymous group == flat behavior.
+    if groups:
+        walked = set(files)
+        real_src = os.path.realpath(src)
+        assigned: set = set()
+        work_groups: List[Tuple[Optional[str], List[str]]] = []
+        for label, gfiles in groups:
+            members = []
+            for gf in gfiles:
+                # Normalize the caller's path into the exact form os.walk(src)
+                # produced — handles /var↔/private/var symlinks (the caller may
+                # have resolved them, we didn't) so grouping doesn't silently
+                # fall through to the unlabeled tail.
+                cand = os.path.join(
+                    src, os.path.relpath(os.path.realpath(gf), real_src))
+                if cand in walked and cand not in assigned:
+                    members.append(cand)
+                    assigned.add(cand)
+            if members:
+                work_groups.append((label, members))
+        leftovers = [f for f in files if f not in assigned]
+        if leftovers:
+            work_groups.append((None, leftovers))
+    else:
+        work_groups = [(None, files)]
+
     # Managed without `with`: a `with` block's __exit__ calls shutdown(wait=True),
     # which would block on running copies and negate cancel_futures on cancel.
     # We shutdown(wait=False, cancel_futures=True) so cancel returns promptly;
@@ -331,32 +371,36 @@ def copy_tree_verified(
     # token. Workers finish their current (single, small) file and exit.
     pool = ThreadPoolExecutor(max_workers=_MAX_WORKERS)
     try:
-        futures = {pool.submit(handle, sp): sp for sp in files}
-        for fut in as_completed(futures):
-            if cancel is not None and cancel.is_set():
-                raise Cancelled()
-            status, rel, nbytes, note = fut.result()
-            done += 1
-            if status == "skip":
-                skipped += 1
-            elif status == "copy":
-                copied += 1
-                bytes_copied += nbytes
-                if note:
-                    emit(progress, Progress(done, total, kind="retry",
+        for label, gfiles in work_groups:
+            if label:                       # announce the group (e.g. a study)
+                emit(progress, Progress(done, total, kind="info",
+                                        phase="copy", note=label))
+            futures = {pool.submit(handle, sp): sp for sp in gfiles}
+            for fut in as_completed(futures):
+                if cancel is not None and cancel.is_set():
+                    raise Cancelled()
+                status, rel, nbytes, note = fut.result()
+                done += 1
+                if status == "skip":
+                    skipped += 1
+                elif status == "copy":
+                    copied += 1
+                    bytes_copied += nbytes
+                    if note:
+                        emit(progress, Progress(done, total, kind="retry",
+                                                note=f"{rel} ({note})"))
+                else:
+                    failed += 1
+                    failures.append((rel, note))
+                    emit(progress, Progress(done, total, kind="fail",
                                             note=f"{rel} ({note})"))
-            else:
-                failed += 1
-                failures.append((rel, note))
-                emit(progress, Progress(done, total, kind="fail",
-                                        note=f"{rel} ({note})"))
-            now = time.time()
-            if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
-                last_emit = now
-                rate = done / (now - start) if now > start else 0
-                eta = (total - done) / rate if rate > 0 else 0
-                emit(progress, Progress(done, total, elapsed=now - start,
-                                        rate=rate, eta=eta, phase="copy"))
+                now = time.time()
+                if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
+                    last_emit = now
+                    rate = done / (now - start) if now > start else 0
+                    eta = (total - done) / rate if rate > 0 else 0
+                    emit(progress, Progress(done, total, elapsed=now - start,
+                                            rate=rate, eta=eta, phase="copy"))
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
 

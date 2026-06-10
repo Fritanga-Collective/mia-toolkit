@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:15-0600\n"
+"POT-Creation-Date: 2026-06-09 22:35-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Español (Mexico)\n"
@@ -33,7 +33,7 @@ msgstr "Apoyar el proyecto"
 msgid "Transparency"
 msgstr "Transparencia"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:715
+#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "Lee nuestro blog"
 
@@ -468,7 +468,7 @@ msgid "Choose the ZIP file to import"
 msgstr "Elige el archivo ZIP a importar"
 
 #: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:442
-#: mia/gui/wizard/steps.py:754
+#: mia/gui/wizard/steps.py:788
 msgid "All files"
 msgstr "Todos los archivos"
 
@@ -694,7 +694,7 @@ msgstr ""
 msgid "README: {p}"
 msgstr "README: {p}"
 
-#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:616
+#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:646
 msgid "Not enough space"
 msgstr "Espacio insuficiente"
 
@@ -835,11 +835,11 @@ msgstr "Solo incluir el archivo"
 msgid "Skip this file"
 msgstr "Omitir este archivo"
 
-#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:752
+#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:786
 msgid "Choose reports or documents"
 msgstr "Elige informes o documentos"
 
-#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:753
+#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:787
 msgid "Documents"
 msgstr "Documentos"
 
@@ -891,37 +891,51 @@ msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr ""
 "Archivo creado: {s} estudios, {n} imágenes. Ahora cópialo a una memoria USB."
 
-#: mia/gui/wizard/steps.py:610
+#: mia/gui/wizard/steps.py:631
+msgid "Study"
+msgstr "Estudio"
+
+#: mia/gui/wizard/steps.py:632
+#, python-brace-format
+msgid "{name} ({count} images)"
+msgstr "{name} ({count} imágenes)"
+
+#: mia/gui/wizard/steps.py:634
+#, python-brace-format
+msgid "Copying study {i} of {n}: {label}…"
+msgstr "Copiando estudio {i} de {n}: {label}…"
+
+#: mia/gui/wizard/steps.py:640
 msgid "Choose your USB drive"
 msgstr "Elige tu memoria USB"
 
-#: mia/gui/wizard/steps.py:617
+#: mia/gui/wizard/steps.py:647
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr "Esa unidad no tiene espacio para el archivo (se necesitan unos {n})."
 
-#: mia/gui/wizard/steps.py:670
+#: mia/gui/wizard/steps.py:704
 msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr "✓ Copiado a la USB y verificado. Haz clic en Siguiente para terminar."
 
-#: mia/gui/wizard/steps.py:673
+#: mia/gui/wizard/steps.py:707
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr "Copiado con {f} archivo(s) con problemas — ver detalles técnicos."
 
-#: mia/gui/wizard/steps.py:685
+#: mia/gui/wizard/steps.py:719
 msgid "Show the files on the USB"
 msgstr "Mostrar los archivos en la USB"
 
-#: mia/gui/wizard/steps.py:688
+#: mia/gui/wizard/steps.py:722
 msgid "Open the inventory"
 msgstr "Abrir el inventario"
 
-#: mia/gui/wizard/steps.py:692 mia/gui/wizard/steps.py:767
+#: mia/gui/wizard/steps.py:726 mia/gui/wizard/steps.py:801
 msgid "Add more files to the USB"
 msgstr "Agregar más archivos a la USB"
 
-#: mia/gui/wizard/steps.py:696
+#: mia/gui/wizard/steps.py:730
 msgid ""
 "Tip: include a one-page cover note with the patient's name, date of birth, a"
 " short history, and the specific questions you want the radiologist to "
@@ -931,7 +945,7 @@ msgstr ""
 " de nacimiento, un breve historial y las preguntas específicas que quieres "
 "que responda el radiólogo."
 
-#: mia/gui/wizard/steps.py:706
+#: mia/gui/wizard/steps.py:740
 msgid ""
 "Was this useful? This tool is free and always will be. If it helped you, you"
 " can buy the dev team a coffee — it keeps the project alive and free for "
@@ -941,11 +955,11 @@ msgstr ""
 "ayudó, puedes invitarle un café al equipo — eso mantiene el proyecto vivo y "
 "gratis para las familias que no pueden pagar."
 
-#: mia/gui/wizard/steps.py:712
+#: mia/gui/wizard/steps.py:746
 msgid "☕  Buy us a coffee"
 msgstr "☕  Invítanos un café"
 
-#: mia/gui/wizard/steps.py:722
+#: mia/gui/wizard/steps.py:756
 msgid ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
@@ -953,7 +967,7 @@ msgstr ""
 "¿Lo usarán en una clínica u hospital? Las licencias institucionales "
 "financian el acceso gratuito de los pacientes →"
 
-#: mia/gui/wizard/steps.py:737
+#: mia/gui/wizard/steps.py:771
 #, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
@@ -966,21 +980,21 @@ msgstr ""
 "\n"
 "Ya puedes entregárselo a tu médico."
 
-#: mia/gui/wizard/steps.py:742
+#: mia/gui/wizard/steps.py:776
 msgid "All done."
 msgstr "¡Listo!"
 
-#: mia/gui/wizard/steps.py:760
+#: mia/gui/wizard/steps.py:794
 #, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "Se copiaron {n} archivo(s) a la USB."
 
-#: mia/gui/wizard/steps.py:762
+#: mia/gui/wizard/steps.py:796
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "No se pudieron copiar {f} archivo(s)."
 
-#: mia/gui/wizard/steps.py:764
+#: mia/gui/wizard/steps.py:798
 msgid ""
 "To embed reports into the DICOM archive for a PACS, add them before "
 "building."

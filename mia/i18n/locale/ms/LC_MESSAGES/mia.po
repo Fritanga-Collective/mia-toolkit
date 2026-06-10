@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:15-0600\n"
+"POT-Creation-Date: 2026-06-09 22:35-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -29,7 +29,7 @@ msgstr "Sokong projek ini"
 msgid "Transparency"
 msgstr "Ketelusan"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:715
+#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "Baca blog kami"
 
@@ -467,7 +467,7 @@ msgid "Choose the ZIP file to import"
 msgstr "Pilih fail ZIP untuk diimport"
 
 #: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:442
-#: mia/gui/wizard/steps.py:754
+#: mia/gui/wizard/steps.py:788
 msgid "All files"
 msgstr "Semua fail"
 
@@ -695,7 +695,7 @@ msgstr ""
 msgid "README: {p}"
 msgstr "README: {p}"
 
-#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:616
+#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:646
 msgid "Not enough space"
 msgstr "Ruang tidak mencukupi"
 
@@ -836,11 +836,11 @@ msgstr "Sertakan fail sahaja"
 msgid "Skip this file"
 msgstr "Langkau fail ini"
 
-#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:752
+#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:786
 msgid "Choose reports or documents"
 msgstr "Pilih laporan atau dokumen"
 
-#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:753
+#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:787
 msgid "Documents"
 msgstr "Dokumen"
 
@@ -890,38 +890,52 @@ msgstr ""
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr "Arkib dibina: {s} kajian, {n} imej. Sekarang salin ia ke pemacu USB."
 
-#: mia/gui/wizard/steps.py:610
+#: mia/gui/wizard/steps.py:631
+msgid "Study"
+msgstr "Kajian"
+
+#: mia/gui/wizard/steps.py:632
+#, python-brace-format
+msgid "{name} ({count} images)"
+msgstr "{name} ({count} imej)"
+
+#: mia/gui/wizard/steps.py:634
+#, python-brace-format
+msgid "Copying study {i} of {n}: {label}…"
+msgstr "Menyalin kajian {i} daripada {n}: {label}…"
+
+#: mia/gui/wizard/steps.py:640
 msgid "Choose your USB drive"
 msgstr "Pilih pemacu USB anda"
 
-#: mia/gui/wizard/steps.py:617
+#: mia/gui/wizard/steps.py:647
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr ""
 "Pemacu itu tidak mempunyai ruang untuk arkib (perlukan kira-kira {n})."
 
-#: mia/gui/wizard/steps.py:670
+#: mia/gui/wizard/steps.py:704
 msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr "✓ Telah disalin ke USB dan disahkan. Klik Seterusnya untuk selesai."
 
-#: mia/gui/wizard/steps.py:673
+#: mia/gui/wizard/steps.py:707
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr "Disalin dengan {f} fail bermasalah — lihat butiran teknikal."
 
-#: mia/gui/wizard/steps.py:685
+#: mia/gui/wizard/steps.py:719
 msgid "Show the files on the USB"
 msgstr "Tunjukkan fail dalam USB"
 
-#: mia/gui/wizard/steps.py:688
+#: mia/gui/wizard/steps.py:722
 msgid "Open the inventory"
 msgstr "Buka inventori"
 
-#: mia/gui/wizard/steps.py:692 mia/gui/wizard/steps.py:767
+#: mia/gui/wizard/steps.py:726 mia/gui/wizard/steps.py:801
 msgid "Add more files to the USB"
 msgstr "Tambah lagi fail ke USB"
 
-#: mia/gui/wizard/steps.py:696
+#: mia/gui/wizard/steps.py:730
 msgid ""
 "Tip: include a one-page cover note with the patient's name, date of birth, a"
 " short history, and the specific questions you want the radiologist to "
@@ -931,7 +945,7 @@ msgstr ""
 "lahir, sejarah ringkas, dan soalan khusus yang anda ingin pakar radiologi "
 "jawab."
 
-#: mia/gui/wizard/steps.py:706
+#: mia/gui/wizard/steps.py:740
 msgid ""
 "Was this useful? This tool is free and always will be. If it helped you, you"
 " can buy the dev team a coffee — it keeps the project alive and free for "
@@ -942,11 +956,11 @@ msgstr ""
 "membantu projek ini terus hidup dan percuma untuk keluarga yang tidak mampu "
 "membayar."
 
-#: mia/gui/wizard/steps.py:712
+#: mia/gui/wizard/steps.py:746
 msgid "☕  Buy us a coffee"
 msgstr "☕  Belanja kami kopi"
 
-#: mia/gui/wizard/steps.py:722
+#: mia/gui/wizard/steps.py:756
 msgid ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
@@ -954,7 +968,7 @@ msgstr ""
 "Menggunakannya di klinik atau hospital? Lesen institusi membiayai akses "
 "percuma untuk pesakit →"
 
-#: mia/gui/wizard/steps.py:737
+#: mia/gui/wizard/steps.py:771
 #, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
@@ -967,21 +981,21 @@ msgstr ""
 "\n"
 "Anda kini boleh menyerahkannya kepada doktor anda."
 
-#: mia/gui/wizard/steps.py:742
+#: mia/gui/wizard/steps.py:776
 msgid "All done."
 msgstr "Semua selesai."
 
-#: mia/gui/wizard/steps.py:760
+#: mia/gui/wizard/steps.py:794
 #, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "{n} fail disalin ke USB."
 
-#: mia/gui/wizard/steps.py:762
+#: mia/gui/wizard/steps.py:796
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "{f} fail tidak dapat disalin."
 
-#: mia/gui/wizard/steps.py:764
+#: mia/gui/wizard/steps.py:798
 msgid ""
 "To embed reports into the DICOM archive for a PACS, add them before "
 "building."

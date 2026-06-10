@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:15-0600\n"
+"POT-Creation-Date: 2026-06-09 22:35-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 中文 (Simplified)\n"
@@ -33,7 +33,7 @@ msgstr "支持这个项目"
 msgid "Transparency"
 msgstr "透明度"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:715
+#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "阅读我们的博客"
 
@@ -455,7 +455,7 @@ msgid "Choose the ZIP file to import"
 msgstr "选择要导入的 ZIP 文件"
 
 #: mia/gui/import_flow.py:85 mia/gui/wizard/steps.py:442
-#: mia/gui/wizard/steps.py:754
+#: mia/gui/wizard/steps.py:788
 msgid "All files"
 msgstr "所有文件"
 
@@ -664,7 +664,7 @@ msgstr "✓ 归档完成：{s} 项检查，{n} 张图像。把此文件夹复制
 msgid "README: {p}"
 msgstr "README：{p}"
 
-#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:616
+#: mia/gui/wizard/steps.py:86 mia/gui/wizard/steps.py:646
 msgid "Not enough space"
 msgstr "空间不足"
 
@@ -793,11 +793,11 @@ msgstr "仅包含该文件"
 msgid "Skip this file"
 msgstr "跳过此文件"
 
-#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:752
+#: mia/gui/wizard/steps.py:440 mia/gui/wizard/steps.py:786
 msgid "Choose reports or documents"
 msgstr "选择报告或文档"
 
-#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:753
+#: mia/gui/wizard/steps.py:441 mia/gui/wizard/steps.py:787
 msgid "Documents"
 msgstr "文档"
 
@@ -845,61 +845,75 @@ msgstr "无法将 {name} 嵌入存档——它仍会作为文件包含在内。"
 msgid "Archive built: {s} studies, {n} images. Now copy it to a USB drive."
 msgstr "归档已生成：{s} 项检查，{n} 张图像。现在把它复制到 U 盘。"
 
-#: mia/gui/wizard/steps.py:610
+#: mia/gui/wizard/steps.py:631
+msgid "Study"
+msgstr "检查"
+
+#: mia/gui/wizard/steps.py:632
+#, python-brace-format
+msgid "{name} ({count} images)"
+msgstr "{name}（{count} 张图像）"
+
+#: mia/gui/wizard/steps.py:634
+#, python-brace-format
+msgid "Copying study {i} of {n}: {label}…"
+msgstr "正在复制检查 {i}/{n}：{label}…"
+
+#: mia/gui/wizard/steps.py:640
 msgid "Choose your USB drive"
 msgstr "选择你的 U 盘"
 
-#: mia/gui/wizard/steps.py:617
+#: mia/gui/wizard/steps.py:647
 #, python-brace-format
 msgid "That drive doesn't have room for the archive (need about {n})."
 msgstr "该驱动器没有空间存放归档（约需 {n}）。"
 
-#: mia/gui/wizard/steps.py:670
+#: mia/gui/wizard/steps.py:704
 msgid "✓ Copied to the USB and verified. Click Next to finish."
 msgstr "✓ 已复制到 U 盘并校验完成。点击“下一步”结束。"
 
-#: mia/gui/wizard/steps.py:673
+#: mia/gui/wizard/steps.py:707
 #, python-brace-format
 msgid "Copied with {f} problem file(s) — see technical details."
 msgstr "复制完成，但有 {f} 个文件有问题——见技术详情。"
 
-#: mia/gui/wizard/steps.py:685
+#: mia/gui/wizard/steps.py:719
 msgid "Show the files on the USB"
 msgstr "在 U 盘中显示文件"
 
-#: mia/gui/wizard/steps.py:688
+#: mia/gui/wizard/steps.py:722
 msgid "Open the inventory"
 msgstr "打开清单"
 
-#: mia/gui/wizard/steps.py:692 mia/gui/wizard/steps.py:767
+#: mia/gui/wizard/steps.py:726 mia/gui/wizard/steps.py:801
 msgid "Add more files to the USB"
 msgstr "向 U 盘添加更多文件"
 
-#: mia/gui/wizard/steps.py:696
+#: mia/gui/wizard/steps.py:730
 msgid ""
 "Tip: include a one-page cover note with the patient's name, date of birth, a"
 " short history, and the specific questions you want the radiologist to "
 "answer."
 msgstr "提示：附上一页说明，写明患者姓名、出生日期、简要病史，以及你希望放射科医生回答的具体问题。"
 
-#: mia/gui/wizard/steps.py:706
+#: mia/gui/wizard/steps.py:740
 msgid ""
 "Was this useful? This tool is free and always will be. If it helped you, you"
 " can buy the dev team a coffee — it keeps the project alive and free for "
 "families who can't pay."
 msgstr "这对你有帮助吗？本工具是免费的，而且永远免费。如果它帮到了你，可以请开发团队喝杯咖啡——这能让项目持续运转，并对无力支付的家庭保持免费。"
 
-#: mia/gui/wizard/steps.py:712
+#: mia/gui/wizard/steps.py:746
 msgid "☕  Buy us a coffee"
 msgstr "☕  请我们喝杯咖啡"
 
-#: mia/gui/wizard/steps.py:722
+#: mia/gui/wizard/steps.py:756
 msgid ""
 "Deploying at a clinic or hospital? Institutional licenses fund free access "
 "for patients →"
 msgstr "在诊所或医院部署？机构许可证为患者的免费使用提供资金 →"
 
-#: mia/gui/wizard/steps.py:737
+#: mia/gui/wizard/steps.py:771
 #, python-brace-format
 msgid ""
 "All done! Your archive is on the USB drive at:\n"
@@ -912,21 +926,21 @@ msgstr ""
 "\n"
 "现在可以把它交给你的医生了。"
 
-#: mia/gui/wizard/steps.py:742
+#: mia/gui/wizard/steps.py:776
 msgid "All done."
 msgstr "全部完成！"
 
-#: mia/gui/wizard/steps.py:760
+#: mia/gui/wizard/steps.py:794
 #, python-brace-format
 msgid "Copied {n} file(s) to the USB."
 msgstr "已将 {n} 个文件复制到 U 盘。"
 
-#: mia/gui/wizard/steps.py:762
+#: mia/gui/wizard/steps.py:796
 #, python-brace-format
 msgid "{f} file(s) could not be copied."
 msgstr "有 {f} 个文件无法复制。"
 
-#: mia/gui/wizard/steps.py:764
+#: mia/gui/wizard/steps.py:798
 msgid ""
 "To embed reports into the DICOM archive for a PACS, add them before "
 "building."

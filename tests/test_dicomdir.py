@@ -35,6 +35,26 @@ def test_build_writes_loadable_dicomdir(dataset_dir, tmp_path):
     assert len(list(fs)) == result.added
 
 
+def test_study_groups_partitions_built_archive_by_study(dataset_dir, tmp_path):
+    root, expected = dataset_dir
+    out = tmp_path / "Archive"
+    result = dicomdir.build_fileset(root, str(out))
+
+    groups = dicomdir.study_groups(str(out))
+    assert len(groups) == expected["studies"]                 # 2 studies
+    assert len({g["uid"] for g in groups}) == len(groups)     # distinct UIDs
+    assert sum(g["count"] for g in groups) == result.added    # every instance
+    for g in groups:
+        assert g["paths"] and g["count"] == len(g["paths"])
+        for p in g["paths"]:
+            assert os.path.isabs(p) and os.path.exists(p)
+            assert os.path.abspath(str(out)) in p             # under the archive
+
+
+def test_study_groups_missing_index_returns_empty(tmp_path):
+    assert dicomdir.study_groups(str(tmp_path)) == []         # no DICOMDIR
+
+
 def test_build_writes_readme(dataset_dir, tmp_path):
     root, _ = dataset_dir
     out = tmp_path / "Archive"

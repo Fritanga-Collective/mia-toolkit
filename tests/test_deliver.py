@@ -2,9 +2,20 @@ import os
 
 import pytest
 
-from mia.core import deliver
+from mia.core import common, deliver
 from mia.core.common import Cancelled
 from tests.helpers import CancelNow
+
+
+@pytest.fixture(autouse=True)
+def _quiet_verbose():
+    """Verbose is ON in production, but the copy/native tests want a known,
+    quiet baseline (no per-file debug stream, no ditto -v capture). Pin it off
+    and restore — tests that exercise verbose set it explicitly."""
+    orig = common.is_verbose()
+    common.set_verbose(False)
+    yield
+    common.set_verbose(orig)
 
 
 def _tree(root):
@@ -288,6 +299,62 @@ def test_verify_sample_caps_at_file_count(tmp_path, monkeypatch):
                                      prefer_native=False, verify_sample=2)
     assert asked["k"] == 2
     assert res.content_verified == 2
+
+
+def test_groups_emit_ordered_milestones_and_copy_all(tmp_path):
+    # groups announce per-group info milestones (in order) while every file is
+    # still copied and the overall bar counts them all.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))  # a.txt, sub/b.bin, sub/deep/c.dat
+    # Pass group paths through a symlinked alias of src (realpath-divergent,
+    # like macOS /var vs /private/var) to exercise the path normalization.
+    alias = tmp_path / "alias"
+    try:
+        os.symlink(str(src), str(alias))
+        base = str(alias)
+    except (OSError, NotImplementedError):
+        base = str(src)
+    a = os.path.join(base, "a.txt")
+    b = os.path.join(base, "sub", "b.bin")
+    # c.dat deliberately left out of the groups -> trailing unlabeled group.
+    groups = [("Study 1 of 2", [a]), ("Study 2 of 2", [b])]
+
+    events = []
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False,
+                                     groups=groups, progress=events.append)
+    assert res.files_copied == 3 and res.failed == 0
+    for rel in ("a.txt", "sub/b.bin", "sub/deep/c.dat"):
+        assert (dst / rel).exists()                  # leftover copied too
+    milestones = [e.note for e in events
+                  if e.kind == "info" and e.phase == "copy"]
+    assert milestones == ["Study 1 of 2", "Study 2 of 2"]   # ordered, no tail
+
+
+def test_groups_none_is_unchanged_flat_copy(tmp_path):
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    files = _tree(str(src))
+    events = []
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False,
+                                     progress=events.append)
+    assert res.files_copied == len(files)
+    assert not [e for e in events if e.kind == "info" and e.phase == "copy"]
+
+
+def test_verbose_emits_per_file_copy_stream(tmp_path):
+    src = tmp_path / "src"
+    _tree(str(src))
+    common.set_verbose(True)
+    try:
+        events = []
+        deliver.copy_tree_verified(str(src), str(tmp_path / "d"),
+                                   prefer_native=False, progress=events.append)
+    finally:
+        common.set_verbose(False)
+    stream = [e.note for e in events if e.kind == "debug"
+              and e.note and e.note.startswith("copying ")]
+    assert len(stream) == 3                            # one per copied file
 
 
 def test_cancellation(tmp_path):

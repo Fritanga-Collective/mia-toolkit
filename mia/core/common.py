@@ -61,10 +61,13 @@ ProgressCallback = Callable[[Progress], None]
 
 
 # Process-global verbose switch. Workers consult is_verbose() before emitting
-# kind="debug" timing notes (extra detail for diagnosing slowness), so the
-# Help ▸ "Verbose technical log" toggle gates the noise at the source rather
-# than every consumer having to filter it.
-_VERBOSE = False
+# kind="debug" timing/per-file notes (extra detail for diagnosing slowness),
+# so the Help ▸ "Verbose technical log" toggle gates the noise at the source
+# rather than every consumer having to filter it. On by default: the detail is
+# captured into the collapsed technical pane + session log and only shown when
+# the user expands "technical details", so the main view stays clean while the
+# diagnostic trail is always there. The Help toggle turns it OFF.
+_VERBOSE = True
 
 
 def is_verbose() -> bool:
