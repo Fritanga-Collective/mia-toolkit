@@ -124,6 +124,79 @@ def test_native_copy_emits_indeterminate_progress(tmp_path, monkeypatch):
     assert all(e.done == 0 and e.eta == 0 for e in native)
 
 
+def test_ditto_gets_dash_v_and_streams_to_debug_when_verbose(tmp_path,
+                                                             monkeypatch):
+    # With the verbose technical log on, ditto runs with -v and its per-item
+    # stderr stream is forwarded as kind="debug" notes — so a slow USB copy
+    # shows *which* file it's on.
+    from mia.core import common
+
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+
+    seen = {}
+
+    class FakeProc:
+        def __init__(self, cmd):
+            self._polls = 0
+            self.returncode = 0
+            self.stderr = iter([">>> Copying a.txt\n", ">>> Copying b.bin\n"])
+
+        def poll(self):
+            self._polls += 1
+            return None if self._polls < 3 else 0
+
+    def fake_popen(cmd, **_k):
+        seen["cmd"] = cmd
+        return FakeProc(cmd)
+
+    monkeypatch.setattr(deliver.platform, "system", lambda: "Darwin")
+    monkeypatch.setattr(deliver.shutil, "which", lambda _c: "/usr/bin/ditto")
+    monkeypatch.setattr(deliver.subprocess, "Popen", fake_popen)
+    monkeypatch.setattr(deliver.time, "sleep", lambda _s: None)
+
+    common.set_verbose(True)
+    try:
+        events = []
+        deliver.copy_tree_verified(str(src), str(dst), prefer_native=True,
+                                   progress=events.append)
+    finally:
+        common.set_verbose(False)
+
+    assert seen["cmd"][:2] == ["ditto", "-v"]
+    debug_notes = [e.note for e in events if e.kind == "debug" and e.note]
+    assert any("Copying a.txt" in n for n in debug_notes)
+    assert any("Copying b.bin" in n for n in debug_notes)
+
+
+def test_ditto_no_dash_v_when_not_verbose(tmp_path, monkeypatch):
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+    seen = {}
+
+    class FakeProc:
+        def __init__(self):
+            self._polls = 0
+            self.returncode = 0
+
+        def poll(self):
+            self._polls += 1
+            return None if self._polls < 2 else 0
+
+    monkeypatch.setattr(deliver.platform, "system", lambda: "Darwin")
+    monkeypatch.setattr(deliver.shutil, "which", lambda _c: "/usr/bin/ditto")
+    monkeypatch.setattr(deliver.subprocess, "Popen",
+                        lambda cmd, **_k: (seen.__setitem__("cmd", cmd)
+                                           or FakeProc()))
+    monkeypatch.setattr(deliver.time, "sleep", lambda _s: None)
+
+    deliver.copy_tree_verified(str(src), str(dst), prefer_native=True,
+                               progress=lambda _p: None)
+    assert "-v" not in seen["cmd"]
+
+
 def test_copy_creates_nested_dirs_without_upfront_precreate(tmp_path):
     # We dropped the upfront dest-tree mkdir storm (minutes of dead time on
     # USB). The verify/fill pass must still create each file's parent lazily,

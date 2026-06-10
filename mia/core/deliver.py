@@ -24,6 +24,7 @@ import os
 import platform
 import shutil
 import subprocess
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
@@ -37,6 +38,7 @@ from .common import (
     check_cancel,
     emit,
     emit_debug,
+    is_verbose,
 )
 from .ripper import copy_with_retry
 
@@ -128,14 +130,22 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
     and reads as nonsense ("11974h"). So while the tool runs we emit an honest
     *indeterminate* "Copying… (elapsed)" event every couple of seconds: an
     animated bar with no fake percentage. The real determinate bar belongs to
-    the verify/fill pass that follows, which counts actual files."""
+    the verify/fill pass that follows, which counts actual files.
+
+    When verbose mode is on, ditto gets ``-v`` so it streams a line per item to
+    stderr; we forward those to the technical log (kind="debug") on a reader
+    thread, which is exactly what's needed to see *which* file a slow USB copy
+    is stalling on."""
     system = platform.system()
+    verbose = is_verbose()
     if system == "Windows":
         cmd = ["robocopy", src, dest, "/E", "/MT:8", "/R:1", "/W:1",
                "/NFL", "/NDL", "/NJH", "/NP"]
         ok_codes = range(0, 8)            # robocopy: <8 == success
     elif system == "Darwin":
-        cmd = ["ditto", src, dest]
+        # -v makes ditto name each item it copies (to stderr) — only worth the
+        # noise when the user has asked for the verbose technical log.
+        cmd = ["ditto", "-v", src, dest] if verbose else ["ditto", src, dest]
         ok_codes = (0,)
     elif system == "Linux":
         cmd = ["cp", "-a", src + "/.", dest + "/"]
@@ -145,11 +155,31 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
     if shutil.which(cmd[0]) is None:
         return False
     emit_debug(progress, f"native copy: {' '.join(cmd)}", phase="copy")
+    # Capture ditto's verbose stream so we can forward it; otherwise discard
+    # both streams. (Only ditto streams useful per-file lines on -v here.)
+    capture = verbose and system == "Darwin"
     try:
-        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL)
+        proc = subprocess.Popen(
+            cmd, stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE if capture else subprocess.DEVNULL,
+            text=True if capture else None, errors="replace")
     except OSError:
         return False
+
+    reader: Optional[threading.Thread] = None
+    if capture and proc.stderr is not None:
+        def _forward(stream) -> None:
+            try:
+                for line in stream:
+                    line = line.rstrip("\n")
+                    if line:
+                        emit_debug(progress, f"ditto: {line}", phase="copy")
+            except (OSError, ValueError):
+                pass  # stream closed when the proc is terminated — fine
+        reader = threading.Thread(target=_forward, args=(proc.stderr,),
+                                  daemon=True)
+        reader.start()
+
     start = time.time()
     last_poll = 0.0
     try:
@@ -172,6 +202,9 @@ def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
             time.sleep(0.2)
     except Cancelled:
         raise
+    finally:
+        if reader is not None:
+            reader.join(timeout=2)  # let the last verbose lines flush
     elapsed = time.time() - start
     emit_debug(progress,
                f"native copy finished: rc={proc.returncode} in {elapsed:.1f}s",
