@@ -63,15 +63,23 @@ class Progress:
 
 
 ProgressCallback = Callable[[Progress], None]
+# THREADING CONTRACT: a ProgressCallback may be invoked from more than one
+# thread for a single operation — e.g. ``deliver.copy_tree_verified`` emits the
+# per-file debug stream from its ThreadPoolExecutor workers and ditto's verbose
+# output from a stderr reader thread, alongside main-thread ticks. Callbacks
+# MUST be thread-safe / self-marshalling. The GUI satisfies this: ``jobs`` hands
+# workers an emitter that only does ``queue.Queue.put`` (thread-safe) and drains
+# it on the Tk thread via ``root.after``; ``ConsoleProgress`` just prints. Don't
+# touch Tk widgets or non-thread-safe aggregators directly from a callback.
 
 
 # Process-global verbose switch. Workers consult is_verbose() before emitting
-# kind="debug" timing/per-file notes (extra detail for diagnosing slowness),
-# so the Help ▸ "Verbose technical log" toggle gates the noise at the source
-# rather than every consumer having to filter it. On by default: the detail is
-# captured into the collapsed technical pane + session log and only shown when
-# the user expands "technical details", so the main view stays clean while the
-# diagnostic trail is always there. The Help toggle turns it OFF.
+# kind="debug" timing/per-file notes (extra detail for diagnosing slowness), so
+# the gating happens at the source rather than every consumer filtering it. On
+# by default: the detail is captured into the collapsed technical pane + session
+# log and only shown when the user expands "technical details", so the main view
+# stays clean while the diagnostic trail is always there. (The CLI exposes a
+# --verbose flag via ConsoleProgress; the GUI has no separate toggle.)
 _VERBOSE = True
 
 

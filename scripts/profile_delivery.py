@@ -356,7 +356,7 @@ def _interpret(runs: list[dict], files: int, total_bytes: int) -> None:
         print(f"   • in-process vs native wall ratio: {ratio:.2f}× → {verdict}.")
     print()
     print("  Deeper dive on the verify pass (the only Python-heavy part):")
-    print("    scalene --cli --- scripts/profile_delivery.py "
+    print("    scalene scripts/profile_delivery.py "
           "--synthetic 2000 --dest <USB> --only inprocess-thorough")
     print("    pyinstrument scripts/profile_delivery.py "
           "--synthetic 2000 --dest <USB> --only inprocess-thorough")
