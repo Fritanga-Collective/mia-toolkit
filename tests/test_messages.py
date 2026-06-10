@@ -54,6 +54,15 @@ def test_plain_tick_wording_by_phase():
     assert "Indexing" in p.feed(Progress(4, 10, phase="index"))[0]
 
 
+def test_copy_tick_counts_images_within_a_study():
+    # When the copy is chunked per study, the line counts images in the current
+    # study (group_done/group_total), not the opaque global file number.
+    plain, _ = Presenter().feed(
+        Progress(1212, 11165, phase="copy", group_done=45, group_total=240))
+    assert "45" in plain and "240" in plain
+    assert "1212" not in plain and "11165" not in plain
+
+
 def test_humanize_exception_maps_common_errors():
     assert "permission" in humanize_exception(PermissionError()).lower()
     assert humanize_exception(FileNotFoundError())

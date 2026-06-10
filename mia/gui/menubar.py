@@ -13,7 +13,6 @@ import webbrowser
 from tkinter import messagebox
 
 from .. import __version__
-from ..core import common
 from .i18n import LANGUAGES, N_, _, current_language
 
 SITE = "https://mia-toolkit.fritanga.co/"
@@ -159,12 +158,6 @@ def build_menubar(app) -> tk.Menu:
     for label, url in LINKS:
         helpmenu.add_command(label=_(label),
                              command=lambda u=url: webbrowser.open(u))
-    helpmenu.add_separator()
-    verbose_var = tk.BooleanVar(value=common.is_verbose())
-    menubar._verbose_var = verbose_var  # keep a reference alive across rebuilds
-    helpmenu.add_checkbutton(
-        label=_("Verbose technical log"), variable=verbose_var,
-        command=lambda: common.set_verbose(verbose_var.get()))
     if not aqua:
         helpmenu.add_separator()
         helpmenu.add_command(label=_("Check for Updates…"),

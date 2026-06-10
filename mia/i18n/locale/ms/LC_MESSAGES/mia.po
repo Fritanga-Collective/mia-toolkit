@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:35-0600\n"
+"POT-Creation-Date: 2026-06-09 22:48-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -13,44 +13,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mia/gui/menubar.py:21
+#: mia/gui/menubar.py:20
 msgid "Website"
 msgstr "Laman web"
 
-#: mia/gui/menubar.py:22
+#: mia/gui/menubar.py:21
 msgid "Privacy policy"
 msgstr "Dasar privasi"
 
-#: mia/gui/menubar.py:23
+#: mia/gui/menubar.py:22
 msgid "Support the project"
 msgstr "Sokong projek ini"
 
-#: mia/gui/menubar.py:24
+#: mia/gui/menubar.py:23
 msgid "Transparency"
 msgstr "Ketelusan"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
+#: mia/gui/menubar.py:24 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "Baca blog kami"
 
-#: mia/gui/menubar.py:44 mia/gui/menubar.py:100 mia/gui/menubar.py:172
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
 msgid "About MIA Toolkit"
 msgstr "Perihal MIA Toolkit"
 
-#: mia/gui/menubar.py:46 mia/gui/launcher.py:71
+#: mia/gui/menubar.py:45 mia/gui/launcher.py:71
 msgid "Made with ♥ by Fritanga"
 msgstr "Dibuat dengan ♥ oleh Fritanga"
 
-#: mia/gui/menubar.py:63 mia/gui/menubar.py:68 mia/gui/menubar.py:75
-#: mia/gui/menubar.py:102 mia/gui/menubar.py:170
+#: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
+#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
 msgid "Check for Updates…"
 msgstr "Semak Kemas Kini…"
 
-#: mia/gui/menubar.py:64
+#: mia/gui/menubar.py:63
 msgid "Couldn't check for updates. Try again later."
 msgstr "Tidak dapat menyemak kemas kini. Cuba lagi nanti."
 
-#: mia/gui/menubar.py:69
+#: mia/gui/menubar.py:68
 #, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
@@ -61,80 +61,76 @@ msgstr ""
 "\n"
 "Buka halaman muat turun?"
 
-#: mia/gui/menubar.py:76
+#: mia/gui/menubar.py:75
 #, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Anda menggunakan versi terkini ({v})."
 
-#: mia/gui/menubar.py:109
+#: mia/gui/menubar.py:108
 msgid "Open Project Folder"
 msgstr "Buka Folder Projek"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:112
 msgid "Exit"
 msgstr "Keluar"
 
-#: mia/gui/menubar.py:114
+#: mia/gui/menubar.py:113
 msgid "File"
 msgstr "Fail"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Cut"
 msgstr "Potong"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Copy"
 msgstr "Salin"
 
-#: mia/gui/menubar.py:119
+#: mia/gui/menubar.py:118
 msgid "Paste"
 msgstr "Tampal"
 
-#: mia/gui/menubar.py:123
+#: mia/gui/menubar.py:122
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: mia/gui/menubar.py:125
+#: mia/gui/menubar.py:124
 msgid "Edit"
 msgstr "Sunting"
 
-#: mia/gui/menubar.py:130
+#: mia/gui/menubar.py:129
 msgid "Home"
 msgstr "Laman Utama"
 
-#: mia/gui/menubar.py:131 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "Persediaan Berpandu"
 
-#: mia/gui/menubar.py:132 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "Tambah Kajian Anda"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "Bina Inventori"
 
-#: mia/gui/menubar.py:134 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "Bina Arkib untuk Doktor"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:147
 msgid "Language"
 msgstr "Bahasa"
 
-#: mia/gui/menubar.py:149
+#: mia/gui/menubar.py:148
 msgid "Go"
 msgstr "Pergi"
 
-#: mia/gui/menubar.py:154
+#: mia/gui/menubar.py:153
 msgid "Window"
 msgstr "Tetingkap"
 
-#: mia/gui/menubar.py:166
-msgid "Verbose technical log"
-msgstr "Log teknikal terperinci"
-
-#: mia/gui/menubar.py:174
+#: mia/gui/menubar.py:167
 msgid "Help"
 msgstr "Bantuan"
 
@@ -357,27 +353,32 @@ msgstr "Berjaya memulihkan satu fail selepas cubaan semula."
 msgid "⚠ Could not read a file (see technical details)."
 msgstr "⚠ Tidak dapat membaca satu fail (lihat butiran teknikal)."
 
-#: mia/gui/messages.py:69
+#: mia/gui/messages.py:73
+#, python-brace-format
+msgid "Copying image {done} of {total}…"
+msgstr "Menyalin imej {done} daripada {total}…"
+
+#: mia/gui/messages.py:75
 #, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "Menyalin fail {done} daripada {total}…"
 
-#: mia/gui/messages.py:71
+#: mia/gui/messages.py:77
 #, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "Mengimbas fail {done} daripada {total}…"
 
-#: mia/gui/messages.py:73
+#: mia/gui/messages.py:79
 #, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "Mengindeks imej {done} daripada {total}…"
 
-#: mia/gui/messages.py:75
+#: mia/gui/messages.py:81
 #, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "Sedang bekerja… {done} daripada {total}"
 
-#: mia/gui/messages.py:82
+#: mia/gui/messages.py:88
 msgid ""
 "Permission denied. The destination may be read-only or locked. Try a "
 "different folder, or check the drive isn't write-protected."
@@ -385,7 +386,7 @@ msgstr ""
 "Kebenaran ditolak. Destinasi mungkin baca-sahaja atau dikunci. Cuba folder "
 "lain, atau periksa sama ada pemacu itu dilindungi daripada penulisan."
 
-#: mia/gui/messages.py:85
+#: mia/gui/messages.py:91
 msgid ""
 "A needed file or folder was not found. A disc may have been ejected too "
 "early, or a folder was moved."
@@ -393,17 +394,17 @@ msgstr ""
 "Fail atau folder yang diperlukan tidak dijumpai. Mungkin sebuah cakera telah"
 " dikeluarkan terlalu awal, atau sebuah folder telah dipindahkan."
 
-#: mia/gui/messages.py:88
+#: mia/gui/messages.py:94
 msgid "The disk is full. Free up space or choose a drive with more room."
 msgstr ""
 "Cakera sudah penuh. Kosongkan ruang atau pilih pemacu yang ada lebih banyak "
 "ruang."
 
-#: mia/gui/messages.py:90
+#: mia/gui/messages.py:96
 msgid "That location is read-only. Choose a different destination folder."
 msgstr "Lokasi itu baca-sahaja. Pilih folder destinasi yang lain."
 
-#: mia/gui/messages.py:91
+#: mia/gui/messages.py:97
 msgid "Something went wrong. See the technical details below."
 msgstr "Ada sesuatu yang tidak kena. Lihat butiran teknikal di bawah."
 
@@ -1043,6 +1044,9 @@ msgstr "Langkah {n} daripada {m}:  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "Selesai"
+
+#~ msgid "Verbose technical log"
+#~ msgstr "Log teknikal terperinci"
 
 #~ msgid ""
 #~ "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"

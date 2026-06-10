@@ -375,12 +375,18 @@ def copy_tree_verified(
             if label:                       # announce the group (e.g. a study)
                 emit(progress, Progress(done, total, kind="info",
                                         phase="copy", note=label))
+            # Per-group image counter for the plain line (labeled groups only;
+            # the unlabeled tail falls back to the overall file count).
+            g_total = len(gfiles) if label else 0
+            g_done = 0
             futures = {pool.submit(handle, sp): sp for sp in gfiles}
             for fut in as_completed(futures):
                 if cancel is not None and cancel.is_set():
                     raise Cancelled()
                 status, rel, nbytes, note = fut.result()
                 done += 1
+                if label:
+                    g_done += 1
                 if status == "skip":
                     skipped += 1
                 elif status == "copy":
@@ -400,7 +406,9 @@ def copy_tree_verified(
                     rate = done / (now - start) if now > start else 0
                     eta = (total - done) / rate if rate > 0 else 0
                     emit(progress, Progress(done, total, elapsed=now - start,
-                                            rate=rate, eta=eta, phase="copy"))
+                                            rate=rate, eta=eta, phase="copy",
+                                            group_done=g_done,
+                                            group_total=g_total))
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
 

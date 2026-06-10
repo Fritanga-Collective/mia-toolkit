@@ -330,6 +330,12 @@ def test_groups_emit_ordered_milestones_and_copy_all(tmp_path):
                   if e.kind == "info" and e.phase == "copy"]
     assert milestones == ["Study 1 of 2", "Study 2 of 2"]   # ordered, no tail
 
+    # Determinate ticks inside a labeled group carry per-group image counts so
+    # the UI can say "image k of N", with group_done never exceeding the total.
+    grouped = [e for e in events if e.kind == "progress"
+               and e.phase == "copy" and e.group_total]
+    assert grouped and all(0 < e.group_done <= e.group_total for e in grouped)
+
 
 def test_groups_none_is_unchanged_flat_copy(tmp_path):
     src = tmp_path / "src"

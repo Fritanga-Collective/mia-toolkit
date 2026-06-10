@@ -51,6 +51,11 @@ class Progress:
     # opaque OS bulk-copy): the UI should show an animated "working" bar, not a
     # made-up percentage/ETA.
     indeterminate: bool = False
+    # Position within the current named group (e.g. one DICOM study) when the
+    # work is chunked: done/total still drive the overall bar, but a consumer
+    # can show "image {group_done} of {group_total}" for the chunk in progress.
+    group_done: int = 0
+    group_total: int = 0
 
     @property
     def pct(self) -> float:

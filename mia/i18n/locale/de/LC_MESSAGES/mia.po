@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:35-0600\n"
+"POT-Creation-Date: 2026-06-09 22:48-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -13,44 +13,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mia/gui/menubar.py:21
+#: mia/gui/menubar.py:20
 msgid "Website"
 msgstr "Website"
 
-#: mia/gui/menubar.py:22
+#: mia/gui/menubar.py:21
 msgid "Privacy policy"
 msgstr "Datenschutz"
 
-#: mia/gui/menubar.py:23
+#: mia/gui/menubar.py:22
 msgid "Support the project"
 msgstr "Das Projekt unterstützen"
 
-#: mia/gui/menubar.py:24
+#: mia/gui/menubar.py:23
 msgid "Transparency"
 msgstr "Transparenz"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
+#: mia/gui/menubar.py:24 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "Unseren Blog lesen"
 
-#: mia/gui/menubar.py:44 mia/gui/menubar.py:100 mia/gui/menubar.py:172
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
 msgid "About MIA Toolkit"
 msgstr "Über MIA Toolkit"
 
-#: mia/gui/menubar.py:46 mia/gui/launcher.py:71
+#: mia/gui/menubar.py:45 mia/gui/launcher.py:71
 msgid "Made with ♥ by Fritanga"
 msgstr "Mit ♥ erstellt von Fritanga"
 
-#: mia/gui/menubar.py:63 mia/gui/menubar.py:68 mia/gui/menubar.py:75
-#: mia/gui/menubar.py:102 mia/gui/menubar.py:170
+#: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
+#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
 msgid "Check for Updates…"
 msgstr "Nach Updates suchen…"
 
-#: mia/gui/menubar.py:64
+#: mia/gui/menubar.py:63
 msgid "Couldn't check for updates. Try again later."
 msgstr "Updates konnten nicht geprüft werden. Versuchen Sie es später erneut."
 
-#: mia/gui/menubar.py:69
+#: mia/gui/menubar.py:68
 #, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
@@ -61,80 +61,76 @@ msgstr ""
 "\n"
 "Download-Seite öffnen?"
 
-#: mia/gui/menubar.py:76
+#: mia/gui/menubar.py:75
 #, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "Sie haben die neueste Version ({v})."
 
-#: mia/gui/menubar.py:109
+#: mia/gui/menubar.py:108
 msgid "Open Project Folder"
 msgstr "Projektordner öffnen"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:112
 msgid "Exit"
 msgstr "Beenden"
 
-#: mia/gui/menubar.py:114
+#: mia/gui/menubar.py:113
 msgid "File"
 msgstr "Datei"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Copy"
 msgstr "Kopieren"
 
-#: mia/gui/menubar.py:119
+#: mia/gui/menubar.py:118
 msgid "Paste"
 msgstr "Einfügen"
 
-#: mia/gui/menubar.py:123
+#: mia/gui/menubar.py:122
 msgid "Select All"
 msgstr "Alles auswählen"
 
-#: mia/gui/menubar.py:125
+#: mia/gui/menubar.py:124
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: mia/gui/menubar.py:130
+#: mia/gui/menubar.py:129
 msgid "Home"
 msgstr "Start"
 
-#: mia/gui/menubar.py:131 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "Geführte Einrichtung"
 
-#: mia/gui/menubar.py:132 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "Untersuchungen hinzufügen"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "Übersicht erstellen"
 
-#: mia/gui/menubar.py:134 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "Archiv für den Arzt erstellen"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:147
 msgid "Language"
 msgstr "Sprache"
 
-#: mia/gui/menubar.py:149
+#: mia/gui/menubar.py:148
 msgid "Go"
 msgstr "Gehe zu"
 
-#: mia/gui/menubar.py:154
+#: mia/gui/menubar.py:153
 msgid "Window"
 msgstr "Fenster"
 
-#: mia/gui/menubar.py:166
-msgid "Verbose technical log"
-msgstr "Ausführliches technisches Protokoll"
-
-#: mia/gui/menubar.py:174
+#: mia/gui/menubar.py:167
 msgid "Help"
 msgstr "Hilfe"
 
@@ -358,27 +354,32 @@ msgstr "Eine Datei wurde nach einem erneuten Versuch wiederhergestellt."
 msgid "⚠ Could not read a file (see technical details)."
 msgstr "⚠ Eine Datei konnte nicht gelesen werden (siehe technische Details)."
 
-#: mia/gui/messages.py:69
+#: mia/gui/messages.py:73
+#, python-brace-format
+msgid "Copying image {done} of {total}…"
+msgstr "Kopiere Bild {done} von {total}…"
+
+#: mia/gui/messages.py:75
 #, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "Datei {done} von {total} wird kopiert…"
 
-#: mia/gui/messages.py:71
+#: mia/gui/messages.py:77
 #, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "Datei {done} von {total} wird geprüft…"
 
-#: mia/gui/messages.py:73
+#: mia/gui/messages.py:79
 #, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "Bild {done} von {total} wird erfasst…"
 
-#: mia/gui/messages.py:75
+#: mia/gui/messages.py:81
 #, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "Wird bearbeitet… {done} von {total}"
 
-#: mia/gui/messages.py:82
+#: mia/gui/messages.py:88
 msgid ""
 "Permission denied. The destination may be read-only or locked. Try a "
 "different folder, or check the drive isn't write-protected."
@@ -387,7 +388,7 @@ msgstr ""
 "gesperrt. Versuchen Sie einen anderen Ordner, oder prüfen Sie, ob das "
 "Laufwerk schreibgeschützt ist."
 
-#: mia/gui/messages.py:85
+#: mia/gui/messages.py:91
 msgid ""
 "A needed file or folder was not found. A disc may have been ejected too "
 "early, or a folder was moved."
@@ -396,19 +397,19 @@ msgstr ""
 "Möglicherweise wurde eine Disc zu früh ausgeworfen oder ein Ordner "
 "verschoben."
 
-#: mia/gui/messages.py:88
+#: mia/gui/messages.py:94
 msgid "The disk is full. Free up space or choose a drive with more room."
 msgstr ""
 "Der Datenträger ist voll. Geben Sie Speicherplatz frei oder wählen Sie ein "
 "Laufwerk mit mehr Platz."
 
-#: mia/gui/messages.py:90
+#: mia/gui/messages.py:96
 msgid "That location is read-only. Choose a different destination folder."
 msgstr ""
 "Dieser Speicherort ist schreibgeschützt. Wählen Sie einen anderen "
 "Zielordner."
 
-#: mia/gui/messages.py:91
+#: mia/gui/messages.py:97
 msgid "Something went wrong. See the technical details below."
 msgstr ""
 "Etwas ist schiefgelaufen. Sehen Sie sich die technischen Details unten an."
@@ -1063,6 +1064,9 @@ msgstr "Schritt {n} von {m}:  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "Fertigstellen"
+
+#~ msgid "Verbose technical log"
+#~ msgstr "Ausführliches technisches Protokoll"
 
 #~ msgid ""
 #~ "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"

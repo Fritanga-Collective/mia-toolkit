@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:35-0600\n"
+"POT-Creation-Date: 2026-06-09 22:48-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -13,44 +13,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mia/gui/menubar.py:21
+#: mia/gui/menubar.py:20
 msgid "Website"
 msgstr "இணையதளம்"
 
-#: mia/gui/menubar.py:22
+#: mia/gui/menubar.py:21
 msgid "Privacy policy"
 msgstr "தனியுரிமைக் கொள்கை"
 
-#: mia/gui/menubar.py:23
+#: mia/gui/menubar.py:22
 msgid "Support the project"
 msgstr "திட்டத்தை ஆதரிக்கவும்"
 
-#: mia/gui/menubar.py:24
+#: mia/gui/menubar.py:23
 msgid "Transparency"
 msgstr "வெளிப்படைத்தன்மை"
 
-#: mia/gui/menubar.py:25 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
+#: mia/gui/menubar.py:24 mia/gui/launcher.py:76 mia/gui/wizard/steps.py:749
 msgid "Read our blog"
 msgstr "எங்கள் வலைப்பதிவைப் படிக்கவும்"
 
-#: mia/gui/menubar.py:44 mia/gui/menubar.py:100 mia/gui/menubar.py:172
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
 msgid "About MIA Toolkit"
 msgstr "MIA Toolkit பற்றி"
 
-#: mia/gui/menubar.py:46 mia/gui/launcher.py:71
+#: mia/gui/menubar.py:45 mia/gui/launcher.py:71
 msgid "Made with ♥ by Fritanga"
 msgstr "Fritanga அன்புடன் ♥ உருவாக்கியது"
 
-#: mia/gui/menubar.py:63 mia/gui/menubar.py:68 mia/gui/menubar.py:75
-#: mia/gui/menubar.py:102 mia/gui/menubar.py:170
+#: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
+#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
 msgid "Check for Updates…"
 msgstr "புதுப்பிப்புகளைச் சரிபார்…"
 
-#: mia/gui/menubar.py:64
+#: mia/gui/menubar.py:63
 msgid "Couldn't check for updates. Try again later."
 msgstr "புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை. பின்னர் முயற்சிக்கவும்."
 
-#: mia/gui/menubar.py:69
+#: mia/gui/menubar.py:68
 #, python-brace-format
 msgid ""
 "Version {new} is available — you have {cur}.\n"
@@ -61,80 +61,76 @@ msgstr ""
 "\n"
 "பதிவிறக்கப் பக்கத்தைத் திறக்கவா?"
 
-#: mia/gui/menubar.py:76
+#: mia/gui/menubar.py:75
 #, python-brace-format
 msgid "You're on the latest version ({v})."
 msgstr "நீங்கள் சமீபத்திய பதிப்பில் உள்ளீர்கள் ({v})."
 
-#: mia/gui/menubar.py:109
+#: mia/gui/menubar.py:108
 msgid "Open Project Folder"
 msgstr "திட்டக் கோப்புறையைத் திற"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:112
 msgid "Exit"
 msgstr "வெளியேறு"
 
-#: mia/gui/menubar.py:114
+#: mia/gui/menubar.py:113
 msgid "File"
 msgstr "கோப்பு"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Cut"
 msgstr "வெட்டு"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:117
 msgid "Copy"
 msgstr "நகலெடு"
 
-#: mia/gui/menubar.py:119
+#: mia/gui/menubar.py:118
 msgid "Paste"
 msgstr "ஒட்டு"
 
-#: mia/gui/menubar.py:123
+#: mia/gui/menubar.py:122
 msgid "Select All"
 msgstr "அனைத்தையும் தேர்ந்தெடு"
 
-#: mia/gui/menubar.py:125
+#: mia/gui/menubar.py:124
 msgid "Edit"
 msgstr "திருத்து"
 
-#: mia/gui/menubar.py:130
+#: mia/gui/menubar.py:129
 msgid "Home"
 msgstr "முகப்பு"
 
-#: mia/gui/menubar.py:131 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "வழிகாட்டப்பட்ட அமைப்பு"
 
-#: mia/gui/menubar.py:132 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "உங்கள் ஆய்வுகளைச் சேர்க்கவும்"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "பட்டியலை உருவாக்கு"
 
-#: mia/gui/menubar.py:134 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "மருத்துவருக்கான காப்பகத்தை உருவாக்கு"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:147
 msgid "Language"
 msgstr "மொழி"
 
-#: mia/gui/menubar.py:149
+#: mia/gui/menubar.py:148
 msgid "Go"
 msgstr "செல்"
 
-#: mia/gui/menubar.py:154
+#: mia/gui/menubar.py:153
 msgid "Window"
 msgstr "சாளரம்"
 
-#: mia/gui/menubar.py:166
-msgid "Verbose technical log"
-msgstr "விரிவான தொழில்நுட்பப் பதிவு"
-
-#: mia/gui/menubar.py:174
+#: mia/gui/menubar.py:167
 msgid "Help"
 msgstr "உதவி"
 
@@ -359,27 +355,32 @@ msgid "⚠ Could not read a file (see technical details)."
 msgstr ""
 "⚠ ஒரு கோப்பைப் படிக்க முடியவில்லை (தொழில்நுட்ப விவரங்களைப் பார்க்கவும்)."
 
-#: mia/gui/messages.py:69
+#: mia/gui/messages.py:73
+#, python-brace-format
+msgid "Copying image {done} of {total}…"
+msgstr "படம் {done}/{total} நகலெடுக்கப்படுகிறது…"
+
+#: mia/gui/messages.py:75
 #, python-brace-format
 msgid "Copying file {done} of {total}…"
 msgstr "கோப்பு {done} / {total} நகலெடுக்கப்படுகிறது…"
 
-#: mia/gui/messages.py:71
+#: mia/gui/messages.py:77
 #, python-brace-format
 msgid "Scanning file {done} of {total}…"
 msgstr "கோப்பு {done} / {total} வருடப்படுகிறது…"
 
-#: mia/gui/messages.py:73
+#: mia/gui/messages.py:79
 #, python-brace-format
 msgid "Indexing image {done} of {total}…"
 msgstr "படம் {done} / {total} அட்டவணைப்படுத்தப்படுகிறது…"
 
-#: mia/gui/messages.py:75
+#: mia/gui/messages.py:81
 #, python-brace-format
 msgid "Working… {done} of {total}"
 msgstr "வேலை நடக்கிறது… {total}-இல் {done}"
 
-#: mia/gui/messages.py:82
+#: mia/gui/messages.py:88
 msgid ""
 "Permission denied. The destination may be read-only or locked. Try a "
 "different folder, or check the drive isn't write-protected."
@@ -388,7 +389,7 @@ msgstr ""
 "பூட்டப்பட்டிருக்கலாம். வேறு கோப்புறையை முயற்சிக்கவும், அல்லது இயக்ககம் "
 "எழுத-தடைசெய்யப்படவில்லை என்பதைச் சரிபார்க்கவும்."
 
-#: mia/gui/messages.py:85
+#: mia/gui/messages.py:91
 msgid ""
 "A needed file or folder was not found. A disc may have been ejected too "
 "early, or a folder was moved."
@@ -397,18 +398,18 @@ msgstr ""
 "விரைவாக வெளியேற்றப்பட்டிருக்கலாம், அல்லது ஒரு கோப்புறை "
 "நகர்த்தப்பட்டிருக்கலாம்."
 
-#: mia/gui/messages.py:88
+#: mia/gui/messages.py:94
 msgid "The disk is full. Free up space or choose a drive with more room."
 msgstr ""
 "வட்டு நிரம்பிவிட்டது. இடத்தைக் காலி செய்யவும் அல்லது அதிக இடமுள்ள "
 "இயக்ககத்தைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/messages.py:90
+#: mia/gui/messages.py:96
 msgid "That location is read-only. Choose a different destination folder."
 msgstr ""
 "அந்த இடம் படிக்க-மட்டும். வேறு ஒரு சேருமிடக் கோப்புறையைத் தேர்ந்தெடுக்கவும்."
 
-#: mia/gui/messages.py:91
+#: mia/gui/messages.py:97
 msgid "Something went wrong. See the technical details below."
 msgstr "ஏதோ தவறு நடந்தது. கீழே உள்ள தொழில்நுட்ப விவரங்களைப் பார்க்கவும்."
 
@@ -1066,6 +1067,9 @@ msgstr "படி {n} / {m}:  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "முடி"
+
+#~ msgid "Verbose technical log"
+#~ msgstr "விரிவான தொழில்நுட்பப் பதிவு"
 
 #~ msgid ""
 #~ "1.  Add your studies — CDs, USB folders, or ZIP downloads\n"
