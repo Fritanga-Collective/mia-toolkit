@@ -16,21 +16,29 @@ What it reports, per run:
     files/s long before MB/s — that distinction is the whole diagnosis)
   * total wall time
 
-It runs up to four configurations so the comparison is apples-to-apples:
+By default it runs ONE configuration (native-size) — the fastest representative
+number. There are four to choose from, all apples-to-apples on the same tree:
   native+size, native+thorough(SHA-256), inprocess+size, inprocess+thorough.
+Pass --all to run the whole matrix, but beware: that's 4 full copies plus 2
+full read-back SHA-256 passes plus 4 per-file deletes, which on a slow USB can
+take *hours*. Prefer comparing one pair at a time with --only.
 
 Usage:
-    # Synthetic tree (defaults: 4000 files x 256 KB ≈ 1 GB of small files,
-    # which is the realistic DICOM-on-USB shape) to a real USB mount:
+    # Default: native copier, size-only verify — one quick number (synthetic
+    # tree defaults to 4000 files x 256 KB ≈ 1 GB of small files, the realistic
+    # DICOM-on-USB shape):
     python scripts/profile_delivery.py --synthetic 4000 --dest /Volumes/USB
 
-    # A real built archive:
+    # Is our in-process copier faster than ditto on this drive? Run the pair:
+    python scripts/profile_delivery.py --synthetic 4000 --dest /Volumes/USB \
+        --only inprocess-size
+
+    # A real built archive instead of synthetic files:
     python scripts/profile_delivery.py --src ~/Documents/MedicalArchive/Archive \
         --dest /Volumes/USB
 
-    # Just the native copier, size-only verify (fastest single number):
-    python scripts/profile_delivery.py --synthetic 4000 --dest /Volumes/USB \
-        --only native-size
+    # The whole matrix (slow!):
+    python scripts/profile_delivery.py --synthetic 4000 --dest /Volumes/USB --all
 
 To go deeper on the *verify pass* specifically (the only CPU/syscall-heavy
 part), wrap a single in-process run in a real profiler — see the banner this
@@ -109,6 +117,22 @@ class Live:
             if summary:
                 sys.stdout.write(f"  ✓ {summary}\n")
             sys.stdout.flush()
+
+    def message(self, text: str) -> None:
+        """Print a standalone milestone line (finishing any heartbeat first)."""
+        self._milestone(text)
+
+    def tick(self, text: str) -> None:
+        """Update the single heartbeat line with arbitrary text."""
+        self._draw(text)
+
+    def endline(self) -> None:
+        """Close off a heartbeat line so the next output starts fresh."""
+        with self._lock:
+            if self._pending:
+                sys.stdout.write("\n")
+                self._pending = False
+                sys.stdout.flush()
 
     def __call__(self, p) -> None:
         kind = p.kind
@@ -200,6 +224,24 @@ def tree_stats(root: str) -> tuple[int, int]:
     return files, bytes_
 
 
+def _cleanup(live: "Live", target: str) -> None:
+    """rmtree with a live heartbeat — deleting thousands of files off a USB is
+    itself slow (FAT/exFAT unlink per file), so it must not look frozen."""
+    if not os.path.isdir(target):
+        return
+    live.message("  · cleaning up the previous copy off the drive "
+                 "(per-file delete — slow on USB)…")
+    t0 = time.perf_counter()
+    done = threading.Event()
+    threading.Thread(
+        target=lambda: (shutil.rmtree(target, ignore_errors=True), done.set()),
+        daemon=True).start()
+    while not done.wait(0.2):
+        live.tick(f"cleaning up… "
+                  f"{common.format_duration(time.perf_counter() - t0)} elapsed")
+    live.endline()
+
+
 def run_one(label: str, src: str, dest: str, *, prefer_native: bool,
             thorough: bool, live: "Live") -> dict:
     """One delivery into a *fresh* dest subdir; returns parsed phase timings.
@@ -207,8 +249,7 @@ def run_one(label: str, src: str, dest: str, *, prefer_native: bool,
     Streams rsync-style live progress to the terminal via ``live`` while also
     collecting the events for the final table."""
     target = os.path.join(dest, f"_profile_{label}")
-    if os.path.isdir(target):
-        shutil.rmtree(target, ignore_errors=True)
+    _cleanup(live, target)
     os.makedirs(target, exist_ok=True)
 
     events: list = []
@@ -242,7 +283,7 @@ def run_one(label: str, src: str, dest: str, *, prefer_native: bool,
             out["native"] = float(m.group(2))
         elif (m := _VERIFY.search(n)):
             out["verify"] = float(m.group(4))
-    shutil.rmtree(target, ignore_errors=True)
+    _cleanup(live, target)
     return out
 
 
@@ -334,7 +375,11 @@ def main() -> int:
     ap.add_argument("--dest", required=True,
                     help="destination root (a USB mount to measure the real thing)")
     ap.add_argument("--only", choices=list(CONFIGS),
-                    help="run a single configuration instead of all four")
+                    help="run a specific single configuration "
+                         "(default is native-size)")
+    ap.add_argument("--all", action="store_true",
+                    help="run ALL four configs (4× copies + 2 full read-back "
+                         "SHA-256 passes — can take hours on a slow USB)")
     args = ap.parse_args()
 
     if not os.path.isdir(args.dest):
@@ -354,10 +399,15 @@ def main() -> int:
         files, total = tree_stats(src)
 
     try:
-        labels = [args.only] if args.only else list(CONFIGS)
+        if args.only:
+            labels = [args.only]
+        elif args.all:
+            labels = list(CONFIGS)
+        else:
+            labels = ["native-size"]   # one quick, representative number
         live = Live()
-        print(f"  source: {files} files, {human_bytes(total)} → {args.dest}",
-              flush=True)
+        print(f"  source: {files} files, {human_bytes(total)} → {args.dest}"
+              f"  [{', '.join(labels)}]", flush=True)
         runs = []
         for label in labels:
             runs.append(run_one(label, src, args.dest, live=live,
