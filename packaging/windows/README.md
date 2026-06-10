@@ -22,45 +22,61 @@ pyinstaller packaging\windows\mia-windows.spec --noconfirm
 The installer is **per-user** (`PrivilegesRequired=lowest`) — no admin prompt,
 installs to `%LOCALAPPDATA%\Programs`.
 
-## Signing — SignPath Foundation (the Windows "notarization")
+## Signing — currently **unsigned** on Windows
 
-Windows has no notarization service like Apple's; the equivalent is an
-**Authenticode signature** plus reputation, so SmartScreen stops flagging
-"unknown publisher." We sign via **SignPath Foundation** — free code signing for
-open-source projects, with native GitHub Actions integration. The visible
-publisher on the certificate is **"SignPath Foundation"**.
+**The Windows installer is not code-signed yet.** Windows has no notarization
+service like Apple's; the equivalent is an **Authenticode signature** plus
+reputation. Until we have a certificate, the installer will trigger a Microsoft
+**SmartScreen** "Windows protected your PC / unknown publisher" prompt.
 
-> Why not Microsoft Trusted Signing? Its identity validation is only offered in
-> the **USA / Canada / EU / UK** — unavailable from Mexico (for individuals and
-> orgs alike). The full Trusted Signing runbook is kept dormant internally in
-> case Microsoft expands regions.
+### Installing the unsigned build (for users)
 
-The release workflow is **already wired**: after Inno Setup builds the
-installer, it uploads the unsigned exe as a CI artifact, submits a SignPath
-signing request, swaps in the signed result, and fails the build unless
-`Get-AuthenticodeSignature` reports `Valid`. The publish job only ever picks up
-the final artifact — the unsigned intermediate can't ship. Everything is gated
-on the `SIGNPATH_API_TOKEN` secret, so builds stay unsigned until approval.
+It's safe to install — you just have to tell Windows to proceed:
 
-### One-time setup
+1. Download `MIA-Toolkit-Setup-<version>.exe` from the
+   [Releases page](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest).
+2. Run it. If SmartScreen appears, click **More info → Run anyway**.
+3. (Optional) Verify the download matches the SHA-256 published in the release's
+   `version.json` before running.
 
-1. **Apply** at signpath.org → Open Source program (SignPath Foundation).
-   Requirements we already meet: public repo, OSI license (MIT, see `LICENSE`),
-   builds produced by GitHub Actions from the repo. Review takes ~1–3 weeks.
-2. On approval, in SignPath create/confirm the **project** (`mia-toolkit`), its
-   **artifact configuration** (the installer .exe), and the
-   **`release-signing` policy**; create a **CI user API token**.
-3. Add to GitHub: secret **`SIGNPATH_API_TOKEN`** (the gate) and repo variable
-   **`SIGNPATH_ORG_ID`** (the organization id). Slugs in the workflow must match
-   the project/policy names above; verify the
-   `signpath/github-action-submit-signing-request` version pin.
-4. Add the SignPath attribution to the README (Foundation requirement), e.g.
-   "Free code signing provided by [SignPath.io](https://signpath.io), certificate
-   by SignPath Foundation."
-5. Tag a release → the Windows job ships a signed installer or fails loudly.
+> Prefer a managed channel? We're working toward winget/package-manager
+> distribution; until then the Releases page is the source of truth.
 
-Notes:
-- **Reputation still warms up over downloads** — a correct signature reduces but
-  doesn't instantly remove SmartScreen prompts.
-- Want deep-signing of the inner app exe too? Configure it in the SignPath
-  artifact configuration (or add a second signing request before Inno packs it).
+### Why unsigned (status, 2026-06-10)
+
+Both viable signing paths are currently closed:
+
+- **Microsoft Trusted Signing** — identity validation only offered in the
+  **USA / Canada / EU / UK**, unavailable from Mexico (individuals and orgs
+  alike). Runbook kept dormant internally in case regions expand.
+- **SignPath Foundation** (free OSS signing) — **application rejected
+  (2026-06-10)** on public-traction grounds (stars/forks/references/articles),
+  explicitly *not* a quality judgment. They invite reapplication once the
+  project has broader recognition, so this is parked, not closed.
+
+Options under review: reapply to SignPath after growing traction, or purchase a
+certificate (e.g. **Certum Open Source Code Signing** — individual validation,
+cloud-token signing that works in CI). macOS builds remain signed + notarized.
+
+### The pipeline is wired and dormant
+
+`release.yml` is already set up to sign when a certificate exists: after Inno
+Setup builds the installer it uploads the unsigned exe as a CI artifact, submits
+a SignPath signing request, swaps in the signed result, and fails the build
+unless `Get-AuthenticodeSignature` reports `Valid`. The publish job only picks up
+the final artifact — an unsigned intermediate can't ship through that path.
+Everything is gated on the `SIGNPATH_API_TOKEN` secret; it's **unset**, so the
+signing step is skipped and the plain (unsigned) installer ships, as today.
+
+### If/when we get a signing path
+
+For SignPath (on a future approval): create/confirm the **project**
+(`mia-toolkit`), its **artifact configuration** (the installer .exe), and the
+**`release-signing` policy**; create a CI user API token; add the
+`SIGNPATH_API_TOKEN` secret + `SIGNPATH_ORG_ID` variable (slugs must match the
+workflow); verify the `signpath/github-action-submit-signing-request` pin; add
+the SignPath attribution line to `README.md`; tag a release → signed installer
+or loud failure. For a **purchased cert**, swap the SignPath step for the CA's
+cloud-signing action (e.g. Certum SimplySign / SSL.com eSigner) behind the same
+gate. Either way, reputation **warms up over downloads** — only an EV cert
+removes the SmartScreen prompt instantly.
