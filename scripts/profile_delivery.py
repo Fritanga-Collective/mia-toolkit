@@ -169,7 +169,14 @@ class Live:
     def _draw(self, text: str, *, throttle: bool = False) -> None:
         now = time.perf_counter()
         with self._lock:
-            if throttle and now - self._last_draw < 0.1:
+            # On a TTY the heartbeat updates one line in place, so draw freely
+            # (0.1s on the noisy ditto stream). When piped to a log there is no
+            # in-place update — each draw is a new line — so coarsen to one
+            # heartbeat every few seconds, keeping `… | tee run.log` readable.
+            min_gap = 0.1 if throttle else 0.0
+            if not self.tty:
+                min_gap = max(min_gap, 3.0)
+            if now - self._last_draw < min_gap:
                 return
             self._last_draw = now
             self._spin = (self._spin + 1) % len(_SPIN)
