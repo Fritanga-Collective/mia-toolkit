@@ -45,6 +45,7 @@ import re
 import shutil
 import sys
 import tempfile
+import threading
 import time
 
 # Run from a checkout without installing.
@@ -56,6 +57,7 @@ _WALK = re.compile(r"walked (\d+) files in ([\d.]+)s")
 _NATIVE = re.compile(r"native copy finished: rc=(-?\d+) in ([\d.]+)s")
 _VERIFY = re.compile(r"verify/fill pass: (\d+) copied, (\d+) skipped, "
                      r"(\d+) failed in ([\d.]+)s")
+_SPIN = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 
 
 def human_bytes(n: float) -> str:
@@ -64,6 +66,104 @@ def human_bytes(n: float) -> str:
             return f"{n:.1f} {unit}"
         n /= 1024
     return f"{n:.1f} TB"
+
+
+def _trunc(text: str, width: int = 44) -> str:
+    text = text.strip()
+    return text if len(text) <= width else "…" + text[-(width - 1):]
+
+
+def _bar(pct: float, width: int = 22) -> str:
+    fill = int(round(width * min(100.0, max(0.0, pct)) / 100.0))
+    return "[" + "#" * fill + "-" * (width - fill) + "]"
+
+
+class Live:
+    """rsync-style live terminal output so a long copy never looks frozen.
+
+    Milestone lines mark phase changes and per-phase timings; one carriage-
+    return-updated heartbeat shows the running phase (elapsed / percent / the
+    file currently being copied). Thread-safe: ditto's stderr reader thread and
+    the poll/verify loop both feed this, so a lock guards every write. Falls
+    back to throttled full lines when stdout isn't a TTY (piped/logged)."""
+
+    def __init__(self) -> None:
+        self.tty = sys.stdout.isatty()
+        self._lock = threading.Lock()
+        self._pending = False        # an unfinished \r heartbeat is on screen
+        self._last_file = ""
+        self._last_draw = 0.0
+        self._spin = 0
+        self._t0 = time.perf_counter()
+
+    def start(self, label: str) -> None:
+        self._t0 = time.perf_counter()
+        self._last_file = ""
+        self._milestone(f"\n▶ {label}")
+
+    def finish(self, summary: str = "") -> None:
+        with self._lock:
+            if self._pending:
+                sys.stdout.write("\n")
+                self._pending = False
+            if summary:
+                sys.stdout.write(f"  ✓ {summary}\n")
+            sys.stdout.flush()
+
+    def __call__(self, p) -> None:
+        kind = p.kind
+        if kind in ("info", "fail", "retry"):
+            if p.note:
+                mark = {"info": "•", "fail": "!", "retry": "~"}[kind]
+                self._milestone(f"  {mark} {p.note}")
+        elif kind == "debug":
+            if not p.note:
+                return
+            if p.note.startswith("ditto: "):
+                self._last_file = p.note[len("ditto: "):]
+                self._draw(self._native_text(), throttle=True)  # live activity
+            else:
+                self._milestone(f"    {p.note}")                # phase timing
+        elif p.indeterminate:
+            self._draw(self._native_text())
+        elif p.total:
+            self._draw(self._verify_text(p))
+
+    # ----- internals ------------------------------------------------------
+
+    def _native_text(self) -> str:
+        el = common.format_duration(time.perf_counter() - self._t0)
+        tail = f"  {_trunc(self._last_file)}" if self._last_file else ""
+        return f"copying… {el} elapsed{tail}"
+
+    def _verify_text(self, p) -> str:
+        rate = f"{p.rate:.0f}/s" if p.rate else ""
+        eta = f"ETA {common.format_duration(p.eta)}" if p.eta else ""
+        return (f"verifying {_bar(p.pct)} {p.pct:5.1f}% "
+                f"({p.done}/{p.total})  {rate}  {eta}".rstrip())
+
+    def _draw(self, text: str, *, throttle: bool = False) -> None:
+        now = time.perf_counter()
+        with self._lock:
+            if throttle and now - self._last_draw < 0.1:
+                return
+            self._last_draw = now
+            self._spin = (self._spin + 1) % len(_SPIN)
+            line = f"  {_SPIN[self._spin]} {text}"
+            if self.tty:
+                sys.stdout.write("\r\033[K" + line)   # update in place
+                self._pending = True
+            else:
+                sys.stdout.write(line + "\n")          # piped/logged: one line
+            sys.stdout.flush()
+
+    def _milestone(self, text: str) -> None:
+        with self._lock:
+            if self._pending:
+                sys.stdout.write("\n")
+                self._pending = False
+            sys.stdout.write(text + "\n")
+            sys.stdout.flush()
 
 
 def make_synthetic(root: str, count: int, size: int) -> tuple[int, int]:
@@ -101,23 +201,35 @@ def tree_stats(root: str) -> tuple[int, int]:
 
 
 def run_one(label: str, src: str, dest: str, *, prefer_native: bool,
-            thorough: bool) -> dict:
-    """One delivery into a *fresh* dest subdir; returns parsed phase timings."""
+            thorough: bool, live: "Live") -> dict:
+    """One delivery into a *fresh* dest subdir; returns parsed phase timings.
+
+    Streams rsync-style live progress to the terminal via ``live`` while also
+    collecting the events for the final table."""
     target = os.path.join(dest, f"_profile_{label}")
     if os.path.isdir(target):
         shutil.rmtree(target, ignore_errors=True)
     os.makedirs(target, exist_ok=True)
 
     events: list = []
+
+    def cb(p) -> None:        # tee: drive the live display *and* record events
+        live(p)
+        events.append(p)
+
+    live.start(label)
     common.set_verbose(True)  # so the worker emits its phase-timing debug notes
     t0 = time.perf_counter()
     try:
         result = deliver.copy_tree_verified(
             src, target, thorough=thorough, prefer_native=prefer_native,
-            progress=events.append)
+            progress=cb)
     finally:
         common.set_verbose(False)
     wall = time.perf_counter() - t0
+    live.finish(f"{label} done in {common.format_duration(wall)} "
+                f"({result.files_copied} copied, {result.files_skipped} "
+                f"skipped, {result.failed} failed)")
 
     notes = [e.note for e in events if e.kind == "debug" and e.note]
     out = {"label": label, "wall": wall, "result": result,
@@ -243,10 +355,13 @@ def main() -> int:
 
     try:
         labels = [args.only] if args.only else list(CONFIGS)
+        live = Live()
+        print(f"  source: {files} files, {human_bytes(total)} → {args.dest}",
+              flush=True)
         runs = []
         for label in labels:
-            print(f"  running {label}…", flush=True)
-            runs.append(run_one(label, src, args.dest, **CONFIGS[label]))
+            runs.append(run_one(label, src, args.dest, live=live,
+                                **CONFIGS[label]))
         report(runs, files, total)
     finally:
         if tmp:
