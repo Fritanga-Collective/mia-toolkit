@@ -86,6 +86,8 @@ def _open_project_folder() -> None:
     open_path(project.root)
 
 
+
+
 def build_menubar(app) -> tk.Menu:
     """Build (or rebuild) the menu bar for the current UI language."""
     root = app.root
@@ -158,6 +160,9 @@ def build_menubar(app) -> tk.Menu:
     for label, url in LINKS:
         helpmenu.add_command(label=_(label),
                              command=lambda u=url: webbrowser.open(u))
+    helpmenu.add_separator()
+    helpmenu.add_command(label=_("Report a problem…"),
+                         command=app.send_feedback)
     if not aqua:
         helpmenu.add_separator()
         helpmenu.add_command(label=_("Check for Updates…"),

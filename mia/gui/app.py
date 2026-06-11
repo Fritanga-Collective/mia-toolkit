@@ -18,7 +18,7 @@ ICON_PNG = Path(__file__).resolve().parent / "assets" / "icon.png"
 class App:
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.root.title(_("MIA Toolkit"))
+        self.root.title(self._title())
         self.root.minsize(660, 580)
         try:
             self._icon = tk.PhotoImage(file=str(ICON_PNG))
@@ -80,13 +80,35 @@ class App:
         from .archive_view import ArchiveView
         self._swap(lambda parent: ArchiveView(parent, self))
 
+    def send_feedback(self) -> None:
+        """Open the anonymized report/feedback dialog from anywhere. Uses the
+        current view's live log if it has one, else the newest session log."""
+        from .project import Project
+        from .report import latest_session_log_lines, open_report_dialog
+        view = self._current
+        panel = getattr(view, "panel", None) or getattr(
+            getattr(view, "current", None), "panel", None)
+        lines = list(getattr(panel, "_tech_lines", []) or [])
+        if not lines:
+            try:
+                lines = latest_session_log_lines(Project().root)
+            except Exception:
+                lines = []
+        open_report_dialog(self.root, lines)
+
     def set_language(self, lang: str) -> None:
         """Switch UI language and re-render (the selector lives on the launcher)."""
         from .i18n import set_language
         set_language(lang)
-        self.root.title(_("MIA Toolkit"))
+        self.root.title(self._title())
         self._menubar = build_menubar(self)  # relabel menus in the new language
         self.show_launcher()
+
+    def _title(self) -> str:
+        from mia.core import diagnostics
+        base = _("MIA Toolkit")
+        return f"{base} — {_('anonymized logs')}" if diagnostics.redacting() \
+            else base
 
     def request_quit(self) -> None:
         """Confirm before quitting, and stop any running work safely first.
@@ -142,7 +164,20 @@ class App:
         self.root.mainloop()
 
 
-def main() -> int:
+def _parse(argv=None):
+    import argparse
+    p = argparse.ArgumentParser(prog="mia", description=_("MIA Toolkit"))
+    p.add_argument(
+        "--anonymize", action="store_true",
+        help="redact paths/names/IDs in the on-screen logs and the session "
+             "log — for safe testing and screencasts")
+    return p.parse_args(argv)
+
+
+def main(argv=None) -> int:
+    from mia.core import diagnostics
+    args = _parse(argv)
+    diagnostics.set_redact(args.anonymize)
     install()
     App().run()
     return 0

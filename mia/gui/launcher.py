@@ -71,12 +71,28 @@ class Launcher(ttk.Frame):
                   text=_("Made with ♥ by Fritanga")).grid(
             row=self._row, column=1, pady=(2, 0))
         self._row += 1
-        # Clickable blog link (emoji outside the translatable string).
-        blog = ttk.Label(self, foreground="#2c5282", font=("", 10, "underline"),
-                         cursor="hand2", text=f"📰 {_('Read our blog')}")
-        blog.bind("<Button-1>", lambda e: webbrowser.open(BLOG_URL))
-        blog.grid(row=self._row, column=1, pady=(4, 0))
+        # Footer links. The emoji is a plain (non-link) prefix so only the text
+        # itself is underlined/clickable — clearer, and it avoids the emoji
+        # throwing off the label width (which clipped the last letter's
+        # underline). The blog opens in the browser; Feedback opens the in-app
+        # report dialog.
+        links = ttk.Frame(self)
+        links.grid(row=self._row, column=1, pady=(4, 0))
         self._row += 1
+
+        def _link(text, command):
+            lbl = ttk.Label(links, foreground="#2c5282", cursor="hand2",
+                            font=("", 10, "underline"), text=text)
+            lbl.bind("<Button-1>", lambda _e: command())
+            return lbl
+
+        ttk.Label(links, font=("", 10), text="📰 ").pack(side="left")
+        _link(_("Read our blog"),
+              lambda: webbrowser.open(BLOG_URL)).pack(side="left")
+        ttk.Label(links, foreground="#888", font=("", 10),
+                  text="   ·   ").pack(side="left")
+        ttk.Label(links, font=("", 10), text="💬 ").pack(side="left")
+        _link(_("Feedback"), self.app.send_feedback).pack(side="left")
 
     def _language_bar(self) -> None:
         bar = ttk.Frame(self)

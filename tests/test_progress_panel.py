@@ -5,6 +5,7 @@ import pytest
 
 pytest.importorskip("tkinter")
 
+from mia.core import diagnostics  # noqa: E402
 from mia.core.common import Progress  # noqa: E402
 from mia.gui.progress_panel import ProgressLogPanel  # noqa: E402
 from tests.helpers import new_tk_root_or_skip  # noqa: E402
@@ -50,3 +51,18 @@ def test_debug_event_goes_only_to_technical_log(panel):
     panel.on_event(Progress(0, 0, kind="debug", note="walked 9 files in 0.1s"))
     assert len(panel._tech_lines) == before + 1
     assert "walked 9 files" in panel._tech_lines[-1]
+
+
+def test_anonymize_scrubs_logs(panel):
+    # --anonymize: log lines are scrubbed before they hit the pane / file /
+    # in-memory buffer, so a screencast leaks no PHI.
+    diagnostics.set_redact(True)
+    try:
+        panel.log_technical("/Users/jane/raw_discs/disc_01_SMITH/IM1")
+        panel.log_plain("copying /Volumes/PATIENT_USB/disc_02_LOPEZ/IM2")
+    finally:
+        diagnostics.set_redact(False)
+    joined = "\n".join(panel._tech_lines)
+    assert "jane" not in joined and "SMITH" not in joined
+    plain = panel.plain_log.get("1.0", "end")
+    assert "PATIENT_USB" not in plain and "LOPEZ" not in plain

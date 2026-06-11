@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mia-toolkit 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-09 22:57-0600\n"
+"POT-Creation-Date: 2026-06-10 17:53-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 中文 (Simplified)\n"
@@ -37,7 +37,7 @@ msgstr "透明度"
 msgid "Read our blog"
 msgstr "阅读我们的博客"
 
-#: mia/gui/menubar.py:43 mia/gui/menubar.py:99 mia/gui/menubar.py:165
+#: mia/gui/menubar.py:43 mia/gui/menubar.py:101 mia/gui/menubar.py:170
 msgid "About MIA Toolkit"
 msgstr "关于 MIA Toolkit"
 
@@ -46,7 +46,7 @@ msgid "Made with ♥ by Fritanga"
 msgstr "由 Fritanga 用 ♥ 打造"
 
 #: mia/gui/menubar.py:62 mia/gui/menubar.py:67 mia/gui/menubar.py:74
-#: mia/gui/menubar.py:101 mia/gui/menubar.py:163
+#: mia/gui/menubar.py:103 mia/gui/menubar.py:168
 msgid "Check for Updates…"
 msgstr "检查更新…"
 
@@ -70,71 +70,75 @@ msgstr ""
 msgid "You're on the latest version ({v})."
 msgstr "你已是最新版本（{v}）。"
 
-#: mia/gui/menubar.py:108
+#: mia/gui/menubar.py:110
 msgid "Open Project Folder"
 msgstr "打开项目文件夹"
 
-#: mia/gui/menubar.py:112
+#: mia/gui/menubar.py:114
 msgid "Exit"
 msgstr "退出"
 
-#: mia/gui/menubar.py:113
+#: mia/gui/menubar.py:115
 msgid "File"
 msgstr "文件"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:119
 msgid "Cut"
 msgstr "剪切"
 
-#: mia/gui/menubar.py:117
+#: mia/gui/menubar.py:119 mia/gui/report.py:162
 msgid "Copy"
 msgstr "复制"
 
-#: mia/gui/menubar.py:118
+#: mia/gui/menubar.py:120
 msgid "Paste"
 msgstr "粘贴"
 
-#: mia/gui/menubar.py:122
+#: mia/gui/menubar.py:124
 msgid "Select All"
 msgstr "全选"
 
-#: mia/gui/menubar.py:124
+#: mia/gui/menubar.py:126
 msgid "Edit"
 msgstr "编辑"
 
-#: mia/gui/menubar.py:129
+#: mia/gui/menubar.py:131
 msgid "Home"
 msgstr "主页"
 
-#: mia/gui/menubar.py:130 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
+#: mia/gui/menubar.py:132 mia/gui/launcher.py:36 mia/gui/wizard/view.py:45
 msgid "Guided Setup"
 msgstr "向导设置"
 
-#: mia/gui/menubar.py:131 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
+#: mia/gui/menubar.py:133 mia/gui/rip_view.py:15 mia/gui/launcher.py:42
 msgid "Add Your Studies"
 msgstr "添加你的检查"
 
-#: mia/gui/menubar.py:132 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
+#: mia/gui/menubar.py:134 mia/gui/launcher.py:45 mia/gui/inventory_view.py:17
 msgid "Build Inventory"
 msgstr "生成清单"
 
-#: mia/gui/menubar.py:133 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
+#: mia/gui/menubar.py:135 mia/gui/launcher.py:47 mia/gui/archive_view.py:16
 msgid "Build Archive for Doctor"
 msgstr "为医生生成归档"
 
-#: mia/gui/menubar.py:147
+#: mia/gui/menubar.py:149
 msgid "Language"
 msgstr "语言"
 
-#: mia/gui/menubar.py:148
+#: mia/gui/menubar.py:150
 msgid "Go"
 msgstr "前往"
 
-#: mia/gui/menubar.py:153
+#: mia/gui/menubar.py:155
 msgid "Window"
 msgstr "窗口"
 
-#: mia/gui/menubar.py:167
+#: mia/gui/menubar.py:164 mia/gui/progress_panel.py:96
+msgid "Report a problem…"
+msgstr "报告问题…"
+
+#: mia/gui/menubar.py:172
 msgid "Help"
 msgstr "帮助"
 
@@ -264,65 +268,65 @@ msgstr "完成。"
 msgid "Choose…"
 msgstr "选择…"
 
-#: mia/gui/progress_panel.py:40 mia/gui/progress_panel.py:50
+#: mia/gui/progress_panel.py:41 mia/gui/progress_panel.py:51
 msgid "Ready."
 msgstr "就绪。"
 
-#: mia/gui/progress_panel.py:72 mia/gui/progress_panel.py:296
+#: mia/gui/progress_panel.py:73 mia/gui/progress_panel.py:311
 msgid "▸ Show technical details"
 msgstr "▸ 显示技术详情"
 
-#: mia/gui/progress_panel.py:89
+#: mia/gui/progress_panel.py:90
 msgid "Save log…"
 msgstr "保存日志…"
 
-#: mia/gui/progress_panel.py:91
+#: mia/gui/progress_panel.py:92
 msgid "Open log folder"
 msgstr "打开日志文件夹"
 
-#: mia/gui/progress_panel.py:107
+#: mia/gui/progress_panel.py:114
 msgid "Writing the archive… this can take several minutes."
 msgstr "正在写入归档…这可能需要几分钟。"
 
-#: mia/gui/progress_panel.py:108
+#: mia/gui/progress_panel.py:115
 msgid "Writing the archive now. This can take several minutes — please wait…"
 msgstr "正在写入归档。这可能需要几分钟——请稍候…"
 
-#: mia/gui/progress_panel.py:139
+#: mia/gui/progress_panel.py:146
 #, python-brace-format
 msgid "Copying {n} files… ({m:.0f}m elapsed)"
 msgstr "正在复制 {n} 个文件…（已用时 {m:.0f} 分钟）"
 
-#: mia/gui/progress_panel.py:141
+#: mia/gui/progress_panel.py:148
 #, python-brace-format
 msgid "Copying {n} files…"
 msgstr "正在复制 {n} 个文件…"
 
-#: mia/gui/progress_panel.py:213
+#: mia/gui/progress_panel.py:220
 #, python-brace-format
 msgid "files {done}/{total}"
 msgstr "文件 {done}/{total}"
 
-#: mia/gui/progress_panel.py:216
+#: mia/gui/progress_panel.py:223
 #, python-brace-format
 msgid "elapsed {t}"
 msgstr "已用 {t}"
 
-#: mia/gui/progress_panel.py:218
+#: mia/gui/progress_panel.py:225
 #, python-brace-format
 msgid "ETA {t}"
 msgstr "剩余 {t}"
 
-#: mia/gui/progress_panel.py:220
+#: mia/gui/progress_panel.py:227
 #, python-brace-format
 msgid "{r:.0f}/s"
 msgstr "{r:.0f}/秒"
 
-#: mia/gui/progress_panel.py:287
+#: mia/gui/progress_panel.py:302
 msgid "▾ Hide technical details"
 msgstr "▾ 隐藏技术详情"
 
-#: mia/gui/progress_panel.py:300
+#: mia/gui/progress_panel.py:315
 msgid "Save technical log"
 msgstr "保存技术日志"
 
@@ -405,20 +409,28 @@ msgstr "该位置为只读。请选择其他目标文件夹。"
 msgid "Something went wrong. See the technical details below."
 msgstr "出了点问题。请查看下方的技术详情。"
 
-#: mia/gui/app.py:21 mia/gui/app.py:54 mia/gui/app.py:87
+#: mia/gui/app.py:34 mia/gui/app.py:113
+msgid "Feedback"
+msgstr "反馈"
+
+#: mia/gui/app.py:63 mia/gui/app.py:119 mia/gui/app.py:179
 #: mia/gui/launcher.py:31
 msgid "MIA Toolkit"
 msgstr "医学影像归档工具 (MIA Toolkit)"
 
-#: mia/gui/app.py:55
+#: mia/gui/app.py:64
 msgid "A task is still running — stop it or let it finish first."
 msgstr "任务仍在进行中——请先停止或等待完成。"
 
-#: mia/gui/app.py:103 mia/gui/app.py:109
+#: mia/gui/app.py:120
+msgid "anonymized logs"
+msgstr "匿名日志"
+
+#: mia/gui/app.py:139 mia/gui/app.py:145
 msgid "Quit MIA Toolkit?"
 msgstr "退出 MIA Toolkit？"
 
-#: mia/gui/app.py:104
+#: mia/gui/app.py:140
 msgid ""
 "Something is still running. If you quit now it will stop safely — you can resume it later.\n"
 "\n"
@@ -607,6 +619,92 @@ msgstr "完成——{n} 项检查。"
 #, python-brace-format
 msgid "✓ Found {n} studies. Opening the spreadsheet…"
 msgstr "✓ 找到 {n} 项检查。正在打开表格…"
+
+#: mia/gui/report.py:46 mia/gui/report.py:101 mia/gui/report.py:111
+#: mia/gui/report.py:121 mia/gui/report.py:148
+msgid "Report a problem"
+msgstr "报告问题"
+
+#: mia/gui/report.py:52
+msgid ""
+"Send us a report to help diagnose a problem. It's anonymized — no patient "
+"names, no file contents — and it's sent only when you choose. Review exactly"
+" what will be sent below."
+msgstr "发送报告帮助我们诊断问题。它是匿名的——不含患者姓名、不含文件内容——并且只有在你选择时才会发送。请在下方查看将要发送的确切内容。"
+
+#: mia/gui/report.py:57
+msgid "What happened? Steps to reproduce? (optional)"
+msgstr "发生了什么？如何复现？（可选）"
+
+#: mia/gui/report.py:62
+msgid "Report preview — this is exactly what will be sent:"
+msgstr "报告预览——这正是将要发送的内容："
+
+#: mia/gui/report.py:102
+#, python-brace-format
+msgid "Report copied to the clipboard — paste it into an email to {c}."
+msgstr "报告已复制到剪贴板——把它粘贴到发送给 {c} 的邮件中。"
+
+#: mia/gui/report.py:112
+#, python-brace-format
+msgid "Couldn't save the report: {e}"
+msgstr "无法保存报告：{e}"
+
+#: mia/gui/report.py:118
+msgid "Save report"
+msgstr "保存报告"
+
+#: mia/gui/report.py:122
+msgid "Saved."
+msgstr "已保存。"
+
+#: mia/gui/report.py:133
+#, python-brace-format
+msgid ""
+"\n"
+"\n"
+"(Full report saved at {p} and copied to your clipboard.)"
+msgstr ""
+"\n"
+"\n"
+"（完整报告已保存至 {p} 并已复制到你的剪贴板。）"
+
+#: mia/gui/report.py:134 mia/gui/report.py:151
+msgid "(not saved)"
+msgstr "（未保存）"
+
+#: mia/gui/report.py:138
+msgid "MIA Toolkit problem report"
+msgstr "MIA Toolkit 问题报告"
+
+#: mia/gui/report.py:142
+msgid "(no description)"
+msgstr "（无描述）"
+
+#: mia/gui/report.py:149
+#, python-brace-format
+msgid ""
+"Couldn't open your email app. The report is on your clipboard and saved at:\n"
+"{p}\n"
+"\n"
+"Please email it to {c}."
+msgstr ""
+"无法打开你的邮件应用。报告已在剪贴板中并保存至：\n"
+"{p}\n"
+"\n"
+"请将它发送至 {c}。"
+
+#: mia/gui/report.py:156
+msgid "Close"
+msgstr "关闭"
+
+#: mia/gui/report.py:158
+msgid "Email it to us"
+msgstr "通过邮件发送给我们"
+
+#: mia/gui/report.py:160
+msgid "Save…"
+msgstr "保存…"
 
 #: mia/gui/archive_view.py:20
 msgid ""
@@ -1016,6 +1114,22 @@ msgstr "第 {n} 步，共 {m} 步：  {t}"
 #: mia/gui/wizard/view.py:140
 msgid "Finish"
 msgstr "完成"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Please attach the report file or paste it below (it's also on your clipboard).\n"
+#~ "\n"
+#~ "Report saved at:\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
+#~ msgstr ""
+#~ "请附上报告文件或粘贴在下方（它也已在你的剪贴板中）。\n"
+#~ "\n"
+#~ "报告已保存至：\n"
+#~ "{p}\n"
+#~ "\n"
+#~ "---\n"
 
 #~ msgid "Verbose technical log"
 #~ msgstr "详细技术日志"

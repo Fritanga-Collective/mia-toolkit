@@ -17,6 +17,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from typing import Optional
 
+from mia.core import diagnostics
 from mia.core.common import Progress, format_duration
 from .i18n import _
 from .messages import Presenter
@@ -90,6 +91,10 @@ class ProgressLogPanel(ttk.Frame):
                    command=self._save_log).pack(side="right")
         ttk.Button(logbtns, text=_("Open log folder"),
                    command=self._open_log).pack(side="right", padx=(0, 8))
+        # Report a problem: an anonymized, user-reviewed diagnostic report
+        # built from this session's technical log (no auto-collection).
+        ttk.Button(logbtns, text=_("Report a problem…"),
+                   command=self._report_problem).pack(side="left")
 
     # ----- Event handling -------------------------------------------------
 
@@ -223,12 +228,16 @@ class ProgressLogPanel(ttk.Frame):
         self.stats.configure(text="   ".join(parts))
 
     def log_plain(self, line: str, tag: Optional[str] = None) -> None:
+        if diagnostics.redacting():
+            line = diagnostics.scrub(line)
         self.plain_log.configure(state="normal")
         self.plain_log.insert("end", line + "\n", (tag,) if tag else ())
         self.plain_log.see("end")
         self.plain_log.configure(state="disabled")
 
     def log_technical(self, line: str) -> None:
+        if diagnostics.redacting():        # --anonymize: safe for screencasts
+            line = diagnostics.scrub(line)
         stamped = f"{time.strftime('%H:%M:%S')}  {line}"
         self._tech_lines.append(stamped)
         if self._logfile is not None:
@@ -279,6 +288,10 @@ class ProgressLogPanel(ttk.Frame):
             self._logfile = None
 
     # ----- Internal -------------------------------------------------------
+
+    def _report_problem(self) -> None:
+        from .report import open_report_dialog
+        open_report_dialog(self, list(self._tech_lines))
 
     def _toggle_tech(self) -> None:
         self._tech_visible = not self._tech_visible
