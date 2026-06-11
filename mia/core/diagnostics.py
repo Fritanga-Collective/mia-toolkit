@@ -131,8 +131,12 @@ def environment() -> Dict[str, str]:
 
 
 # Per-file / clinical lines: high volume, low diagnostic value, highest PHI
-# surface — dropped from the report (we keep their count for context).
-_DROP = re.compile(r"^(?:copying |ditto: (?!.*\brc=)|indexing study:)", re.I)
+# surface — dropped from the report (we keep their count for context). We drop
+# only the per-file *copy* stream: the in-process "Copying …" lines and ditto's
+# verbose "ditto: Copying …" items. Other ditto lines are kept — ditto reports
+# real errors as "ditto: ditto: <message>" (its own stderr, re-prefixed), and
+# those are low-volume and valuable for diagnosis.
+_DROP = re.compile(r"^(?:copying |ditto: copying |indexing study:)", re.I)
 
 
 def filter_log(lines: List[str]) -> Tuple[List[str], int]:

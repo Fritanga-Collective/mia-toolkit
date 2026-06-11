@@ -130,8 +130,12 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
         saved = save_to(tmp)
         win.clipboard_clear()
         win.clipboard_append(state["report"])
+        # Scrub the path before it leaves the machine: a Windows temp dir is
+        # C:\Users\<name>\… and would leak the username into a report that
+        # promises anonymization.
+        shown = diagnostics.scrub(tmp) if saved else _("(not saved)")
         pointer = _("\n\n(Full report saved at {p} and copied to your "
-                    "clipboard.)").format(p=tmp if saved else _("(not saved)"))
+                    "clipboard.)").format(p=shown)
         body = diagnostics.build_report(
             notes.get("1.0", "end").strip(), log_lines, extra=extra,
             max_log_lines=60) + pointer
@@ -148,7 +152,7 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
                 _("Report a problem"),
                 _("Couldn't open your email app. The report is on your "
                   "clipboard and saved at:\n{p}\n\nPlease email it to {c}.")
-                .format(p=tmp if saved else _("(not saved)"), c=CONTACT),
+                .format(p=shown, c=CONTACT),
                 parent=win)
 
     bar = ttk.Frame(win)

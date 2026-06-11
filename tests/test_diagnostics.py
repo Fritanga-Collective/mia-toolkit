@@ -73,6 +73,20 @@ def test_filter_drops_per_file_and_clinical_lines():
     assert "DOE" not in joined and "BRAIN" not in joined
 
 
+def test_filter_keeps_ditto_errors_drops_copy_stream():
+    # ditto -v streams "Copying …" per file (re-prefixed "ditto: Copying …"),
+    # but reports real errors as "ditto: ditto: <message>". Drop the former,
+    # keep the latter — it's the diagnostic signal.
+    lines = [
+        "10:00:02  ditto: Copying /Volumes/X/IM0001",
+        "10:00:03  ditto: ditto: Cannot get the real path for source '/Volumes/X'",
+    ]
+    kept, dropped = dx.filter_log(lines)
+    assert dropped == 1
+    joined = "\n".join(kept)
+    assert "Cannot get the real path" in joined
+
+
 def test_build_report_is_anonymized_end_to_end():
     home = os.path.expanduser("~")
     log = [
