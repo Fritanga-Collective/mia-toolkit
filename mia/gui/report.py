@@ -22,8 +22,9 @@ CONTACT = "mia-tools@fritanga.co"
 
 
 def latest_session_log_lines(*extra_dirs: str) -> list:
-    """Read the newest mia_session_*.log (project + temp + any extra dir) so a
-    report can be filed even from a screen without a live panel."""
+    """Read the newest mia_session_*.log from the temp dir (plus any extra dirs
+    passed in) so a report can be filed even from a screen without a live
+    panel. Pass the project dir explicitly if it should be searched too."""
     candidates = []
     for d in (*extra_dirs, tempfile.gettempdir()):
         if d and os.path.isdir(d):
@@ -46,7 +47,6 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
     win.title(_("Report a problem"))
     win.transient(parent.winfo_toplevel())
     win.columnconfigure(0, weight=1)
-    win.rowconfigure(3, weight=1)
 
     ttk.Label(win, wraplength=620, justify="left", text=_(
         "Send us a report to help diagnose a problem. It's anonymized — no "

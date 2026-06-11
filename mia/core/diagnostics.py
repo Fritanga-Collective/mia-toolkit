@@ -108,7 +108,7 @@ def scrub(text: str) -> str:
         text = text.replace(_HOME, "~")
     text = _USER.sub(r"\1<user>", text)
     text = _WINUSER.sub(r"\1<user>", text)
-    text = _VOL.sub(lambda m: (m.group(1) or m.group(3)) + "<drive>", text)
+    text = _VOL.sub(lambda m: (m.group(1) or m.group(2)) + "<drive>", text)
     text = _UID.sub("<uid>", text)
     text = _DISC.sub(r"disc_\1", text)
     text = _PATH.sub(_scrub_path, text)

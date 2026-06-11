@@ -25,6 +25,15 @@ def test_scrub_redacts_volume_and_disc_label():
     assert "disc_03" in d                      # disc number kept, label gone
 
 
+def test_scrub_redacts_linux_media_and_mnt_mounts():
+    # Regression: the /media/ branch uses the second capture group; scrub must
+    # not raise IndexError and must redact the mount label.
+    m = dx.scrub("Mounted /media/jdoe/PATIENT_USB and read it")
+    assert "jdoe" not in m and "PATIENT_USB" not in m and "/media/<drive>" in m
+    n = dx.scrub("Copying to /mnt/SMITH_CD/IM0001")
+    assert "SMITH" not in n and "/mnt/<drive>" in n
+
+
 def test_scrub_redacts_dicom_uid():
     s = dx.scrub("study 1.2.840.113619.2.55.3.604688.1 added")
     assert "1.2.840" not in s and "<uid>" in s
