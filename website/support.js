@@ -31,7 +31,7 @@
 
   // Checkout URL for a tier: its own direct product link.
   function checkoutUrl(tier) {
-    if (!tier || !tier.url) return CONFIG.checkout; // bare = buyer chooses
+    if (!tier || !tier.url) return CONFIG.checkout; // defensive fallback only
     return tier.url;
   }
 
