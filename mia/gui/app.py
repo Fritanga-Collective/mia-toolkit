@@ -26,15 +26,6 @@ class App:
         except tk.TclError:
             pass  # icon is cosmetic — never block startup over it
 
-        # A persistent top-right Feedback button, present on every screen so the
-        # user can report a problem / send feedback from anywhere.
-        topbar = ttk.Frame(self.root)
-        topbar.pack(side="top", fill="x")
-        self._feedback_btn = ttk.Button(
-            topbar, text=f"💬  {_('Feedback')}", command=self.send_feedback)
-        self._feedback_btn.pack(side="right", padx=8, pady=4)
-        ttk.Separator(self.root, orient="horizontal").pack(side="top", fill="x")
-
         self.container = ttk.Frame(self.root)
         self.container.pack(fill="both", expand=True)
         self._current: tk.Widget | None = None
@@ -110,7 +101,6 @@ class App:
         from .i18n import set_language
         set_language(lang)
         self.root.title(self._title())
-        self._feedback_btn.configure(text=f"💬  {_('Feedback')}")
         self._menubar = build_menubar(self)  # relabel menus in the new language
         self.show_launcher()
 
