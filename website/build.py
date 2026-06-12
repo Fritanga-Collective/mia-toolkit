@@ -28,8 +28,15 @@ LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de"]
 HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
             "ta": "ta-SG", "de": "de"}
 
-PAGES = ["index", "support", "privacy", "stats"]
-OG_PAGES = {"index", "support"}          # privacy has no social card (as before)
+PAGES = ["index", "help", "support", "privacy", "stats"]
+OG_PAGES = {"index", "help", "support"}  # privacy has no social card (as before)
+
+# The 6 guided-setup screens the /help walkthrough documents, in order (the
+# `home` screenshot lives in the Overview, not the HowTo). Slugs drive the
+# anchor ids, the image filenames, and the i18n key suffixes (hyphen→underscore).
+HELP_STEPS = ["welcome", "add-studies", "review", "documents",
+              "build-deliver", "done"]
+HELP_FAQ_N = 8                            # number of FAQ Q&A pairs (faq_q1…)
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
           "CNAME", "img", "version.json", "favicon.ico"]
@@ -127,27 +134,66 @@ def head_seo(langs: dict, lang: str, page: str, s: dict) -> str:
     return "\n".join(lines)
 
 
-def json_ld(lang: str, s: dict, page: str) -> str:
-    if page != "index":
-        return ""
-    data = {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "MIA Toolkit",
-        "operatingSystem": "macOS, Windows",
-        "applicationCategory": "HealthApplication",
-        "url": BASE + page_url(lang, "index"),
-        "downloadUrl": "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
-        "description": s["index.meta_desc"],
-        "image": f"{BASE}/img/social.jpg",
-        "isAccessibleForFree": True,
-        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-        "publisher": {"@type": "Organization", "name": "Fritanga",
-                      "url": "https://fritanga.co"},
-    }
+def _ld_script(data: dict) -> str:
     return ('  <script type="application/ld+json">\n'
             + json.dumps(data, ensure_ascii=False, indent=2)
             + "\n  </script>")
+
+
+def json_ld(lang: str, s: dict, page: str) -> str:
+    if page == "index":
+        data = {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "MIA Toolkit",
+            "operatingSystem": "macOS, Windows",
+            "applicationCategory": "HealthApplication",
+            "url": BASE + page_url(lang, "index"),
+            "downloadUrl": "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
+            "description": s["index.meta_desc"],
+            "image": f"{BASE}/img/social.jpg",
+            "isAccessibleForFree": True,
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+            "publisher": {"@type": "Organization", "name": "Fritanga",
+                          "url": "https://fritanga.co"},
+        }
+        return _ld_script(data)
+
+    if page == "help":
+        # Localized HowTo (the walkthrough) + FAQPage (the FAQ), both built from
+        # the i18n strings so each locale gets its own structured data.
+        url = BASE + page_url(lang, "help")
+        steps = []
+        for slug in HELP_STEPS:
+            k = slug.replace("-", "_")
+            steps.append({
+                "@type": "HowToStep",
+                "name": s[f"help.s_{k}_h3"],
+                "text": s[f"help.s_{k}_p"],
+                "url": f"{url}#step-{slug}",
+                "image": f"{BASE}/img/help/{lang}/{slug}.png",
+            })
+        howto = {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": s["help.howto_name"],
+            "description": s["help.meta_desc"],
+            "image": f"{BASE}/img/help/{lang}/home.png",
+            "totalTime": "PT15M",
+            "step": steps,
+        }
+        faqpage = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": s[f"help.faq_q{i}"],
+                 "acceptedAnswer": {"@type": "Answer", "text": s[f"help.faq_a{i}"]}}
+                for i in range(1, HELP_FAQ_N + 1)
+            ],
+        }
+        return _ld_script(howto) + "\n" + _ld_script(faqpage)
+
+    return ""
 
 
 def render(template: str, s: dict, computed: dict) -> str:
@@ -292,6 +338,8 @@ def main() -> int:
         for page in PAGES:
             computed = {
                 "P": prefix,
+                "LANG": lang,   # directory code (en/es/zh/…), not the _lang
+                                # locale (es-MX); used for per-language asset paths
                 "HEAD_SEO": head_seo(langs, lang, page, s),
                 "JSON_LD": json_ld(lang, s, page),
                 "LANGSEL": langsel(langs, lang, page),
