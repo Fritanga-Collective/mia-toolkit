@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{help.title}}</title>
+  <meta name="description" content="{{help.meta_desc}}">
+  <link rel="stylesheet" href="{{P}}styles.css">
+  <script src="{{P}}lang.js"></script>
+{{HEAD_SEO}}
+{{JSON_LD}}
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="index.html">MIA Toolkit</a>
+      <nav class="lang">
+        <a href="help.html">{{nav.help}}</a>
+        <a href="support.html">{{nav.support}}</a>
+{{LANGSEL}}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap help">
+      <h1>{{help.h1}}</h1>
+      <p class="lead">{{help.intro}}</p>
+
+      <nav class="help-toc" aria-label="{{help.toc_label}}">
+        <span class="toc-label">{{help.toc_label}}</span>
+        <a href="#overview">{{help.overview_h2}}</a>
+        <a href="#walkthrough">{{help.walk_h2}}</a>
+        <a href="#tasks">{{help.tasks_h2}}</a>
+        <a href="#troubleshooting">{{help.trouble_h2}}</a>
+        <a href="#faq">{{help.faq_h2}}</a>
+        <a href="#get">{{help.cta_h2}}</a>
+      </nav>
+
+      <section id="overview" class="help-section">
+        <h2>{{help.overview_h2}}</h2>
+        <div class="help-step">
+          <div class="help-text">
+            <p>{{help.overview_p1}}</p>
+            <p>{{help.overview_p2}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/home.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_home_alt}}">
+          </figure>
+        </div>
+      </section>
+
+      <section id="walkthrough" class="help-section">
+        <h2>{{help.walk_h2}}</h2>
+        <p>{{help.walk_intro}}</p>
+
+        <div id="step-welcome" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_welcome_h3}}</h3>
+            <p>{{help.s_welcome_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/welcome.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_welcome_alt}}">
+          </figure>
+        </div>
+
+        <div id="step-add-studies" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_add_studies_h3}}</h3>
+            <p>{{help.s_add_studies_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/add-studies.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_add_studies_alt}}">
+          </figure>
+        </div>
+
+        <div id="step-review" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_review_h3}}</h3>
+            <p>{{help.s_review_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/review.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_review_alt}}">
+          </figure>
+        </div>
+
+        <div id="step-documents" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_documents_h3}}</h3>
+            <p>{{help.s_documents_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/documents.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_documents_alt}}">
+          </figure>
+        </div>
+
+        <div id="step-build-deliver" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_build_deliver_h3}}</h3>
+            <p>{{help.s_build_deliver_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/build-deliver.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_build_deliver_alt}}">
+          </figure>
+        </div>
+
+        <div id="step-done" class="help-step">
+          <div class="help-text">
+            <h3>{{help.s_done_h3}}</h3>
+            <p>{{help.s_done_p}}</p>
+          </div>
+          <figure class="shot-frame">
+            <img class="shot" src="{{P}}img/help/{{_lang}}/done.png"
+                 width="1544" height="1786" loading="lazy"
+                 alt="{{help.shot_done_alt}}">
+          </figure>
+        </div>
+      </section>
+
+      <section id="tasks" class="help-section">
+        <h2>{{help.tasks_h2}}</h2>
+        <div class="help-cards">
+          <div class="help-card">
+            <h3>{{help.task_cd_h3}}</h3>
+            <p>{{help.task_cd_p}} <a href="#step-add-studies">{{help.task_more}}</a></p>
+          </div>
+          <div class="help-card">
+            <h3>{{help.task_merge_h3}}</h3>
+            <p>{{help.task_merge_p}} <a href="#step-build-deliver">{{help.task_more}}</a></p>
+          </div>
+          <div class="help-card">
+            <h3>{{help.task_import_h3}}</h3>
+            <p>{{help.task_import_p}} <a href="#step-add-studies">{{help.task_more}}</a></p>
+          </div>
+          <div class="help-card">
+            <h3>{{help.task_docs_h3}}</h3>
+            <p>{{help.task_docs_p}} <a href="#step-documents">{{help.task_more}}</a></p>
+          </div>
+          <div class="help-card">
+            <h3>{{help.task_deliver_h3}}</h3>
+            <p>{{help.task_deliver_p}} <a href="#step-done">{{help.task_more}}</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="troubleshooting" class="help-section">
+        <h2>{{help.trouble_h2}}</h2>
+        <div class="help-qa"><h3>{{help.trouble_cd_h3}}</h3><p>{{help.trouble_cd_p}}</p></div>
+        <div class="help-qa"><h3>{{help.trouble_slow_h3}}</h3><p>{{help.trouble_slow_p}}</p></div>
+        <div class="help-qa"><h3>{{help.trouble_multi_h3}}</h3><p>{{help.trouble_multi_p}}</p></div>
+        <div class="help-qa"><h3>{{help.trouble_win_h3}}</h3><p>{{help.trouble_win_p}}</p></div>
+        <div class="help-qa"><h3>{{help.trouble_nodicom_h3}}</h3><p>{{help.trouble_nodicom_p}}</p></div>
+      </section>
+
+      <section id="faq" class="help-section">
+        <h2>{{help.faq_h2}}</h2>
+        <div class="help-qa"><h3>{{help.faq_q1}}</h3><p>{{help.faq_a1}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q2}}</h3><p>{{help.faq_a2}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q3}}</h3><p>{{help.faq_a3}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q4}}</h3><p>{{help.faq_a4}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q5}}</h3><p>{{help.faq_a5}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q6}}</h3><p>{{help.faq_a6}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q7}}</h3><p>{{help.faq_a7}}</p></div>
+        <div class="help-qa"><h3>{{help.faq_q8}}</h3><p>{{help.faq_a8}}</p></div>
+      </section>
+
+      <section id="get" class="help-section help-cta">
+        <h2>{{help.cta_h2}}</h2>
+        <p>{{help.cta_p}}</p>
+        <p>
+          <a class="btn" href="index.html#download">{{help.cta_download}}</a>
+          <a class="btn-secondary" href="support.html">{{help.cta_support}}</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>{{footer.ethos}} ·
+        <a href="help.html">{{footer.help}}</a> ·
+        <a href="privacy.html">{{footer.privacy}}</a> ·
+        <a href="stats.html">{{footer.stats}}</a></p>
+      <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
+    </div>
+  </footer>
+</body>
+</html>

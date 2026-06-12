@@ -137,3 +137,58 @@ footer p a { color: var(--muted); text-decoration: underline; }
   .steps { grid-template-columns: 1fr; }
   .btn { min-width: 0; width: 100%; }
 }
+
+/* ---- /help page ---- */
+.wrap.help { max-width: 920px; }
+.help > h1 { font-size: 2rem; line-height: 1.2; margin: 28px 0 10px; }
+.help .lead { font-size: 1.2rem; color: var(--muted); margin: 0 0 8px; }
+
+/* Sticky in-page section nav. */
+.help-toc { position: sticky; top: 0; z-index: 5; display: flex;
+  flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 18px 0 8px;
+  padding: 10px 14px; background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 0.95rem; }
+.help-toc .toc-label { font-weight: 700; color: var(--ink); }
+.help-toc a { color: var(--accent); text-decoration: none; }
+.help-toc a:hover { text-decoration: underline; }
+
+/* Anchors clear the sticky TOC when jumped to. */
+.help-section, .help-step[id] { scroll-margin-top: 72px; }
+.help-section { margin: 34px 0; }
+.help-section > h2 { font-size: 1.5rem; color: var(--accent);
+  border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+
+/* A walkthrough row: prose beside its portrait screenshot (1544×1786). */
+.help-step { display: grid; grid-template-columns: 1fr 300px; gap: 28px;
+  align-items: start; margin: 22px 0; }
+.help-step h3 { margin: 0 0 6px; font-size: 1.2rem; }
+.help-step p { margin: 0; }
+.shot-frame { margin: 0; width: 300px; max-width: 100%; aspect-ratio: 1544 / 1786;
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  background: var(--panel); }
+.shot { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Task cards + Q&A blocks. */
+.help-cards { display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.help-card { background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px; }
+.help-card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.help-card p { margin: 0; font-size: 0.95rem; }
+.help-card a { color: var(--accent); white-space: nowrap; }
+.help-qa { border-top: 1px solid var(--border); padding: 14px 0; }
+.help-qa h3 { margin: 0 0 4px; font-size: 1.1rem; }
+.help-qa p { margin: 0; }
+
+.help-cta { background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 26px; text-align: center; }
+.btn-secondary { display: inline-block; color: var(--accent);
+  border: 1px solid var(--accent); padding: 12px 22px; border-radius: 8px;
+  text-decoration: none; font-weight: 600; margin-left: 8px; }
+.btn-secondary:hover { background: var(--accent); color: #fff; }
+
+@media (max-width: 640px) {
+  .help-step { grid-template-columns: 1fr; gap: 14px; }
+  .shot-frame { width: 100%; max-width: 360px; margin: 0 auto; }
+  .btn-secondary { display: block; margin: 10px auto 0; max-width: 360px; }
+}
