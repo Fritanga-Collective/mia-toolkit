@@ -338,6 +338,8 @@ def main() -> int:
         for page in PAGES:
             computed = {
                 "P": prefix,
+                "LANG": lang,   # directory code (en/es/zh/…), not the _lang
+                                # locale (es-MX); used for per-language asset paths
                 "HEAD_SEO": head_seo(langs, lang, page, s),
                 "JSON_LD": json_ld(lang, s, page),
                 "LANGSEL": langsel(langs, lang, page),
