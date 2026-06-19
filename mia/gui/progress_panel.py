@@ -35,8 +35,6 @@ def summary_from_result(result, *, op: str = "copy to USB",
     build_report/verdict consume. Best-effort media lookup; never raises so a
     finished delivery can always stash a summary. ``dest`` defaults to the
     result's own dest (the volume we just copied to)."""
-    from mia.core import diagnostics
-
     media = {}
     try:
         media = diagnostics.media_info(dest or getattr(result, "dest", "") or "")
@@ -148,8 +146,9 @@ class ProgressLogPanel(ttk.Frame):
         # "fail" red so it's visible) and as a status note; keep the raw note in
         # the technical log too. The job keeps running.
         if p.kind == "warn":
-            msg = _("⚠ This drive is copying slowly. If it stalls, try another "
-                    "USB drive or plug it straight into the computer.")
+            # Single source for the plain text — the Presenter owns the
+            # translated warn copy (see messages.Presenter._plain_for_note).
+            msg = self.presenter._plain_for_note(p) or ""
             self.log_plain(msg, tag="fail")
             self.set_status(msg)
             self.log_technical(p.note or "")

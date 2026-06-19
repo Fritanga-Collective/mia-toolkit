@@ -27,6 +27,10 @@ _HOME = os.path.expanduser("~")
 # Throughput floor mirrored from deliver._SLOW_FILES_PER_SEC so the report's
 # verdict and the worker's proactive warning agree on what "slow" means.
 _SLOW_FILES_PER_SEC = 2.0
+# Above this, a run is reading at (or near) the healthy FAT/exFAT rate, so the
+# verdict should call it normal rather than "slow but expected". Set a touch
+# below the observed ~7-9 files/s healthy band to leave honest headroom.
+_HEALTHY_FILES_PER_SEC = 6.0
 
 # Process-global "redact the displayed logs" switch, set by the --anonymize CLI
 # flag. When on, the GUI runs each log line through scrub() before showing or
@@ -244,8 +248,8 @@ def media_info(path: str) -> Dict[str, str]:
 def verdict(summary: Dict) -> str:
     """A conservative, caveated read of a run summary for the report. Never an
     accusation — copy media is genuinely slow, and we'd rather say 'consistent
-    with normal overhead' than wrongly condemn a healthy drive. Thresholds match
-    int-docs/dev/PROFILING-DELIVERY.md (healthy FAT/exFAT ≈ 7-9 files/s)."""
+    with normal overhead' than wrongly condemn a healthy drive. Thresholds come
+    from in-house delivery profiling (healthy FAT/exFAT ≈ 7-9 files/s)."""
     failed = int(summary.get("failed", 0) or 0)
     retries = int(summary.get("retries", 0) or 0)
     fps = float(summary.get("files_per_sec", 0) or 0)
@@ -261,7 +265,7 @@ def verdict(summary: Dict) -> str:
                 "possible failing/counterfeit drive, a bad port, or a USB hub. "
                 "Worth trying a known-good drive plugged straight in.")
     fatlike = any(t in fs for t in ("fat", "exfat", "msdos"))
-    if fatlike and fps > 0:
+    if fatlike and 0 < fps < _HEALTHY_FILES_PER_SEC:
         return ("Slow but consistent with normal small-file overhead for many "
                 "DICOM files on FAT/exFAT (the per-file metadata cost) — not a "
                 "fault.")

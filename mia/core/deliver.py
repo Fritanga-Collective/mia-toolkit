@@ -59,8 +59,8 @@ _PROGRESS_MIN_INTERVAL = 0.2  # seconds; throttle per-file emits
 DEFAULT_VERIFY_SAMPLE = 64
 
 # Proactive slow-media warning. Healthy FAT/exFAT sticks copy many small DICOM
-# files at ~7-9 files/s (the inherent per-file metadata cost — see
-# int-docs/dev/PROFILING-DELIVERY.md). A *failing/counterfeit* drive or a bad
+# files at ~7-9 files/s (the inherent per-file metadata cost, per in-house
+# delivery profiling). A *failing/counterfeit* drive or a bad
 # port crawls at well under 1 file/s. We sample throughput after the first few
 # files (or a short time budget) and warn once if it's below this floor — set
 # conservatively so we never cry wolf on a merely-slow-but-healthy drive.

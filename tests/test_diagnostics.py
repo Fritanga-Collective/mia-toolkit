@@ -181,10 +181,17 @@ def test_verdict_thresholds():
     # Very slow, no errors -> counterfeit/failing/slow-port caution.
     slow = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 1.0})
     assert "counterfeit" in slow.lower() or "failing" in slow.lower()
-    # ~8 files/s on exFAT, no errors -> normal small-file overhead, not a fault.
-    normal = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 8.0,
-                         "filesystem": "exFAT"})
-    assert "not a fault" in normal.lower()
+    # Slow-but-not-alarming on exFAT (between the floor and the healthy band) ->
+    # normal small-file overhead, not a fault.
+    slow_fat = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 3.0,
+                           "filesystem": "exFAT"})
+    assert "not a fault" in slow_fat.lower()
+    # Healthy ~8 files/s on exFAT must NOT be called "slow" — it's at the normal
+    # FAT/exFAT rate, so the verdict should read as plain-normal throughput.
+    fast_fat = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 8.0,
+                           "filesystem": "exFAT"})
+    assert "slow" not in fast_fat.lower()
+    assert "normal" in fast_fat.lower()
     # Cancelled -> not a fault.
     assert "cancel" in dx.verdict({"cancelled": True}).lower()
 
@@ -199,12 +206,16 @@ def test_build_report_with_summary_renders_throughput_media_verdict():
         "slow_media": False,
         "slowest_files": [("disc_01/DOE^JANE/IM0001", 1.23)],
     }
-    report = dx.build_report("slow copy", [], summary=summary)
+    report = dx.build_report("the copy felt off", [], summary=summary)
     assert "## Last operation" in report
     assert "8.0 files/s" in report and "2.0 MB/s" in report
     assert "## Media" in report and "exFAT" in report
     assert "## Verdict" in report
-    assert "not a fault" in report.lower()       # normal exFAT overhead
+    # Healthy ~8 files/s on exFAT reads as plain-normal throughput, not the
+    # "slow but…" overhead message (which is reserved for the slow-but-OK band).
+    assert dx.verdict(summary) in report
+    assert "slow but" not in report.lower()
+    assert "throughput looks normal" in report.lower()
     # Slowest-file rel paths are scrubbed — no PHI survives.
     assert "DOE" not in report and "JANE" not in report
     assert "## Slowest files" in report
