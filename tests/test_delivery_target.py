@@ -26,7 +26,8 @@ def test_marker_round_trip(tmp_path):
     assert info.folder == folder
     assert not info.legacy
     # The raw file is valid JSON with a schema version.
-    data = json.loads(open(os.path.join(folder, dt.MARKER_NAME)).read())
+    with open(os.path.join(folder, dt.MARKER_NAME), encoding="utf-8") as f:
+        data = json.load(f)
     assert data["schema_version"] == dt.SCHEMA_VERSION
 
 
@@ -123,6 +124,28 @@ def test_choose_target_no_patient_yields_new_generic(tmp_path):
     dec = dt.choose_target(str(tmp_path), (None, None))
     assert dec.action == dt.NEW
     assert os.path.basename(dec.folder) == dt.GENERIC_FOLDER
+
+
+def test_choose_target_new_avoids_unrelated_nonempty_folder(tmp_path):
+    # A pre-existing, non-MIA folder with the stable name (no marker, no legacy
+    # structure) must not be proposed as the fresh destination.
+    clash = os.path.join(str(tmp_path), "CaseReview_DOE_JANE")
+    os.makedirs(clash)
+    with open(os.path.join(clash, "someone-elses.txt"), "w") as f:
+        f.write("not ours")
+    dec = dt.choose_target(str(tmp_path), ("DOE^JANE", "P001"))
+    assert dec.action == dt.NEW
+    assert dec.folder != clash
+    assert os.path.basename(dec.folder) == "CaseReview_DOE_JANE_2"
+
+
+def test_choose_target_new_reuses_empty_folder(tmp_path):
+    # An existing but *empty* folder of the stable name is safe to reuse.
+    empty = os.path.join(str(tmp_path), "CaseReview_DOE_JANE")
+    os.makedirs(empty)
+    dec = dt.choose_target(str(tmp_path), ("DOE^JANE", "P001"))
+    assert dec.action == dt.NEW
+    assert dec.folder == empty
 
 
 # ----- archive_identity ----------------------------------------------------

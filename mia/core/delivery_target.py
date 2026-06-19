@@ -207,9 +207,12 @@ def archive_identity(studies: Dict[str, dict]) -> Tuple[Optional[str], Optional[
 
     ``studies`` is the per-study mapping produced by
     :func:`mia.core.inventory.scan_directory` (each value has ``patient_name`` /
-    ``patient_id``). The dominant patient wins; a genuine multi-patient mix, or
-    no usable identity at all, yields ``(None, None)`` so the caller falls back
-    to a generic folder name.
+    ``patient_id``). Identity is reported only when the studies *agree*: a single
+    distinct usable name yields that name (and likewise for the id). Any genuine
+    multi-patient mix on a field, or no usable identity at all, yields ``None``
+    for that field — and a name mismatch yields ``(None, None)`` overall — so the
+    caller falls back to a generic folder name rather than guessing a "dominant"
+    patient.
     """
     name_counts: Dict[str, int] = {}
     raw_name: Dict[str, str] = {}
@@ -258,6 +261,34 @@ def _same_patient(info: DeliveryInfo, patient: Tuple[Optional[str], Optional[str
     return False
 
 
+def _is_empty_dir(path: str) -> bool:
+    try:
+        return not os.listdir(path)
+    except OSError:
+        return False
+
+
+def _fresh_target(usb_root: str, patient_name: Optional[str]) -> str:
+    """A destination path safe to use for a *fresh* delivery: the preferred
+    ``CaseReview_<Patient>`` (or generic ``CaseReview``) when that path is unused
+    or empty, otherwise the first ``..._2``, ``..._3``, … variant that is.
+
+    This guards the stable-name scheme against silently writing into — and
+    mixing with — a pre-existing, non-empty folder of the same name that we
+    don't recognize as this patient's MIA delivery.
+    """
+    base = safe_folder_name(patient_name)
+    candidate = os.path.join(usb_root, base)
+    if not os.path.exists(candidate) or _is_empty_dir(candidate):
+        return candidate
+    n = 2
+    while True:
+        candidate = os.path.join(usb_root, f"{base}_{n}")
+        if not os.path.exists(candidate) or _is_empty_dir(candidate):
+            return candidate
+        n += 1
+
+
 def choose_target(usb_root: str,
                   patient: Tuple[Optional[str], Optional[str]]) -> Decision:
     """Decide where this delivery goes on ``usb_root``.
@@ -266,32 +297,33 @@ def choose_target(usb_root: str,
       * a same-patient folder already exists  → ``UPDATE`` that folder;
       * only different-patient folder(s) exist → ``ASK`` (caller prompts);
       * nothing recognizable                  → ``NEW`` (proposed folder name).
+
+    The proposed folder for ``NEW`` (and the new-folder option offered with
+    ``ASK``) is always an unused or empty path, so a fresh delivery never lands
+    inside an unrelated, non-empty folder that happens to share the stable name.
     """
     existing = find_deliveries(usb_root)
     for info in existing:
         if _same_patient(info, patient):
             return Decision(UPDATE, folder=info.folder, existing=existing)
+    proposed = _fresh_target(usb_root, patient[0])
     if existing:
-        proposed = os.path.join(usb_root, safe_folder_name(patient[0]))
         return Decision(ASK, folder=proposed, existing=existing)
-    return Decision(NEW, folder=os.path.join(usb_root,
-                                             safe_folder_name(patient[0])),
-                    existing=existing)
+    return Decision(NEW, folder=proposed, existing=existing)
 
 
 def find_orphans(src_archive: str, dest_folder: str) -> List[str]:
-    """Files under ``dest_folder`` (in ``Archive/`` and ``Reports/``) that are
-    *not* in the freshly built source set — i.e. left over from a previous,
-    larger delivery to the same patient folder.
+    """DICOM files under ``dest_folder/Archive`` that are *not* in the freshly
+    built source set — i.e. left over from a previous, larger delivery to the
+    same patient folder.
 
     ``src_archive`` is the just-built source ``Archive/`` directory. We compare
-    the destination ``Archive/`` against it by relative path; destination
-    ``Reports/`` files are all considered candidates (the source set is the
-    current document plan, which the caller has already re-copied, so any extra
-    Reports file is an orphan from a previous delivery). The hidden marker, the
-    DELIVERY-LOG, README, and the inventory are never reported as orphans.
+    the destination ``Archive/`` against it by relative path; only the
+    ``Archive/`` subtree is pruned. Other top-level files (the hidden marker, the
+    DELIVERY-LOG, README, the inventory, and any doctor-facing docs) are left
+    untouched and never reported as orphans.
 
-    Returns destination-relative paths (POSIX-ish, using ``os.sep``).
+    Returns destination-relative paths (under ``Archive/``, using ``os.sep``).
     """
     orphans: List[str] = []
     src_archive = os.path.abspath(src_archive)

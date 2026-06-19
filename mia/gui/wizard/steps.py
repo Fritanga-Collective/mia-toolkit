@@ -647,7 +647,7 @@ class ArchiveStep(PanelStep):
             groups.append((milestone, s["paths"]))
         return groups
 
-    def _ask_update_or_new(self, decision, patient):
+    def _ask_update_or_new(self, decision, _patient):
         """A different patient's archive is already on the drive. Ask whether to
         update it anyway, add a new folder, or cancel. Returns the chosen dest
         folder, or None to cancel."""
