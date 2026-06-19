@@ -14,12 +14,19 @@ from __future__ import annotations
 
 import os
 import platform
+import plistlib
 import re
+import shutil
+import subprocess
 import sys
 import time
 from typing import Dict, List, Optional, Tuple
 
 _HOME = os.path.expanduser("~")
+
+# Throughput floor mirrored from deliver._SLOW_FILES_PER_SEC so the report's
+# verdict and the worker's proactive warning agree on what "slow" means.
+_SLOW_FILES_PER_SEC = 2.0
 
 # Process-global "redact the displayed logs" switch, set by the --anonymize CLI
 # flag. When on, the GUI runs each log line through scrub() before showing or
@@ -123,11 +130,144 @@ def environment() -> Dict[str, str]:
         ver = "?"
     return {
         "app_version": str(ver),
-        "frozen": "yes" if getattr(sys, "frozen", False) else "no (source)",
+        # Was "frozen: yes" (the PyInstaller flag), which read like "the app
+        # froze." Say what it actually means to a maintainer triaging a report.
+        "build": "packaged app" if getattr(sys, "frozen", False)
+        else "source checkout",
         "os": platform.platform(),
         "arch": platform.machine(),
         "python": platform.python_version(),
     }
+
+
+def _fmt_size(n: Optional[int]) -> str:
+    """Human bytes for a report; 'unknown' when we couldn't read it."""
+    if not isinstance(n, int) or n < 0:
+        return "unknown"
+    x = float(n)
+    for unit in ("B", "KB", "MB", "GB"):
+        if x < 1024:
+            return f"{x:.1f} {unit}"
+        x /= 1024
+    return f"{x:.1f} TB"
+
+
+def _filesystem(path: str) -> str:
+    """Best-effort filesystem type for the volume holding ``path``. Per-OS,
+    each branch falling back to 'unknown'. Never raises. A path that doesn't
+    exist has no volume to describe → 'unknown' (we don't guess from root)."""
+    if not path or not os.path.exists(path):
+        return "unknown"
+    try:
+        system = platform.system()
+        if system == "Darwin":
+            # diskutil wants a mount point (e.g. /Volumes/USB), not an arbitrary
+            # path inside it, and it reports failure via an "Error" key in the
+            # plist (returncode stays 0). Walk up to the nearest mount point.
+            probe = os.path.abspath(path)
+            for _ in range(64):
+                if os.path.ismount(probe) or probe == os.sep:
+                    break
+                parent = os.path.dirname(probe)
+                if parent == probe:
+                    break
+                probe = parent
+            out = subprocess.run(
+                ["diskutil", "info", "-plist", probe],
+                capture_output=True, timeout=5)
+            if out.returncode == 0 and out.stdout:
+                info = plistlib.loads(out.stdout)
+                if not info.get("Error"):
+                    fs = info.get("FilesystemName") or info.get(
+                        "FilesystemType")
+                    if fs:
+                        return str(fs)
+        elif system == "Windows":
+            # fsutil fsinfo volumeinfo <root> prints a "File System Name : NTFS"
+            # style line. Use the drive root of the path.
+            drive = os.path.splitdrive(os.path.abspath(path))[0] or "C:"
+            out = subprocess.run(
+                ["fsutil", "fsinfo", "volumeinfo", drive + "\\"],
+                capture_output=True, text=True, timeout=5)
+            if out.returncode == 0 and out.stdout:
+                for line in out.stdout.splitlines():
+                    if "file system name" in line.lower():
+                        return line.split(":", 1)[1].strip() or "unknown"
+        elif system == "Linux":
+            # Match the longest mountpoint that is a prefix of our path.
+            target = os.path.abspath(path)
+            best_fs, best_len = "unknown", -1
+            with open("/proc/mounts", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    parts = line.split()
+                    if len(parts) >= 3:
+                        mp, fstype = parts[1], parts[2]
+                        if target == mp or target.startswith(mp.rstrip("/") + "/"):
+                            if len(mp) > best_len:
+                                best_fs, best_len = fstype, len(mp)
+            return best_fs
+    except Exception:
+        pass
+    return "unknown"
+
+
+def media_info(path: str) -> Dict[str, str]:
+    """Best-effort, non-raising facts about the volume holding ``path``:
+    ``{filesystem, total, free}``. Each key falls back to 'unknown'. Used to
+    give a slow-copy report context (e.g. exFAT on a small drive). Never raises
+    on a bad/missing path — diagnosis must not crash the reporter."""
+    from . import deliver  # local import: deliver imports common, not us
+
+    info = {"filesystem": "unknown", "total": "unknown", "free": "unknown"}
+    if not path:
+        return info
+    info["filesystem"] = _filesystem(path)
+    # Total: walk up to the nearest existing parent (mirrors deliver.free_space).
+    try:
+        p = os.path.abspath(path)
+        while p and not os.path.exists(p):
+            parent = os.path.dirname(p)
+            if parent == p:
+                break
+            p = parent
+        usage = shutil.disk_usage(p or os.sep)
+        info["total"] = _fmt_size(usage.total)
+    except Exception:
+        pass
+    try:
+        info["free"] = _fmt_size(deliver.free_space(path))
+    except Exception:
+        pass
+    return info
+
+
+def verdict(summary: Dict) -> str:
+    """A conservative, caveated read of a run summary for the report. Never an
+    accusation — copy media is genuinely slow, and we'd rather say 'consistent
+    with normal overhead' than wrongly condemn a healthy drive. Thresholds match
+    int-docs/dev/PROFILING-DELIVERY.md (healthy FAT/exFAT ≈ 7-9 files/s)."""
+    failed = int(summary.get("failed", 0) or 0)
+    retries = int(summary.get("retries", 0) or 0)
+    fps = float(summary.get("files_per_sec", 0) or 0)
+    fs = str(summary.get("filesystem", "") or "").lower()
+    if summary.get("cancelled"):
+        return ("The copy was stopped before it finished (cancelled). Re-run to "
+                "resume; this is not a fault.")
+    if failed > 0 or retries > 0:
+        return ("Errors or retries happened during the copy — the drive, cable, "
+                "or port may be failing. Try another drive/port and re-run.")
+    if 0 < fps < _SLOW_FILES_PER_SEC:
+        return ("Unusually slow (well under ~2 files/s) with no errors — "
+                "possible failing/counterfeit drive, a bad port, or a USB hub. "
+                "Worth trying a known-good drive plugged straight in.")
+    fatlike = any(t in fs for t in ("fat", "exfat", "msdos"))
+    if fatlike and fps > 0:
+        return ("Slow but consistent with normal small-file overhead for many "
+                "DICOM files on FAT/exFAT (the per-file metadata cost) — not a "
+                "fault.")
+    if fps > 0:
+        return "Throughput looks normal; no problem indicators."
+    return "Not enough information to judge throughput."
 
 
 # Per-file / clinical lines: high volume, low diagnostic value, highest PHI
@@ -137,29 +277,65 @@ def environment() -> Dict[str, str]:
 # real errors as "ditto: ditto: <message>" (its own stderr, re-prefixed), and
 # those are low-volume and valuable for diagnosis.
 _DROP = re.compile(r"^(?:copying |ditto: copying |indexing study:)", re.I)
+# Progress heartbeats emitted by Presenter.feed, e.g.
+# "[412/640] 64.4%  9/s  ETA 2m 3s". High volume, zero diagnostic value now
+# that the run summary carries throughput — drop them too (count kept).
+_TICK = re.compile(r"^\[\d+/\d+\]")
 
 
 def filter_log(lines: List[str]) -> Tuple[List[str], int]:
-    """Keep milestones/timings/errors; drop the per-file copy stream and
-    clinical study-description lines. Returns (kept, dropped_count). Lines are
+    """Keep milestones/timings/errors/warnings; drop the per-file copy stream,
+    clinical study-description lines, and the progress heartbeats (the summary
+    now carries throughput). Returns (kept, dropped_count). Lines are
     ``"HH:MM:SS  <note>"``; we match on the note."""
     kept, dropped = [], 0
     for line in lines:
         note = line.split("  ", 1)[1] if "  " in line else line
-        if _DROP.match(note.strip()):
+        stripped = note.strip()
+        if _DROP.match(stripped) or _TICK.match(stripped):
             dropped += 1
         else:
             kept.append(line)
     return kept, dropped
 
 
+def _render_summary(summary: Dict) -> List[str]:
+    """The '## Last operation' + '## Media' + verdict block. All values are
+    non-PHI numbers/labels except slowest-file rel paths, which are scrubbed."""
+    def g(key, default="?"):
+        v = summary.get(key)
+        return default if v is None else v
+
+    out = ["## Last operation",
+           f"- operation: {g('op', 'copy to USB')}",
+           f"- result: {g('result')}",
+           f"- files copied: {g('files_copied')}",
+           f"- files skipped (already present): {g('files_skipped')}",
+           f"- files failed: {g('failed')}",
+           f"- retries (recovered after a bad write): {g('retries', 0)}",
+           f"- elapsed: {float(g('elapsed', 0) or 0):.1f}s",
+           f"- throughput: {float(g('files_per_sec', 0) or 0):.1f} files/s, "
+           f"{float(g('mb_per_sec', 0) or 0):.1f} MB/s"]
+    if summary.get("slow_media"):
+        out.append("- slow-media warning was shown during this run")
+    out += ["", "## Media",
+            f"- filesystem: {g('filesystem', 'unknown')}",
+            f"- free: {g('free', 'unknown')}",
+            f"- total: {g('total', 'unknown')}"]
+    out += ["", "## Verdict", verdict(summary)]
+    return out
+
+
 def build_report(notes: str, log_lines: List[str], *,
                  extra: Optional[Dict[str, str]] = None,
                  when: Optional[str] = None,
+                 summary: Optional[Dict] = None,
                  max_log_lines: int = 400) -> str:
     """Assemble the anonymized report. ``notes`` is the user's free text;
     ``log_lines`` the panel's technical log; ``extra`` optional GUI fields
-    (language, screen). All log content is scrubbed; the tail is capped."""
+    (language, screen); ``summary`` an optional structured run summary (from a
+    recent delivery) rendered before the activity log. All log content and the
+    slowest-file paths are scrubbed; the tail is capped."""
     env = environment()
     if extra:
         env.update({k: str(v) for k, v in extra.items()})
@@ -178,6 +354,10 @@ def build_report(notes: str, log_lines: List[str], *,
     out += ["", "## What happened (your words)",
             (notes.strip() or "(none provided)")]
 
+    if summary:
+        out.append("")
+        out += _render_summary(summary)
+
     kept, dropped = filter_log(log_lines)
     if len(kept) > max_log_lines:
         clipped = len(kept) - max_log_lines
@@ -186,10 +366,16 @@ def build_report(notes: str, log_lines: List[str], *,
         clipped = 0
     out += ["", "## Activity log (anonymized)"]
     if dropped:
-        out.append(f"({dropped} per-file/detail lines omitted for privacy)")
+        out.append(f"({dropped} per-file/heartbeat/detail lines omitted)")
     if clipped:
         out.append(f"(…{clipped} earlier lines trimmed; showing the last "
                    f"{max_log_lines})")
     out.append(scrub("\n".join(kept)) if kept else "(no activity recorded)")
+
+    if summary and summary.get("slowest_files"):
+        out += ["", "## Slowest files (anonymized)"]
+        for rel, secs in summary["slowest_files"]:
+            out.append(f"- {scrub(str(rel))}: {float(secs):.2f}s")
+
     out += ["", "— end of report —"]
     return "\n".join(out)

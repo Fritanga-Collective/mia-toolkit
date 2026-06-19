@@ -39,6 +39,7 @@ from .common import (
     check_cancel,
     emit,
     emit_debug,
+    emit_warn,
     is_verbose,
 )
 from .ripper import copy_with_retry
@@ -56,6 +57,18 @@ _PROGRESS_MIN_INTERVAL = 0.2  # seconds; throttle per-file emits
 # the assurance of hashing everything, at a tiny fraction of the cost. Full
 # per-file hashing stays available via thorough=True.
 DEFAULT_VERIFY_SAMPLE = 64
+
+# Proactive slow-media warning. Healthy FAT/exFAT sticks copy many small DICOM
+# files at ~7-9 files/s (the inherent per-file metadata cost — see
+# int-docs/dev/PROFILING-DELIVERY.md). A *failing/counterfeit* drive or a bad
+# port crawls at well under 1 file/s. We sample throughput after the first few
+# files (or a short time budget) and warn once if it's below this floor — set
+# conservatively so we never cry wolf on a merely-slow-but-healthy drive.
+_SLOW_FILES_PER_SEC = 2.0
+_SLOW_SAMPLE_FILES = 20       # warn after at least this many files, or…
+_SLOW_SAMPLE_SECONDS = 10.0   # …this much elapsed, whichever comes first
+# How many slowest files to record for the diagnostic report.
+_SLOWEST_KEEP = 3
 
 
 def free_space(path: str) -> int:
@@ -119,10 +132,30 @@ class DeliverResult:
     thorough: bool
     content_verified: int = 0   # files checked by SHA-256 (all if thorough)
     failures: List[Tuple[str, str]] = field(default_factory=list)
+    # A copy that needed a second attempt (bad first write, retried once).
+    retries: int = 0
+    # Set when an early throughput sample came back below the slow-media
+    # threshold (see _SLOW_FILES_PER_SEC) — a heads-up that the drive/port may
+    # be the bottleneck, not the app. Not a failure on its own.
+    slow_media: bool = False
+    # The slowest few files by per-file copy time: (rel_path, seconds). The rel
+    # path is scrubbed downstream (diagnostics.scrub) before it ever leaves the
+    # machine, so this carries no PHI in a report.
+    slowest_files: List[Tuple[str, float]] = field(default_factory=list)
 
     @property
     def verified(self) -> bool:
         return self.failed == 0
+
+    @property
+    def files_per_sec(self) -> float:
+        n = self.files_copied + self.files_skipped
+        return n / self.elapsed if self.elapsed > 0 else 0.0
+
+    @property
+    def mb_per_sec(self) -> float:
+        return (self.bytes_copied / (1024 * 1024) / self.elapsed
+                if self.elapsed > 0 else 0.0)
 
 
 def _native_bulk_copy(src: str, dest: str, *, total_files: int = 0,
@@ -307,14 +340,22 @@ def copy_tree_verified(
     failures: List[Tuple[str, str]] = []
     done = 0
     last_emit = 0.0
+    retries = 0
+    slow_media = False
+    slow_warned = False
+    actually_copied = 0          # files that needed a real copy (not skipped)
+    slowest: List[Tuple[str, float]] = []   # (rel, secs), kept small & sorted
 
-    def handle(sp: str) -> Tuple[str, str, int, Optional[str]]:
-        """Returns (status, rel, nbytes, note). status in skip/copy/fail."""
+    def handle(sp: str) -> Tuple[str, str, int, Optional[str], bool, float]:
+        """Returns (status, rel, nbytes, note, retried, secs). status in
+        skip/copy/fail. ``retried`` is True when the first write failed
+        verification and a second attempt was made; ``secs`` is the wall-clock
+        copy time for this file (0 for a skip), used to rank the slowest few."""
         rel = os.path.relpath(sp, src)
         dp = os.path.join(dest, rel)
         deep = sp in sampled            # content-check this file, not just size
         if os.path.exists(dp) and _matches(sp, dp, deep):
-            return ("skip", rel, 0, None)
+            return ("skip", rel, 0, None, False, 0.0)
         # Create the parent lazily (no upfront pre-create). exist_ok already
         # swallows the benign race between pool threads writing into the same
         # folder; a surviving OSError is real (e.g. a path component is a file,
@@ -323,20 +364,24 @@ def copy_tree_verified(
         try:
             os.makedirs(os.path.dirname(dp), exist_ok=True)
         except OSError as e:
-            return ("fail", rel, 0, f"could not create folder: {e}")
+            return ("fail", rel, 0, f"could not create folder: {e}", False, 0.0)
         emit_debug(progress, f"copying {rel}", phase="copy")  # per-file stream
+        t0 = time.time()
         ok, note = copy_with_retry(sp, dp, cancel=cancel)
         verified = ok and _matches(sp, dp, deep)
+        retried = False
         if ok and not verified:                 # one retry on a bad write
+            retried = True
             ok, note = copy_with_retry(sp, dp, cancel=cancel)
             verified = ok and _matches(sp, dp, deep)
+        secs = time.time() - t0
         if verified:
             try:
                 nbytes = os.path.getsize(dp)
             except OSError:
                 nbytes = 0
-            return ("copy", rel, nbytes, note)
-        return ("fail", rel, 0, note or "verification failed")
+            return ("copy", rel, nbytes, note, retried, secs)
+        return ("fail", rel, 0, note or "verification failed", retried, secs)
 
     # Order the work into (optionally labeled) groups so the pass can announce
     # progress per group (e.g. per study). Each caller group keeps only files
@@ -386,10 +431,12 @@ def copy_tree_verified(
             for fut in as_completed(futures):
                 if cancel is not None and cancel.is_set():
                     raise Cancelled()
-                status, rel, nbytes, note = fut.result()
+                status, rel, nbytes, note, retried, secs = fut.result()
                 done += 1
                 if label:
                     g_done += 1
+                if retried:
+                    retries += 1
                 if status == "skip":
                     skipped += 1
                 elif status == "copy":
@@ -403,7 +450,32 @@ def copy_tree_verified(
                     failures.append((rel, note))
                     emit(progress, Progress(done, total, kind="fail",
                                             note=f"{rel} ({note})"))
+                # Track the slowest few real copies (skips are ~free and would
+                # crowd out the signal). Keep a tiny sorted list, no global sort.
+                if status != "skip":
+                    actually_copied += 1
+                    if (len(slowest) < _SLOWEST_KEEP
+                            or secs > slowest[-1][1]):
+                        slowest.append((rel, secs))
+                        slowest.sort(key=lambda t: t[1], reverse=True)
+                        del slowest[_SLOWEST_KEEP:]
                 now = time.time()
+                # Proactive slow-media check: once we've actually copied a small
+                # sample (not skips) or spent a little time, judge throughput and
+                # warn ONCE if it's crawling. Skip-heavy resumes don't trip it.
+                if (not slow_warned and actually_copied > 0
+                        and (actually_copied >= _SLOW_SAMPLE_FILES
+                             or now - start >= _SLOW_SAMPLE_SECONDS)):
+                    slow_warned = True
+                    sample_rate = actually_copied / (now - start) \
+                        if now > start else 0.0
+                    if 0 < sample_rate < _SLOW_FILES_PER_SEC and failed == 0:
+                        slow_media = True
+                        emit_warn(progress,
+                                  f"slow media: ~{sample_rate:.1f} files/s — the "
+                                  "USB drive or port may be failing or very "
+                                  "slow; try another drive/port if it stalls.",
+                                  phase="copy")
                 if now - last_emit >= _PROGRESS_MIN_INTERVAL or done == total:
                     last_emit = now
                     rate = done / (now - start) if now > start else 0
@@ -424,4 +496,5 @@ def copy_tree_verified(
         files_skipped=skipped, failed=failed, bytes_copied=bytes_copied,
         elapsed=time.time() - start, thorough=thorough,
         content_verified=len(sampled), failures=failures,
+        retries=retries, slow_media=slow_media, slowest_files=slowest,
     )

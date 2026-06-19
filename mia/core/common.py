@@ -45,7 +45,10 @@ class Progress:
     rate: float = 0.0
     eta: float = 0.0
     note: Optional[str] = None
-    kind: str = "progress"  # "progress" | "info" | "retry" | "fail" | "debug"
+    # "progress" | "info" | "retry" | "fail" | "debug" | "warn"
+    # "warn" is a proactive, user-facing caution (e.g. a slow-media heads-up)
+    # that isn't a failure — the UI shows it prominently but the job continues.
+    kind: str = "progress"
     phase: str = ""
     # When True the worker can't give a meaningful done/total ratio (e.g. an
     # opaque OS bulk-copy): the UI should show an animated "working" bar, not a
@@ -104,6 +107,15 @@ def emit(callback: Optional[ProgressCallback], progress: Progress) -> None:
     """Send a progress event if a callback was provided."""
     if callback is not None:
         callback(progress)
+
+
+def emit_warn(callback: Optional[ProgressCallback], note: str,
+              phase: str = "") -> None:
+    """Emit a kind="warn" note — a proactive, user-facing caution (not a
+    failure). Always sent when a callback exists (unlike emit_debug, which is
+    verbose-gated): a slow-media heads-up is worth showing even in quiet mode."""
+    if callback is not None:
+        callback(Progress(0, 0, kind="warn", note=note, phase=phase))
 
 
 def check_cancel(cancel: Optional[CancelToken]) -> None:
@@ -167,6 +179,10 @@ class ConsoleProgress:
             return
         if p.kind == "fail":
             print(f"  FAIL: {p.note}", flush=True)
+            return
+        if p.kind == "warn":
+            if p.note is not None:
+                print(f"  WARNING: {p.note}", flush=True)
             return
         if p.kind == "retry":
             if self.verbose and p.note is not None:

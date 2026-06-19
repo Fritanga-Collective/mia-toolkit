@@ -29,12 +29,48 @@ from .sysutil import reveal
 _SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 
 
+def summary_from_result(result, *, op: str = "copy to USB",
+                        dest: Optional[str] = None) -> dict:
+    """Flatten a deliver.DeliverResult (+ media facts) into the plain dict
+    build_report/verdict consume. Best-effort media lookup; never raises so a
+    finished delivery can always stash a summary. ``dest`` defaults to the
+    result's own dest (the volume we just copied to)."""
+    from mia.core import diagnostics
+
+    media = {}
+    try:
+        media = diagnostics.media_info(dest or getattr(result, "dest", "") or "")
+    except Exception:
+        media = {"filesystem": "unknown", "total": "unknown", "free": "unknown"}
+    return {
+        "op": op,
+        "result": "verified" if getattr(result, "verified", False)
+        else "completed with problems",
+        "files_copied": getattr(result, "files_copied", 0),
+        "files_skipped": getattr(result, "files_skipped", 0),
+        "failed": getattr(result, "failed", 0),
+        "retries": getattr(result, "retries", 0),
+        "elapsed": getattr(result, "elapsed", 0.0),
+        "files_per_sec": getattr(result, "files_per_sec", 0.0),
+        "mb_per_sec": getattr(result, "mb_per_sec", 0.0),
+        "slow_media": getattr(result, "slow_media", False),
+        "slowest_files": list(getattr(result, "slowest_files", []) or []),
+        "filesystem": media.get("filesystem", "unknown"),
+        "free": media.get("free", "unknown"),
+        "total": media.get("total", "unknown"),
+    }
+
+
 class ProgressLogPanel(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
         super().__init__(master)
         self.presenter = Presenter()
         self._tech_lines: list[str] = []
         self._tech_visible = False
+        # Structured summary of the most recent finished operation (a delivery),
+        # stashed by the owning view so "Report a problem" can render run
+        # context (throughput, media, verdict). None until a run completes.
+        self.last_summary: Optional[dict] = None
         self._logfile = None
         self._logfile_path: Optional[str] = None
         # Working-spinner state (animates the status line while a session runs).
@@ -104,6 +140,18 @@ class ProgressLogPanel(ttk.Frame):
         # (on by default — captured here but only shown when the user expands
         # "technical details").
         if p.kind == "debug":
+            self.log_technical(p.note or "")
+            return
+
+        # A proactive caution (e.g. slow media) — not a failure, but worth the
+        # user's attention. Show it prominently in the plain log (reusing the
+        # "fail" red so it's visible) and as a status note; keep the raw note in
+        # the technical log too. The job keeps running.
+        if p.kind == "warn":
+            msg = _("⚠ This drive is copying slowly. If it stalls, try another "
+                    "USB drive or plug it straight into the computer.")
+            self.log_plain(msg, tag="fail")
+            self.set_status(msg)
             self.log_technical(p.note or "")
             return
 
@@ -291,7 +339,8 @@ class ProgressLogPanel(ttk.Frame):
 
     def _report_problem(self) -> None:
         from .report import open_report_dialog
-        open_report_dialog(self, list(self._tech_lines))
+        open_report_dialog(self, list(self._tech_lines),
+                           summary=self.last_summary)
 
     def _toggle_tech(self) -> None:
         self._tech_visible = not self._tech_visible
