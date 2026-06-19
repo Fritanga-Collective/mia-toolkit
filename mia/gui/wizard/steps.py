@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import shutil
-import time
 import tkinter as tk
 import webbrowser
 from tkinter import filedialog, messagebox, ttk
@@ -24,9 +23,11 @@ def institutions_url() -> str:
     prefix = "" if lang == "en" else f"{lang}/"
     return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
 
-from mia.core import deliver, dicomdir, documents, inventory
+from mia.core import deliver, delivery_target, dicomdir, documents, inventory
 from mia.core.common import Progress, format_bytes
 from mia.core.ripper import copy_with_retry
+
+from ..three_button import ask_three
 
 from .. import import_flow
 from ..i18n import _
@@ -646,6 +647,45 @@ class ArchiveStep(PanelStep):
             groups.append((milestone, s["paths"]))
         return groups
 
+    def _ask_update_or_new(self, decision, patient):
+        """A different patient's archive is already on the drive. Ask whether to
+        update it anyway, add a new folder, or cancel. Returns the chosen dest
+        folder, or None to cancel."""
+        other = decision.existing[0] if decision.existing else None
+        who = (other.patient_name if other and other.patient_name
+               else _("another patient"))
+        msg = _(
+            "This drive already has an archive for {who}. Do you want to update "
+            "that existing folder, or add a new separate folder for this "
+            "delivery?").format(who=who)
+        # Buttons: Update the existing folder / New folder / Cancel.
+        choice = ask_three(
+            self.wizard.app.root, _("Drive already has an archive"), msg,
+            [(_("Update existing"), "update"),
+             (_("Add new folder"), "new"),
+             (_("Cancel"), None)],
+            cancel=None)
+        if choice == "update" and other is not None:
+            return other.folder
+        if choice == "new":
+            return decision.folder            # proposed CaseReview_<patient>
+        return None
+
+    def _ask_orphans(self, n: int):
+        """Some files on the drive are left over from a previous, larger
+        delivery to this folder. Ask Keep / Remove / Cancel. Returns True
+        (remove), False (keep), or None (cancel)."""
+        msg = _(
+            "This folder has {n} file(s) from a previous delivery that aren't "
+            "in the current archive. Keep them, or remove them so the folder "
+            "matches exactly what you're delivering now?").format(n=n)
+        return ask_three(
+            self.wizard.app.root, _("Leftover files found"), msg,
+            [(_("Keep them"), False),
+             (_("Remove them"), True),
+             (_("Cancel"), None)],
+            cancel=None)
+
     def _deliver(self) -> None:
         usb = filedialog.askdirectory(title=_("Choose your USB drive"))
         if not usb:
@@ -657,8 +697,34 @@ class ArchiveStep(PanelStep):
                 "That drive doesn't have room for the archive (need about {n}).")
                 .format(n=format_bytes(need)))
             return
-        dest = os.path.join(usb, "CaseReview_" + time.strftime("%Y%m%d"))
+
+        # Smart, incremental re-delivery: recognize an existing CaseReview folder
+        # for this patient and update it in place (don't make a fresh dated
+        # folder that duplicates the data and defeats the resume/verify copy).
+        inv_res = self.wizard.inventory_result
+        studies = inv_res.studies if inv_res is not None else {}
+        patient = delivery_target.archive_identity(studies)
+        decision = delivery_target.choose_target(usb, patient)
+        dest = decision.folder
+        if decision.action == delivery_target.ASK:
+            dest = self._ask_update_or_new(decision, patient)
+            if dest is None:
+                return                            # user cancelled
+
+        # Orphans: files from a previous, larger delivery to this same folder
+        # that aren't in the freshly built archive. Ask before touching them.
+        remove_orphans = False
+        orphan_rels: list = []
+        if decision.action != delivery_target.NEW and os.path.isdir(dest):
+            orphan_rels = delivery_target.find_orphans(src, dest)
+            if orphan_rels:
+                choice = self._ask_orphans(len(orphan_rels))
+                if choice is None:
+                    return                        # user cancelled
+                remove_orphans = choice
+
         inv = self.project.inventory_path
+        pname, pid = patient
 
         def work(emit, cancel):
             # Copy study-by-study (prefer_native=False so the in-process pass
@@ -667,11 +733,19 @@ class ArchiveStep(PanelStep):
             # device-bound-equivalent). Sample a handful of files for SHA-256
             # content verification (cheap insurance against a drive that writes
             # the wrong bytes at the right size — counterfeit/failing sticks).
+            dest_archive = os.path.join(dest, "Archive")
             result = deliver.copy_tree_verified(
-                src, os.path.join(dest, "Archive"),
+                src, dest_archive,
                 prefer_native=False, groups=self._copy_groups(src),
                 verify_sample=deliver.DEFAULT_VERIFY_SAMPLE,
                 progress=emit, cancel=cancel)
+            # Force-overwrite the DICOMDIR index regardless of size: on a
+            # re-delivery the rebuilt index can differ in content at the same
+            # byte length, and the size-only resume would otherwise keep the
+            # stale one. Tiny file — always recopy for correctness.
+            src_dd = os.path.join(src, "DICOMDIR")
+            if os.path.exists(src_dd):
+                copy_with_retry(src_dd, os.path.join(dest_archive, "DICOMDIR"))
             if os.path.exists(inv):
                 os.makedirs(dest, exist_ok=True)
                 dst_inv = os.path.join(dest, os.path.basename(inv))
@@ -699,6 +773,18 @@ class ArchiveStep(PanelStep):
                 # couldn't be written (drive full / permissions).
                 result.failed += 1
                 result.failures.append(("README.txt / DELIVERY-LOG.txt", str(e)))
+            # Remove leftover files from a previous, larger delivery — only if
+            # the user chose to. (Computed before the copy; safe to delete now
+            # that the current set is in place.)
+            if remove_orphans and orphan_rels:
+                delivery_target.remove_orphans(dest, orphan_rels)
+            # Stamp the hidden marker so the next delivery to this drive
+            # recognizes the folder as this patient's and updates it in place.
+            try:
+                delivery_target.write_marker(
+                    dest, patient_name=pname, patient_id=pid, result=ar)
+            except OSError:
+                pass  # the delivery itself is fine without the marker
             return result, dest
 
         self.run_job(work, self._deliver_done, self.project.root,
