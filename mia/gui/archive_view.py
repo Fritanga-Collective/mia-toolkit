@@ -6,9 +6,10 @@ import os
 from tkinter import ttk
 from typing import Any
 
-from mia.core import dicomdir
+from mia.core import delivery_target, dicomdir
 from .i18n import N_, _
 from .task_view import TaskView, reveal
+from .three_button import ask_three
 from .widgets import FolderPicker, default_dir
 
 
@@ -47,15 +48,32 @@ class ArchiveView(TaskView):
         if not out:
             self.set_status(_("Please choose where to save the archive."))
             return
+        self._update = False
         if os.path.isdir(out) and os.listdir(out):
-            self.set_status(_("That destination already has files in it."))
-            self.log_plain(_("⚠ The destination folder isn't empty. Choose an "
-                             "empty folder (or a new one) so the archive stays "
-                             "clean."), tag="fail")
-            return
+            # A non-empty destination is only safe to touch if it's a MIA
+            # archive we recognize — then we update it incrementally. Anything
+            # else (unknown data) we refuse to clobber, as before.
+            if delivery_target.read_marker(out) is None:
+                self.set_status(_("That destination already has files in it."))
+                self.log_plain(_("⚠ The destination folder isn't empty. Choose "
+                                 "an empty folder (or a new one) so the archive "
+                                 "stays clean."), tag="fail")
+                return
+            choice = ask_three(
+                self.app.root, _("Update existing archive"),
+                _("This folder already holds a MIA archive. Update it with the "
+                  "latest images, or cancel?"),
+                [(_("Update"), True), (_("Cancel"), None)], cancel=None)
+            if not choice:
+                self.set_status(_("Cancelled."))
+                return
+            self._update = True
 
         self._source = source
         self._out = out
+        # Snapshot the existing files so we can detect orphans (left over from a
+        # previous, larger build) after the rebuild.
+        self._before = self._snapshot(out) if self._update else set()
         self.set_status(_("Scanning for images…"))
         self.log_plain(_("Looking for all DICOM images under {f}…")
                        .format(f=source))
@@ -66,6 +84,18 @@ class ArchiveView(TaskView):
 
         self.start_job(work, self._finish, log_dir=out)
 
+    @staticmethod
+    def _snapshot(folder: str) -> set:
+        """Relative paths of all files under ``folder`` (excluding the hidden
+        marker), for orphan detection across a rebuild."""
+        out = set()
+        for dirpath, _dirs, files in os.walk(folder):
+            for fn in files:
+                if fn == delivery_target.MARKER_NAME:
+                    continue
+                out.add(os.path.relpath(os.path.join(dirpath, fn), folder))
+        return out
+
     def _finish(self, status: str, result: Any) -> None:
         if status != "done":
             return
@@ -75,6 +105,31 @@ class ArchiveView(TaskView):
                              "ripped discs?"))
             return
         readme = dicomdir.write_readme(self._out, result, self._source)
+
+        # On an incremental update, offer to drop files left over from a
+        # previous, larger build that the rebuild no longer produced.
+        if self._update:
+            after = self._snapshot(self._out)
+            orphans = sorted(self._before - after)
+            if orphans:
+                choice = ask_three(
+                    self.app.root, _("Leftover files found"),
+                    _("This folder has {n} file(s) from a previous build that "
+                      "aren't in the current archive. Keep them, or remove "
+                      "them?").format(n=len(orphans)),
+                    [(_("Keep them"), False), (_("Remove them"), True)],
+                    cancel=False)
+                if choice:
+                    delivery_target.remove_orphans(self._out, orphans)
+
+        # Stamp the marker so a later run recognizes this folder as a MIA
+        # archive and offers to update it.
+        try:
+            delivery_target.write_marker(
+                self._out, patient_name=None, patient_id=None, result=result)
+        except OSError:
+            pass
+
         self.set_status(_("Archive ready — {s} studies, {n} images.")
                         .format(s=result.studies, n=result.added))
         self.log_plain(_("✓ Archive complete: {s} studies, {n} images. "
