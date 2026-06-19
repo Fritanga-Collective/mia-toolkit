@@ -58,6 +58,15 @@ class App:
             current.destroy()
         self._current = factory(self.container)
         self._current.pack(fill="both", expand=True)
+        # macOS/Aqua deferred-redraw fix: destroying a view that held native
+        # tk.Text widgets (the tool screens' log panels) and immediately
+        # building a new one leaves the replacement un-repainted until the
+        # window gets a real OS event (mouse move / resize). Flush pending
+        # redraws now, and on Aqua force an expose so labels paint immediately.
+        # (Do NOT use full update() here — this runs inside a button callback.)
+        self._current.update_idletasks()
+        if self.root.tk.call("tk", "windowingsystem") == "aqua":
+            self._current.event_generate("<Expose>")
 
     # Imports are local to avoid a circular import at module load.
     def show_launcher(self) -> None:
