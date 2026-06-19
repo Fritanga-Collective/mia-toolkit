@@ -89,12 +89,13 @@ class App:
         panel = getattr(view, "panel", None) or getattr(
             getattr(view, "current", None), "panel", None)
         lines = list(getattr(panel, "_tech_lines", []) or [])
+        summary = getattr(panel, "last_summary", None)
         if not lines:
             try:
                 lines = latest_session_log_lines(Project().root)
             except Exception:
                 lines = []
-        open_report_dialog(self.root, lines)
+        open_report_dialog(self.root, lines, summary=summary)
 
     def set_language(self, lang: str) -> None:
         """Switch UI language and re-render (the selector lives on the launcher)."""

@@ -61,6 +61,9 @@ class Presenter:
             return _("Recovered a file after a retry.")
         if p.kind == "fail":
             return _("⚠ Could not read a file (see technical details).")
+        if p.kind == "warn":
+            return _("⚠ This drive is copying slowly. If it stalls, try another "
+                     "USB drive or plug it straight into the computer.")
         return p.note  # info notes are already user-facing
 
     @staticmethod

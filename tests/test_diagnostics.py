@@ -110,7 +110,10 @@ def test_build_report_is_anonymized_end_to_end():
 
 def test_environment_has_core_fields():
     env = dx.environment()
-    assert set(env) >= {"app_version", "frozen", "os", "arch", "python"}
+    assert set(env) >= {"app_version", "build", "os", "arch", "python"}
+    # "build" replaces the old "frozen" flag (which read like "the app froze").
+    assert "frozen" not in env
+    assert env["build"] in ("packaged app", "source checkout")
 
 
 def test_redact_toggle():
@@ -129,3 +132,97 @@ def test_build_report_caps_log_for_email_body():
     assert "trimmed" in report                 # cap marker present
     assert "step 9" in report                  # keeps the tail
     assert "step 0" not in report              # drops the head
+
+
+def test_filter_drops_progress_heartbeats_keeps_milestones():
+    # The "[done/total] pct% rate/s ETA" heartbeats are tick spam now that the
+    # summary carries throughput — drop them, keep milestones/errors/warnings.
+    lines = [
+        "10:00:01  walked 6400 files in 0.3s",
+        "10:00:02  [1/6400]  0.0%  0/s  ETA 0s",
+        "10:00:30  [3200/6400] 50.0%  9/s  ETA 5m 0s",
+        "10:00:31  slow media: ~1.2 files/s — the USB drive may be failing",
+        "10:01:00  verify/fill pass: 6400 copied, 0 skipped, 0 failed in 2.0s",
+    ]
+    kept, dropped = dx.filter_log(lines)
+    assert dropped == 2                          # both [n/n] ticks
+    joined = "\n".join(kept)
+    assert "walked 6400" in joined
+    assert "slow media" in joined                # warning kept
+    assert "verify/fill pass" in joined
+    assert "[3200/6400]" not in joined
+
+
+def test_environment_build_label():
+    assert dx.environment()["build"] in ("packaged app", "source checkout")
+
+
+def test_media_info_unknown_on_bogus_path_no_raise():
+    info = dx.media_info("/this/path/does/not/exist/ever/12345")
+    assert set(info) == {"filesystem", "total", "free"}
+    # Must never raise; filesystem of a non-existent path is "unknown".
+    assert info["filesystem"] == "unknown"
+
+
+def test_media_info_real_path_reports_total_free():
+    info = dx.media_info(os.path.expanduser("~"))
+    # On a real path total/free should resolve (filesystem may still be unknown
+    # if the OS probe isn't available in CI).
+    assert info["total"] != "unknown"
+    assert info["free"] != "unknown"
+
+
+def test_verdict_thresholds():
+    # Errors/retries -> failing-drive language.
+    assert "failing" in dx.verdict(
+        {"failed": 1, "retries": 0, "files_per_sec": 8}).lower()
+    assert "failing" in dx.verdict(
+        {"failed": 0, "retries": 2, "files_per_sec": 8}).lower()
+    # Very slow, no errors -> counterfeit/failing/slow-port caution.
+    slow = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 1.0})
+    assert "counterfeit" in slow.lower() or "failing" in slow.lower()
+    # Slow-but-not-alarming on exFAT (between the floor and the healthy band) ->
+    # normal small-file overhead, not a fault.
+    slow_fat = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 3.0,
+                           "filesystem": "exFAT"})
+    assert "not a fault" in slow_fat.lower()
+    # Healthy ~8 files/s on exFAT must NOT be called "slow" — it's at the normal
+    # FAT/exFAT rate, so the verdict should read as plain-normal throughput.
+    fast_fat = dx.verdict({"failed": 0, "retries": 0, "files_per_sec": 8.0,
+                           "filesystem": "exFAT"})
+    assert "slow" not in fast_fat.lower()
+    assert "normal" in fast_fat.lower()
+    # Cancelled -> not a fault.
+    assert "cancel" in dx.verdict({"cancelled": True}).lower()
+
+
+def test_build_report_with_summary_renders_throughput_media_verdict():
+    summary = {
+        "op": "copy to USB",
+        "result": "verified",
+        "files_copied": 6400, "files_skipped": 0, "failed": 0, "retries": 0,
+        "elapsed": 800.0, "files_per_sec": 8.0, "mb_per_sec": 2.0,
+        "filesystem": "exFAT", "free": "12.0 GB", "total": "32.0 GB",
+        "slow_media": False,
+        "slowest_files": [("disc_01/DOE^JANE/IM0001", 1.23)],
+    }
+    report = dx.build_report("the copy felt off", [], summary=summary)
+    assert "## Last operation" in report
+    assert "8.0 files/s" in report and "2.0 MB/s" in report
+    assert "## Media" in report and "exFAT" in report
+    assert "## Verdict" in report
+    # Healthy ~8 files/s on exFAT reads as plain-normal throughput, not the
+    # "slow but…" overhead message (which is reserved for the slow-but-OK band).
+    assert dx.verdict(summary) in report
+    assert "slow but" not in report.lower()
+    assert "throughput looks normal" in report.lower()
+    # Slowest-file rel paths are scrubbed — no PHI survives.
+    assert "DOE" not in report and "JANE" not in report
+    assert "## Slowest files" in report
+
+
+def test_build_report_without_summary_omits_sections():
+    report = dx.build_report("x", ["10:00:00  walked 5 files in 0.1s"])
+    assert "## Last operation" not in report
+    assert "## Media" not in report
+    assert "## Verdict" not in report

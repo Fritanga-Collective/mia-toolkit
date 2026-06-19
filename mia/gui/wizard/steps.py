@@ -797,6 +797,16 @@ class ArchiveStep(PanelStep):
         result, dest = payload
         self.wizard.deliver_result = result
         self.wizard.delivered_path = dest
+        # Stash a structured summary so "Report a problem" can show run context
+        # (throughput, media, verdict) for this delivery.
+        from ..progress_panel import summary_from_result
+        try:
+            self.panel.last_summary = summary_from_result(result, dest=dest)
+        except Exception as e:
+            self.panel.last_summary = None
+            # Record why the run summary couldn't be built — it's support-facing
+            # data, so a silent drop would hide the cause from maintainers.
+            self.panel.log_technical(f"summary_from_result failed: {e!r}")
         if result.failed == 0:
             self.info.configure(text=_(
                 "✓ Copied to the USB and verified. Click Next to finish."))

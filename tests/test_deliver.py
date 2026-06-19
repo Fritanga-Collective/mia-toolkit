@@ -371,6 +371,79 @@ def test_cancellation(tmp_path):
                                    prefer_native=False, cancel=CancelNow())
 
 
+def test_result_carries_run_summary_fields(tmp_path):
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    files = _tree(str(src))
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+    # New structured-summary fields are present and sane on a clean run.
+    assert res.retries == 0
+    assert res.slow_media is False
+    assert isinstance(res.slowest_files, list)
+    assert 0 < len(res.slowest_files) <= 3
+    for rel, secs in res.slowest_files:
+        assert isinstance(rel, str) and secs >= 0
+    # Derived throughput properties.
+    assert res.files_per_sec >= 0 and res.mb_per_sec >= 0
+    assert len(files) == res.files_copied
+
+
+def test_slow_source_trips_slow_media(tmp_path, monkeypatch):
+    # A forced-slow copy (each file "takes" a long time) must trip the proactive
+    # slow-media warning and set slow_media on the result, with no failures.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    # Enough files to cross the sample threshold.
+    for i in range(_n := 25):
+        p = src / f"f{i:03d}.dat"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(b"x" * 10)
+
+    # Fake the clock so elapsed grows fast: each time.time() call advances 1s.
+    clock = {"t": 1000.0}
+
+    def fake_time():
+        clock["t"] += 1.0
+        return clock["t"]
+
+    monkeypatch.setattr(deliver.time, "time", fake_time)
+
+    events = []
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False,
+                                     progress=events.append)
+    assert res.failed == 0
+    assert res.slow_media is True
+    warns = [e for e in events if e.kind == "warn"]
+    assert len(warns) == 1                       # warned exactly once
+    assert "slow media" in (warns[0].note or "").lower()
+
+
+def test_retries_counted_on_bad_write(tmp_path, monkeypatch):
+    # When the first write verifies wrong and the second succeeds, the run
+    # records exactly one retry per such file.
+    src = tmp_path / "src"
+    dst = tmp_path / "dst"
+    _tree(str(src))
+
+    real_copy = deliver.copy_with_retry
+    state = {"first": True}
+
+    def flaky_copy(sp, dp, **kw):
+        ok, note = real_copy(sp, dp, **kw)
+        # Corrupt the first copied file's destination size once, forcing the
+        # in-pass re-verify to fail and a second attempt to run.
+        if ok and state["first"]:
+            state["first"] = False
+            with open(dp, "ab") as f:
+                f.write(b"x")                    # wrong size -> _matches False
+        return ok, note
+
+    monkeypatch.setattr(deliver, "copy_with_retry", flaky_copy)
+    res = deliver.copy_tree_verified(str(src), str(dst), prefer_native=False)
+    assert res.retries == 1
+    assert res.failed == 0                        # the retry repaired it
+
+
 def test_free_space_and_dir_size(tmp_path):
     src = tmp_path / "src"
     _tree(str(src))

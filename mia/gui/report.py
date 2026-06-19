@@ -40,7 +40,8 @@ def latest_session_log_lines(*extra_dirs: str) -> list:
 
 
 def open_report_dialog(parent: tk.Misc, log_lines: list,
-                       extra: dict | None = None) -> None:
+                       extra: dict | None = None,
+                       summary: dict | None = None) -> None:
     extra = {"language": current_language(), **(extra or {})}
 
     win = tk.Toplevel(parent)
@@ -78,7 +79,8 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
     def rebuild() -> None:
         state["job"] = None
         report = diagnostics.build_report(
-            notes.get("1.0", "end").strip(), log_lines, extra=extra)
+            notes.get("1.0", "end").strip(), log_lines, extra=extra,
+            summary=summary)
         state["report"] = report
         preview.configure(state="normal")
         preview.delete("1.0", "end")
@@ -138,7 +140,7 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
                     "clipboard.)").format(p=shown)
         body = diagnostics.build_report(
             notes.get("1.0", "end").strip(), log_lines, extra=extra,
-            max_log_lines=60) + pointer
+            summary=summary, max_log_lines=60) + pointer
         subject = _("MIA Toolkit problem report")
         url = f"mailto:{CONTACT}?subject={quote(subject)}&body={quote(body)}"
         if len(url) > 6000:                      # too long for some mail clients
