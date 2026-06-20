@@ -12,18 +12,22 @@ from .i18n import LANGUAGES, _, current_language
 # Opens in the user's browser on click — outbound only on explicit user action.
 BLOG_URL = "https://fritangacollective.substack.com/"
 
-# Buttons share one fixed width (in characters) so the cards are uniform and
-# centered, rather than stretching to the full window width.
-BUTTON_WIDTH = 30
-WRAP = 250
+# Cards share one fixed width in PIXELS (not characters) so they're uniform and
+# centered, and render identically across platforms. A character-based width
+# (Tk's default) scales with the platform font's metrics, which made the cards
+# (and the window) much wider on Windows than on macOS.
+CARD_WIDTH = 400
 
 
 class Launcher(ttk.Frame):
     def __init__(self, master: tk.Misc, app: Any) -> None:
         super().__init__(master, padding=28)
         self.app = app
-        # Weighted side columns center the fixed-width cards in column 1.
+        # Weighted side columns center the fixed-width cards in column 1; the
+        # center column is pinned to CARD_WIDTH (no weight) so it holds that
+        # pixel width and never stretches when the window grows.
         self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, minsize=CARD_WIDTH)
         self.columnconfigure(2, weight=1)
         self._row = 0
 
@@ -120,19 +124,22 @@ class Launcher(ttk.Frame):
     def _card(self, emoji: str, title: str, subtitle: str,
               command: Callable[[], None]) -> None:
         card = ttk.Frame(self)
-        # No sticky -> the card keeps its natural (content) width and is
-        # centered within the weighted middle column.
-        card.grid(row=self._row, column=1, pady=7)
+        # Fill the CARD_WIDTH-pinned center column so the card is the same pixel
+        # width on every platform (sticky="ew"); the inner button/label stretch
+        # to fill the card.
+        card.grid(row=self._row, column=1, pady=7, sticky="ew")
+        card.columnconfigure(0, weight=1)
         self._row += 1
         # Emoji is kept out of the translatable string (it's language-neutral)
         # and prefixed here so every card reads "<emoji>  <label>" uniformly.
         # A classic tk.Button so the vertical padding (padx/pady) sits *inside*
         # the button and the pill actually grows with the larger text — the
-        # native ttk (aqua) button on macOS won't do that.
+        # native ttk (aqua) button on macOS won't do that. No char-based width:
+        # the button fills the fixed-pixel card via sticky="ew" instead.
         tk.Button(card, text=f"{emoji}  {title}", command=command, font=("", 15),
-                  width=BUTTON_WIDTH, padx=18, pady=16, relief="solid",
+                  padx=18, pady=16, relief="solid",
                   borderwidth=1, bg="white", activebackground="#eef2f7",
                   highlightthickness=0, cursor="hand2").grid(
-            row=0, column=0)
-        ttk.Label(card, text=subtitle, foreground="#666", wraplength=WRAP,
+            row=0, column=0, sticky="ew")
+        ttk.Label(card, text=subtitle, foreground="#666", wraplength=CARD_WIDTH,
                   justify="center").grid(row=1, column=0, pady=(6, 0))
