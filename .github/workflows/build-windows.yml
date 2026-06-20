@@ -1,0 +1,45 @@
+name: Build Windows (manual test installer)
+
+# Manual, on-demand build of the Windows x64 installer for testing — e.g.
+# verifying install on Windows-on-ARM via x64 emulation. Produces an UNSIGNED
+# installer and uploads it as a workflow artifact. Does NOT create a release,
+# does NOT touch the website, does NOT tag. Run from any branch:
+#   gh workflow run build-windows.yml --ref <branch>
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version string baked into the installer filename"
+        required: false
+        default: "0.0.0-test"
+
+jobs:
+  build:
+    name: Build Windows x64 installer
+    runs-on: windows-latest
+    env:
+      MIA_VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[build]"
+
+      - name: Build app (PyInstaller)
+        run: pyinstaller packaging/windows/mia-windows.spec --noconfirm
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer (Inno Setup)
+        shell: pwsh
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "packaging\windows\installer.iss"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-installer
+          path: dist/*.exe
+          if-no-files-found: error
