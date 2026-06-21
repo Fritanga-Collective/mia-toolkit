@@ -14,18 +14,18 @@
     // there's no "compare all options" chooser anymore. Served from our Lemon
     // Squeezy store custom domain (CNAME).
     checkout:
-      "https://support.mia-toolkit.fritanga.co/checkout/buy/9d2bf6af-6bbc-4a07-a55e-af6a5de6a5f9",
+      "https://support.miatools.tech/checkout/buy/9d2bf6af-6bbc-4a07-a55e-af6a5de6a5f9",
     // Per tier: `url` is the product's direct checkout; `amount` is only for
     // display. The monthly product is a real subscription (recurring).
     tiers: [
       { id: "coffee", amount: 5.99,
-        url: "https://support.mia-toolkit.fritanga.co/checkout/buy/931b7467-55cd-48e7-bc85-101530b6b175" },
+        url: "https://support.miatools.tech/checkout/buy/931b7467-55cd-48e7-bc85-101530b6b175" },
       { id: "supporter", amount: 15.99,
-        url: "https://support.mia-toolkit.fritanga.co/checkout/buy/367767d8-4496-480f-ae73-44e5765cb9c3" },
+        url: "https://support.miatools.tech/checkout/buy/367767d8-4496-480f-ae73-44e5765cb9c3" },
       { id: "patron", amount: 50.99,
-        url: "https://support.mia-toolkit.fritanga.co/checkout/buy/28aee3c3-2162-46be-92fd-e546de7bd443" },
+        url: "https://support.miatools.tech/checkout/buy/28aee3c3-2162-46be-92fd-e546de7bd443" },
       { id: "monthly", amount: 5, recurring: true,
-        url: "https://support.mia-toolkit.fritanga.co/checkout/buy/65cb3914-7437-4c59-ad79-516118471601" },
+        url: "https://support.miatools.tech/checkout/buy/65cb3914-7437-4c59-ad79-516118471601" },
     ],
   };
 
