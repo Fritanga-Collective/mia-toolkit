@@ -24,8 +24,13 @@ PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 DefaultDirName={localappdata}\Programs\{#AppName}
 DisableProgramGroupPage=yes
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
+; x64compatible (Inno Setup 6.3+) matches x64 *and* ARM64 machines that can run
+; x64 via Windows' built-in emulation. With plain "x64" the installer refuses to
+; run on Windows-on-ARM ("does not support the version of Windows...") before
+; emulation can kick in. This ships our x64 build to ARM users (emulated); a
+; native ARM64 build is a separate, later step.
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir={#SourcePath}..\..\dist
 OutputBaseFilename=MIA-Toolkit-Setup-{#AppVer}
 Compression=lzma2

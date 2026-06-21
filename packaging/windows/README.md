@@ -22,6 +22,16 @@ pyinstaller packaging\windows\mia-windows.spec --noconfirm
 The installer is **per-user** (`PrivilegesRequired=lowest`) — no admin prompt,
 installs to `%LOCALAPPDATA%\Programs`.
 
+## Architecture / Windows on ARM
+
+The build is **x64**. The installer sets `ArchitecturesAllowed=x64compatible`, so it
+also installs on **Windows 11 on ARM**, where the app runs under Windows' built-in
+x64 emulation. (With plain `x64` the installer *refuses* to run on ARM —
+"This program does not support the version of Windows your computer is running" —
+before emulation can help.) `x64compatible` requires **Inno Setup 6.3+** (the CI
+`choco install innosetup` is current; install 6.3+ locally). A **native ARM64**
+build is a possible later step — not shipped yet.
+
 ## Signing — SignPath Foundation (the Windows "notarization")
 
 Windows has no notarization service like Apple's; the equivalent is an
