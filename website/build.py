@@ -21,7 +21,7 @@ import shutil
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BASE = "https://mia-toolkit.fritanga.co"
+BASE = "https://miatools.tech"
 
 # Language order = dropdown order. English lives at the site root (x-default).
 LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de"]
