@@ -11,7 +11,7 @@ from types import SimpleNamespace
 
 # The tool and its installers are free. These open in the user's browser —
 # the only outbound links in the app (no telemetry, no background calls).
-SUPPORT_URL = "https://mia-toolkit.fritanga.co/support.html"
+SUPPORT_URL = "https://miatools.tech/support.html"
 BLOG_URL = "https://fritangacollective.substack.com/"
 
 
@@ -21,7 +21,7 @@ def institutions_url() -> str:
     from ..i18n import current_language
     lang = current_language()
     prefix = "" if lang == "en" else f"{lang}/"
-    return f"https://mia-toolkit.fritanga.co/{prefix}support.html#institutions"
+    return f"https://miatools.tech/{prefix}support.html#institutions"
 
 from mia.core import deliver, delivery_target, dicomdir, documents, inventory
 from mia.core.common import Progress, format_bytes

@@ -6,17 +6,17 @@ MIA Toolkit is a free, open-source, offline desktop app (macOS + Windows) — pl
 the original command-line scripts — that compiles years of medical imaging CDs
 into a single, radiologist-friendly DICOM archive.
 
-🌐 [Website](https://mia-toolkit.fritanga.co) ·
+🌐 [Website](https://miatools.tech) ·
 📦 [Download — free](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest) ·
-❤️ [Support the project](https://mia-toolkit.fritanga.co/support.html) ·
+❤️ [Support the project](https://miatools.tech/support.html) ·
 📰 [Blog](https://fritangacollective.substack.com/) ·
-🔒 [Privacy](https://mia-toolkit.fritanga.co/privacy.html)
+🔒 [Privacy](https://miatools.tech/privacy.html)
 
 Private by design: no account, no cloud, no telemetry — your data never leaves
 your machine.
 
 **Free for personal use — forever.** Organizations deploying MIA Toolkit are
-invited to purchase an [Institutional License](https://mia-toolkit.fritanga.co/support.html#institutions) — the
+invited to purchase an [Institutional License](https://miatools.tech/support.html#institutions) — the
 compliance-and-support package that keeps the tool free for patients.
 
 ## What this is for

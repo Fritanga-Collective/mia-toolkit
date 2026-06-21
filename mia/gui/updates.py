@@ -24,8 +24,8 @@ try:
 except ImportError:  # source installs can rely on the interpreter's defaults
     certifi = None
 
-VERSION_URL = "https://mia-toolkit.fritanga.co/version.json"
-DOWNLOAD_PAGE = "https://mia-toolkit.fritanga.co/"
+VERSION_URL = "https://miatools.tech/version.json"
+DOWNLOAD_PAGE = "https://miatools.tech/"
 TIMEOUT_SECONDS = 5.0
 # version.json is a tiny static file; cap the read so a hostile/compromised
 # endpoint can't stream gigabytes into memory.
