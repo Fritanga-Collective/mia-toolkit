@@ -5,13 +5,13 @@
   "use strict";
 
   var CONFIG = {
-    version: "0.1.11",
+    version: "0.1.12",
     releasesLatest:
       "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
     macUrl:
-      "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.11/MIA-Toolkit-0.1.11.dmg",
+      "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.12/MIA-Toolkit-0.1.12.dmg",
     winUrl:
-      "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.11/MIA-Toolkit-Setup-0.1.11.exe",
+      "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.12/MIA-Toolkit-Setup-0.1.12.exe",
   };
 
   function detectOS() {
