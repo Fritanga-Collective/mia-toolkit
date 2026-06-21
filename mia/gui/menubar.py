@@ -15,7 +15,7 @@ from tkinter import messagebox
 from .. import __version__
 from .i18n import LANGUAGES, N_, _, current_language
 
-SITE = "https://mia-toolkit.fritanga.co/"
+SITE = "https://miatools.tech/"
 LINKS = [
     (N_("Website"), SITE),
     (N_("Privacy policy"), SITE + "privacy.html"),
