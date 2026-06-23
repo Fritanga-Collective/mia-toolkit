@@ -26,9 +26,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BASE = "https://miatools.tech"
 
 # Language order = dropdown order. English lives at the site root (x-default).
-LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de"]
+LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de", "fr"]
 HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
-            "ta": "ta-SG", "de": "de"}
+            "ta": "ta-SG", "de": "de", "fr": "fr"}
 
 PAGES = ["index", "help", "support", "privacy", "stats"]
 OG_PAGES = {"index", "help", "support"}  # privacy has no social card (as before)

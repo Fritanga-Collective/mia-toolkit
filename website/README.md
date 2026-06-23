@@ -6,7 +6,7 @@ Static, fast, multilingual, **no frameworks, no tracking**. Pages are
 ```
 website/
 ├── templates/      index.html · support.html · privacy.html · blog_*.html  ({{key}} placeholders)
-├── i18n/           en.json · es.json · zh.json · ms.json · ta.json · de.json
+├── i18n/           en.json · es.json · zh.json · ms.json · ta.json · de.json · fr.json
 ├── content/blog/   <lang>/<slug>.md  (front-matter + Markdown blog posts)
 ├── build.py        generator → _site/ (gitignored); stdlib + `markdown` (build-time)
 ├── requirements.txt  build-time dep: Markdown (pinned)

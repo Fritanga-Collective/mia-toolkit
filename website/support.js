@@ -83,6 +83,16 @@
             "E-Mail, nichts muss installiert werden.",
       freeQ: "Jetzt nicht?",
     },
+    fr: {
+      intro: "Choisissez un montant — l'application est toujours gratuite.",
+      names: { coffee: "Un café", supporter: "Soutien",
+               patron: "Mécène", monthly: "Soutien mensuel" },
+      permo: "/mois",
+      note: "Paiement unique, sauf pour l'option mensuelle. Lemon Squeezy " +
+            "gère les taxes et les reçus ; vous recevrez un remerciement par " +
+            "e-mail, rien à installer.",
+      freeQ: "Pas maintenant ?",
+    },
     ta: {
       intro: "தொகையைத் தேர்ந்தெடுங்கள் — இந்த ஆப் எப்போதும் இலவசம்.",
       names: { coffee: "ஒரு காபி", supporter: "ஆதரவாளர்",
