@@ -3,7 +3,7 @@ title: Qué hacer con un cajón lleno de discos de estudios médicos
 slug: drawer-of-hospital-cds
 date: 2026-06-08
 summary: Un cajón con discos viejos de resonancias y tomografías no te sirve de nada — así los juntas, los respaldas y los llevas en una sola USB que cualquier médico puede abrir.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [historias, primeros-pasos]
 image: /img/blog/drawer-of-hospital-cds.es.jpg

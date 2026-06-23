@@ -3,7 +3,7 @@ title: What to Do With a Drawer Full of Hospital Imaging CDs
 slug: drawer-of-hospital-cds
 date: 2026-06-05
 summary: A drawer of old MRI and CT scan discs is doing you no good — here is how to consolidate, back up, and carry your images on one USB any doctor can open.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [stories, getting-started]
 image: /img/blog/drawer-of-hospital-cds.jpg

@@ -3,7 +3,7 @@ title: 抽屉里的医院影像光盘，到底该怎么办
 slug: drawer-of-hospital-cds
 date: 2026-06-06
 summary: 一抽屉读不出的核磁、CT 光盘其实帮不上忙——把影像集中、备份，整理成医院都能打开的一支 U 盘。
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [中文内容, 入门]
 image: /img/blog/drawer-of-hospital-cds.zh.jpg

@@ -450,11 +450,28 @@ def _blog_chrome(lang: str, prefix: str) -> dict:
     }
 
 
+# Internal blog-post links in a post body: /blog/<slug>/ or /<lang>/blog/<slug>/.
+_BLOG_LINK_RE = re.compile(
+    r'<a href="(/(?:[a-z]{2}/)?blog/[a-z0-9-]+/)"[^>]*>(.*?)</a>', re.S)
+
+
+def _prune_dead_blog_links(body: str, live_urls: set[str]) -> str:
+    """Unlink internal blog cross-links whose target isn't live yet (keep the
+    text). A post can link a sibling that's scheduled for a later date or that
+    has no translation in this language; rather than ship a 404, we drop just
+    the <a> wrapper. The link re-activates automatically on the daily rebuild
+    once the target publishes — no manual upkeep, and cross-links can't rot."""
+    return _BLOG_LINK_RE.sub(
+        lambda m: m.group(0) if m.group(1) in live_urls else m.group(2), body)
+
+
 def render_post(post: dict, cluster: list[dict], langs: dict,
-                template: str) -> str:
+                template: str, live_urls: set[str] | None = None) -> str:
     s = langs[post["lang"]]
     body = markdown.markdown(post["body"],
                              extensions=["extra", "toc", "sane_lists"])
+    if live_urls is not None:
+        body = _prune_dead_blog_links(body, live_urls)
     # Honesty flag for machine-assisted translations (health-adjacent topic):
     # a subtle footer note inviting corrections. Localized via blog.mt_note when
     # present (added to the MT target locales), with an English fallback.
@@ -821,6 +838,9 @@ def main() -> int:
             print(f"  ! blog: skipping {c} — missing blog.* i18n keys "
                   f"({missing}) in i18n/{c}.json")
     posts = [p for p in all_posts if p["lang"] in ready]
+    # URLs that actually exist this build — used to unlink dead cross-links
+    # (sibling not yet published, or no translation in this language).
+    live_urls = {blog_post_url(p["lang"], p["slug"]) for p in posts}
     blog_pages = 0
     if posts:
         for lang in _blog_langs(posts):
@@ -838,7 +858,8 @@ def main() -> int:
             postdir = os.path.join(site, "" if p["lang"] == "en" else p["lang"],
                                    "blog", p["slug"])
             os.makedirs(postdir, exist_ok=True)
-            out = _inject_gc(render_post(p, cluster, langs, blog_tmpl["post"]))
+            out = _inject_gc(render_post(p, cluster, langs, blog_tmpl["post"],
+                                         live_urls))
             with open(os.path.join(postdir, "index.html"), "w",
                       encoding="utf-8") as f:
                 f.write(out)
