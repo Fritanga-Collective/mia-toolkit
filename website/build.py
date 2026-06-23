@@ -441,10 +441,11 @@ def render_blog_index(lang: str, posts: list[dict], langs: dict,
     items = []
     for p in mine:
         url = blog_post_url(lang, p["slug"])
-        # Decorative thumbnail (alt="" — the title link already names the post).
-        thumb = (f'          <a class="blog-thumb" href="{url}" aria-hidden="true" '
-                 f'tabindex="-1"><img src="{p["image"]}" alt="" '
-                 f'loading="lazy"></a>\n') if p.get("image") else ""
+        # Decorative thumbnail: a bare <img alt=""> (not a link) — the title link
+        # is the single click/tab target, and a non-interactive image needs no
+        # aria-hidden/tabindex, so there's no double-target or a11y conflict.
+        thumb = (f'          <img class="blog-thumb" src="{p["image"]}" alt="" '
+                 f'loading="lazy">\n') if p.get("image") else ""
         items.append(
             '        <li class="blog-item">\n'
             + thumb +
@@ -603,10 +604,16 @@ def sitemap(langs: dict, posts: list[dict] | None = None,
             if "en" in blog_langs:
                 pairs.append(("x-default", f'{BASE}{blog_index_url("en")}'))
             entries.append(_sitemap_url(loc, pairs))
+        # Only reference languages whose blog pages were actually emitted
+        # (posts is already filtered to the guard-passing `ready` langs) — else
+        # a post that exists for a skipped language would emit an hreflang
+        # alternate pointing at a page that was never built.
+        emitted_langs = {p["lang"] for p in posts}
         for p in posts:
             loc = BASE + blog_post_url(p["lang"], p["slug"])
             cl = (clusters or {}).get(p["slug"], [p])
-            cl_langs = [c for c in LANG_ORDER if c in {q["lang"] for q in cl}]
+            cl_langs = [c for c in LANG_ORDER
+                        if c in {q["lang"] for q in cl} and c in emitted_langs]
             pairs = [(HREFLANG[c], f"{BASE}{blog_post_url(c, p['slug'])}")
                      for c in cl_langs]
             if "en" in cl_langs:
@@ -690,11 +697,16 @@ GC_SNIPPET = ('  <script data-goatcounter="https://{code}.goatcounter.com/count"
 
 
 def _inject_gc(html_str: str) -> str:
-    """Inject the cookieless GoatCounter beacon before </body> (if enabled)."""
+    """Inject the cookieless GoatCounter beacon before the LAST </body> (if
+    enabled). Using the last close tag is robust to a stray '</body>' appearing
+    inside blog Markdown (raw HTML), which would otherwise misplace the beacon."""
     if not GOATCOUNTER:
         return html_str
-    return html_str.replace(
-        "</body>", GC_SNIPPET.format(code=GOATCOUNTER) + "</body>")
+    snippet = GC_SNIPPET.format(code=GOATCOUNTER)
+    i = html_str.rfind("</body>")
+    if i == -1:
+        return html_str + snippet
+    return html_str[:i] + snippet + html_str[i:]
 
 
 def main() -> int:
@@ -750,8 +762,13 @@ def main() -> int:
              if c in langs and REQUIRED_BLOG_KEYS <= langs[c].keys()}
     skipped = sorted({p["lang"] for p in all_posts} - ready)
     for c in skipped:
-        print(f"  ! blog: skipping {c} — missing blog.* i18n keys in "
-              f"i18n/{c}.json (add them to publish {c} posts)")
+        if c not in langs:
+            print(f"  ! blog: skipping {c} — i18n/{c}.json not loaded "
+                  f"(not in LANG_ORDER or file missing)")
+        else:
+            missing = ", ".join(sorted(REQUIRED_BLOG_KEYS - langs[c].keys()))
+            print(f"  ! blog: skipping {c} — missing blog.* i18n keys "
+                  f"({missing}) in i18n/{c}.json")
     posts = [p for p in all_posts if p["lang"] in ready]
     blog_pages = 0
     if posts:

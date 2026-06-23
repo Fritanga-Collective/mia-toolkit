@@ -6,7 +6,9 @@
   <title>{{BLOG_INDEX_TITLE}}</title>
   <meta name="description" content="{{blog.meta_desc}}">
   <link rel="stylesheet" href="{{P}}styles.css">
-  <script src="{{P}}lang.js"></script>
+  <!-- No lang.js here: its root-page auto-redirect maps to /{lang}/{page}.html,
+       so /blog/ would bounce to /es/blog.html (404). Blog pages route via their
+       own per-post language selector. -->
   <!-- No cookies, no tracking. Page counts: GoatCounter
        (cookieless, aggregate) — details in privacy.html -->
 {{HEAD_SEO}}
