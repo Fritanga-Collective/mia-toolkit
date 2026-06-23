@@ -6,6 +6,7 @@ summary: You have a right to your own scans — here is how to request them in D
 languages: [en]
 status: published
 tags: [stories, getting-started]
+image: /img/blog/medical-images-belong-to-you.jpg
 ---
 
 You walked out of the hospital with a paper folder, a shiny disc, and a long list of instructions. Months later, a new doctor asks to see "the actual images" from your scan. You hand over the disc. It won't open. Or the printed films are too small to tell anyone much. And the hospital that made them is an hour away, with a phone line that keeps you on hold.

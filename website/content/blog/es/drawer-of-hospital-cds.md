@@ -6,6 +6,7 @@ summary: Un cajón con discos viejos de resonancias y tomografías no te sirve d
 languages: [en, es, zh]
 status: published
 tags: [historias, primeros-pasos]
+image: /img/blog/drawer-of-hospital-cds.es.jpg
 ---
 
 Abre el cajón. Ya sabes cuál. Ahí están todos: el disco de la resonancia que te hicieron en el IMSS, la tomografía del ISSSTE, las radiografías de aquel laboratorio privado al que fuiste cuando andabas de prisa. Unos traen una fecha apuntada con plumón, otros no traen nada. Algunos siguen en su sobrecito de papel, otros con la cajita ya estrellada.

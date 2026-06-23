@@ -6,6 +6,7 @@ summary: 一抽屉读不出的核磁、CT 光盘其实帮不上忙——把影�
 languages: [en, es, zh]
 status: published
 tags: [中文内容, 入门]
+image: /img/blog/drawer-of-hospital-cds.zh.jpg
 ---
 
 打开那个抽屉，你一定知道是哪一个。里面塞着一摞光盘，有的装在纸套里，有的躺在裂了角的塑料盒中。一张是某家医院的核磁，一张是另一家医院的 CT，还有几张是小区诊所拍的片子。有的盘上用记号笔歪歪扭扭写着日期，有的什么都没写。

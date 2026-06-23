@@ -6,6 +6,7 @@ summary: From rip-your-CDs to six languages, USB/ZIP import, and a notarized Mac
 languages: [en]
 status: published
 tags: [releases, announcements]
+image: /img/blog/release-notes-v0-1-5.jpg
 ---
 
 MIA Toolkit started as a promise: your medical images belong to you, and getting them onto one USB drive for your doctor shouldn't require a computer science degree. Six releases later, here's everything that promise has grown into — including one promise we made in writing and just kept. And everything stays exactly as free as day one.

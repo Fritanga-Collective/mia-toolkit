@@ -6,6 +6,7 @@ summary: Los estudios ya no llegan solo en disco — así agregas una USB del la
 languages: [en, es]
 status: published
 tags: [guias, primeros-pasos]
+image: /img/blog/hospital-usb-or-zip.es.jpg
 ---
 
 Si andas ayudando a tus papás con sus estudios, ya te diste cuenta de que cada hospital los entrega como quiere. En el IMSS o el ISSSTE a veces te dan un **disco**; en un laboratorio de imagenología privada te entregan una **memoria USB**; y muchos portales (el de tu hospital o laboratorio) te dejan descargar un **archivo ZIP**. Son la misma cosa por dentro, nada más empaquetada distinto.

@@ -214,6 +214,14 @@ def json_ld(lang: str, s: dict, page: str) -> str:
 import datetime as _dt
 import email.utils as _eut
 
+# Every blog.* i18n key the blog templates/renderers consume. A locale must
+# carry ALL of these to be eligible — render() raises KeyError on the first
+# missing key, so a partial set (e.g. only blog.index_title) must still skip.
+REQUIRED_BLOG_KEYS = frozenset({
+    "blog.index_title", "blog.meta_desc", "blog.published",
+    "blog.back", "blog.read_more",
+})
+
 
 def blog_index_url(lang: str) -> str:
     return "/blog/" if lang == "en" else f"/{lang}/blog/"
@@ -284,12 +292,22 @@ def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
                 "languages": meta.get("languages", [lang]),
                 "tags": meta.get("tags", []),
                 "status": meta.get("status", ""),
+                "image": meta.get("image", ""),
                 "body": body,
             })
     clusters: dict[str, list[dict]] = {}
     for p in posts:
         clusters.setdefault(p["slug"], []).append(p)
     return posts, clusters
+
+
+def _post_image_url(post: dict) -> str:
+    """Absolute social-card image for a post: its own `image` front-matter
+    (http→as-is, root-relative→prefixed with BASE) or "" when it has none."""
+    img = post.get("image", "")
+    if not img:
+        return ""
+    return img if img.startswith("http") else BASE + img
 
 
 def blog_head_seo(post: dict, cluster: list[dict]) -> str:
@@ -306,6 +324,8 @@ def blog_head_seo(post: dict, cluster: list[dict]) -> str:
                      f'href="{BASE}{blog_post_url("en", slug)}">')
     title = html.escape(post["title"], quote=True)
     desc = html.escape(post["summary"], quote=True)
+    custom = _post_image_url(post)
+    image = custom or f"{BASE}/img/social.jpg"
     lines += [
         '  <meta property="og:type" content="article">',
         '  <meta property="og:site_name" content="MIA Toolkit">',
@@ -313,13 +333,18 @@ def blog_head_seo(post: dict, cluster: list[dict]) -> str:
         f'  <meta property="og:description" content="{desc}">',
         f'  <meta property="og:url" content="{url}">',
         f'  <meta property="article:published_time" content="{post["date"]}">',
-        f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
-        '  <meta property="og:image:width" content="1200">',
-        '  <meta property="og:image:height" content="633">',
+        f'  <meta property="og:image" content="{image}">',
+    ]
+    if not custom:  # 1200x633 describes social.jpg only
+        lines += [
+            '  <meta property="og:image:width" content="1200">',
+            '  <meta property="og:image:height" content="633">',
+        ]
+    lines += [
         '  <meta name="twitter:card" content="summary_large_image">',
         f'  <meta name="twitter:title" content="{title}">',
         f'  <meta name="twitter:description" content="{desc}">',
-        f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+        f'  <meta name="twitter:image" content="{image}">',
     ]
     return "\n".join(lines)
 
@@ -333,7 +358,7 @@ def blog_json_ld(post: dict, cluster: list[dict]) -> str:
         "datePublished": post["date"],
         "inLanguage": HREFLANG.get(post["lang"], post["lang"]),
         "description": post["summary"],
-        "image": f"{BASE}/img/social.jpg",
+        "image": _post_image_url(post) or f"{BASE}/img/social.jpg",
         "author": {"@type": "Organization", "name": "Fritanga",
                    "url": "https://fritanga.co"},
         "publisher": {"@type": "Organization", "name": "Fritanga",
@@ -390,6 +415,11 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
                              extensions=["extra", "toc", "sane_lists"])
     prefix = "../../" if post["lang"] == "en" else "../../../"
     computed = _blog_chrome(post["lang"], prefix)
+    hero = ""
+    if post.get("image"):
+        alt = html.escape(post["title"], quote=True)
+        hero = (f'      <figure class="blog-hero"><img src="{post["image"]}" '
+                f'alt="{alt}" loading="lazy"></figure>')
     computed.update({
         "HEAD_SEO": blog_head_seo(post, cluster),
         "JSON_LD": blog_json_ld(post, cluster),
@@ -397,6 +427,7 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
         "BLOG_TITLE": html.escape(post["title"]),
         "BLOG_SUMMARY": html.escape(post["summary"], quote=True),
         "BLOG_DATE": post["date"],
+        "BLOG_IMAGE": hero,
         "BLOG_BODY": body,
     })
     return render(template, s, computed)
@@ -447,6 +478,22 @@ def blog_index_head_seo(lang: str, langs: dict, posts: list[dict]) -> str:
     if "en" in codes:
         lines.append(f'  <link rel="alternate" hreflang="x-default" '
                      f'href="{BASE}{blog_index_url("en")}">')
+    title = html.escape(langs[lang]["blog.index_title"], quote=True)
+    desc = html.escape(langs[lang]["blog.meta_desc"], quote=True)
+    lines += [
+        '  <meta property="og:type" content="website">',
+        '  <meta property="og:site_name" content="MIA Toolkit">',
+        f'  <meta property="og:title" content="{title}">',
+        f'  <meta property="og:description" content="{desc}">',
+        f'  <meta property="og:url" content="{url}">',
+        f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
+        '  <meta property="og:image:width" content="1200">',
+        '  <meta property="og:image:height" content="633">',
+        '  <meta name="twitter:card" content="summary_large_image">',
+        f'  <meta name="twitter:title" content="{title}">',
+        f'  <meta name="twitter:description" content="{desc}">',
+        f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+    ]
     return "\n".join(lines)
 
 
@@ -693,7 +740,7 @@ def main() -> int:
                      encoding="utf-8").read(),
     }
     ready = {c for c in _blog_langs(all_posts)
-             if c in langs and "blog.index_title" in langs[c]}
+             if c in langs and REQUIRED_BLOG_KEYS <= langs[c].keys()}
     skipped = sorted({p["lang"] for p in all_posts} - ready)
     for c in skipped:
         print(f"  ! blog: skipping {c} — missing blog.* i18n keys in "

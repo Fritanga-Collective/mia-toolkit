@@ -6,6 +6,7 @@ summary: A few calm minutes now make a USB of scans open for anyone — verify t
 languages: [en]
 status: published
 tags: [guides, usb]
+image: /img/blog/after-usb-transfer.jpg
 ---
 
 The copy finished. All your imaging is on one USB drive. It is tempting to call it done and toss the drive in your bag until the appointment. But a few minutes now, while you are at your own computer, dramatically raise the odds that the drive "just works" when it matters, in front of a doctor, at a second-opinion clinic, or in a relative's hands.

@@ -219,6 +219,9 @@ footer p a { color: var(--muted); text-decoration: underline; }
   border-radius: 10px; padding: 14px 16px; overflow-x: auto; }
 .post pre code { background: none; border: 0; padding: 0; }
 .post img { max-width: 100%; height: auto; border-radius: 10px; }
+.blog-hero { margin: 0 0 22px; }
+.blog-hero img { display: block; width: 100%; max-width: 100%; height: auto;
+  border-radius: 12px; border: 1px solid var(--border); }
 .post-back { margin: 0 0 6px; }
 .post-back a { color: var(--accent); text-decoration: none; }
 .post-back a:hover { text-decoration: underline; }

@@ -6,6 +6,7 @@ summary: Scans no longer arrive only on discs — here is how to add a clinic US
 languages: [en, es]
 status: published
 tags: [guides, getting-started]
+image: /img/blog/hospital-usb-or-zip.jpg
 ---
 
 CDs are disappearing. These days your scans arrive in two new ways: a **USB stick** handed to you at the imaging desk, or a **ZIP file** downloaded from a patient portal like MyChart. Since v0.1.3, MIA Toolkit treats both as first-class citizens — they go into the same organized archive as your discs, in about two minutes.

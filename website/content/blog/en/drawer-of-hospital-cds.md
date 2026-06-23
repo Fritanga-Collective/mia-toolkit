@@ -6,6 +6,7 @@ summary: A drawer of old MRI and CT scan discs is doing you no good — here is 
 languages: [en, es, zh]
 status: published
 tags: [stories, getting-started]
+image: /img/blog/drawer-of-hospital-cds.jpg
 ---
 
 Open the drawer. You know the one. A stack of shiny discs in paper sleeves and cracked plastic cases. An MRI from one hospital. A CT scan from another. A few X-rays from a clinic across town. Some have a date scribbled on them in marker. Some have nothing at all.

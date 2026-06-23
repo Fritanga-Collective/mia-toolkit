@@ -6,6 +6,7 @@ summary: The format you choose decides whether a clinic's computer can read your
 languages: [en]
 status: published
 tags: [guides, usb]
+image: /img/blog/format-usb-drive.jpg
 ---
 
 You have done the hard part. Your scans are gathered, organized, and copied onto a USB drive. But there is one quiet detail that decides whether a doctor's computer can actually read that drive when you hand it over: how the drive is *formatted*.
