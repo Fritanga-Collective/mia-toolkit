@@ -441,13 +441,20 @@ def render_blog_index(lang: str, posts: list[dict], langs: dict,
     items = []
     for p in mine:
         url = blog_post_url(lang, p["slug"])
+        # Decorative thumbnail (alt="" — the title link already names the post).
+        thumb = (f'          <a class="blog-thumb" href="{url}" aria-hidden="true" '
+                 f'tabindex="-1"><img src="{p["image"]}" alt="" '
+                 f'loading="lazy"></a>\n') if p.get("image") else ""
         items.append(
             '        <li class="blog-item">\n'
-            f'          <h2><a href="{url}">{html.escape(p["title"])}</a></h2>\n'
-            f'          <p class="post-meta">{s["blog.published"]} '
+            + thumb +
+            '          <div class="blog-item-body">\n'
+            f'            <h2><a href="{url}">{html.escape(p["title"])}</a></h2>\n'
+            f'            <p class="post-meta">{s["blog.published"]} '
             f'<time datetime="{p["date"]}">{p["date"]}</time></p>\n'
-            f'          <p>{html.escape(p["summary"])}</p>\n'
-            f'          <p><a href="{url}">{s["blog.read_more"]}</a></p>\n'
+            f'            <p>{html.escape(p["summary"])}</p>\n'
+            f'            <p><a href="{url}">{s["blog.read_more"]}</a></p>\n'
+            '          </div>\n'
             '        </li>')
     prefix = "../" if lang == "en" else "../../"
     computed = _blog_chrome(lang, prefix)
