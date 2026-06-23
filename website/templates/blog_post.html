@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="{{_lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{BLOG_TITLE}} — MIA Toolkit</title>
+  <meta name="description" content="{{BLOG_SUMMARY}}">
+  <link rel="stylesheet" href="{{P}}styles.css">
+  <!-- No lang.js here: its root-page auto-redirect maps to /{lang}/{page}.html,
+       so /blog/<slug>/ would bounce to /es/<slug>.html (404). Blog pages route
+       via their own per-post language selector. -->
+  <!-- No cookies, no tracking. Page counts: GoatCounter
+       (cookieless, aggregate) — details in privacy.html -->
+{{HEAD_SEO}}
+{{JSON_LD}}
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="{{HOME}}">MIA Toolkit</a>
+      <nav class="lang">
+        <a href="{{HELP}}">{{nav.help}}</a>
+        <span>|</span>
+        <a href="{{SUPPORT}}">{{nav.support}}</a>
+{{LANGSEL}}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article class="wrap post">
+      <p class="post-back"><a href="{{BLOG_INDEX}}">{{blog.back}}</a></p>
+      <h1>{{BLOG_TITLE}}</h1>
+      <p class="post-meta"><time datetime="{{BLOG_DATE}}">{{BLOG_DATE}}</time></p>
+{{BLOG_IMAGE}}
+{{BLOG_BODY}}
+      <p class="post-back"><a href="{{BLOG_INDEX}}">{{blog.back}}</a></p>
+    </article>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="disclaimer">{{footer.disclaimer}}</p>
+      <p>{{footer.ethos}} ·
+        <a href="{{HELP}}">{{footer.help}}</a> ·
+        <a href="{{PRIVACY}}">{{footer.privacy}}</a> ·
+        <a href="{{STATS}}">{{footer.stats}}</a></p>
+      <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
+    </div>
+  </footer>
+</body>
+</html>

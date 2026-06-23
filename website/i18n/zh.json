@@ -194,5 +194,10 @@
   "privacy.site_li1_gc": "静态网站，<strong>无 Cookie、无追踪器、无广告</strong>。我们使用开源、无 Cookie 的计数器 <strong>GoatCounter</strong> 统计聚合页面浏览量——它不存储个人数据、不建立画像、不做跨站追踪。",
   "stats.col_referrer": "来源",
   "stats.col_count": "次数",
-  "_blog_url": "https://fritangacollective.substack.com/s/4d3"
+  "blog.index_title": "MIA Toolkit 博客",
+  "blog.meta_desc": "用大白话讲清楚怎么整理你的医学影像——如何打开医院光盘、为医生做一支 U 盘，把自己的影像真正掌握在手里。",
+  "blog.published": "发布于",
+  "blog.back": "← 返回博客",
+  "blog.read_more": "阅读全文 →",
+  "_blog_url": "/zh/blog/"
 }
