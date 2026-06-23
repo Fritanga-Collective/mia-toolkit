@@ -59,7 +59,7 @@ MIA Toolkit 帮你整理和交付**你自己的**医学影像。它**不会读�
 
 那个抽屉已经等了很久。把所有影像归到一个安全的地方，是你能为未来的自己、也为陪你看病的人，做的最贴心的事之一。它会让下一次就诊少一份担忧。
 
-[免费下载 MIA Toolkit](/zh/)。有问题可以写信到 [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co)。
+[免费下载 MIA Toolkit](/zh/)。有问题可以写信到 [support@miatools.tech](mailto:support@miatools.tech)。
 
 ## 常见问题
 

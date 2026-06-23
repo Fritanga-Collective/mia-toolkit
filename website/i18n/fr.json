@@ -194,5 +194,11 @@
   "privacy.site_li1_gc": "Un site statique <strong>sans cookies, sans traceurs et sans publicité</strong>. Nous utilisons <strong>GoatCounter</strong>, un compteur open source et sans cookies, pour les comptages agrégés de pages vues — il ne stocke aucune donnée personnelle, ne construit aucun profil et ne fait aucun suivi inter-sites.",
   "stats.col_referrer": "Source",
   "stats.col_count": "Nombre",
+  "blog.index_title": "Le blog de MIA Toolkit",
+  "blog.meta_desc": "Des guides pratiques, en langage clair, pour organiser vos images médicales — comment ouvrir les CD de l'hôpital, créer une seule clé USB pour votre médecin et reprendre le contrôle de vos examens.",
+  "blog.published": "Publié",
+  "blog.back": "← Retour au blog",
+  "blog.read_more": "Lire la suite →",
+  "blog.mt_note": "Traduit avec l'aide d'une machine — corrections bienvenues à <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a>.",
   "_blog_url": "/blog/"
 }

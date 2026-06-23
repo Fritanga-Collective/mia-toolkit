@@ -61,7 +61,7 @@ MIA Toolkit helps you organize and deliver your *own* medical images. It does no
 
 That drawer has been waiting a long time. Pulling everything into one safe place is one of the kindest things you can do for your future self and for whoever helps you at appointments. It takes the worry out of the next visit.
 
-[Download MIA Toolkit free](/). Questions? Write to [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co).
+[Download MIA Toolkit free](/). Questions? Write to [support@miatools.tech](mailto:support@miatools.tech).
 
 ## FAQ
 

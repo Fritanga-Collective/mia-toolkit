@@ -93,7 +93,7 @@ Your privacy stays yours throughout. MIA Toolkit works completely offline. There
 
 A plain-language disclaimer: MIA Toolkit helps you organize and deliver your *own* medical images. It is not a medical device. It does not interpret or read your images, and it cannot tell you what they mean. It does not replace a radiologist or any other doctor. The viewers mentioned here are made by other companies and are listed only as options; verify their licenses and downloads yourself. Everything here is provided without any warranty.
 
-If you would like to try it, you can [download MIA Toolkit for free](/) — there's a [step-by-step guide](/help.html). Questions are welcome at [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co).
+If you would like to try it, you can [download MIA Toolkit for free](/) — there's a [step-by-step guide](/help.html). Questions are welcome at [support@miatools.tech](mailto:support@miatools.tech).
 
 ## FAQ
 

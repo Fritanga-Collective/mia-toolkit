@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report suspected security issues privately to **mia-tools@fritanga.co**.
+Please report suspected security issues privately to **support@miatools.tech**.
 
 Include enough detail to reproduce (affected version, OS, and steps or a proof
 of concept). We aim to acknowledge within a few days. Please give us a

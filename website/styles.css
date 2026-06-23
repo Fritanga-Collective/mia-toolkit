@@ -233,3 +233,7 @@ footer p a { color: var(--muted); text-decoration: underline; }
 .post-back { margin: 0 0 6px; }
 .post-back a { color: var(--accent); text-decoration: none; }
 .post-back a:hover { text-decoration: underline; }
+.mt-note { margin: 28px 0 0; padding-top: 12px;
+  border-top: 1px solid var(--border); color: var(--muted);
+  font-size: 0.85rem; font-style: italic; }
+.mt-note a { color: var(--accent); }

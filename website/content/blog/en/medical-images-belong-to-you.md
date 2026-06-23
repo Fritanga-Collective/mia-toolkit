@@ -55,7 +55,7 @@ The final step is the simplest: carry your consolidated USB drive with you. New 
 
 MIA Toolkit helps you organize and deliver your own medical images. It does not read or interpret images, it is not a medical device, and it is not a substitute for review by a qualified radiologist or doctor. It comes with no warranty. For anything about diagnosis or treatment, rely on your healthcare professionals.
 
-If you'd like to bring your own images together in one place, you can [download MIA Toolkit for free](/). Questions? Reach us at [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co).
+If you'd like to bring your own images together in one place, you can [download MIA Toolkit for free](/). Questions? Reach us at [support@miatools.tech](mailto:support@miatools.tech).
 
 ## FAQ
 

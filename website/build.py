@@ -13,6 +13,7 @@ Output: website/_site/  (deployed by .github/workflows/pages.yml)
 
 from __future__ import annotations
 
+import datetime
 import html
 import json
 import os
@@ -260,18 +261,47 @@ def _parse_front_matter(text: str) -> tuple[dict, str]:
     return meta, body.lstrip("\n")
 
 
+# Scheduling: a post goes live only when its `date` (ISO YYYY-MM-DD) has
+# arrived. A `status: published` post with a FUTURE date is "scheduled" and
+# held until then — combined with the daily Pages rebuild (pages.yml cron), it
+# publishes itself on its date with no manual push. Set BLOG_PREVIEW=1 to
+# include future-dated posts (local preview / staging the upcoming week).
+BLOG_PREVIEW = bool(os.environ.get("BLOG_PREVIEW"))
+
+
+def _blog_today() -> datetime.date:
+    return datetime.datetime.now(datetime.timezone.utc).date()
+
+
+def _is_live(meta: dict, today: datetime.date) -> bool:
+    """A published post is live once its date is today or earlier (UTC).
+
+    Future-dated → held unless BLOG_PREVIEW. A missing/malformed date is treated
+    as live now (back-compatible) — main() warns so it doesn't go unnoticed."""
+    if BLOG_PREVIEW:
+        return True
+    raw = (meta.get("date") or "").strip()
+    try:
+        return datetime.date.fromisoformat(raw) <= today
+    except ValueError:
+        return True  # no/!ISO date → publish now (warned in main)
+
+
 def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
-    """Walk content/blog/<lang>/*.md → published post dicts + slug clusters.
+    """Walk content/blog/<lang>/*.md → live post dicts + slug clusters.
 
     Each post dict carries: lang, slug, title, date, summary, languages, tags,
-    status, body (raw markdown). Skips anything without status == "published".
-    Returns (posts, clusters) where clusters maps slug → [post, …] (every
-    published language for that slug), used for hreflang + the language switcher.
+    status, image, translation, body (raw markdown). Keeps only
+    status == "published" posts whose date has arrived (see _is_live;
+    BLOG_PREVIEW=1 includes scheduled ones). Returns (posts, clusters) where
+    clusters maps slug → [post, …] (every live language for that slug), used for
+    hreflang + the language switcher.
     """
     root = os.path.join(HERE, "content", "blog")
     posts: list[dict] = []
     if not os.path.isdir(root):
         return posts, {}
+    today = _blog_today()
     for lang in sorted(os.listdir(root)):
         ldir = os.path.join(root, lang)
         if not os.path.isdir(ldir):
@@ -283,6 +313,14 @@ def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
                 meta, body = _parse_front_matter(f.read())
             if meta.get("status") != "published":
                 continue
+            if not _is_live(meta, today):
+                continue  # scheduled for a future date — hold it
+            try:
+                datetime.date.fromisoformat((meta.get("date") or "").strip())
+            except ValueError:
+                print(f"  ! blog: {lang}/{name} has no/invalid ISO date "
+                      f"({meta.get('date')!r}) — publishing now; set "
+                      f"date: YYYY-MM-DD to schedule it")
             posts.append({
                 "lang": lang,
                 "slug": meta.get("slug") or name[:-3],
@@ -293,6 +331,7 @@ def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
                 "tags": meta.get("tags", []),
                 "status": meta.get("status", ""),
                 "image": meta.get("image", ""),
+                "translation": meta.get("translation", ""),
                 "body": body,
             })
     clusters: dict[str, list[dict]] = {}
@@ -413,6 +452,15 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
     s = langs[post["lang"]]
     body = markdown.markdown(post["body"],
                              extensions=["extra", "toc", "sane_lists"])
+    # Honesty flag for machine-assisted translations (health-adjacent topic):
+    # a subtle footer note inviting corrections. Localized via blog.mt_note when
+    # present (added to the MT target locales), with an English fallback.
+    if post.get("translation") == "machine":
+        note = s.get("blog.mt_note", "Translated with machine assistance — "
+                     "corrections welcome at "
+                     "<a href=\"mailto:support@miatools.tech\">"
+                     "support@miatools.tech</a>.")
+        body += f'\n<p class="mt-note">{note}</p>'
     prefix = "../../" if post["lang"] == "en" else "../../../"
     computed = _blog_chrome(post["lang"], prefix)
     hero = ""
