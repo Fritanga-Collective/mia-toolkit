@@ -3,7 +3,7 @@ title: Was Sie mit einer Schublade voller Krankenhaus-CDs tun können
 slug: drawer-of-hospital-cds
 date: 2026-06-05
 summary: Eine Schublade voller alter MRT- und CT-Discs nützt Ihnen nichts — hier erfahren Sie, wie Sie Ihre Bilder zusammenführen, sichern und auf einem einzigen USB-Stick mitnehmen, den jeder Arzt öffnen kann.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [stories, getting-started]
 translation: machine

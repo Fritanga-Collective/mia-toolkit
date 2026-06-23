@@ -3,7 +3,7 @@ title: Tus imágenes médicas te pertenecen
 slug: medical-images-belong-to-you
 date: 2026-06-05
 summary: Tienes derecho a tus propios estudios — aquí te decimos cómo pedirlos en formato DICOM, guardar un respaldo y juntar todos tus estudios para que cualquier doctor pueda abrirlos.
-languages: [en]
+languages: [en, es]
 status: published
 tags: [stories, getting-started]
 ---

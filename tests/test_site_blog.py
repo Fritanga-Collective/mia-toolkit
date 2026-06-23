@@ -126,6 +126,21 @@ def test_date_gate_holds_future_and_shows_past(monkeypatch):
     assert build._is_live({"date": "not-a-date"}, today) is True
 
 
+def test_prune_dead_blog_links():
+    live = {"/blog/alive/", "/de/blog/alive/"}
+    body = ('<p><a href="/blog/alive/">A</a>, '
+            '<a href="/blog/future/">F</a>, '
+            '<a href="/de/blog/alive/">DA</a>, '
+            '<a href="/de/blog/missing/">DM</a></p>')
+    out = build._prune_dead_blog_links(body, live)
+    assert '<a href="/blog/alive/">A</a>' in out      # live → kept
+    assert '<a href="/de/blog/alive/">DA</a>' in out   # live → kept
+    assert '<a href="/blog/future/"' not in out        # dead → unlinked…
+    assert ">F</a>" not in out and ">F<" not in out and "F</p>" not in out
+    assert "F," in out                                  # …but the text stays
+    assert '<a href="/de/blog/missing/"' not in out and "DM" in out
+
+
 def test_blog_preview_includes_future(monkeypatch):
     import datetime
 

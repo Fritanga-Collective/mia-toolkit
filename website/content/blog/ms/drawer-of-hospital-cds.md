@@ -3,7 +3,7 @@ title: Apa yang Perlu Dilakukan dengan Satu Laci Penuh CD Pengimejan Hospital
 slug: drawer-of-hospital-cds
 date: 2026-06-05
 summary: Satu laci penuh cakera imbasan MRI dan CT lama tidak memberi anda apa-apa manfaat — berikut ialah cara menyatukan, membuat sandaran, dan membawa imej anda pada satu USB yang boleh dibuka oleh mana-mana doktor.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [stories, getting-started]
 translation: machine

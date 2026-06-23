@@ -3,7 +3,7 @@ title: மருத்துவமனைப் படிம CD-களால் �
 slug: drawer-of-hospital-cds
 date: 2026-06-05
 summary: பழைய MRI மற்றும் CT ஸ்கேன் வட்டுகள் நிறைந்த ஒரு டிராயர் உங்களுக்கு எந்தப் பயனும் தருவதில்லை — அவற்றை எப்படி ஒருங்கிணைப்பது, காப்பு எடுப்பது, மற்றும் எந்த மருத்துவரும் திறக்கக்கூடிய ஒரே USB-யில் எடுத்துச் செல்வது என்பது இங்கே.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [stories, getting-started]
 translation: machine

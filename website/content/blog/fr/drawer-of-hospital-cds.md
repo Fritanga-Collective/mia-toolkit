@@ -3,7 +3,7 @@ title: Que faire d'un tiroir rempli de CD d'imagerie d'hôpital
 slug: drawer-of-hospital-cds
 date: 2026-06-05
 summary: Un tiroir rempli de vieux disques d'IRM et de scanners ne vous sert à rien — voici comment regrouper, sauvegarder et transporter vos images sur une seule clé USB que n'importe quel médecin peut ouvrir.
-languages: [en, es, zh]
+languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [stories, getting-started]
 translation: machine
