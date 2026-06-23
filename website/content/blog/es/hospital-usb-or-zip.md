@@ -44,7 +44,7 @@ Y ya. En el paso de **Revisar** vas a ver los estudios nuevos junto con todo lo 
 - **No tires la USB ni borres el ZIP original** hasta que veas los estudios en el paso de Revisar. Ya que los confirmaste, quedan a salvo en tu expediente (y en tu respaldo).
 - **Todo pasa en tu computadora.** Sin subir nada, sin crear cuenta y sin internet. Tus estudios no salen de tu equipo: la misma promesa de privacidad de siempre.
 
-[Descarga MIA Toolkit gratis](/es/).
+[Descarga MIA Toolkit gratis](/es/?utm_campaign=buz).
 
 ---
 

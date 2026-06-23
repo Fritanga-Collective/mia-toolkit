@@ -266,7 +266,10 @@ def _parse_front_matter(text: str) -> tuple[dict, str]:
 # held until then — combined with the daily Pages rebuild (pages.yml cron), it
 # publishes itself on its date with no manual push. Set BLOG_PREVIEW=1 to
 # include future-dated posts (local preview / staging the upcoming week).
-BLOG_PREVIEW = bool(os.environ.get("BLOG_PREVIEW"))
+# Parse explicitly so "0"/"false"/"" do NOT enable preview (a bare bool() on the
+# env value would treat any non-empty string, incl. "0", as on).
+BLOG_PREVIEW = os.environ.get("BLOG_PREVIEW", "").strip().lower() in {
+    "1", "true", "yes", "on"}
 
 
 def _blog_today() -> datetime.date:

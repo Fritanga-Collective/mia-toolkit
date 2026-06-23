@@ -109,9 +109,12 @@ def test_rss_feed_well_formed_and_has_sample():
     assert "Fri, 05 Jun 2026" in out            # RFC-822 pubDate
 
 
-def test_date_gate_holds_future_and_shows_past():
+def test_date_gate_holds_future_and_shows_past(monkeypatch):
     import datetime
 
+    # BLOG_PREVIEW is read from the env at import; force it off so this test is
+    # deterministic even if a dev/CI exports BLOG_PREVIEW.
+    monkeypatch.setattr(build, "BLOG_PREVIEW", False)
     today = datetime.date(2026, 6, 23)
     # Past / today → live; future → held; missing or malformed → live (now).
     assert build._is_live({"date": "2020-01-01"}, today) is True
