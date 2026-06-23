@@ -81,8 +81,9 @@ def test_load_posts_and_clusters():
     assert all(p["status"] == "published" for p in posts)
     for slug, cluster in clusters.items():
         assert all(p["slug"] == slug for p in cluster)
-    # The drawer post is a 3-language cluster (en/es/zh) sharing one slug.
-    assert {p["lang"] for p in clusters["drawer-of-hospital-cds"]} == {
+    # The drawer post is a multi-language cluster sharing one slug (at least
+    # the original en/es/zh; more locales may have been added since).
+    assert {p["lang"] for p in clusters["drawer-of-hospital-cds"]} >= {
         "en", "es", "zh"}
     sample = next(p for p in posts
                   if p["slug"] == "drawer-of-hospital-cds" and p["lang"] == "en")

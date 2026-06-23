@@ -3,7 +3,7 @@ title: Your Medical Images Belong to You
 slug: medical-images-belong-to-you
 date: 2026-06-05
 summary: You have a right to your own scans — here is how to request them in DICOM, keep a backup, and bring every study together so any doctor can open them.
-languages: [en]
+languages: [en, es]
 status: published
 tags: [stories, getting-started]
 image: /img/blog/medical-images-belong-to-you.jpg
