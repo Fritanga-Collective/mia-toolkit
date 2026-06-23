@@ -3,12 +3,10 @@ title: Welcome to the MIA Toolkit Blog
 slug: welcome-to-the-mia-blog
 date: 2026-06-15
 summary: Why we built MIA Toolkit, and what this blog will cover — plain-language guides to taking charge of your own medical imaging.
-languages: [en]
+languages: [en, es]
 status: published
 tags: [announcements, getting-started]
 ---
-
-# Welcome to the MIA Toolkit Blog
 
 If you have ever opened a drawer full of hospital imaging CDs and wondered what
 on earth to do with them, this blog is for you. We built **MIA Toolkit** to

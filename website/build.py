@@ -344,12 +344,16 @@ def blog_json_ld(post: dict, cluster: list[dict]) -> str:
 
 
 def _blog_langsel(langs: dict, current_lang: str, target: dict) -> str:
-    """Render the full site language dropdown (every loaded language, in
-    LANG_ORDER) so blog pages keep the same chrome as the rest of the site.
-    `target` maps each lang code → the URL that option points to."""
+    """Render a language dropdown over ONLY the languages in `target` (the
+    Wikipedia model: offer just the languages this content actually exists in,
+    so switching always lands on a real translation). `target` maps lang code →
+    URL. Omitted entirely when there's nothing to switch to (≤1 language)."""
+    codes = [c for c in LANG_ORDER if c in target]
+    if len(codes) <= 1:
+        return ""
     label = langs[current_lang].get("_selector_label", "Language")
     opts = []
-    for code in (c for c in LANG_ORDER if c in langs):
+    for code in codes:
         sel = " selected" if code == current_lang else ""
         opts.append(f'          <option value="{target[code]}"{sel}>'
                     f'{langs[code]["_lang_name"]}</option>')
@@ -358,21 +362,11 @@ def _blog_langsel(langs: dict, current_lang: str, target: dict) -> str:
             + "\n".join(opts) + "\n        </select>")
 
 
-def blog_langsel(cluster: list[dict], langs: dict, current_lang: str,
-                 blog_langs: list[str]) -> str:
-    """Post selector: always the full dropdown. Each language points to the
-    translated post if it exists, else that language's blog index, else its
-    site home — so it's never a dead link and upgrades as translations land."""
-    cluster_langs = {p["lang"] for p in cluster}
+def blog_langsel(cluster: list[dict], langs: dict, current_lang: str) -> str:
+    """Post selector: only the languages this post is actually translated into,
+    each pointing at the real translation (never the homepage, never a 404)."""
     slug = cluster[0]["slug"]
-    target = {}
-    for code in (c for c in LANG_ORDER if c in langs):
-        if code in cluster_langs:
-            target[code] = blog_post_url(code, slug)
-        elif code in blog_langs:
-            target[code] = blog_index_url(code)
-        else:
-            target[code] = page_url(code, "index")
+    target = {p["lang"]: blog_post_url(p["lang"], slug) for p in cluster}
     return _blog_langsel(langs, current_lang, target)
 
 
@@ -390,7 +384,7 @@ def _blog_chrome(lang: str, prefix: str) -> dict:
 
 
 def render_post(post: dict, cluster: list[dict], langs: dict,
-                template: str, blog_langs: list[str]) -> str:
+                template: str) -> str:
     s = langs[post["lang"]]
     body = markdown.markdown(post["body"],
                              extensions=["extra", "toc", "sane_lists"])
@@ -399,7 +393,7 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
     computed.update({
         "HEAD_SEO": blog_head_seo(post, cluster),
         "JSON_LD": blog_json_ld(post, cluster),
-        "LANGSEL": blog_langsel(cluster, langs, post["lang"], blog_langs),
+        "LANGSEL": blog_langsel(cluster, langs, post["lang"]),
         "BLOG_TITLE": html.escape(post["title"]),
         "BLOG_SUMMARY": html.escape(post["summary"], quote=True),
         "BLOG_DATE": post["date"],
@@ -409,7 +403,7 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
 
 
 def render_blog_index(lang: str, posts: list[dict], langs: dict,
-                      template: str, blog_langs: list[str]) -> str:
+                      template: str) -> str:
     s = langs[lang]
     mine = sorted((p for p in posts if p["lang"] == lang),
                   key=lambda p: p["date"], reverse=True)  # newest first
@@ -429,7 +423,7 @@ def render_blog_index(lang: str, posts: list[dict], langs: dict,
     computed.update({
         "HEAD_SEO": blog_index_head_seo(lang, langs, posts),
         "JSON_LD": "",
-        "LANGSEL": blog_index_langsel(lang, langs, blog_langs),
+        "LANGSEL": blog_index_langsel(lang, langs, posts),
         "BLOG_INDEX_TITLE": s["blog.index_title"],
         "BLOG_LIST": "\n".join(items),
     })
@@ -456,13 +450,10 @@ def blog_index_head_seo(lang: str, langs: dict, posts: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def blog_index_langsel(lang: str, langs: dict, blog_langs: list[str]) -> str:
-    """Index selector: full dropdown; each language points to its blog index if
-    it has one, else its site home — consistent chrome, never a dead link."""
-    target = {}
-    for code in (c for c in LANG_ORDER if c in langs):
-        target[code] = (blog_index_url(code) if code in blog_langs
-                        else page_url(code, "index"))
+def blog_index_langsel(lang: str, langs: dict, posts: list[dict]) -> str:
+    """Index selector: only the languages that actually have a blog index
+    (≥1 published post), each pointing at that language's index."""
+    target = {c: blog_index_url(c) for c in _blog_langs(posts)}
     return _blog_langsel(langs, lang, target)
 
 
@@ -710,13 +701,12 @@ def main() -> int:
     posts = [p for p in all_posts if p["lang"] in ready]
     blog_pages = 0
     if posts:
-        blog_langs = _blog_langs(posts)  # langs that get a generated blog index
-        for lang in blog_langs:
+        for lang in _blog_langs(posts):
             outdir = (os.path.join(site, "blog") if lang == "en"
                       else os.path.join(site, lang, "blog"))
             os.makedirs(outdir, exist_ok=True)
             idx = _inject_gc(render_blog_index(lang, posts, langs,
-                                               blog_tmpl["index"], blog_langs))
+                                               blog_tmpl["index"]))
             with open(os.path.join(outdir, "index.html"), "w",
                       encoding="utf-8") as f:
                 f.write(idx)
@@ -726,8 +716,7 @@ def main() -> int:
             postdir = os.path.join(site, "" if p["lang"] == "en" else p["lang"],
                                    "blog", p["slug"])
             os.makedirs(postdir, exist_ok=True)
-            out = _inject_gc(render_post(p, cluster, langs, blog_tmpl["post"],
-                                         blog_langs))
+            out = _inject_gc(render_post(p, cluster, langs, blog_tmpl["post"]))
             with open(os.path.join(postdir, "index.html"), "w",
                       encoding="utf-8") as f:
                 f.write(out)
