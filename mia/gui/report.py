@@ -18,7 +18,7 @@ from urllib.parse import quote
 from mia.core import diagnostics
 from .i18n import _, current_language
 
-CONTACT = "mia-tools@fritanga.co"
+CONTACT = "support@miatools.tech"
 
 
 def latest_session_log_lines(*extra_dirs: str) -> list:

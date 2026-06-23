@@ -37,7 +37,7 @@ That's it. The **Review** step now lists the new studies alongside everything fr
 - **Keep the original USB/ZIP** until you've seen the studies in the Review step — then it's safely in your archive (and your backup).
 - **Everything happens on your computer.** No upload, no account, no internet needed — the same privacy promise as always.
 
-[Download MIA Toolkit free](/).
+[Download MIA Toolkit free](/?utm_campaign=buz).
 
 ---
 

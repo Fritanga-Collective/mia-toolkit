@@ -37,7 +37,7 @@ You do not need to be technical to do this. Here is the plan.
 
 ## How MIA Toolkit Does All Three, for Free
 
-[MIA Toolkit](/) is a free desktop app for Mac and Windows that handles exactly this. It does the three fixes above in three plain steps.
+[MIA Toolkit](/?utm_campaign=bdr) is a free desktop app for Mac and Windows that handles exactly this. It does the three fixes above in three plain steps.
 
 **Copy.** Put a disc in your computer and MIA Toolkit copies everything off it onto your machine. Do this for each disc. They all land in one organized place.
 
@@ -61,7 +61,7 @@ MIA Toolkit helps you organize and deliver your *own* medical images. It does no
 
 That drawer has been waiting a long time. Pulling everything into one safe place is one of the kindest things you can do for your future self and for whoever helps you at appointments. It takes the worry out of the next visit.
 
-[Download MIA Toolkit free](/). Questions? Write to [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co).
+[Download MIA Toolkit free](/?utm_campaign=bdr). Questions? Write to [support@miatools.tech](mailto:support@miatools.tech).
 
 ## FAQ
 

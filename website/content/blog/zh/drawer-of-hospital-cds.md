@@ -35,7 +35,7 @@ image: /img/blog/drawer-of-hospital-cds.zh.jpg
 
 ## MIA Toolkit 怎么帮你，而且完全免费
 
-[MIA Toolkit](/zh/) 是一款给 Mac 和 Windows 用的免费桌面软件，专门解决这件事。它**免费、开源、完全离线**——你的数据不离开你的电脑。整个过程只有三步。
+[MIA Toolkit](/zh/?utm_campaign=bdr) 是一款给 Mac 和 Windows 用的免费桌面软件，专门解决这件事。它**免费、开源、完全离线**——你的数据不离开你的电脑。整个过程只有三步。
 
 **添加。** 把光盘放进电脑，软件就把上面的内容全部复制到本机；除了光盘，U 盘里的文件夹、甚至从医院网站下载的 ZIP 压缩包，都可以直接导入。一张张、一份份加进来，最后都归到同一个有条理的地方。
 
@@ -59,7 +59,7 @@ MIA Toolkit 帮你整理和交付**你自己的**医学影像。它**不会读�
 
 那个抽屉已经等了很久。把所有影像归到一个安全的地方，是你能为未来的自己、也为陪你看病的人，做的最贴心的事之一。它会让下一次就诊少一份担忧。
 
-[免费下载 MIA Toolkit](/zh/)。有问题可以写信到 [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co)。
+[免费下载 MIA Toolkit](/zh/?utm_campaign=bdr)。有问题可以写信到 [support@miatools.tech](mailto:support@miatools.tech)。
 
 ## 常见问题
 

@@ -37,7 +37,7 @@ No necesitas ser experto en computadoras para esto. Este es el plan.
 
 ## Cómo MIA Toolkit hace las tres cosas, gratis
 
-[MIA Toolkit](/es/) es una aplicación gratuita para Mac y Windows que se encarga exactamente de esto. Hace los tres arreglos de arriba en tres pasos sencillos.
+[MIA Toolkit](/es/?utm_campaign=bdr) es una aplicación gratuita para Mac y Windows que se encarga exactamente de esto. Hace los tres arreglos de arriba en tres pasos sencillos.
 
 **Agregar.** Mete un disco a tu computadora y MIA Toolkit copia todo lo que tiene a tu equipo. Hazlo con cada disco. Y si en lugar de discos ya tienes los estudios en una USB o en un archivo ZIP, también los puedes agregar igual de fácil. Todo cae en un mismo lugar ordenado.
 
@@ -63,7 +63,7 @@ Esto le sirve mucho a quien cuida de un familiar mayor, ese cuyos estudios está
 
 Ese cajón lleva mucho tiempo esperando. Jalar todo a un solo lugar seguro es una de las cosas más amables que puedes hacer por tu yo del futuro y por quien te acompaña a tus citas. Le quita la angustia a la próxima consulta.
 
-[Descarga MIA Toolkit gratis](/es/). ¿Dudas? Escríbenos a [mia-tools@fritanga.co](mailto:mia-tools@fritanga.co).
+[Descarga MIA Toolkit gratis](/es/?utm_campaign=bdr). ¿Dudas? Escríbenos a [support@miatools.tech](mailto:support@miatools.tech).
 
 ## Preguntas frecuentes
 

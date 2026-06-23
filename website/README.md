@@ -99,6 +99,27 @@ in `i18n/<code>.json` (`blog.index_title`, `blog.meta_desc`, `blog.published`,
 `blog.back`, `blog.read_more`). Without them the build prints a warning and
 **skips that language's posts** rather than crashing — add the keys to publish.
 
+### Scheduling a post (future-dating)
+
+The `date:` field is a **publish gate**: a `status: published` post whose `date`
+is in the **future** is held until that date (UTC), then goes live by itself.
+`pages.yml` runs a **daily rebuild** (cron `0 7 * * *`), so a scheduled post
+appears on its date with no push. To stage the upcoming week locally, run
+`BLOG_PREVIEW=1 python3 website/build.py` to include future-dated posts. A post
+with a missing/invalid `date` publishes immediately (with a build warning).
+
+So a release cadence is just front-matter: set each post's `date:` to its
+intended publish day and commit them together — they reveal themselves on
+schedule.
+
+### Machine-translated posts
+
+For a translation produced with machine assistance (not a native-speaker
+original), add `translation: machine` to its front-matter. The build appends a
+small italic footer note inviting corrections at `support@miatools.tech`
+(localized via the optional `blog.mt_note` i18n key, English fallback). Omit the
+field for native originals (en, the es originals, zh).
+
 ## Privacy-respecting stats (optional)
 
 If you ever want counts, add a cookieless GoatCounter or Plausible tag in the

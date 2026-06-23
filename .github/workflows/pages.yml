@@ -8,6 +8,10 @@ on:
     branches: [main]
     paths: ["website/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
+  # Daily rebuild so date-scheduled blog posts publish themselves on their date
+  # with no push (build.py date-gates posts; see website/README.md "Scheduling").
+  schedule:
+    - cron: "0 7 * * *"   # daily, 07:00 UTC
 
 permissions:
   contents: read
