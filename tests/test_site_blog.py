@@ -70,14 +70,17 @@ def test_url_helpers():
 def test_load_posts_and_clusters():
     posts, clusters = build.load_posts()
     slugs = {p["slug"] for p in posts}
-    assert "welcome-to-the-mia-blog" in slugs
+    assert "drawer-of-hospital-cds" in slugs
     # Every returned post is published, and clusters group by slug.
     assert all(p["status"] == "published" for p in posts)
     for slug, cluster in clusters.items():
         assert all(p["slug"] == slug for p in cluster)
-    sample = next(p for p in posts if p["slug"] == "welcome-to-the-mia-blog")
-    assert sample["lang"] == "en"
-    assert sample["date"] == "2026-06-15"
+    # The drawer post is a 3-language cluster (en/es/zh) sharing one slug.
+    assert {p["lang"] for p in clusters["drawer-of-hospital-cds"]} == {
+        "en", "es", "zh"}
+    sample = next(p for p in posts
+                  if p["slug"] == "drawer-of-hospital-cds" and p["lang"] == "en")
+    assert sample["date"] == "2026-06-05"
 
 
 def test_sitemap_includes_blog():
@@ -85,7 +88,7 @@ def test_sitemap_includes_blog():
     langs = build.load_langs()
     out = build.sitemap(langs, posts, clusters)
     assert "https://miatools.tech/blog/" in out
-    assert "https://miatools.tech/blog/welcome-to-the-mia-blog/" in out
+    assert "https://miatools.tech/blog/drawer-of-hospital-cds/" in out
 
 
 def test_rss_feed_well_formed_and_has_sample():
@@ -96,5 +99,5 @@ def test_rss_feed_well_formed_and_has_sample():
     out = build.rss_feed(en)
     xml.dom.minidom.parseString(out)            # raises if malformed
     assert '<rss version="2.0">' in out
-    assert "Welcome to the MIA Toolkit Blog" in out
-    assert "Mon, 15 Jun 2026" in out            # RFC-822 pubDate
+    assert "What to Do With a Drawer Full of Hospital Imaging CDs" in out
+    assert "Fri, 05 Jun 2026" in out            # RFC-822 pubDate
