@@ -26,7 +26,9 @@ def _load_build():
     try:
         spec.loader.exec_module(mod)
     except ModuleNotFoundError as e:  # markdown not installed in this env
-        pytest.skip(f"website build dep missing: {e}")
+        # Called at module load → must allow a module-level skip (else pytest
+        # errors at collection instead of skipping).
+        pytest.skip(f"website build dep missing: {e}", allow_module_level=True)
     return mod
 
 

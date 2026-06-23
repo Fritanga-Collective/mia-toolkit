@@ -22,4 +22,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip
       - run: pip install -e ".[dev]"
+      # Build-time-only dep for the website generator, so the blog-pipeline
+      # tests (RSS + sitemap regression) actually run instead of skipping.
+      - run: pip install -r website/requirements.txt
       - run: pytest -q
