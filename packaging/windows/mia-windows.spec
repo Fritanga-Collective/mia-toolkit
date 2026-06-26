@@ -21,9 +21,10 @@ REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
 # collect_submodules("mia_core") below runs at spec-eval time, BEFORE
 # Analysis(pathex=[REPO]) influences resolution — so make mia_core importable
 # now (works even if PyInstaller is launched from outside the repo root or
-# without an editable install).
-if REPO not in sys.path:
-    sys.path.insert(0, REPO)
+# without an editable install). Force REPO to the FRONT (de-duped) so the repo's
+# source wins over any installed copy → reproducible builds regardless of
+# PYTHONPATH / site-packages ordering.
+sys.path = [REPO] + [p for p in sys.path if p != REPO]
 
 # CI sets MIA_VERSION from the release tag.
 VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
