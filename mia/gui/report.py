@@ -42,7 +42,14 @@ def latest_session_log_lines(*extra_dirs: str) -> list:
 def open_report_dialog(parent: tk.Misc, log_lines: list,
                        extra: dict | None = None,
                        summary: dict | None = None) -> None:
-    extra = {"language": current_language(), **(extra or {})}
+    # The application version lives here (the toolkit), not in mia.core — inject
+    # it so the report still shows it (environment() reports core_version itself).
+    try:
+        from mia import __version__ as _app_ver
+    except Exception:
+        _app_ver = "?"
+    extra = {"app_version": str(_app_ver), "language": current_language(),
+             **(extra or {})}
 
     win = tk.Toplevel(parent)
     win.title(_("Report a problem"))
