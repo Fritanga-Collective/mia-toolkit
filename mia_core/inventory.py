@@ -270,7 +270,7 @@ def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
         from openpyxl import Workbook
         from openpyxl.styles import Alignment, Font, PatternFill
         from openpyxl.utils import get_column_letter
-    except ImportError as e:  # pragma: no cover
+    except ImportError as e:
         raise RuntimeError(
             "Excel inventory export needs openpyxl — install it with "
             "`pip install openpyxl` (it ships as the `xlsx` extra once "

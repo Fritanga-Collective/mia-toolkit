@@ -66,7 +66,7 @@ def test_scan_cancellation(dataset_dir):
         inventory.scan_directory(root, cancel=CancelNow())
 
 
-def test_xlsx_export_without_openpyxl_raises_clear_error(monkeypatch):
+def test_xlsx_export_without_openpyxl_raises_clear_error(monkeypatch, tmp_path):
     """openpyxl is an optional dependency: importing inventory + scanning never
     needs it (it's imported lazily inside write_inventory_xlsx), and the export
     raises a clear, actionable RuntimeError — not a bare ModuleNotFoundError —
@@ -74,5 +74,6 @@ def test_xlsx_export_without_openpyxl_raises_clear_error(monkeypatch):
     import sys
     # Sentinel None makes `from openpyxl import ...` raise ImportError.
     monkeypatch.setitem(sys.modules, "openpyxl", None)
+    out = tmp_path / "should_not_be_written.xlsx"  # raises before writing
     with pytest.raises(RuntimeError, match="openpyxl"):
-        inventory.write_inventory_xlsx({}, "/tmp/should_not_be_written.xlsx")
+        inventory.write_inventory_xlsx({}, str(out))
