@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Profile the USB delivery copy to find the speed bottleneck.
 
-The delivery (mia.core.deliver.copy_tree_verified) is I/O-bound, so a plain
+The delivery (mia_core.deliver.copy_tree_verified) is I/O-bound, so a plain
 CPU profiler is misleading: during the native `ditto`/`robocopy` phase the
 Python process only polls a subprocess, and the verify pass is dominated by
 filesystem syscalls, not Python. This harness instead measures the thing that
@@ -59,7 +59,7 @@ import time
 # Run from a checkout without installing.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from mia.core import common, deliver  # noqa: E402
+from mia_core import common, deliver  # noqa: E402
 
 _WALK = re.compile(r"walked (\d+) files in ([\d.]+)s")
 _NATIVE = re.compile(r"native copy finished: rc=(-?\d+) in ([\d.]+)s")

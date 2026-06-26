@@ -5,8 +5,8 @@ import pytest
 
 pytest.importorskip("tkinter")
 
-from mia.core import diagnostics  # noqa: E402
-from mia.core.common import Progress  # noqa: E402
+from mia_core import diagnostics  # noqa: E402
+from mia_core.common import Progress  # noqa: E402
 from mia.gui.progress_panel import ProgressLogPanel  # noqa: E402
 from tests.helpers import new_tk_root_or_skip  # noqa: E402
 

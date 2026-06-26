@@ -115,7 +115,7 @@ class App:
         self.show_launcher()
 
     def _title(self) -> str:
-        from mia.core import diagnostics
+        from mia_core import diagnostics
         base = _("MIA Toolkit")
         return f"{base} — {_('anonymized logs')}" if diagnostics.redacting() \
             else base
@@ -185,7 +185,7 @@ def _parse(argv=None):
 
 
 def main(argv=None) -> int:
-    from mia.core import diagnostics
+    from mia_core import diagnostics
     args = _parse(argv)
     diagnostics.set_redact(args.anonymize)
     install()

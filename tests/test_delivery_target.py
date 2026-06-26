@@ -1,4 +1,4 @@
-"""Tests for smart, incremental USB re-delivery (mia.core.delivery_target)."""
+"""Tests for smart, incremental USB re-delivery (mia_core.delivery_target)."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from datetime import datetime, timezone
 
 import pytest
 
-from mia.core import delivery_target as dt
-from mia.core import diagnostics
+from mia_core import delivery_target as dt
+from mia_core import diagnostics
 
 
 # ----- marker round-trip ---------------------------------------------------

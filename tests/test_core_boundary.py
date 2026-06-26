@@ -1,12 +1,12 @@
-"""Boundary guard: ``mia.core`` must stay a standalone, offline library.
+"""Boundary guard: ``mia_core`` must stay a standalone, offline library.
 
 The core package is slated for extraction into a published ``mia-core`` library
 (see the KB extraction plan). For that to stay clean — and to keep the patient
-Toolkit's "sends nothing, ever" promise structurally true — ``mia.core`` must
+Toolkit's "sends nothing, ever" promise structurally true — ``mia_core`` must
 import **no GUI** (tkinter / mia.gui), **no i18n** (mia.i18n), **no network**
 (urllib / socket / ssl / http / requests / certifi), and **must not reach back
 into the application package** (``from mia import …`` for anything but
-``mia.core`` itself).
+``mia_core`` itself).
 
 This is enforced by **static analysis** of core's own source (via ``ast``), not
 runtime import inspection — so it can't be fooled by, nor false-positive on, a
@@ -22,7 +22,7 @@ import os
 import pytest
 
 CORE_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "mia", "core")
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "mia_core")
 
 # Top-level module names core must never import.
 FORBIDDEN_TOP = {
@@ -62,23 +62,23 @@ def test_core_module_has_no_forbidden_imports(path: str) -> None:
         top = module.split(".")[0]
         assert top not in FORBIDDEN_TOP, (
             f"{os.path.basename(path)}:{lineno} imports forbidden '{module}' "
-            f"— mia.core must stay offline/GUI-free")
+            f"— mia_core must stay offline/GUI-free")
         assert not module.startswith(FORBIDDEN_PREFIXES), (
             f"{os.path.basename(path)}:{lineno} imports application module "
-            f"'{module}' — mia.core must not depend on the GUI/i18n layers")
-        # No reverse import of the application root (e.g. `from mia import
-        # __version__`): core owns its own version. `mia.core[.x]` is fine.
-        assert not (module == "mia" or
-                    (module.startswith("mia.") and
-                     not module.startswith("mia.core"))), (
+            f"'{module}' — mia_core must not depend on the GUI/i18n layers")
+        # No dependency on the application package at all (e.g. the old
+        # `from mia import __version__`): mia_core is standalone and owns its
+        # own version. It uses relative imports internally, so it never needs
+        # to import `mia` or any `mia.*` submodule.
+        assert not (module == "mia" or module.startswith("mia.")), (
             f"{os.path.basename(path)}:{lineno} reaches into the application "
-            f"package via '{module}' — mia.core must be self-contained")
+            f"package via '{module}' — mia_core must be self-contained")
 
 
 def test_core_exposes_frozen_public_api() -> None:
     """The extraction plan freezes a public surface for semver — assert it's
     importable and stable so an accidental removal is caught."""
-    import mia.core as core
+    import mia_core as core
 
     assert core.__version__  # the library owns its own version
     for name in ("Progress", "Cancelled", "CancelToken", "check_cancel",
@@ -86,5 +86,5 @@ def test_core_exposes_frozen_public_api() -> None:
                  "importer", "inventory", "dicomdir", "deliver",
                  "delivery_target", "ripper", "sources", "documents",
                  "diagnostics"):
-        assert name in core.__all__, f"{name} dropped from mia.core.__all__"
-        assert hasattr(core, name), f"mia.core.{name} not importable"
+        assert name in core.__all__, f"{name} dropped from mia_core.__all__"
+        assert hasattr(core, name), f"mia_core.{name} not importable"

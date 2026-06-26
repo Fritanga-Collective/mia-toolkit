@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from mia.core.common import Cancelled
-from mia.core import ripper
+from mia_core.common import Cancelled
+from mia_core import ripper
 from tests.helpers import CancelNow
 
 

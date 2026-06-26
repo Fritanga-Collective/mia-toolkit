@@ -32,9 +32,9 @@ build = [
 
 [project.scripts]
 mia = "mia.gui.app:main"
-mia-rip = "mia.core.ripper:main"
-mia-inventory = "mia.core.inventory:main"
-mia-build = "mia.core.dicomdir:main"
+mia-rip = "mia_core.ripper:main"
+mia-inventory = "mia_core.inventory:main"
+mia-build = "mia_core.dicomdir:main"
 
 [tool.setuptools.packages.find]
 include = ["mia*"]

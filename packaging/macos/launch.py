@@ -11,7 +11,7 @@ def _selftest() -> int:
     import openpyxl
     import pydicom
 
-    from mia.core import common, deliver, dicomdir, inventory, ripper  # noqa: F401
+    from mia_core import common, deliver, dicomdir, inventory, ripper  # noqa: F401
     from mia.gui import app  # noqa: F401
 
     print(f"selftest OK: pydicom {pydicom.__version__}, "

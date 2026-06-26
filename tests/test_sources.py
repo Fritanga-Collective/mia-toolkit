@@ -1,4 +1,4 @@
-"""Tests for source identity / already-imported detection (mia.core.sources)
+"""Tests for source identity / already-imported detection (mia_core.sources)
 and RipSessionController's session-vs-busy callback split."""
 
 from __future__ import annotations
@@ -8,7 +8,7 @@ import os
 import pytest
 from pydicom.uid import generate_uid
 
-from mia.core import ripper, sources
+from mia_core import ripper, sources
 from tests.helpers import make_dicom
 
 

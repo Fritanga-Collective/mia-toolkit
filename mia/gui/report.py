@@ -1,6 +1,6 @@
 """'Report a problem' — let the user generate an anonymized diagnostic report,
 review it, and send it themselves. No auto-collection: the report is built from
-the in-memory technical log, scrubbed of PHI (see mia.core.diagnostics), shown
+the in-memory technical log, scrubbed of PHI (see mia_core.diagnostics), shown
 in full, and only leaves the machine if the user copies/saves/emails it.
 """
 
@@ -15,7 +15,7 @@ import webbrowser
 from tkinter import filedialog, messagebox, ttk
 from urllib.parse import quote
 
-from mia.core import diagnostics
+from mia_core import diagnostics
 from .i18n import _, current_language
 
 CONTACT = "support@miatools.tech"
@@ -42,7 +42,7 @@ def latest_session_log_lines(*extra_dirs: str) -> list:
 def open_report_dialog(parent: tk.Misc, log_lines: list,
                        extra: dict | None = None,
                        summary: dict | None = None) -> None:
-    # The application version lives here (the toolkit), not in mia.core — inject
+    # The application version lives here (the toolkit), not in mia_core — inject
     # it so the report still shows it (environment() reports core_version itself).
     try:
         from mia import __version__ as _app_ver

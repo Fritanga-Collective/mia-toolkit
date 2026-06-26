@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 
-from mia.core import deliver
+from mia_core import deliver
 
 
 class Project:
@@ -74,7 +74,7 @@ class Project:
         spreadsheet, so the new root is complete and later steps don't see them
         as missing. Returns the DeliverResult for the discs (or None).
         """
-        from mia.core.ripper import copy_with_retry
+        from mia_core.ripper import copy_with_retry
 
         new_root = os.path.abspath(os.path.expanduser(new_root))
         result = None

@@ -3,7 +3,7 @@
 import threading
 import time
 
-from mia.core.common import Cancelled, Progress
+from mia_core.common import Cancelled, Progress
 from mia.gui import jobs
 
 

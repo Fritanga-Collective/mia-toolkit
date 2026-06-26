@@ -1,4 +1,4 @@
-"""Adversarial regression tests for the ZIP import path (mia.core.importer).
+"""Adversarial regression tests for the ZIP import path (mia_core.importer).
 
 Each test pins a defense the 2026-06-07 security audit either confirmed or
 added. Malicious archives are synthesized in tmp_path — none are committed as
@@ -12,8 +12,8 @@ import zipfile
 
 import pytest
 
-from mia.core import importer
-from mia.core.importer import _ExtractBudget, _safe_extract, import_zip
+from mia_core import importer
+from mia_core.importer import _ExtractBudget, _safe_extract, import_zip
 
 
 def _zip(path, members):

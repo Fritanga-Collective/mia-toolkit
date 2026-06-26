@@ -13,7 +13,7 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Any, Callable, Optional
 
-from mia.core.common import Progress
+from mia_core.common import Progress
 from . import jobs
 from .i18n import _
 from .messages import exception_detail, humanize_exception

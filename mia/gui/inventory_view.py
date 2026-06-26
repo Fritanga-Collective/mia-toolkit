@@ -7,7 +7,7 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Any
 
-from mia.core import inventory
+from mia_core import inventory
 from .i18n import N_, _
 from .task_view import TaskView, open_path
 from .widgets import FolderPicker, default_dir

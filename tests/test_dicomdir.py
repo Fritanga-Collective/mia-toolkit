@@ -3,8 +3,8 @@ import os
 import pytest
 from pydicom.fileset import FileSet
 
-from mia.core import dicomdir
-from mia.core.common import Cancelled
+from mia_core import dicomdir
+from mia_core.common import Cancelled
 from tests.helpers import CancelNow
 
 

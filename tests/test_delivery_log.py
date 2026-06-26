@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from datetime import datetime
 
-from mia.core import dicomdir
+from mia_core import dicomdir
 
 
 def _result(studies_info):

@@ -1,4 +1,4 @@
-"""Tests for mia.core.importer — folder/USB and ZIP import sources."""
+"""Tests for mia_core.importer — folder/USB and ZIP import sources."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ import zipfile
 import pytest
 from pydicom.uid import generate_uid
 
-from mia.core import importer
-from mia.core.common import Cancelled
+from mia_core import importer
+from mia_core.common import Cancelled
 
 from tests.helpers import make_dicom
 

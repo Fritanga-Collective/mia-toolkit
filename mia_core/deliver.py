@@ -10,7 +10,7 @@ rsync at all):
   off;
 * **integrity** — every copied file is verified (size always; SHA-256 when
   ``thorough``) and recopied once on mismatch;
-* **robustness** — copying reuses :func:`mia.core.ripper.copy_with_retry`
+* **robustness** — copying reuses :func:`mia_core.ripper.copy_with_retry`
   (retry + backoff), already tested for flaky media.
 
 Same ``Progress`` / cancel contract as the other workers, so it drops straight

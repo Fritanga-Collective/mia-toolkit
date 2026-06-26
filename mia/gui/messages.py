@@ -19,7 +19,7 @@ import time
 import traceback
 from typing import Callable, Optional, Tuple
 
-from mia.core.common import Progress, format_duration
+from mia_core.common import Progress, format_duration
 from .i18n import _
 
 PlainTech = Tuple[Optional[str], Optional[str]]

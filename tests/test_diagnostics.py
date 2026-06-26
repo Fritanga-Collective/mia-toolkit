@@ -4,7 +4,7 @@ PHI does NOT survive."""
 
 import os
 
-from mia.core import diagnostics as dx
+from mia_core import diagnostics as dx
 
 
 def test_scrub_redacts_home_and_username():

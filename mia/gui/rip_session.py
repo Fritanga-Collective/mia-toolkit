@@ -15,7 +15,7 @@ from typing import Any, Callable, Optional
 
 from tkinter import messagebox
 
-from mia.core import ripper, sources
+from mia_core import ripper, sources
 from . import jobs
 from .i18n import _
 from .messages import exception_detail, humanize_exception
