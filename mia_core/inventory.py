@@ -37,9 +37,11 @@ except ImportError:  # pragma: no cover
     print("Run: pip install pydicom")
     raise
 
-# openpyxl is an OPTIONAL dependency (the `xlsx` extra) — imported lazily inside
-# write_inventory_xlsx() so the rest of mia_core (scan, consistency check, the
-# CLI's scan path) works without it. Only the Excel export needs it.
+# openpyxl is imported lazily inside write_inventory_xlsx() (its only consumer)
+# so the rest of mia_core — scan, consistency check, the CLI's scan path —
+# imports and runs without it. Today it's still a regular mia-toolkit
+# dependency; it becomes the optional `xlsx` extra once mia-core is split into
+# its own distribution (see the KB extraction plan).
 
 
 # Patterns to detect MR/CT sequence type from SeriesDescription.
@@ -271,7 +273,8 @@ def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
     except ImportError as e:  # pragma: no cover
         raise RuntimeError(
             "Excel inventory export needs openpyxl — install it with "
-            "`pip install mia-core[xlsx]` (or `pip install openpyxl`).") from e
+            "`pip install openpyxl` (it ships as the `xlsx` extra once "
+            "mia-core is its own distribution).") from e
 
     wb = Workbook()
 
