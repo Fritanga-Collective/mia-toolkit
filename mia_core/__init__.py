@@ -1,4 +1,4 @@
-"""``mia.core`` — the toolkit's offline worker library (future ``mia-core``).
+"""``mia_core`` — the toolkit's offline worker library (future ``mia-core``).
 
 These modules preserve the algorithms of the original standalone scripts
 (``rip_cd.py``, ``dicom_inventory.py``, ``build_dicomdir.py``) verbatim. The
@@ -30,7 +30,7 @@ import importlib
 from typing import Any
 
 # ── Public API surface (frozen for semver) ──────────────────────────────────
-# Lightweight primitives, re-exported for convenience (`from mia.core import
+# Lightweight primitives, re-exported for convenience (`from mia_core import
 # Progress`). `common` is a dependency-free leaf, so this adds no import cost.
 from .common import (  # noqa: E402
     Cancelled,
@@ -43,9 +43,9 @@ from .common import (  # noqa: E402
 )
 
 # Worker modules are part of the public surface but loaded **lazily** (PEP 562):
-# `import mia.core` stays cheap (no eager pydicom/openpyxl), `python -m
-# mia.core.<x>` doesn't warn about double-execution, yet `from mia.core import
-# inventory` and `mia.core.inventory` both work and `import *` honours __all__.
+# `import mia_core` stays cheap (no eager pydicom/openpyxl), `python -m
+# mia_core.<x>` doesn't warn about double-execution, yet `from mia_core import
+# inventory` and `mia_core.inventory` both work and `import *` honours __all__.
 _SUBMODULES = frozenset({
     "deliver", "delivery_target", "diagnostics", "dicomdir", "documents",
     "importer", "inventory", "ripper", "sources",

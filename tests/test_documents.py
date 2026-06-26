@@ -8,7 +8,7 @@ import os
 import pydicom
 from pydicom.uid import generate_uid
 
-from mia.core import dicomdir, documents, inventory
+from mia_core import dicomdir, documents, inventory
 from tests.helpers import make_dicom
 
 

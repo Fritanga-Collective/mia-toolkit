@@ -6,7 +6,7 @@ import os
 from tkinter import ttk
 from typing import Any
 
-from mia.core import delivery_target, dicomdir
+from mia_core import delivery_target, dicomdir
 from .i18n import N_, _
 from .task_view import TaskView, reveal
 from .three_button import ask_three

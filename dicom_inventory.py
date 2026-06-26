@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Backward-compatible CLI shim. See mia/core/inventory.py for the implementation.
+"""Backward-compatible CLI shim. See mia_core/inventory.py for the implementation.
 
 Usage is unchanged:
     python3 dicom_inventory.py /path/to/raw_discs
@@ -7,7 +7,7 @@ Usage is unchanged:
 """
 import sys
 
-from mia.core.inventory import main
+from mia_core.inventory import main
 
 if __name__ == "__main__":
     sys.exit(main())

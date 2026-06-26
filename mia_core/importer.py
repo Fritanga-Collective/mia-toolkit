@@ -1,6 +1,6 @@
 """Import studies from a local folder/USB drive or a downloaded ZIP archive.
 
-Both importers funnel into :func:`mia.core.ripper.rip_disc`, which already
+Both importers funnel into :func:`mia_core.ripper.rip_disc`, which already
 copies an arbitrary tree into a numbered ``disc_NN_<date>_<label>`` folder with
 per-file retry, resume-on-rerun, a ``_manifest.txt``, and the shared
 Progress/cancel contract — so the inventory/archive pipeline needs no changes.

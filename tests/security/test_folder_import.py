@@ -1,5 +1,5 @@
 """Adversarial regression tests for the folder/disc copy path and the Excel
-inventory (mia.core.ripper, mia.core.inventory). See docs/SECURITY-AUDIT.md."""
+inventory (mia_core.ripper, mia_core.inventory). See docs/SECURITY-AUDIT.md."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ import sys
 import pytest
 from openpyxl import load_workbook
 
-from mia.core import inventory
-from mia.core.inventory import scan_directory, write_inventory_xlsx, xlsx_safe
-from mia.core.ripper import rip_disc
+from mia_core import inventory
+from mia_core.inventory import scan_directory, write_inventory_xlsx, xlsx_safe
+from mia_core.ripper import rip_disc
 from tests.helpers import make_dicom
 
 
@@ -80,7 +80,7 @@ def test_manifest_escapes_newline_in_failed_path(tmp_path, monkeypatch):
     bad = src / "evil\nTotal files   : 9"
     bad.write_text("x")
 
-    monkeypatch.setattr("mia.core.ripper.copy_with_retry",
+    monkeypatch.setattr("mia_core.ripper.copy_with_retry",
                         lambda *a, **k: (False, "unreadable"))
     result = rip_disc(str(src), str(tmp_path / "proj"), 1)
     with open(result.manifest_path) as f:

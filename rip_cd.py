@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Backward-compatible CLI shim. See mia/core/ripper.py for the implementation.
+"""Backward-compatible CLI shim. See mia_core/ripper.py for the implementation.
 
 Usage is unchanged:
     python3 rip_cd.py                 # auto-detect
@@ -7,7 +7,7 @@ Usage is unchanged:
 """
 import sys
 
-from mia.core.ripper import main
+from mia_core.ripper import main
 
 if __name__ == "__main__":
     sys.exit(main())

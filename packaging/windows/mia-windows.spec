@@ -20,7 +20,10 @@ REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
 # CI sets MIA_VERSION from the release tag.
 VERSION = os.environ.get("MIA_VERSION") or "0.1.0"
 
-hidden = collect_submodules("pydicom") + collect_submodules("openpyxl")
+# mia_core exposes its worker modules via a lazy PEP-562 __getattr__, so the
+# static analyzer can miss some; collect them explicitly too.
+hidden = (collect_submodules("pydicom") + collect_submodules("openpyxl")
+          + collect_submodules("mia_core"))
 datas = collect_data_files("pydicom") + [
     (os.path.join(REPO, "mia/i18n/locale"), "mia/i18n/locale"),
     (os.path.join(REPO, "mia/gui/assets"), "mia/gui/assets"),

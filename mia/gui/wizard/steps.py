@@ -23,9 +23,9 @@ def institutions_url() -> str:
     prefix = "" if lang == "en" else f"{lang}/"
     return f"https://miatools.tech/{prefix}support.html#institutions"
 
-from mia.core import deliver, delivery_target, dicomdir, documents, inventory
-from mia.core.common import Progress, format_bytes
-from mia.core.ripper import copy_with_retry
+from mia_core import deliver, delivery_target, dicomdir, documents, inventory
+from mia_core.common import Progress, format_bytes
+from mia_core.ripper import copy_with_retry
 
 from ..three_button import ask_three
 

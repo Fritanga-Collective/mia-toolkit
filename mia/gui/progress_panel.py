@@ -17,8 +17,8 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from typing import Optional
 
-from mia.core import diagnostics
-from mia.core.common import Progress, format_duration
+from mia_core import diagnostics
+from mia_core.common import Progress, format_duration
 from .i18n import _
 from .messages import Presenter
 from .sysutil import reveal

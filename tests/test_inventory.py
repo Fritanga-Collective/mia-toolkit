@@ -1,8 +1,8 @@
 import pytest
 from openpyxl import load_workbook
 
-from mia.core import inventory
-from mia.core.common import Cancelled
+from mia_core import inventory
+from mia_core.common import Cancelled
 from tests.helpers import CancelNow
 
 

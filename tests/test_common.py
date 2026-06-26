@@ -1,4 +1,4 @@
-from mia.core.common import (
+from mia_core.common import (
     Progress,
     format_bytes,
     format_duration,

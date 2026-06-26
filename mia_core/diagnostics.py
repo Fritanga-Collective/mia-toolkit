@@ -133,7 +133,7 @@ def environment(app_version: Optional[str] = None) -> Dict[str, str]:
     know on its own — the host app injects it (the GUI passes it through the
     report's ``extra`` fields). When absent it reads as ``"?"``. The library
     always reports its OWN version as ``core_version`` (no reverse import of
-    the application package — keeps ``mia.core`` standalone)."""
+    the application package — keeps ``mia_core`` standalone)."""
     from . import __version__ as core_ver
     return {
         "app_version": str(app_version) if app_version else "?",

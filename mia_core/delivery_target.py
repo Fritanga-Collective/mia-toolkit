@@ -5,8 +5,8 @@ DICOM ``Archive/``, the inventory, doctor-facing docs, and a hidden
 ``.mia-archive.json`` marker that records *whose* archive this is. On the next
 delivery to the same drive we read those markers, recognize a folder belonging to
 the same patient, and update it in place — so the already-incremental
-:func:`mia.core.deliver.copy_tree_verified` (resume/verify) and the append-on-
-redelivery :func:`mia.core.dicomdir.write_delivery_log` actually do their job
+:func:`mia_core.deliver.copy_tree_verified` (resume/verify) and the append-on-
+redelivery :func:`mia_core.dicomdir.write_delivery_log` actually do their job
 instead of being defeated by a fresh dated folder every time.
 
 This module is pure stdlib + an optional ``pydicom`` import (only for reading a
@@ -206,7 +206,7 @@ def archive_identity(studies: Dict[str, dict]) -> Tuple[Optional[str], Optional[
     """Derive ``(patient_name, patient_id)`` for a just-built archive.
 
     ``studies`` is the per-study mapping produced by
-    :func:`mia.core.inventory.scan_directory` (each value has ``patient_name`` /
+    :func:`mia_core.inventory.scan_directory` (each value has ``patient_name`` /
     ``patient_id``). Identity is reported only when the studies *agree*: a single
     distinct usable name yields that name (and likewise for the id). Any genuine
     multi-patient mix on a field, or no usable identity at all, yields ``None``

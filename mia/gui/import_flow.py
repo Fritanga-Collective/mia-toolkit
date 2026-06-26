@@ -14,8 +14,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from typing import Any, Callable, Optional
 
-from mia.core import deliver, importer, ripper, sources
-from mia.core.common import format_bytes
+from mia_core import deliver, importer, ripper, sources
+from mia_core.common import format_bytes
 
 from . import jobs
 from .i18n import _

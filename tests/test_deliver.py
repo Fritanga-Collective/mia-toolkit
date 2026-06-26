@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from mia.core import common, deliver
-from mia.core.common import Cancelled
+from mia_core import common, deliver
+from mia_core.common import Cancelled
 from tests.helpers import CancelNow
 
 
@@ -140,7 +140,7 @@ def test_ditto_gets_dash_v_and_streams_to_debug_when_verbose(tmp_path,
     # With the verbose technical log on, ditto runs with -v and its per-item
     # stderr stream is forwarded as kind="debug" notes — so a slow USB copy
     # shows *which* file it's on.
-    from mia.core import common
+    from mia_core import common
 
     src = tmp_path / "src"
     dst = tmp_path / "dst"
@@ -222,7 +222,7 @@ def test_copy_creates_nested_dirs_without_upfront_precreate(tmp_path):
 
 
 def test_verbose_gates_debug_emits(tmp_path):
-    from mia.core import common
+    from mia_core import common
 
     src = tmp_path / "src"
     _tree(str(src))

@@ -1,4 +1,4 @@
-"""Run a ``mia.core`` worker on a background thread, safely for Tkinter.
+"""Run a ``mia_core`` worker on a background thread, safely for Tkinter.
 
 Tkinter is not thread-safe, so the worker runs off the UI thread and pushes
 progress events through a :class:`queue.Queue`. The UI thread drains the queue
@@ -14,7 +14,7 @@ import queue
 import threading
 from typing import Any, Callable, Tuple
 
-from mia.core.common import Cancelled, Progress
+from mia_core.common import Cancelled, Progress
 
 # A worker thunk: given an event emitter and a cancel token, do the work and
 # return a result. Views wrap a core call, e.g.

@@ -1,6 +1,6 @@
 import errno
 
-from mia.core.common import Progress
+from mia_core.common import Progress
 from mia.gui.messages import Presenter, exception_detail, humanize_exception
 
 
