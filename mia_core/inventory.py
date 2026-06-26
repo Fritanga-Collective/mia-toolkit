@@ -37,14 +37,9 @@ except ImportError:  # pragma: no cover
     print("Run: pip install pydicom")
     raise
 
-try:
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
-    from openpyxl.utils import get_column_letter
-except ImportError:  # pragma: no cover
-    print("ERROR: openpyxl not installed.")
-    print("Run: pip install openpyxl")
-    raise
+# openpyxl is an OPTIONAL dependency (the `xlsx` extra) — imported lazily inside
+# write_inventory_xlsx() so the rest of mia_core (scan, consistency check, the
+# CLI's scan path) works without it. Only the Excel export needs it.
 
 
 # Patterns to detect MR/CT sequence type from SeriesDescription.
@@ -267,7 +262,17 @@ def scan_directory(
 
 
 def write_inventory_xlsx(studies: Dict[str, dict], output_path: str) -> None:
-    """Build the three-sheet Excel inventory."""
+    """Build the three-sheet Excel inventory. Requires the optional `openpyxl`
+    dependency (the `xlsx` extra)."""
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Alignment, Font, PatternFill
+        from openpyxl.utils import get_column_letter
+    except ImportError as e:  # pragma: no cover
+        raise RuntimeError(
+            "Excel inventory export needs openpyxl — install it with "
+            "`pip install mia-core[xlsx]` (or `pip install openpyxl`).") from e
+
     wb = Workbook()
 
     header_font = Font(bold=True, color="FFFFFF")
