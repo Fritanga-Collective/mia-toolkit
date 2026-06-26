@@ -126,14 +126,18 @@ def scrub(text: str) -> str:
     return text
 
 
-def environment() -> Dict[str, str]:
-    """Non-identifying runtime facts useful for diagnosis."""
-    try:
-        from mia import __version__ as ver
-    except Exception:
-        ver = "?"
+def environment(app_version: Optional[str] = None) -> Dict[str, str]:
+    """Non-identifying runtime facts useful for diagnosis.
+
+    ``app_version`` is the *application's* version, which the library cannot
+    know on its own — the host app injects it (the GUI passes it through the
+    report's ``extra`` fields). When absent it reads as ``"?"``. The library
+    always reports its OWN version as ``core_version`` (no reverse import of
+    the application package — keeps ``mia.core`` standalone)."""
+    from . import __version__ as core_ver
     return {
-        "app_version": str(ver),
+        "app_version": str(app_version) if app_version else "?",
+        "core_version": str(core_ver),
         # Was "frozen: yes" (the PyInstaller flag), which read like "the app
         # froze." Say what it actually means to a maintainer triaging a report.
         "build": "packaged app" if getattr(sys, "frozen", False)
