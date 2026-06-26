@@ -194,5 +194,11 @@
   "privacy.site_li1_gc": "Laman statik <strong>tanpa kuki, tanpa penjejak dan tanpa iklan</strong>. Kami menggunakan <strong>GoatCounter</strong>, pembilang sumber terbuka tanpa kuki, untuk kiraan paparan halaman secara agregat — ia tidak menyimpan data peribadi, tidak membina profil dan tidak menjejak antara laman.",
   "stats.col_referrer": "Sumber",
   "stats.col_count": "Bilangan",
-  "_blog_url": "https://fritangacollective.substack.com/"
+  "blog.index_title": "Blog MIA Toolkit",
+  "blog.meta_desc": "Panduan praktikal dalam bahasa yang mudah untuk menyusun imej perubatan anda — cara membuka CD hospital, membina satu pemacu USB untuk doktor anda, dan mengawal imbasan anda sendiri.",
+  "blog.published": "Diterbitkan",
+  "blog.back": "← Kembali ke blog",
+  "blog.read_more": "Baca lagi →",
+  "blog.mt_note": "Diterjemahkan dengan bantuan mesin — pembetulan dialu-alukan di <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a>.",
+  "_blog_url": "/ms/blog/"
 }

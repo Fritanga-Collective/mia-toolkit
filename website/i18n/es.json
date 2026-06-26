@@ -194,5 +194,10 @@
   "privacy.site_li1_gc": "Un sitio estático <strong>sin cookies, sin rastreadores y sin anuncios</strong>. Usamos <strong>GoatCounter</strong>, un contador de código abierto y sin cookies, para contar visitas de forma agregada — no guarda datos personales, no crea perfiles y no rastrea entre sitios.",
   "stats.col_referrer": "Origen",
   "stats.col_count": "Conteo",
-  "_blog_url": "https://fritangacollective.substack.com/s/espanol"
+  "blog.index_title": "El blog de MIA Toolkit",
+  "blog.meta_desc": "Guías prácticas y en lenguaje claro para organizar tus estudios de imagen — cómo abrir discos del hospital, armar una sola USB para tu médico y tomar el control de tus estudios.",
+  "blog.published": "Publicado",
+  "blog.back": "← Volver al blog",
+  "blog.read_more": "Leer más →",
+  "_blog_url": "/es/blog/"
 }

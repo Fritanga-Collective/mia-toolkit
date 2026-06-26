@@ -194,5 +194,10 @@
   "privacy.site_li1_gc": "A static site with <strong>no cookies, no trackers, and no ads</strong>. We use <strong>GoatCounter</strong>, an open-source, cookieless counter, for aggregate page-view counts — it stores no personal data, builds no profiles, and does no cross-site tracking.",
   "stats.col_referrer": "Referrer",
   "stats.col_count": "Count",
-  "_blog_url": "https://fritangacollective.substack.com/"
+  "blog.index_title": "The MIA Toolkit Blog",
+  "blog.meta_desc": "Practical, plain-language guides on organizing your medical imaging — how to open hospital CDs, build one USB for your doctor, and take charge of your own scans.",
+  "blog.published": "Published",
+  "blog.back": "← Back to the blog",
+  "blog.read_more": "Read more →",
+  "_blog_url": "/blog/"
 }

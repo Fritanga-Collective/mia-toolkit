@@ -194,5 +194,11 @@
   "privacy.site_li1_gc": "Eine statische Website <strong>ohne Cookies, ohne Tracker und ohne Werbung</strong>. Für aggregierte Seitenaufruf-Zahlen nutzen wir <strong>GoatCounter</strong>, einen quelloffenen, cookielosen Zähler — er speichert keine personenbezogenen Daten, erstellt keine Profile und betreibt kein seitenübergreifendes Tracking.",
   "stats.col_referrer": "Quelle",
   "stats.col_count": "Anzahl",
-  "_blog_url": "https://fritangacollective.substack.com/"
+  "blog.index_title": "Der MIA-Toolkit-Blog",
+  "blog.meta_desc": "Praktische, verständliche Anleitungen, um Ihre medizinischen Bilddaten zu organisieren — Klinik-CDs öffnen, einen einzigen USB-Stick für Ihre Ärztin oder Ihren Arzt erstellen und die Kontrolle über Ihre eigenen Aufnahmen übernehmen.",
+  "blog.published": "Veröffentlicht",
+  "blog.back": "← Zurück zum Blog",
+  "blog.read_more": "Weiterlesen →",
+  "blog.mt_note": "Mit maschineller Unterstützung übersetzt — Korrekturen willkommen unter <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a>.",
+  "_blog_url": "/de/blog/"
 }

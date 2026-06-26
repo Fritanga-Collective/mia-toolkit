@@ -1,0 +1,5 @@
+# Build-time only dependency for website/build.py (the static site generator).
+# Used to render blog post bodies (content/blog/<lang>/*.md) from Markdown to
+# HTML. Nothing here ships to users or runs in the browser — the output is
+# plain static HTML. Pinned for reproducible CI builds.
+markdown==3.9
