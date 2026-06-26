@@ -12,6 +12,7 @@
 # in the environment once a universal2 interpreter is in use.
 
 import os
+import sys
 
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
@@ -22,6 +23,13 @@ try:
 except NameError:
     SPEC_DIR = os.getcwd()
 REPO = os.path.abspath(os.path.join(SPEC_DIR, "..", ".."))
+
+# collect_submodules("mia_core") below runs at spec-eval time, BEFORE
+# Analysis(pathex=[REPO]) influences resolution — so make mia_core importable
+# now (works even if PyInstaller is launched from outside the repo root or
+# without an editable install).
+if REPO not in sys.path:
+    sys.path.insert(0, REPO)
 
 TARGET_ARCH = os.environ.get("MIA_TARGET_ARCH") or None  # 'universal2' when ready
 # CI sets MIA_VERSION from the release tag so the bundle's Info.plist matches.

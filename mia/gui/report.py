@@ -48,8 +48,10 @@ def open_report_dialog(parent: tk.Misc, log_lines: list,
         from mia import __version__ as _app_ver
     except Exception:
         _app_ver = "?"
-    extra = {"app_version": str(_app_ver), "language": current_language(),
-             **(extra or {})}
+    # app_version is authoritative (the real toolkit version) — set it LAST so a
+    # caller-provided `extra` can't shadow it; language stays caller-overridable.
+    extra = {"language": current_language(), **(extra or {}),
+             "app_version": str(_app_ver)}
 
     win = tk.Toplevel(parent)
     win.title(_("Report a problem"))

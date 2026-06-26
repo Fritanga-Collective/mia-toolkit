@@ -34,8 +34,12 @@ FORBIDDEN_PREFIXES = ("mia.gui", "mia.i18n")
 
 
 def _core_files() -> list[str]:
-    return [os.path.join(CORE_DIR, f) for f in sorted(os.listdir(CORE_DIR))
-            if f.endswith(".py")]
+    """Every .py in mia_core, recursively — so a future subpackage can't smuggle
+    a boundary-violating import past the guard."""
+    out = []
+    for root, _dirs, files in os.walk(CORE_DIR):
+        out += [os.path.join(root, f) for f in files if f.endswith(".py")]
+    return sorted(out)
 
 
 def _imported_names(tree: ast.AST) -> list[tuple[str, int]]:
@@ -54,24 +58,25 @@ def _imported_names(tree: ast.AST) -> list[tuple[str, int]]:
 
 
 @pytest.mark.parametrize("path", _core_files(),
-                         ids=lambda p: os.path.basename(p))
+                         ids=lambda p: os.path.relpath(p, CORE_DIR))
 def test_core_module_has_no_forbidden_imports(path: str) -> None:
+    rel = os.path.relpath(path, CORE_DIR)  # unique + readable even if recursive
     with open(path, encoding="utf-8") as f:
         tree = ast.parse(f.read(), filename=path)
     for module, lineno in _imported_names(tree):
         top = module.split(".")[0]
         assert top not in FORBIDDEN_TOP, (
-            f"{os.path.basename(path)}:{lineno} imports forbidden '{module}' "
+            f"{rel}:{lineno} imports forbidden '{module}' "
             f"— mia_core must stay offline/GUI-free")
         assert not module.startswith(FORBIDDEN_PREFIXES), (
-            f"{os.path.basename(path)}:{lineno} imports application module "
+            f"{rel}:{lineno} imports application module "
             f"'{module}' — mia_core must not depend on the GUI/i18n layers")
         # No dependency on the application package at all (e.g. the old
         # `from mia import __version__`): mia_core is standalone and owns its
         # own version. It uses relative imports internally, so it never needs
         # to import `mia` or any `mia.*` submodule.
         assert not (module == "mia" or module.startswith("mia.")), (
-            f"{os.path.basename(path)}:{lineno} reaches into the application "
+            f"{rel}:{lineno} reaches into the application "
             f"package via '{module}' — mia_core must be self-contained")
 
 
