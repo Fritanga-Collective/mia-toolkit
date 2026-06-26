@@ -41,6 +41,16 @@ HELP_STEPS = ["welcome", "add-studies", "review", "documents",
               "build-deliver", "done"]
 HELP_FAQ_N = 8                            # number of FAQ Q&A pairs (faq_q1…)
 
+
+def help_img_lang(lang: str) -> str:
+    """Language whose /help screenshots to use: the page's own language if a
+    localized screenshot set exists (img/help/<lang>/), else fall back to
+    English. Localized UI screenshots don't exist for every locale yet (e.g.
+    fr), so without this fallback those pages render broken <img>s. English is
+    the safe default — the walkthrough reads fine with English screenshots."""
+    d = os.path.join(HERE, "img", "help", lang)
+    return lang if os.path.isdir(d) else "en"
+
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
           "CNAME", "img", "version.json", "favicon.ico"]
 
@@ -170,6 +180,7 @@ def json_ld(lang: str, s: dict, page: str) -> str:
         # Localized HowTo (the walkthrough) + FAQPage (the FAQ), both built from
         # the i18n strings so each locale gets its own structured data.
         url = BASE + page_url(lang, "help")
+        ilang = help_img_lang(lang)   # localized screenshots if present, else en
         steps = []
         for slug in HELP_STEPS:
             k = slug.replace("-", "_")
@@ -178,14 +189,14 @@ def json_ld(lang: str, s: dict, page: str) -> str:
                 "name": s[f"help.s_{k}_h3"],
                 "text": s[f"help.s_{k}_p"],
                 "url": f"{url}#step-{slug}",
-                "image": f"{BASE}/img/help/{lang}/{slug}.png",
+                "image": f"{BASE}/img/help/{ilang}/{slug}.png",
             })
         howto = {
             "@context": "https://schema.org",
             "@type": "HowTo",
             "name": s["help.howto_name"],
             "description": s["help.meta_desc"],
-            "image": f"{BASE}/img/help/{lang}/home.png",
+            "image": f"{BASE}/img/help/{ilang}/home.png",
             "totalTime": "PT15M",
             "step": steps,
         }
@@ -803,6 +814,7 @@ def main() -> int:
                 "P": prefix,
                 "LANG": lang,   # directory code (en/es/zh/…), not the _lang
                                 # locale (es-MX); used for per-language asset paths
+                "HELP_IMG_LANG": help_img_lang(lang),  # screenshots, en-fallback
                 "HEAD_SEO": head_seo(langs, lang, page, s),
                 "JSON_LD": json_ld(lang, s, page),
                 "LANGSEL": langsel(langs, lang, page),
