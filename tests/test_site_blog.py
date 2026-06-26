@@ -148,3 +148,24 @@ def test_blog_preview_includes_future(monkeypatch):
     monkeypatch.setattr(build, "BLOG_PREVIEW", True)
     # With preview on, even a far-future post is treated as live.
     assert build._is_live({"date": "2099-12-31"}, today) is True
+
+
+def test_help_img_lang_falls_back_to_english():
+    # A locale WITH its own screenshot set resolves to itself; en always does.
+    assert build.help_img_lang("en") == "en"
+    # A locale WITHOUT a screenshot dir must fall back to English, never emit a
+    # broken img/help/<lang>/ path (the fr-help regression this guards against).
+    assert build.help_img_lang("definitely-not-a-locale") == "en"
+
+
+def test_every_language_help_screenshots_resolve():
+    # For every site language, the screenshots the /help page references must
+    # exist on disk — either the locale's own set or the English fallback. This
+    # is the end-to-end guard: add a language to LANG_ORDER without a screenshot
+    # set (as happened for fr) and this fails unless the fallback covers it.
+    help_dir = os.path.join(REPO, "website", "img", "help")
+    for lang in build.LANG_ORDER:
+        ilang = build.help_img_lang(lang)
+        for slug in build.HELP_STEPS + ["home"]:
+            path = os.path.join(help_dir, ilang, f"{slug}.png")
+            assert os.path.isfile(path), f"{lang} → missing {ilang}/{slug}.png"
