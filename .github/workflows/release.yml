@@ -291,7 +291,28 @@ jobs:
           git add website/download.js website/version.json
           git commit -m "Website: sync download to ${TAG} (CI)"
           git push origin HEAD:main
+          NEW_SHA=$(git rev-parse HEAD)
           # Commits pushed with GITHUB_TOKEN never trigger other workflows
           # (GitHub's recursion guard), so the Pages deploy must be dispatched
           # explicitly or the live site keeps serving the old version.
+          # RACE: `gh workflow run pages.yml --ref main` resolves `main` to a SHA
+          # *now* — if the push above hasn't propagated yet, it resolves the
+          # pre-sync commit and Pages deploys the stale tree (the site kept
+          # serving the old version until a manual re-deploy). So wait until the
+          # API reports main == the commit we just pushed before dispatching.
+          synced=false
+          for _ in $(seq 1 30); do
+            REMOTE_SHA=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)
+            if [ "$REMOTE_SHA" = "$NEW_SHA" ]; then synced=true; break; fi
+            echo "waiting for main to reflect $NEW_SHA (currently $REMOTE_SHA)…"
+            sleep 2
+          done
+          # If main never reflected the push within the timeout, do NOT dispatch
+          # — a dispatch now would resolve the stale SHA and redeploy the old
+          # tree (the very bug this guards against). Fail loudly instead so the
+          # release surfaces it; re-run pages.yml manually once main is updated.
+          if [ "$synced" != true ]; then
+            echo "::error::main did not reflect $NEW_SHA within timeout; refusing to dispatch a stale Pages deploy. Re-run pages.yml (--ref main) once main shows the sync commit."
+            exit 1
+          fi
           gh workflow run pages.yml --ref main
