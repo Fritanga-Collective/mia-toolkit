@@ -13,16 +13,8 @@ import webbrowser
 from tkinter import messagebox
 
 from .. import __version__
-from .i18n import LANGUAGES, N_, _, current_language
-
-SITE = "https://miatools.tech/"
-LINKS = [
-    (N_("Website"), SITE),
-    (N_("Privacy policy"), SITE + "privacy.html"),
-    (N_("Support the project"), SITE + "support.html"),
-    (N_("Transparency"), SITE + "stats.html"),
-    (N_("Read our blog"), "https://fritangacollective.substack.com/"),
-]
+from .i18n import LANGUAGES, _, current_language
+from .links import SITE, site_url
 
 
 def _edit_event(root: tk.Tk, name: str):
@@ -157,8 +149,18 @@ def build_menubar(app) -> tk.Menu:
     # ----- Help --------------------------------------------------------------
     helpmenu = tk.Menu(menubar, name="help" if aqua else None,
                        tearoff=False)
-    for label, url in LINKS:
-        helpmenu.add_command(label=_(label),
+    # Built per rebuild so the URLs localize with the current UI language and
+    # carry their registered utm_campaign codes. Informational/legal pages
+    # (privacy, transparency) stay untagged.
+    links = [
+        (_("Website"), site_url(campaign="awb")),
+        (_("Privacy policy"), site_url("privacy.html")),
+        (_("Support the project"), site_url("support.html", campaign="acf")),
+        (_("Transparency"), site_url("stats.html")),
+        (_("Read our blog"), site_url("blog/", campaign="abl")),
+    ]
+    for label, url in links:
+        helpmenu.add_command(label=label,
                              command=lambda u=url: webbrowser.open(u))
     helpmenu.add_separator()
     helpmenu.add_command(label=_("Report a problem…"),

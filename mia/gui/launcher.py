@@ -8,9 +8,7 @@ from tkinter import ttk
 from typing import Any, Callable
 
 from .i18n import LANGUAGES, _, current_language
-
-# Opens in the user's browser on click — outbound only on explicit user action.
-BLOG_URL = "https://fritangacollective.substack.com/"
+from .links import site_url
 
 # Cards share one fixed width in PIXELS (not characters) so they're uniform and
 # centered, and render identically across platforms. A character-based width
@@ -92,7 +90,8 @@ class Launcher(ttk.Frame):
 
         ttk.Label(links, font=("", 10), text="📰 ").pack(side="left")
         _link(_("Read our blog"),
-              lambda: webbrowser.open(BLOG_URL)).pack(side="left")
+              lambda: webbrowser.open(
+                  site_url("blog/", campaign="abl"))).pack(side="left")
         ttk.Label(links, foreground="#888", font=("", 10),
                   text="   ·   ").pack(side="left")
         ttk.Label(links, font=("", 10), text="💬 ").pack(side="left")
