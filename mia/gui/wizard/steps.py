@@ -9,19 +9,16 @@ import webbrowser
 from tkinter import filedialog, messagebox, ttk
 from types import SimpleNamespace
 
-# The tool and its installers are free. These open in the user's browser —
-# the only outbound links in the app (no telemetry, no background calls).
-SUPPORT_URL = "https://miatools.tech/support.html"
-BLOG_URL = "https://fritangacollective.substack.com/"
+# These open in the user's browser on explicit click — the only outbound links
+# in the app (no telemetry, no background calls). Built via site_url() so they
+# localize with the UI language and carry their registered utm_campaign codes.
 
 
 def institutions_url() -> str:
     """The institutional section in the app's current language — linking the
     language page directly avoids the website's auto-redirect entirely."""
-    from ..i18n import current_language
-    lang = current_language()
-    prefix = "" if lang == "en" else f"{lang}/"
-    return f"https://miatools.tech/{prefix}support.html#institutions"
+    from ..links import site_url
+    return site_url("support.html#institutions", campaign="acf")
 
 from mia_core import deliver, delivery_target, dicomdir, documents, inventory
 from mia_core.common import Progress, format_bytes
@@ -869,10 +866,12 @@ class DoneStep(WizardStep):
         inst.grid(row=2, column=0, sticky="w", pady=(10, 0))
 
     def _donate(self) -> None:
-        webbrowser.open(SUPPORT_URL)
+        from ..links import site_url
+        webbrowser.open(site_url("support.html", campaign="adc"))
 
     def _blog(self) -> None:
-        webbrowser.open(BLOG_URL)
+        from ..links import site_url
+        webbrowser.open(site_url("blog/", campaign="abl"))
 
     def enter(self) -> None:
         dp = self.wizard.delivered_path
