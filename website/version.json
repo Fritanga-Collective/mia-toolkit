@@ -1,13 +1,13 @@
 {
- "version": "0.1.12",
- "date": "2026-06-21",
+ "version": "0.1.13",
+ "date": "2026-07-02",
  "mac": {
-  "url": "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.12/MIA-Toolkit-0.1.12.dmg",
-  "sha256": "9759dab9ce93708d82874887f85b362937265a06d8414644671f2895e33104f5"
+  "url": "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.13/MIA-Toolkit-0.1.13.dmg",
+  "sha256": "8d33afa407cf0fb32d4a14bc73dcf8423ec9d52d065cd5b2779ecfc08f573276"
  },
  "win": {
-  "url": "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.12/MIA-Toolkit-Setup-0.1.12.exe",
-  "sha256": "125dad9c0aba94164dd6222998c698b604e44bbc82180e76528acd829d47a403"
+  "url": "https://github.com/Fritanga-Collective/mia-toolkit/releases/download/v0.1.13/MIA-Toolkit-Setup-0.1.13.exe",
+  "sha256": "0b9d3e4517f288784e40786c08d9b0dfc4c957b76aef218c8f3f7d562be58d3a"
  },
  "notes": "https://github.com/Fritanga-Collective/mia-toolkit/releases"
 }
