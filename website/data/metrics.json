@@ -275,6 +275,12 @@
    "total": 70,
    "views14": 0,
    "uniques14": 0
+  },
+  {
+   "date": "2026-07-21",
+   "total": 72,
+   "views14": 0,
+   "uniques14": 0
   }
  ],
  "releases": [
@@ -287,7 +293,7 @@
     },
     {
      "name": "MIA-Toolkit-Setup-0.1.13.exe",
-     "count": 2
+     "count": 4
     }
    ]
   },
@@ -462,5 +468,5 @@
   }
  ],
  "referrers": [],
- "updated": "2026-07-20"
+ "updated": "2026-07-21"
 }
