@@ -521,6 +521,12 @@
    "total": 100,
    "views14": 0,
    "uniques14": 0
+  },
+  {
+   "date": "2026-08-31",
+   "total": 100,
+   "views14": 0,
+   "uniques14": 0
   }
  ],
  "releases": [
@@ -708,5 +714,5 @@
   }
  ],
  "referrers": [],
- "updated": "2026-08-30"
+ "updated": "2026-08-31"
 }
