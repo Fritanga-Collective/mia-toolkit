@@ -483,15 +483,13 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
                              extensions=["extra", "toc", "sane_lists"])
     if live_urls is not None:
         body = _prune_dead_blog_links(body, live_urls)
-    # Honesty flag for machine-assisted translations (health-adjacent topic):
-    # a subtle footer note inviting corrections. Localized via blog.mt_note when
-    # present (added to the MT target locales), with an English fallback.
+    # Footer note on translated posts inviting readers to improve the wording.
+    # Localized via blog.tr_note where present, with an English fallback.
     if post.get("translation") == "machine":
-        note = s.get("blog.mt_note", "Translated with machine assistance — "
-                     "corrections welcome at "
+        note = s.get("blog.tr_note", "Translations welcome — corrections at "
                      "<a href=\"mailto:support@miatools.tech\">"
                      "support@miatools.tech</a>.")
-        body += f'\n<p class="mt-note">{note}</p>'
+        body += f'\n<p class="tr-note">{note}</p>'
     prefix = "../../" if post["lang"] == "en" else "../../../"
     computed = _blog_chrome(post["lang"], prefix)
     hero = ""
@@ -655,11 +653,34 @@ def redirect_stub(target: str) -> str:
 """
 
 
-def _sitemap_url(loc: str, alt_pairs: list[tuple[str, str]]) -> str:
-    """One <url> entry with xhtml:link hreflang alternates (code, href)."""
+def _iso_date(raw: str) -> str:
+    """A normalized YYYY-MM-DD, or "" when `raw` isn't a valid ISO date.
+
+    load_posts() deliberately publishes a post whose front-matter date is
+    missing or malformed — it warns and carries on — so an unvalidated value
+    reaches the sitemap: "not-a-date" emits a <lastmod> the sitemap spec
+    rejects, and a value containing & or < makes sitemap.xml not well-formed,
+    taking every URL down with it. Validate at the choke point instead."""
+    try:
+        return datetime.date.fromisoformat((raw or "").strip()).isoformat()
+    except (ValueError, TypeError):
+        return ""
+
+
+def _sitemap_url(loc: str, alt_pairs: list[tuple[str, str]],
+                 lastmod: str = "") -> str:
+    """One <url> entry with xhtml:link hreflang alternates (code, href).
+
+    `lastmod` is emitted only where we hold a real date — blog posts carry one
+    in front matter. Static pages deliberately omit it rather than stamp the
+    build date on every URL: a sitemap whose lastmod always reads "now" is one
+    Google learns to distrust, which costs more than the tag gains."""
     alts = [f'    <xhtml:link rel="alternate" hreflang="{hl}" href="{href}"/>'
             for hl, href in alt_pairs]
-    return "  <url>\n    <loc>" + loc + "</loc>\n" + "\n".join(alts) + "\n  </url>"
+    iso = _iso_date(lastmod)
+    mod = f"\n    <lastmod>{iso}</lastmod>" if iso else ""
+    return ("  <url>\n    <loc>" + loc + "</loc>" + mod + "\n"
+            + "\n".join(alts) + "\n  </url>")
 
 
 def sitemap(langs: dict, posts: list[dict] | None = None,
@@ -682,7 +703,11 @@ def sitemap(langs: dict, posts: list[dict] | None = None,
                      for c in blog_langs]
             if "en" in blog_langs:
                 pairs.append(("x-default", f'{BASE}{blog_index_url("en")}'))
-            entries.append(_sitemap_url(loc, pairs))
+            # _iso_date first: max() over raw strings would rank a
+            # malformed value like "not-a-date" above every real date.
+            newest = max((_iso_date(p["date"])
+                          for p in posts if p["lang"] == lang), default="")
+            entries.append(_sitemap_url(loc, pairs, newest))
         # Only reference languages whose blog pages were actually emitted
         # (posts is already filtered to the guard-passing `ready` langs) — else
         # a post that exists for a skipped language would emit an hreflang
@@ -698,7 +723,7 @@ def sitemap(langs: dict, posts: list[dict] | None = None,
             if "en" in cl_langs:
                 pairs.append(("x-default",
                               f'{BASE}{blog_post_url("en", p["slug"])}'))
-            entries.append(_sitemap_url(loc, pairs))
+            entries.append(_sitemap_url(loc, pairs, p["date"]))
 
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
@@ -812,6 +837,10 @@ def main() -> int:
         for page in PAGES:
             computed = {
                 "P": prefix,
+                "HOME": page_url(lang, "index"),  # "/" or "/{lang}/" — never
+                                # "index.html", which Google crawls as a
+                                # separate URL and files under "Alternate page
+                                # with proper canonical tag".
                 "LANG": lang,   # directory code (en/es/zh/…), not the _lang
                                 # locale (es-MX); used for per-language asset paths
                 "HELP_IMG_LANG": help_img_lang(lang),  # screenshots, en-fallback
