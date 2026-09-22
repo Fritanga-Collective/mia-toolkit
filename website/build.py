@@ -483,15 +483,13 @@ def render_post(post: dict, cluster: list[dict], langs: dict,
                              extensions=["extra", "toc", "sane_lists"])
     if live_urls is not None:
         body = _prune_dead_blog_links(body, live_urls)
-    # Honesty flag for machine-assisted translations (health-adjacent topic):
-    # a subtle footer note inviting corrections. Localized via blog.mt_note when
-    # present (added to the MT target locales), with an English fallback.
+    # Footer note on translated posts inviting readers to improve the wording.
+    # Localized via blog.tr_note where present, with an English fallback.
     if post.get("translation") == "machine":
-        note = s.get("blog.mt_note", "Translated with machine assistance — "
-                     "corrections welcome at "
+        note = s.get("blog.tr_note", "Translations welcome — corrections at "
                      "<a href=\"mailto:support@miatools.tech\">"
                      "support@miatools.tech</a>.")
-        body += f'\n<p class="mt-note">{note}</p>'
+        body += f'\n<p class="tr-note">{note}</p>'
     prefix = "../../" if post["lang"] == "en" else "../../../"
     computed = _blog_chrome(post["lang"], prefix)
     hero = ""
