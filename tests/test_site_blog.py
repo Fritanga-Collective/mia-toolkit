@@ -169,3 +169,48 @@ def test_every_language_help_screenshots_resolve():
         for slug in build.HELP_STEPS + ["home"]:
             path = os.path.join(help_dir, ilang, f"{slug}.png")
             assert os.path.isfile(path), f"{lang} → missing {ilang}/{slug}.png"
+
+
+def test_iso_date_normalizes_and_rejects():
+    assert build._iso_date("2026-06-05") == "2026-06-05"
+    assert build._iso_date("  2026-06-05  ") == "2026-06-05"
+    for bad in ("", "not-a-date", "2026-13-01", "2026-06-05&x", None):
+        assert build._iso_date(bad) == ""
+
+
+def test_sitemap_lastmod_only_for_valid_dates():
+    """A post whose front matter carries a bad date still publishes (load_posts
+    warns and carries on), so the sitemap must drop its lastmod rather than
+    emit an invalid one — or, worse, break XML well-formedness."""
+    import xml.dom.minidom
+
+    langs = build.load_langs()
+    posts = [
+        {"lang": "en", "slug": "good", "date": "2026-06-05", "title": "Good",
+         "summary": "", "languages": ["en"], "tags": [], "status": "published",
+         "image": "", "translation": "", "body": ""},
+        {"lang": "en", "slug": "bad", "date": "not-a-date", "title": "Bad",
+         "summary": "", "languages": ["en"], "tags": [], "status": "published",
+         "image": "", "translation": "", "body": ""},
+        {"lang": "en", "slug": "hostile", "date": "2026-06-05&x",
+         "title": "Hostile", "summary": "", "languages": ["en"], "tags": [],
+         "status": "published", "image": "", "translation": "", "body": ""},
+    ]
+    clusters = {p["slug"]: [p] for p in posts}
+    out = build.sitemap(langs, posts, clusters)
+
+    xml.dom.minidom.parseString(out)             # raises if malformed
+    assert "<lastmod>2026-06-05</lastmod>" in out
+    assert "not-a-date" not in out
+    assert "2026-06-05&x" not in out
+    # Exactly two: the "good" post and the blog index that inherits its date.
+    assert out.count("<lastmod>") == 2
+
+
+def test_sitemap_static_pages_carry_no_lastmod():
+    """Static pages deliberately omit lastmod — stamping the build date on
+    every URL each run is the pattern Google learns to distrust."""
+    langs = build.load_langs()
+    out = build.sitemap(langs, None, None)
+    assert "<loc>https://miatools.tech/</loc>" in out
+    assert "<lastmod>" not in out

@@ -199,6 +199,6 @@
   "blog.published": "வெளியிடப்பட்டது",
   "blog.back": "← வலைப்பதிவுக்குத் திரும்பு",
   "blog.read_more": "மேலும் படிக்க →",
-  "blog.mt_note": "இயந்திர உதவியுடன் மொழிபெயர்க்கப்பட்டது — திருத்தங்களை <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a> இல் வரவேற்கிறோம்.",
+  "blog.tr_note": "மொழிபெயர்ப்புகள் வரவேற்கப்படுகின்றன — திருத்தங்களை <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a> க்கு அனுப்பவும்.",
   "_blog_url": "/ta/blog/"
 }
