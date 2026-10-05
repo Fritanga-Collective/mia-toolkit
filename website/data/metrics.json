@@ -731,6 +731,12 @@
    "total": 107,
    "views14": 0,
    "uniques14": 0
+  },
+  {
+   "date": "2026-10-05",
+   "total": 109,
+   "views14": 0,
+   "uniques14": 0
   }
  ],
  "releases": [
@@ -739,7 +745,7 @@
    "assets": [
     {
      "name": "MIA-Toolkit-0.1.13.dmg",
-     "count": 12
+     "count": 14
     },
     {
      "name": "MIA-Toolkit-Setup-0.1.13.exe",
@@ -918,5 +924,5 @@
   }
  ],
  "referrers": [],
- "updated": "2026-10-04"
+ "updated": "2026-10-05"
 }
