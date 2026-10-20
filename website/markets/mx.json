@@ -1,12 +1,12 @@
 {
-  "_doc": "Datos de mercado para /es/institutions/mx/ (es-MX). Línea regulatoria: usar SOLO la línea provisional de INSTITUTIONS-LAUNCH-READINESS R5 hasta que un abogado sanitario la confirme. Nunca: 'no es un dispositivo médico', 'aprobado/certificado por COFEPRIS', 'exento de registro sanitario', 'cumple NOM-024', 'para diagnóstico', 'visor médico', 'seguridad del paciente', 'cumplimiento normativo garantizado'. An English version (/institutions/mx/) can be added later as an 'en' entry.",
+  "_doc": "Datos de mercado para /es/institutions/mx/ (es-MX). Línea regulatoria: usar SOLO la línea provisional de INSTITUTIONS-LAUNCH-READINESS R5 hasta que un abogado sanitario la confirme. Nunca: 'no es un dispositivo médico', 'aprobado/certificado por COFEPRIS', 'exento de registro sanitario', 'cumple NOM-024', 'para diagnóstico', 'visor médico', 'seguridad del paciente', 'cumplimiento normativo garantizado'. Un idioma por mercado: México se publica solo en español (es-MX).",
   "code": "mx",
   "pages": {
     "es": {
       "locale": "es-MX",
       "og_locale": "es_MX",
       "strings": {
-        "m.title": "MIA Toolkit para centros de imagen y hospitales en México — discos externos, sin conexión",
+        "m.title": "Discos de imagen externos, importados sin conexión — México",
         "m.meta_desc": "Importe en minutos los CD de imagen que traen los pacientes, en un solo equipo y sin enviar nada. Licencias anuales desde 99 USD; piloto gratuito de 60 días.",
         "m.eyebrow": "México · centros de imagen y hospitales",
         "m.uc_lead": "Para centros de imagen independientes, cadenas de diagnóstico y hospitales privados. Primera ciudad piloto: Monterrey.",

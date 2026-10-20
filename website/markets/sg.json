@@ -1,13 +1,12 @@
 {
-  "_doc": "Market data for /institutions/sg/. 'pages' maps a site language code to that page's content. Planned: zh, ms, ta (hreflang zh-SG / ms-SG / ta-SG) — add a 'zh' entry here with human-reviewed translations plus the instp.* keys in i18n/zh.json, and build.py emits /zh/institutions/sg/ automatically. Never say 'medical tourism' on this page.",
+  "_doc": "Market data for /institutions/sg/. One language per market: Singapore is English only (en-SG); 'pages' holds exactly that one entry. Never say 'medical tourism' on this page.",
   "code": "sg",
-  "planned_langs": {"zh": "zh-SG", "ms": "ms-SG", "ta": "ta-SG"},
   "pages": {
     "en": {
       "locale": "en-SG",
       "og_locale": "en_SG",
       "strings": {
-        "m.title": "MIA Toolkit for Singapore clinics and hospitals — foreign-disc intake, offline",
+        "m.title": "Foreign-disc intake, offline — Singapore clinics and hospitals",
         "m.meta_desc": "Read the imaging CDs international patients bring, organize the studies and hand them to your team — offline, nothing sent anywhere. Free 60-day pilot.",
         "m.eyebrow": "Singapore · specialist & imaging clinics",
         "m.uc_lead": "For private specialist and imaging clinics, hospital international-patient centres, and hospitals in Johor that care for patients from Singapore.",
@@ -25,9 +24,7 @@
         {"topic": "Device status (HSA)", "text": "HSA GL-04-R4 (Dec 2025): software that only stores, converts or transfers images is not a medical device. MIA Toolkit stores, converts and transfers studies; it never interprets or measures them."},
         {"topic": "Health Information Act", "text": "Expected to take effect in early 2027. Listed for context only; we will update this row when its requirements apply."}
       ],
-      "trust_assets": [
-        {"text": "Procurement kit in 中文, Melayu and தமிழ்", "ready": false}
-      ]
+      "trust_assets": []
     }
   }
 }

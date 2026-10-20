@@ -1,12 +1,12 @@
 {
-  "_doc": "Market data for /institutions/us/. 'pages' maps a site language code (i18n/<code>.json) to that page's market-specific content; build.py renders one page per entry with templates/institutions.html. Shared copy (hero, pricing, pilot…) lives in the instp.* keys of i18n/<code>.json. Only claims we can back: see INSTITUTIONS-SITE-SPEC §3 'Never say'.",
+  "_doc": "Market data for /institutions/us/. One language per market: 'pages' holds exactly one entry (en → en-US) keyed by site language code (i18n/<code>.json); build.py renders it with templates/institutions.html. Shared copy (hero, pricing, pilot…) lives in the instp.* keys of i18n/<code>.json. Only claims we can back: see INSTITUTIONS-SITE-SPEC §3 'Never say'.",
   "code": "us",
   "pages": {
     "en": {
       "locale": "en-US",
       "og_locale": "en_US",
       "strings": {
-        "m.title": "MIA Toolkit for US hospitals and imaging centers — outside-CD import, offline",
+        "m.title": "Outside-CD import, offline — US hospitals and imaging centers",
         "m.meta_desc": "Import the outside imaging CDs patients bring in — offline, on one workstation, nothing sent anywhere. Annual licenses from $99; free 60-day pilot.",
         "m.eyebrow": "United States · hospitals, practices & imaging centers",
         "m.uc_lead": "For critical-access hospitals, orthopedic, neurology and oncology practices, second-opinion programs, teleradiology groups and independent imaging centers.",

@@ -388,17 +388,39 @@ body.inst .i-brand { display: flex; align-items: center; color: #fff;
   text-decoration: none; font-weight: 600; font-size: 0.875rem;
   padding: 12px 0; margin-right: auto; }
 body.inst .i-brand span { font-weight: 400; margin-left: 0.35em; }
-body.inst .i-nav { display: flex; flex-wrap: wrap; align-items: stretch; }
-body.inst .i-nav-label { display: flex; align-items: center;
-  font-family: var(--i-mono); font-size: 0.6875rem; text-transform: uppercase;
-  letter-spacing: 0.04em; color: var(--i-shell-muted); margin-right: 4px; }
-body.inst .i-nav a, body.inst .i-patients { display: flex; align-items: center;
+/* Market menu: a <details> disclosure of plain links (works without JS). */
+body.inst .i-market { position: relative; display: flex; align-items: stretch; }
+body.inst .i-market > summary { display: flex; align-items: center; gap: 8px;
+  padding: 12px 32px 12px 12px; cursor: pointer; list-style: none;
+  color: #fff; font-size: 0.875rem; position: relative; }
+body.inst .i-market > summary::-webkit-details-marker { display: none; }
+body.inst .i-market > summary::after { content: ""; position: absolute;
+  right: 12px; top: 50%; width: 6px; height: 6px; margin-top: -5px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg); }
+body.inst .i-market[open] > summary::after { margin-top: -1px;
+  transform: rotate(225deg); }
+body.inst .i-market > summary:hover,
+body.inst .i-market[open] > summary { background: var(--i-shell-2); }
+body.inst .i-market > summary:focus-visible { outline: 2px solid #fff;
+  outline-offset: -2px; }
+body.inst .i-nav-label { font-family: var(--i-mono); font-size: 0.6875rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--i-shell-muted); }
+body.inst .i-market-menu { position: absolute; top: 100%; right: 0;
+  z-index: 30; min-width: 100%; width: max-content; margin: 0; padding: 0;
+  list-style: none; background: var(--i-shell-2);
+  border-top: 1px solid #393939; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+body.inst .i-market-menu a { display: block; padding: 12px 16px;
+  color: var(--i-shell-text); text-decoration: none; font-size: 0.875rem;
+  border-left: 3px solid transparent; }
+body.inst .i-market-menu a:hover { background: #393939; color: #fff; }
+body.inst .i-market-menu a[aria-current="page"] { color: #fff;
+  border-left-color: var(--i-primary); }
+body.inst .i-patients { display: flex; align-items: center;
   padding: 12px 10px; color: var(--i-shell-muted); text-decoration: none;
-  font-size: 0.875rem; border-bottom: 3px solid transparent; }
-body.inst .i-nav a:hover, body.inst .i-patients:hover {
-  background: var(--i-shell-2); color: #fff; }
-body.inst .i-nav a[aria-current="page"] { color: #fff;
-  border-bottom-color: var(--i-primary); }
+  font-size: 0.875rem; }
+body.inst .i-patients:hover { background: var(--i-shell-2); color: #fff; }
 body.inst .i-shell a:focus-visible { outline: 2px solid #fff;
   outline-offset: -2px; }
 
@@ -525,6 +547,8 @@ body.inst .i-footer-grid { display: grid;
     grid-template-columns: minmax(0, 1fr); }
   body.inst .i-footer-grid { grid-template-columns: minmax(0, 1fr); }
   body.inst .i-brand { width: 100%; }
+  body.inst .i-market-menu { left: 0; right: auto; }
+  body.inst .i-market > summary { padding-left: 0; }
   body.inst .i-shell-in { gap: 0 16px; }
 }
 @media (max-width: 560px) {
@@ -537,5 +561,5 @@ body.inst .i-footer-grid { display: grid;
   body.inst .i-table tbody th { width: 100%; padding-bottom: 4px;
     border-bottom: 0; }
   body.inst .i-table td { padding-top: 0; }
-  body.inst .i-nav a, body.inst .i-patients { padding: 10px 8px; }
+  body.inst .i-patients { padding: 10px 8px; }
 }

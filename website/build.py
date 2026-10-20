@@ -51,7 +51,8 @@ def help_img_lang(lang: str) -> str:
     d = os.path.join(HERE, "img", "help", lang)
     return lang if os.path.isdir(d) else "en"
 
-ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
+ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "inst.js",
+          "robots.txt",
           "fonts",
           "CNAME", "img", "version.json", "favicon.ico"]
 
@@ -797,21 +798,34 @@ def _inject_gc(html_str: str) -> str:
 
 # ───────────────────── institutions (/institutions/) ─────────────────────
 # The institutional storefront (INSTITUTIONS-SITE-SPEC). One template
-# (templates/institutions.html) × one data file per market (markets/<m>.json)
-# × the page languages that market lists. Shared copy lives in the instp.*
-# keys of i18n/<lang>.json; market-specific copy (m.* strings, use cases,
-# compliance rows, trust assets) lives in the market file. URLs nest like the
-# rest of the site: English at /institutions/<m>/, others at
-# /<lang>/institutions/<m>/. A neutral English hub with a market picker sits
-# at /institutions/. All pages form ONE hreflang cluster (regional variants:
-# es-MX / en-US / en-SG …) with the hub as x-default.
-#
-# Adding a language to a market (e.g. zh/ms/ta for Singapore): add a "zh"
-# entry under "pages" in markets/sg.json with its locale + reviewed strings,
-# and the instp.* keys to i18n/zh.json. A page whose language lacks any
-# instp.* key is skipped with a warning instead of crashing the build.
+# (templates/institutions.html) × one data file per market (markets/<m>.json).
+# Each market has exactly ONE page language (MX = es-MX, US = en-US,
+# SG = en-SG); markets/<m>.json lists it under "pages" and the build refuses a
+# market with more than one. Shared copy lives in the instp.* keys of
+# i18n/<lang>.json; market-specific copy (m.* strings, use cases, compliance
+# rows, trust assets) lives in the market file. URLs nest like the rest of the
+# site: English at /institutions/<m>/, others at /<lang>/institutions/<m>/. A
+# neutral English hub with a market picker sits at /institutions/. All pages
+# form ONE hreflang cluster (es-MX / en-US / en-SG) with the hub as x-default.
+# A page whose language lacks any instp.* key is skipped with a warning
+# instead of crashing the build.
 
-INST_MARKETS = ["mx", "us", "sg"]   # market-switcher order
+INST_MARKETS = ["mx", "us", "sg"]   # market-menu order
+
+# Brand shown in the institutional header, <title> suffixes, og:site_name and
+# the JSON-LD Brand. Naming is still being decided: this is the one line to
+# change. Keyed by page language.
+INST_BRAND = {"en": "MIA Tools – Clinics & Hospitals",
+              "es": "MIA Tools – Clínicas y Hospitales"}
+
+
+def inst_brand(lang: str) -> str:
+    return INST_BRAND.get(lang, INST_BRAND["en"])
+
+
+def inst_title(title: str, lang: str) -> str:
+    """Page <title>: the page's own title + the brand suffix."""
+    return f"{title} | {inst_brand(lang)}"
 
 # Windows Authenticode signing status (launch-readiness R1). False renders the
 # honest "not yet signed" compliance row; flip to True once a signed release
@@ -836,6 +850,10 @@ def load_markets() -> dict[str, dict]:
             continue
         with open(path, encoding="utf-8") as f:
             markets[code] = json.load(f)
+        n = len(markets[code].get("pages", {}))
+        if n != 1:
+            raise ValueError(f"markets/{code}.json must list exactly one page "
+                             f"language (one language per market), got {n}")
     return markets
 
 
@@ -881,14 +899,15 @@ def _mailto(subject: str, body: str = "") -> str:
 
 
 def inst_head_seo(url: str, cluster: list[tuple[str, str]], title: str,
-                  desc: str, og_locale: str) -> str:
+                  desc: str, og_locale: str, lang: str) -> str:
     title, desc = html.escape(title, quote=True), html.escape(desc, quote=True)
+    site_name = html.escape(inst_brand(lang), quote=True)
     lines = [f'  <link rel="canonical" href="{url}">'] + _favicon_lines()
     lines += [f'  <link rel="alternate" hreflang="{hl}" href="{href}">'
               for hl, href in cluster]
     lines += [
         '  <meta property="og:type" content="website">',
-        '  <meta property="og:site_name" content="MIA Toolkit">',
+        f'  <meta property="og:site_name" content="{site_name}">',
         f'  <meta property="og:title" content="{title}">',
         f'  <meta property="og:description" content="{desc}">',
         f'  <meta property="og:url" content="{url}">',
@@ -907,7 +926,7 @@ def inst_head_seo(url: str, cluster: list[tuple[str, str]], title: str,
 INST_TIERS = [("clinic", "99"), ("hospital", "499"), ("network", "1499")]
 
 
-def inst_json_ld(s: dict, url: str, locale: str, desc: str) -> str:
+def inst_json_ld(s: dict, url: str, locale: str, desc: str, lang: str) -> str:
     """Organization + SoftwareApplication with the three paid tiers as Offers
     (annual, USD). No ratings or reviews — we have none to cite."""
     org_id = BASE + "/institutions/#org"
@@ -918,7 +937,7 @@ def inst_json_ld(s: dict, url: str, locale: str, desc: str) -> str:
         "name": "Fritanga",
         "url": "https://fritanga.co",
         "email": INST_EMAIL,
-        "brand": {"@type": "Brand", "name": "MIA Toolkit"},
+        "brand": {"@type": "Brand", "name": inst_brand(lang)},
         "contactPoint": {"@type": "ContactPoint", "contactType": "sales",
                          "email": INST_EMAIL},
     }
@@ -955,59 +974,55 @@ def inst_json_ld(s: dict, url: str, locale: str, desc: str) -> str:
     return _ld_script(org) + "\n" + _ld_script(app)
 
 
-def _inst_market_target(m: str, lang: str, pages) -> tuple[str, str] | None:
-    """(url, locale) a market-switcher link should open: the market's page in
-    the current language when it exists, else its first page."""
-    mine = [(l, p) for mm, l, p in pages if mm == m]
-    if not mine:
-        return None
-    for l, p in mine:
-        if l == lang:
+def _inst_market_target(m: str, pages) -> tuple[str, str] | None:
+    """(url, locale) of a market's page (one language per market)."""
+    for mm, l, p in pages:
+        if mm == m:
             return inst_url(l, m), p["locale"]
-    l, p = mine[0]
-    return inst_url(l, m), p["locale"]
+    return None
 
 
 def inst_shell(langs: dict, lang: str, market: str | None, pages) -> str:
-    """Dark top bar: brand, market switcher, language links, For patients."""
+    """Dark top bar: brand, ONE market menu, For patients.
+
+    The market menu is a <details> disclosure holding plain links: it opens,
+    closes and navigates with no JavaScript (keyboard: Tab to the summary,
+    Enter/Space to open, Tab through the links). /inst.js only adds the
+    niceties (Escape and click-outside close it). Each market has a single
+    language, so there is no separate language switcher."""
     s = langs[lang]
+    e = html.escape
     cur_locale = next((p["locale"] for m, l, p in pages
                        if m == market and l == lang), "en")
-    mk = []
+    items = []
     for m in INST_MARKETS:
-        t = _inst_market_target(m, lang, pages)
+        t = _inst_market_target(m, pages)
         if not t:
             continue
         url, loc = t
         cur = ' aria-current="page"' if m == market else ""
-        hl = f' hreflang="{loc}"' if loc.split("-")[0] != cur_locale.split("-")[0] else ""
-        mk.append(f'        <a href="{url}"{hl}{cur}>{s[f"instp.market_{m}"]}</a>')
-    if market:
-        variants = [(l, p) for m, l, p in pages if m == market]
-        lk = []
-        for l, p in variants:
-            cur = ' aria-current="page"' if l == lang else ""
-            lk.append(f'        <a href="{inst_url(l, market)}" '
-                      f'hreflang="{p["locale"]}" lang="{p["locale"]}"{cur}>'
-                      f'{langs[l]["_lang_name"]}</a>')
-    else:
-        lk = [f'        <a href="{inst_url("en")}" aria-current="page">'
-              f'{langs["en"]["_lang_name"]}</a>']
+        hl = (f' hreflang="{loc}"'
+              if loc.split("-")[0] != cur_locale.split("-")[0] else "")
+        items.append(f'          <li><a href="{url}"{hl}{cur}>'
+                     f'{s[f"instp.market_{m}"]}</a></li>')
+    current = (s[f"instp.market_{market}"] if market
+               else s["instp.market_choose"])
+    brand = inst_brand(lang)
+    head, sep, tail = brand.partition(" – ")
+    brand_html = (f'{e(head)}<span>{e(sep + tail)}</span>' if sep
+                  else e(brand))
     return (
         '  <header class="i-shell">\n'
         '    <div class="i-shell-in">\n'
-        f'      <a class="i-brand" href="{inst_url("en")}">MIA '
-        '<span>{{instp.brand_sub}}</span></a>\n'
-        '      <nav class="i-nav" aria-label="{{instp.market_label}}">\n'
-        '        <span class="i-nav-label" aria-hidden="true">'
-        '{{instp.market_label}}</span>\n'
-        + "\n".join(mk) + "\n"
-        '      </nav>\n'
-        '      <nav class="i-nav" aria-label="{{instp.lang_label}}">\n'
-        '        <span class="i-nav-label" aria-hidden="true">'
-        '{{instp.lang_label}}</span>\n'
-        + "\n".join(lk) + "\n"
-        '      </nav>\n'
+        f'      <a class="i-brand" href="{inst_url(lang, market) if market else inst_url("en")}">'
+        f'{brand_html}</a>\n'
+        '      <details class="i-market">\n'
+        '        <summary><span class="i-nav-label">{{instp.market_label}}</span>'
+        f'<span class="i-market-cur">{current}</span></summary>\n'
+        '        <ul class="i-market-menu" aria-label="{{instp.market_label}}">\n'
+        + "\n".join(items) + "\n"
+        '        </ul>\n'
+        '      </details>\n'
         f'      <a class="i-patients" href="{page_url(lang, "index")}">'
         '{{instp.for_patients}} →</a>\n'
         '    </div>\n'
@@ -1060,9 +1075,11 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
     sub = lambda k: s[k].replace("{market}", mname)  # noqa: E731
     computed = {
         "INST_LOCALE": pdata["locale"],
-        "HEAD_SEO": inst_head_seo(url, cluster, s["m.title"], s["m.meta_desc"],
-                                  pdata["og_locale"]),
-        "JSON_LD": inst_json_ld(s, url, pdata["locale"], s["m.meta_desc"]),
+        "PAGE_TITLE": e(inst_title(s["m.title"], lang)),
+        "HEAD_SEO": inst_head_seo(url, cluster, inst_title(s["m.title"], lang),
+                                  s["m.meta_desc"], pdata["og_locale"], lang),
+        "JSON_LD": inst_json_ld(s, url, pdata["locale"], s["m.meta_desc"],
+                                lang),
         "INST_SHELL": inst_shell(langs, lang, market, pages),
         "INST_FOOTER": inst_footer(lang, s["m.contact_hours"]),
         "INST_USE_CASES": use_cases,
@@ -1083,7 +1100,7 @@ def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
     url = BASE + inst_url("en")
     cards = []
     for m in INST_MARKETS:
-        t = _inst_market_target(m, "en", pages)
+        t = _inst_market_target(m, pages)
         if not t:
             continue
         href, loc = t
@@ -1095,9 +1112,11 @@ def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
             f'<p>{s[f"instp.hub_card_{m}"]}</p>'
             f'<span class="i-more">{s["instp.hub_open"]} →</span></a></li>')
     computed = {
-        "HEAD_SEO": inst_head_seo(url, cluster, s["instp.hub_title"],
-                                  s["instp.hub_meta"], s["_og_locale"]),
-        "JSON_LD": inst_json_ld(s, url, "en", s["instp.hub_meta"]),
+        "PAGE_TITLE": html.escape(inst_title(s["instp.hub_title"], "en")),
+        "HEAD_SEO": inst_head_seo(url, cluster,
+                                  inst_title(s["instp.hub_title"], "en"),
+                                  s["instp.hub_meta"], s["_og_locale"], "en"),
+        "JSON_LD": inst_json_ld(s, url, "en", s["instp.hub_meta"], "en"),
         "INST_SHELL": inst_shell(langs, "en", None, pages),
         "INST_FOOTER": inst_footer("en", s["instp.hub_contact_hours"]),
         "INST_HUB_CARDS": "\n".join(cards),

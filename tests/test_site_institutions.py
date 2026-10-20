@@ -142,3 +142,73 @@ def test_fonts_self_hosted_no_google(site):
         assert "fonts.googleapis.com" not in page, rel
         assert "/fonts/" not in page, rel
         assert 'class="inst"' not in page, rel
+
+
+MARKET_PAGES = {  # market -> (page path, page language, brand language)
+    "mx": ("es/institutions/mx/index.html", "es-MX", "es"),
+    "us": ("institutions/us/index.html", "en-US", "en"),
+    "sg": ("institutions/sg/index.html", "en-SG", "en"),
+}
+MARKET_URLS = {"mx": "/es/institutions/mx/", "us": "/institutions/us/",
+               "sg": "/institutions/sg/"}
+
+
+def test_one_language_per_market():
+    markets = build.load_markets()
+    assert {m: list(d["pages"]) for m, d in markets.items()} == {
+        "mx": ["es"], "us": ["en"], "sg": ["en"]}
+    for d in markets.values():
+        assert "planned_langs" not in d
+
+
+def test_no_other_language_variants(site):
+    for rel in ("institutions/mx/index.html", "zh/institutions/sg/index.html",
+                "ms/institutions/sg/index.html", "ta/institutions/sg/index.html",
+                "es/institutions/us/index.html"):
+        assert not os.path.exists(os.path.join(site, rel)), rel
+    for rel in INST_PAGES:
+        page = _read(site, rel)
+        for hl in ("zh-SG", "ms-SG", "ta-SG", "zh-Hans"):
+            assert f'hreflang="{hl}"' not in page, (rel, hl)
+        for word in ("中文", "Melayu", "தமிழ்"):
+            assert word not in page, (rel, word)
+
+
+def test_header_has_one_market_menu(site):
+    for m, (rel, _, lang) in MARKET_PAGES.items():
+        page = _read(site, rel)
+        shell = page[page.index('<header class="i-shell">'):page.index("</header>")]
+        assert shell.count('<details class="i-market">') == 1, rel
+        label = "Mercado" if lang == "es" else "Market"
+        assert f'<span class="i-nav-label">{label}</span>' in shell
+        for other, url in MARKET_URLS.items():
+            cur = ' aria-current="page"' if other == m else ""
+            assert f'href="{url}"' in shell, (rel, other)
+            assert (f'href="{url}"{cur}>' in shell
+                    or f'href="{url}" hreflang=' in shell), (rel, other)
+        assert shell.count('aria-current="page"') == 1
+        # No language switcher on institution pages.
+        assert "Language" not in shell and "Idioma" not in shell
+        assert "i-nav" not in shell.replace("i-nav-label", "")
+        patients = "/es/" if lang == "es" else "/"
+        assert f'class="i-patients" href="{patients}"' in shell
+    hub = _read(site, "institutions/index.html")
+    assert hub.count('<details class="i-market">') == 1
+    assert 'aria-current="page"' not in hub[:hub.index("</header>")]
+    assert '<script src="/inst.js" defer></script>' in hub
+    assert os.path.isfile(os.path.join(site, "inst.js"))
+
+
+def test_brand_constant_used(site):
+    assert set(build.INST_BRAND) == {"en", "es"}
+    for rel, (_, _, lang) in [(v[0], v) for v in MARKET_PAGES.values()] + [
+            ("institutions/index.html", (None, None, "en"))]:
+        page = _read(site, rel)
+        brand = build.INST_BRAND[lang]
+        esc = brand.replace("&", "&amp;")
+        title = page[page.index("<title>") + 7:page.index("</title>")]
+        assert title.endswith(" | " + esc), rel
+        assert f'<meta property="og:site_name" content="{esc}">' in page
+        assert f'"name": "{brand}"' in page  # JSON-LD Brand
+        head, _, tail = esc.partition(" – ")
+        assert f'class="i-brand"' in page and f"{head}<span> – {tail}</span>" in page
