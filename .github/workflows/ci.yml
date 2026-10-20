@@ -26,3 +26,15 @@ jobs:
       # tests (RSS + sitemap regression) actually run instead of skipping.
       - run: pip install -r website/requirements.txt
       - run: pytest -q
+
+  worker:
+    name: Forms Worker unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # Plain node:test, no dependencies and no network.
+      - run: node --test test/*.test.js
+        working-directory: workers/forms
