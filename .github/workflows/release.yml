@@ -1,12 +1,14 @@
 name: Release
 
 # On a version tag (v1.2.3): test on all OSes, build the macOS .dmg and the
-# Windows installer .exe, and attach both to the GitHub Release.
+# Windows installer .exe, smoke-test each BUILT artifact (headless --selftest),
+# and attach them to the GitHub Release together with SHA256SUMS, one CycloneDX
+# SBOM per platform and GitHub build-provenance attestations.
 #
 # macOS signing/notarization and Windows signing each run only when their
 # secrets are present; otherwise UNSIGNED artifacts are built so the pipeline
-# still produces downloads today (SmartScreen / Gatekeeper "unknown publisher"
-# until the certs are added).
+# still produces downloads. macOS secrets are configured (signed + notarized
+# since v0.1.5); Windows stays unsigned until a signing route is live.
 #
 # Required secrets for signed macOS builds (optional until you have a cert):
 #   MACOS_SIGN_ID         e.g. "Developer ID Application: NAME (TEAMID)"
@@ -111,10 +113,42 @@ jobs:
             -srcfolder "dist/MIA Toolkit.app" \
             -ov -format UDZO "dist/MIA-Toolkit-${VER}.dmg"
 
+      # G15: install the shipped artifact the way a user does (mount the DMG,
+      # copy the .app out) and run its headless self-test: imports the bundle
+      # and builds a DICOMDIR from a synthetic study. A broken bundle fails
+      # here, before anything is uploaded or published.
+      - name: Smoke-test the built .dmg (self-test)
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          DMG=$(ls dist/*.dmg | head -n1)
+          MNT="$RUNNER_TEMP/mia-dmg"
+          mkdir -p "$MNT"
+          hdiutil attach "$DMG" -nobrowse -readonly -mountpoint "$MNT"
+          ditto "$MNT/MIA Toolkit.app" "$RUNNER_TEMP/smoke/MIA Toolkit.app"
+          hdiutil detach "$MNT"
+          BIN="$RUNNER_TEMP/smoke/MIA Toolkit.app/Contents/MacOS/mia"
+          "$BIN" --version
+          "$BIN" --selftest
+
+      # G14: CycloneDX SBOM of the build environment (the Python packages the
+      # bundle was frozen from; a superset of what ships, incl. PyInstaller).
+      # Run as an isolated pipx tool so the SBOM tool itself isn't listed.
+      - name: SBOM (CycloneDX, build environment)
+        run: |
+          set -euo pipefail
+          VER="${MIA_VERSION:-${GITHUB_REF_NAME#v}}"
+          pipx run --spec "cyclonedx-bom==7.5.0" cyclonedx-py environment \
+            --pyproject pyproject.toml --of JSON \
+            -o "dist/MIA-Toolkit-${VER}-macos.cdx.json" \
+            "$(python -c 'import sys; print(sys.executable)')"
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: macos-dmg
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.cdx.json
 
   windows:
     name: Build Windows (.exe)
@@ -183,15 +217,62 @@ jobs:
           Write-Host "Signature status: $($sig.Status)"
           if ($sig.Status -ne 'Valid') { exit 1 }
 
+      # G15: silently install the FINAL installer (the signed one, once
+      # signing is live) per-user into a temp dir, then run the installed
+      # app's headless self-test. The exe is a windowed (no-console) build, so
+      # the result is read from the MIA_SELFTEST_REPORT file + the exit code.
+      # A broken installer/bundle fails here, before anything is published.
+      - name: Smoke-test the built installer (silent install + self-test)
+        timeout-minutes: 10
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $setup = (Get-ChildItem dist\MIA-Toolkit-Setup-*.exe)[0].FullName
+          $dir = Join-Path $env:RUNNER_TEMP 'mia-install'
+          $log = Join-Path $env:RUNNER_TEMP 'mia-install.log'
+          $inst = Start-Process -FilePath $setup -Wait -PassThru -ArgumentList @(
+            '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/CURRENTUSER',
+            ('/DIR="{0}"' -f $dir), ('/LOG="{0}"' -f $log))
+          if ($inst.ExitCode -ne 0) {
+            if (Test-Path $log) { Get-Content $log -Tail 40 }
+            throw "installer exited with $($inst.ExitCode)"
+          }
+          $exe = Join-Path $dir 'MIA Toolkit.exe'
+          if (-not (Test-Path $exe)) { throw "installed app not found: $exe" }
+          $env:MIA_SELFTEST_REPORT = Join-Path $env:RUNNER_TEMP 'selftest.txt'
+          $t = Start-Process -FilePath $exe -ArgumentList '--selftest' -Wait -PassThru
+          if (Test-Path $env:MIA_SELFTEST_REPORT) { Get-Content $env:MIA_SELFTEST_REPORT }
+          if ($t.ExitCode -ne 0) { throw "self-test exited with $($t.ExitCode)" }
+
+      # G14: CycloneDX SBOM of the build environment (see the macOS job).
+      - name: SBOM (CycloneDX, build environment)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ver = if ($env:MIA_VERSION) { $env:MIA_VERSION } else { $env:GITHUB_REF_NAME -replace '^v','' }
+          $py = python -c "import sys; print(sys.executable)"
+          pipx run --spec "cyclonedx-bom==7.5.0" cyclonedx-py environment `
+            --pyproject pyproject.toml --of JSON `
+            -o "dist/MIA-Toolkit-$ver-windows.cdx.json" $py
+          if ($LASTEXITCODE -ne 0) { throw "SBOM generation failed" }
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: windows-exe
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/*.cdx.json
 
   release:
     name: Publish GitHub Release
     needs: [macos, windows]
     runs-on: ubuntu-latest
+    # Scoped to this job, not workflow-wide: attest-build-provenance needs an
+    # OIDC token (id-token) and permission to store attestations.
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -199,17 +280,34 @@ jobs:
           merge-multiple: true
           # Only the final artifacts — never the unsigned SignPath intermediate.
           pattern: "{macos-dmg,windows-exe}"
+      # G14: one checksum file for every installer (`sha256sum -c` format). It
+      # is the single source of the hashes; sync-website reads it for
+      # version.json instead of re-hashing.
+      - name: SHA256SUMS
+        working-directory: artifacts
+        run: |
+          set -euo pipefail
+          ls *.dmg *.exe >/dev/null   # fail if either installer is missing
+          sha256sum *.dmg *.exe > SHA256SUMS
+          cat SHA256SUMS
+      - name: Attest build provenance (installers)
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: artifacts/SHA256SUMS
       - name: Create/Update release with artifacts
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
+          set -euo pipefail
+          shopt -s nullglob
+          ASSETS=(artifacts/*.dmg artifacts/*.exe artifacts/*.cdx.json artifacts/SHA256SUMS)
           # --generate-notes lists merged PRs/commits since the previous tag;
           # hand-edit afterwards for the user-facing feature one-liners.
-          gh release create "$TAG" artifacts/*.dmg artifacts/*.exe \
+          gh release create "$TAG" "${ASSETS[@]}" \
             --repo "$GITHUB_REPOSITORY" --title "$TAG" \
             --generate-notes \
-          || gh release upload "$TAG" artifacts/*.dmg artifacts/*.exe \
+          || gh release upload "$TAG" "${ASSETS[@]}" \
             --repo "$GITHUB_REPOSITORY" --clobber
 
   sync-website:
@@ -252,19 +350,19 @@ jobs:
           p.write_text(s)
           PY
           # version.json for the user-initiated in-app update check
-          # (static, first-party, sha256 per asset for the IT guide).
+          # (static, first-party, sha256 per asset for the IT guide). The
+          # hashes come from the release's SHA256SUMS asset (written by the
+          # release job), so checksums have one source of truth.
           mkdir -p /tmp/rel-assets && pushd /tmp/rel-assets >/dev/null
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
-            -p '*.dmg' -p '*.exe' --clobber
-          MAC_FILE=$(find . -maxdepth 1 -name '*.dmg' | head -n1)
-          WIN_FILE=$(find . -maxdepth 1 -name '*.exe' | head -n1)
-          if [ -z "$MAC_FILE" ] || [ -z "$WIN_FILE" ]; then
-            echo "::error::release assets missing (dmg='$MAC_FILE' exe='$WIN_FILE') — refusing to publish an invalid version.json"
+            -p SHA256SUMS --clobber
+          MAC_SHA=$(awk -v f="$MAC_NAME" '$2 == f || $2 == "*" f {print $1}' SHA256SUMS)
+          WIN_SHA=$(awk -v f="$WIN_NAME" '$2 == f || $2 == "*" f {print $1}' SHA256SUMS)
+          popd >/dev/null
+          if [ -z "$MAC_NAME" ] || [ -z "$WIN_NAME" ] || [ -z "$MAC_SHA" ] || [ -z "$WIN_SHA" ]; then
+            echo "::error::release assets/checksums missing (dmg='$MAC_NAME' sha='$MAC_SHA' exe='$WIN_NAME' sha='$WIN_SHA') — refusing to publish an invalid version.json"
             exit 1
           fi
-          MAC_SHA=$(shasum -a 256 "$MAC_FILE" | awk '{print $1}')
-          WIN_SHA=$(shasum -a 256 "$WIN_FILE" | awk '{print $1}')
-          popd >/dev/null
           python3 - "$VER" "$MAC_URL" "$MAC_SHA" "$WIN_URL" "$WIN_SHA" <<'PY'
           import datetime, json, sys
           ver, mac, mac_sha, win, win_sha = sys.argv[1:6]
