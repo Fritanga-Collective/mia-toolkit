@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{instp.hub_title}}</title>
+  <meta name="description" content="{{instp.hub_meta}}">
+  <!-- TODO(self-host): serve IBM Plex (OFL) from /fonts/ instead of Google
+       Fonts (INSTITUTIONS-SITE-SPEC §4). Institution pages only. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <!-- No lang.js: the market is suggested by the picker below, never forced. -->
+{{HEAD_SEO}}
+{{JSON_LD}}
+</head>
+<body class="inst">
+  <a class="i-skip" href="#main">{{instp.skip}}</a>
+{{INST_SHELL}}
+
+  <main id="main">
+    <section class="i-hero">
+      <div class="i-container i-hero-grid">
+        <div class="i-hero-copy">
+          <p class="i-eyebrow">{{instp.hub_eyebrow}}</p>
+          <h1>{{instp.hero_h1}}</h1>
+          <p class="i-lead">{{instp.hero_lead}}</p>
+        </div>
+        <aside class="i-glance" aria-labelledby="glance-h">
+          <p class="i-eyebrow" id="glance-h">{{instp.glance_h}}</p>
+          <dl>
+            <div><dt>{{instp.glance_os_k}}</dt><dd>{{instp.glance_os_v}}</dd></div>
+            <div><dt>{{instp.glance_net_k}}</dt><dd class="i-mono">{{instp.glance_net_v}}</dd></div>
+            <div><dt>{{instp.glance_out_k}}</dt><dd>{{instp.glance_out_v}}</dd></div>
+            <div><dt>{{instp.glance_lic_k}}</dt><dd><a href="https://github.com/Fritanga-Collective/mia-toolkit">{{instp.glance_lic_v}}</a></dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="i-band" id="markets" aria-labelledby="pick-h">
+      <div class="i-container">
+        <h2 id="pick-h">{{instp.hub_pick_h2}}</h2>
+        <p class="i-section-lead">{{instp.hub_pick_p}}</p>
+        <ul class="i-tiles i-tiles-3 i-markets-pick">
+{{INST_HUB_CARDS}}
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="ev-h">
+      <div class="i-container">
+        <h2 class="i-eyebrow" id="ev-h">{{instp.ev_h2}}</h2>
+        <ul class="i-tiles i-tiles-3 i-evidence">
+          <li><p class="i-num">{{instp.ev1_num}}</p><p>{{instp.ev1_label}}</p><p class="i-src">{{instp.ev1_src}}</p></li>
+          <li><p class="i-num">{{instp.ev2_num}}</p><p>{{instp.ev2_label}}</p><p class="i-src">{{instp.ev2_src}}</p></li>
+          <li><p class="i-num">{{instp.ev3_num}}</p><p>{{instp.ev3_label}}</p><p class="i-src"><a href="https://github.com/Fritanga-Collective/mia-toolkit">{{instp.ev3_src}}</a></p></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+{{INST_FOOTER}}
+</body>
+</html>

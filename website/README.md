@@ -61,6 +61,28 @@ everyone. The download is always free and one click away.
   a URL param can't make PWYW recurring), set that tier's `url` in `CONFIG.tiers`
   to override the preset link.
 
+## Institutions (`/institutions/`)
+
+The institutional storefront: `templates/institutions.html` (market pages) +
+`templates/institutions_hub.html` (English hub with a market picker) ×
+`markets/{mx,us,sg}.json`. Shared copy is in the `instp.*` keys of
+`i18n/<lang>.json`; market copy (`m.*` strings, use cases, compliance rows,
+trust assets) is in the market file under `pages.<lang>`. Output:
+`/institutions/`, `/institutions/us/`, `/institutions/sg/` (en) and
+`/es/institutions/mx/` (es-MX), one hreflang cluster with the hub as
+x-default. Pages use the Carbon-style layer in `styles.css` (scoped to
+`body.inst`) and load IBM Plex from Google Fonts (TODO: self-host).
+
+- **Add a language to a market** (e.g. zh/ms/ta for Singapore): add a
+  `pages.zh` entry to `markets/sg.json` (locale `zh-SG`, reviewed strings) and
+  the `instp.*` keys to `i18n/zh.json`. Pages missing keys are skipped with a
+  warning.
+- **Windows signing:** flip `WINDOWS_SIGNED` in `build.py` once a signed
+  release ships; the compliance row switches in every language.
+- **Trust assets** (SBOM, HECVAT, VPAT…) render only when `"ready": true`.
+- CTAs are `mailto:` for now (TODOs in the template mark where checkout links,
+  the pilot form and kit PDFs go).
+
 ## Write a blog post (`/blog`)
 
 The blog is self-hosted under `miatools.tech/blog` (en), `…/<code>/blog/` for

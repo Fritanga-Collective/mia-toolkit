@@ -1,0 +1,33 @@
+{
+  "_doc": "Market data for /institutions/sg/. 'pages' maps a site language code to that page's content. Planned: zh, ms, ta (hreflang zh-SG / ms-SG / ta-SG) — add a 'zh' entry here with human-reviewed translations plus the instp.* keys in i18n/zh.json, and build.py emits /zh/institutions/sg/ automatically. Never say 'medical tourism' on this page.",
+  "code": "sg",
+  "planned_langs": {"zh": "zh-SG", "ms": "ms-SG", "ta": "ta-SG"},
+  "pages": {
+    "en": {
+      "locale": "en-SG",
+      "og_locale": "en_SG",
+      "strings": {
+        "m.title": "MIA Toolkit for Singapore clinics and hospitals — foreign-disc intake, offline",
+        "m.meta_desc": "Read the imaging CDs international patients bring, organize the studies and hand them to your team — offline, nothing sent anywhere. Free 60-day pilot.",
+        "m.eyebrow": "Singapore · specialist & imaging clinics",
+        "m.uc_lead": "For private specialist and imaging clinics, hospital international-patient centres, and hospitals in Johor that care for patients from Singapore.",
+        "m.currency_note": "Prices are in US dollars (USD). Ask us if you need a quote in SGD.",
+        "m.procurement_note": "Pay by card online (opening soon) or ask us for an invoice. Responding to a public-sector tender? Email us.",
+        "m.contact_hours": "Email support · target first reply within 2 business days"
+      },
+      "use_cases": [
+        {"title": "Foreign-disc intake", "text": "Patients arrive with CDs from hospitals across the region. Read each disc at the front desk and hand your team one organized set of studies instead of a pile of discs."},
+        {"title": "Complete studies before arrival", "text": "Referred patients can consolidate their own discs onto one USB drive with MIA Toolkit — free for patients — so the specialist has complete studies from the first visit."},
+        {"title": "Care across the Causeway", "text": "For patients whose care spans Johor and Singapore, one standard DICOMDIR on USB travels with them between both sides."}
+      ],
+      "compliance": [
+        {"topic": "PDPA", "text": "The app collects and transmits nothing: studies are processed on your workstation and no personal data reaches us."},
+        {"topic": "Device status (HSA)", "text": "HSA GL-04-R4 (Dec 2025): software that only stores, converts or transfers images is not a medical device. MIA Toolkit stores, converts and transfers studies; it never interprets or measures them."},
+        {"topic": "Health Information Act", "text": "Expected to take effect in early 2027. Listed for context only; we will update this row when its requirements apply."}
+      ],
+      "trust_assets": [
+        {"text": "Procurement kit in 中文, Melayu and தமிழ்", "ready": false}
+      ]
+    }
+  }
+}

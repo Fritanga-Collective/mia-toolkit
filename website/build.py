@@ -663,8 +663,14 @@ def _sitemap_url(loc: str, alt_pairs: list[tuple[str, str]]) -> str:
 
 
 def sitemap(langs: dict, posts: list[dict] | None = None,
-            clusters: dict | None = None) -> str:
+            clusters: dict | None = None,
+            inst_alts: list[tuple[str, str]] | None = None) -> str:
     entries = []
+    # Institutions: one entry per emitted page, each listing the whole
+    # regional-variant cluster (hub = en + x-default). See inst_cluster().
+    if inst_alts:
+        for loc in dict.fromkeys(href for _hl, href in inst_alts):
+            entries.append(_sitemap_url(loc, inst_alts))
     for page in PAGES:
         for lang in langs:
             loc = BASE + page_url(lang, page)
@@ -788,12 +794,346 @@ def _inject_gc(html_str: str) -> str:
     return html_str[:i] + snippet + html_str[i:]
 
 
-def main() -> int:
+# ───────────────────── institutions (/institutions/) ─────────────────────
+# The institutional storefront (INSTITUTIONS-SITE-SPEC). One template
+# (templates/institutions.html) × one data file per market (markets/<m>.json)
+# × the page languages that market lists. Shared copy lives in the instp.*
+# keys of i18n/<lang>.json; market-specific copy (m.* strings, use cases,
+# compliance rows, trust assets) lives in the market file. URLs nest like the
+# rest of the site: English at /institutions/<m>/, others at
+# /<lang>/institutions/<m>/. A neutral English hub with a market picker sits
+# at /institutions/. All pages form ONE hreflang cluster (regional variants:
+# es-MX / en-US / en-SG …) with the hub as x-default.
+#
+# Adding a language to a market (e.g. zh/ms/ta for Singapore): add a "zh"
+# entry under "pages" in markets/sg.json with its locale + reviewed strings,
+# and the instp.* keys to i18n/zh.json. A page whose language lacks any
+# instp.* key is skipped with a warning instead of crashing the build.
+
+INST_MARKETS = ["mx", "us", "sg"]   # market-switcher order
+
+# Windows Authenticode signing status (launch-readiness R1). False renders the
+# honest "not yet signed" compliance row; flip to True once a signed release
+# ships and the row switches to instp.sign_signed in every language.
+WINDOWS_SIGNED = False
+
+INST_EMAIL = "support@miatools.tech"
+
+
+def inst_url(lang: str, market: str | None = None) -> str:
+    """Root-absolute URL of the hub (market=None) or a market page."""
+    prefix = "/" if lang == "en" else f"/{lang}/"
+    return f"{prefix}institutions/" + (f"{market}/" if market else "")
+
+
+def load_markets() -> dict[str, dict]:
+    markets = {}
+    for code in INST_MARKETS:
+        path = os.path.join(HERE, "markets", f"{code}.json")
+        if not os.path.exists(path):
+            print(f"  ! markets/{code}.json missing — skipping {code}")
+            continue
+        with open(path, encoding="utf-8") as f:
+            markets[code] = json.load(f)
+    return markets
+
+
+def _inst_required_keys(langs: dict) -> set[str]:
+    """instp.* keys a market page needs (the hub-only keys are English-only)."""
+    return {k for k in langs["en"]
+            if k.startswith("instp.") and not k.startswith("instp.hub_")}
+
+
+def inst_pages(langs: dict, markets: dict) -> list[tuple[str, str, dict]]:
+    """(market, lang, page-data) for every market page that can be built."""
+    need = _inst_required_keys(langs)
+    out = []
+    for m in INST_MARKETS:
+        for lang, pdata in markets.get(m, {}).get("pages", {}).items():
+            if lang not in langs:
+                print(f"  ! institutions: skipping {lang}/{m} — "
+                      f"i18n/{lang}.json not loaded")
+                continue
+            missing = need - langs[lang].keys()
+            if missing:
+                print(f"  ! institutions: skipping {lang}/{m} — missing "
+                      f"{len(missing)} instp.* keys in i18n/{lang}.json")
+                continue
+            out.append((m, lang, pdata))
+    return out
+
+
+def inst_cluster(pages: list[tuple[str, str, dict]]) -> list[tuple[str, str]]:
+    """(hreflang, absolute URL) for the hub + every market page + x-default."""
+    pairs = [("en", BASE + inst_url("en"))]
+    pairs += [(p["locale"], BASE + inst_url(lang, m)) for m, lang, p in pages]
+    pairs.append(("x-default", BASE + inst_url("en")))
+    return pairs
+
+
+def _mailto(subject: str, body: str = "") -> str:
+    from urllib.parse import quote
+    q = "subject=" + quote(subject, safe="")
+    if body:
+        q += "&body=" + quote(body, safe="")
+    return html.escape(f"mailto:{INST_EMAIL}?{q}", quote=True)
+
+
+def inst_head_seo(url: str, cluster: list[tuple[str, str]], title: str,
+                  desc: str, og_locale: str) -> str:
+    title, desc = html.escape(title, quote=True), html.escape(desc, quote=True)
+    lines = [f'  <link rel="canonical" href="{url}">'] + _favicon_lines()
+    lines += [f'  <link rel="alternate" hreflang="{hl}" href="{href}">'
+              for hl, href in cluster]
+    lines += [
+        '  <meta property="og:type" content="website">',
+        '  <meta property="og:site_name" content="MIA Toolkit">',
+        f'  <meta property="og:title" content="{title}">',
+        f'  <meta property="og:description" content="{desc}">',
+        f'  <meta property="og:url" content="{url}">',
+        f'  <meta property="og:locale" content="{og_locale}">',
+        f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
+        '  <meta property="og:image:width" content="1200">',
+        '  <meta property="og:image:height" content="633">',
+        '  <meta name="twitter:card" content="summary_large_image">',
+        f'  <meta name="twitter:title" content="{title}">',
+        f'  <meta name="twitter:description" content="{desc}">',
+        f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+    ]
+    return "\n".join(lines)
+
+
+INST_TIERS = [("clinic", "99"), ("hospital", "499"), ("network", "1499")]
+
+
+def inst_json_ld(s: dict, url: str, locale: str, desc: str) -> str:
+    """Organization + SoftwareApplication with the three paid tiers as Offers
+    (annual, USD). No ratings or reviews — we have none to cite."""
+    org_id = BASE + "/institutions/#org"
+    org = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": org_id,
+        "name": "Fritanga",
+        "url": "https://fritanga.co",
+        "email": INST_EMAIL,
+        "brand": {"@type": "Brand", "name": "MIA Toolkit"},
+        "contactPoint": {"@type": "ContactPoint", "contactType": "sales",
+                         "email": INST_EMAIL},
+    }
+    offers = []
+    for key, price in INST_TIERS:
+        offers.append({
+            "@type": "Offer",
+            "name": f"MIA Toolkit — {s[f'inst.{key}']}",
+            "description": s[f"inst.{key}_scope"],
+            "price": price,
+            "priceCurrency": "USD",
+            "url": url + "#pricing",
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": price,
+                "priceCurrency": "USD",
+                "referenceQuantity": {"@type": "QuantitativeValue",
+                                      "value": 1, "unitCode": "ANN"},
+            },
+        })
+    app = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MIA Toolkit",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "macOS, Windows",
+        "url": url,
+        "inLanguage": locale,
+        "description": desc,
+        "license": "https://opensource.org/licenses/MIT",
+        "publisher": {"@id": org_id},
+        "offers": offers,
+    }
+    return _ld_script(org) + "\n" + _ld_script(app)
+
+
+def _inst_market_target(m: str, lang: str, pages) -> tuple[str, str] | None:
+    """(url, locale) a market-switcher link should open: the market's page in
+    the current language when it exists, else its first page."""
+    mine = [(l, p) for mm, l, p in pages if mm == m]
+    if not mine:
+        return None
+    for l, p in mine:
+        if l == lang:
+            return inst_url(l, m), p["locale"]
+    l, p = mine[0]
+    return inst_url(l, m), p["locale"]
+
+
+def inst_shell(langs: dict, lang: str, market: str | None, pages) -> str:
+    """Dark top bar: brand, market switcher, language links, For patients."""
+    s = langs[lang]
+    cur_locale = next((p["locale"] for m, l, p in pages
+                       if m == market and l == lang), "en")
+    mk = []
+    for m in INST_MARKETS:
+        t = _inst_market_target(m, lang, pages)
+        if not t:
+            continue
+        url, loc = t
+        cur = ' aria-current="page"' if m == market else ""
+        hl = f' hreflang="{loc}"' if loc.split("-")[0] != cur_locale.split("-")[0] else ""
+        mk.append(f'        <a href="{url}"{hl}{cur}>{s[f"instp.market_{m}"]}</a>')
+    if market:
+        variants = [(l, p) for m, l, p in pages if m == market]
+        lk = []
+        for l, p in variants:
+            cur = ' aria-current="page"' if l == lang else ""
+            lk.append(f'        <a href="{inst_url(l, market)}" '
+                      f'hreflang="{p["locale"]}" lang="{p["locale"]}"{cur}>'
+                      f'{langs[l]["_lang_name"]}</a>')
+    else:
+        lk = [f'        <a href="{inst_url("en")}" aria-current="page">'
+              f'{langs["en"]["_lang_name"]}</a>']
+    return (
+        '  <header class="i-shell">\n'
+        '    <div class="i-shell-in">\n'
+        f'      <a class="i-brand" href="{inst_url("en")}">MIA '
+        '<span>{{instp.brand_sub}}</span></a>\n'
+        '      <nav class="i-nav" aria-label="{{instp.market_label}}">\n'
+        '        <span class="i-nav-label" aria-hidden="true">'
+        '{{instp.market_label}}</span>\n'
+        + "\n".join(mk) + "\n"
+        '      </nav>\n'
+        '      <nav class="i-nav" aria-label="{{instp.lang_label}}">\n'
+        '        <span class="i-nav-label" aria-hidden="true">'
+        '{{instp.lang_label}}</span>\n'
+        + "\n".join(lk) + "\n"
+        '      </nav>\n'
+        f'      <a class="i-patients" href="{page_url(lang, "index")}">'
+        '{{instp.for_patients}} →</a>\n'
+        '    </div>\n'
+        '  </header>')
+
+
+def inst_footer(lang: str, hours: str) -> str:
+    analytics = ("{{instp.foot_analytics}}" if GOATCOUNTER
+                 else "{{instp.foot_noanalytics}}")
+    return (
+        '  <footer class="i-footer">\n'
+        '    <div class="i-container i-footer-grid">\n'
+        '      <div>\n'
+        '        <p class="i-eyebrow">{{instp.foot_contact}}</p>\n'
+        f'        <p><a href="mailto:{INST_EMAIL}">{INST_EMAIL}</a></p>\n'
+        f'        <p>{html.escape(hours)}</p>\n'
+        '      </div>\n'
+        '      <div>\n'
+        f'        <p>{analytics} · <a href="{page_url(lang, "privacy")}">'
+        '{{instp.foot_privacy}}</a></p>\n'
+        '        <p>{{instp.foot_disclaimer}}</p>\n'
+        '        <p>{{footer.made_by_pre}}<a href="https://fritanga.co">'
+        'Fritanga</a>{{footer.made_by_post}}</p>\n'
+        '      </div>\n'
+        '    </div>\n'
+        '  </footer>')
+
+
+def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
+                     pages, cluster, template: str) -> str:
+    s = dict(langs[lang])
+    s.update(pdata["strings"])
+    url = BASE + inst_url(lang, market)
+    mname = s[f"instp.market_{market}"]
+    e = html.escape
+    use_cases = "\n".join(
+        f'          <article class="i-card"><h3>{e(u["title"])}</h3>'
+        f'<p>{e(u["text"])}</p></article>' for u in pdata["use_cases"])
+    rows = [(e(r["topic"]), e(r["text"])) for r in pdata["compliance"]]
+    rows += [(s["instp.net_topic"], s["instp.net_text"]),
+             (s["instp.out_topic"], s["instp.out_text"]),
+             (s["instp.sign_topic"], s["instp.sign_signed"] if WINDOWS_SIGNED
+              else s["instp.sign_unsigned"])]
+    compliance = "\n".join(
+        f'            <tr><th scope="row">{t}</th><td>{x}</td></tr>'
+        for t, x in rows)
+    # Market-specific trust assets render only once they exist ("ready").
+    trust = "".join(f'\n          <li>{e(t["text"])}</li>'
+                      for t in pdata.get("trust_assets", []) if t.get("ready"))
+    sub = lambda k: s[k].replace("{market}", mname)  # noqa: E731
+    computed = {
+        "INST_LOCALE": pdata["locale"],
+        "HEAD_SEO": inst_head_seo(url, cluster, s["m.title"], s["m.meta_desc"],
+                                  pdata["og_locale"]),
+        "JSON_LD": inst_json_ld(s, url, pdata["locale"], s["m.meta_desc"]),
+        "INST_SHELL": inst_shell(langs, lang, market, pages),
+        "INST_FOOTER": inst_footer(lang, s["m.contact_hours"]),
+        "INST_USE_CASES": use_cases,
+        "INST_COMPLIANCE": compliance,
+        "INST_TRUST": trust,
+        "MAIL_PILOT": _mailto(sub("instp.subj_pilot"), s["instp.body_pilot"]),
+        "MAIL_KIT": _mailto(sub("instp.subj_kit"), s["instp.body_kit"]),
+        "MAIL_CLINIC": _mailto(sub("instp.subj_clinic")),
+        "MAIL_HOSPITAL": _mailto(sub("instp.subj_hospital")),
+        "MAIL_NETWORK": _mailto(sub("instp.subj_network")),
+        "MAIL_PUBLIC": _mailto(sub("instp.subj_public")),
+    }
+    return render(template, s, computed)
+
+
+def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
+    s = langs["en"]
+    url = BASE + inst_url("en")
+    cards = []
+    for m in INST_MARKETS:
+        t = _inst_market_target(m, "en", pages)
+        if not t:
+            continue
+        href, loc = t
+        hl = f' hreflang="{loc}"' if not loc.startswith("en") else ""
+        cards.append(
+            f'          <li><a class="i-card i-card-link" href="{href}"{hl}>'
+            f'<span class="i-eyebrow">{s[f"instp.hub_lang_{m}"]}</span>'
+            f'<h3>{s[f"instp.market_{m}"]}</h3>'
+            f'<p>{s[f"instp.hub_card_{m}"]}</p>'
+            f'<span class="i-more">{s["instp.hub_open"]} →</span></a></li>')
+    computed = {
+        "HEAD_SEO": inst_head_seo(url, cluster, s["instp.hub_title"],
+                                  s["instp.hub_meta"], s["_og_locale"]),
+        "JSON_LD": inst_json_ld(s, url, "en", s["instp.hub_meta"]),
+        "INST_SHELL": inst_shell(langs, "en", None, pages),
+        "INST_FOOTER": inst_footer("en", s["instp.hub_contact_hours"]),
+        "INST_HUB_CARDS": "\n".join(cards),
+    }
+    return render(template, s, computed)
+
+
+def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
+    """Emit the hub + every market page. Returns (page count, sitemap URLs)."""
+    markets = load_markets()
+    pages = inst_pages(langs, markets)
+    cluster = inst_cluster(pages)
+    tdir = os.path.join(HERE, "templates")
+    with open(os.path.join(tdir, "institutions.html"), encoding="utf-8") as f:
+        tmpl = f.read()
+    with open(os.path.join(tdir, "institutions_hub.html"), encoding="utf-8") as f:
+        hub_tmpl = f.read()
+
+    def write(path: str, content: str) -> None:
+        d = os.path.join(site, path.strip("/"))
+        os.makedirs(d, exist_ok=True)
+        with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+            f.write(_inject_gc(content))
+
+    write(inst_url("en"), render_inst_hub(langs, pages, cluster, hub_tmpl))
+    for m, lang, pdata in pages:
+        write(inst_url(lang, m),
+              render_inst_page(langs, m, lang, pdata, pages, cluster, tmpl))
+    return 1 + len(pages), cluster
+
+
+def main(site: str | None = None) -> int:
     langs = load_langs()
     if "en" not in langs:
         print("FATAL: i18n/en.json is required")
         return 1
-    site = os.path.join(HERE, "_site")
+    site = site or os.path.join(HERE, "_site")
     shutil.rmtree(site, ignore_errors=True)
     os.makedirs(site)
 
@@ -884,12 +1224,15 @@ def main() -> int:
                       encoding="utf-8") as f:
                 f.write(rss_feed(en_posts))
 
+    # ── Institutions (/institutions/) ─────────────────────────────
+    inst_count, inst_alts = build_institutions(site, langs)
+
     for legacy, target in LEGACY.items():
         with open(os.path.join(site, legacy), "w", encoding="utf-8") as f:
             f.write(redirect_stub(target))
 
     with open(os.path.join(site, "sitemap.xml"), "w", encoding="utf-8") as f:
-        f.write(sitemap(langs, posts, clusters))
+        f.write(sitemap(langs, posts, clusters, inst_alts))
 
     for asset in ASSETS:
         src = os.path.join(HERE, asset)
@@ -904,7 +1247,8 @@ def main() -> int:
 
     print(f"✓ built {pages} pages × {len(langs)} languages "
           f"({', '.join(langs)}), {blog_pages} blog pages "
-          f"({len(posts)} posts), {len(LEGACY)} redirects, sitemap, assets "
+          f"({len(posts)} posts), {inst_count} institution pages, "
+          f"{len(LEGACY)} redirects, sitemap, assets "
           f"→ {os.path.relpath(site)}")
     return 0
 

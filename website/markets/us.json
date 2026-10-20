@@ -1,0 +1,34 @@
+{
+  "_doc": "Market data for /institutions/us/. 'pages' maps a site language code (i18n/<code>.json) to that page's market-specific content; build.py renders one page per entry with templates/institutions.html. Shared copy (hero, pricing, pilot…) lives in the instp.* keys of i18n/<code>.json. Only claims we can back: see INSTITUTIONS-SITE-SPEC §3 'Never say'.",
+  "code": "us",
+  "pages": {
+    "en": {
+      "locale": "en-US",
+      "og_locale": "en_US",
+      "strings": {
+        "m.title": "MIA Toolkit for US hospitals and imaging centers — outside-CD import, offline",
+        "m.meta_desc": "Import the outside imaging CDs patients bring in — offline, on one workstation, nothing sent anywhere. Annual licenses from $99; free 60-day pilot.",
+        "m.eyebrow": "United States · hospitals, practices & imaging centers",
+        "m.uc_lead": "For critical-access hospitals, orthopedic, neurology and oncology practices, second-opinion programs, teleradiology groups and independent imaging centers.",
+        "m.currency_note": "Prices are in US dollars (USD).",
+        "m.procurement_note": "Small purchases: card or P-card through online checkout (opening soon). Need a quote, a purchase-order process or vendor onboarding? Email us with what your purchasing team requires and we'll work it out with you.",
+        "m.contact_hours": "Email support · target first reply within 2 business days"
+      },
+      "use_cases": [
+        {"title": "Outside-study import", "text": "At the film library or medical-records desk: read the outside CD, organize its studies and hand standard DICOM to your existing import step."},
+        {"title": "Patient discharge media", "text": "Consolidate a patient's discs onto one USB drive with a standard DICOMDIR for discharge or transfer, instead of burning another CD."},
+        {"title": "Second-opinion intake", "text": "Programs that receive discs by mail can process them in one place and get an inventory of what each disc contained."}
+      ],
+      "compliance": [
+        {"topic": "Device status", "text": "Not a medical device: software solely to transfer, store, convert or display images (FDA MDDS guidance, Sept 2022; FD&C §520(o)(1)(D)); never interprets."},
+        {"topic": "HIPAA", "text": "No BAA needed: we never receive or access PHI (HHS HIPAA FAQ 256). Support works only with de-identified screenshots or logs — please never send us PHI."}
+      ],
+      "trust_assets": [
+        {"text": "Software bill of materials (SBOM, CycloneDX)", "ready": false},
+        {"text": "HECVAT / vendor-questionnaire answers for an on-premises, no-data product", "ready": false},
+        {"text": "Accessibility conformance report (VPAT 2.5 / ACR)", "ready": false},
+        {"text": "DICOM conformance statement", "ready": false}
+      ]
+    }
+  }
+}

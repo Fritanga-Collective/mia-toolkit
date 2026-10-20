@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="{{INST_LOCALE}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{m.title}}</title>
+  <meta name="description" content="{{m.meta_desc}}">
+  <!-- TODO(self-host): serve IBM Plex (OFL) from /fonts/ instead of Google
+       Fonts to drop this third-party request (INSTITUTIONS-SITE-SPEC §4).
+       Web fonts load on /institutions/** only; patient pages use system fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <!-- No lang.js here: its root-page auto-redirect maps to /{lang}/{page}.html,
+       which doesn't exist for /institutions/<market>/. Market and language are
+       chosen with the links in the top bar, never forced. -->
+{{HEAD_SEO}}
+{{JSON_LD}}
+</head>
+<body class="inst">
+  <a class="i-skip" href="#main">{{instp.skip}}</a>
+{{INST_SHELL}}
+
+  <main id="main">
+    <section class="i-hero">
+      <div class="i-container i-hero-grid">
+        <div class="i-hero-copy">
+          <p class="i-eyebrow">{{m.eyebrow}}</p>
+          <h1>{{instp.hero_h1}}</h1>
+          <p class="i-lead">{{instp.hero_lead}}</p>
+          <div class="i-actions">
+            <a class="i-btn i-btn-primary" href="#pilot">{{instp.cta_pilot}}</a>
+            <a class="i-btn i-btn-ghost" href="#kit">{{instp.cta_kit}}</a>
+          </div>
+        </div>
+        <aside class="i-glance" aria-labelledby="glance-h">
+          <p class="i-eyebrow" id="glance-h">{{instp.glance_h}}</p>
+          <dl>
+            <div><dt>{{instp.glance_os_k}}</dt><dd>{{instp.glance_os_v}}</dd></div>
+            <div><dt>{{instp.glance_net_k}}</dt><dd class="i-mono">{{instp.glance_net_v}}</dd></div>
+            <div><dt>{{instp.glance_out_k}}</dt><dd>{{instp.glance_out_v}}</dd></div>
+            <div><dt>{{instp.glance_lic_k}}</dt><dd><a href="https://github.com/Fritanga-Collective/mia-toolkit">{{instp.glance_lic_v}}</a></dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="i-band" aria-labelledby="ev-h">
+      <div class="i-container">
+        <h2 class="i-eyebrow" id="ev-h">{{instp.ev_h2}}</h2>
+        <ul class="i-tiles i-tiles-3 i-evidence">
+          <li><p class="i-num">{{instp.ev1_num}}</p><p>{{instp.ev1_label}}</p><p class="i-src">{{instp.ev1_src}}</p></li>
+          <li><p class="i-num">{{instp.ev2_num}}</p><p>{{instp.ev2_label}}</p><p class="i-src">{{instp.ev2_src}}</p></li>
+          <li><p class="i-num">{{instp.ev3_num}}</p><p>{{instp.ev3_label}}</p><p class="i-src"><a href="https://github.com/Fritanga-Collective/mia-toolkit">{{instp.ev3_src}}</a></p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="products" aria-labelledby="prod-h">
+      <div class="i-container">
+        <h2 id="prod-h">{{instp.prod_h2}}</h2>
+        <div class="i-tiles i-tiles-2">
+          <article class="i-card">
+            <p><span class="i-tag i-tag-ok">{{instp.tk_status}}</span></p>
+            <h3>{{instp.tk_h3}}</h3>
+            <p>{{instp.tk_p}}</p>
+            <p class="i-card-links"><a href="#pilot">{{instp.tk_link_pilot}} →</a> <a href="#pricing">{{instp.tk_link_pricing}} →</a></p>
+          </article>
+          <article class="i-card">
+            <p><span class="i-tag i-tag-design">{{instp.br_status}}</span></p>
+            <h3>{{instp.br_h3}}</h3>
+            <p>{{instp.br_p}}</p>
+            <!-- TODO(bridge): bridge.miatools.tech is not live yet (design-partner
+                 form per MIA-BRIDGE-GTM). Keep this link; it starts working
+                 once the subdomain is published. -->
+            <p class="i-card-links"><a href="https://bridge.miatools.tech">{{instp.br_cta}} →</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="i-band" id="use-cases" aria-labelledby="uc-h">
+      <div class="i-container">
+        <h2 id="uc-h">{{instp.uc_h2}}</h2>
+        <p class="i-section-lead">{{m.uc_lead}}</p>
+        <div class="i-tiles i-tiles-3">
+{{INST_USE_CASES}}
+        </div>
+      </div>
+    </section>
+
+    <section id="compliance" aria-labelledby="comp-h">
+      <div class="i-container">
+        <h2 id="comp-h">{{instp.comp_h2}}</h2>
+        <p class="i-section-lead">{{instp.comp_intro}}</p>
+        <table class="i-table">
+          <thead>
+            <tr><th scope="col">{{instp.comp_col_topic}}</th><th scope="col">{{instp.comp_col_position}}</th></tr>
+          </thead>
+          <tbody>
+{{INST_COMPLIANCE}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="i-dark" id="roi" aria-labelledby="roi-h">
+      <div class="i-container">
+        <p class="i-eyebrow">{{instp.roi_eyebrow}}</p>
+        <h2 id="roi-h">{{instp.roi_h2}}</h2>
+        <p class="i-section-lead">{{instp.roi_intro}}</p>
+        <ul class="i-tiles i-tiles-3 i-roi">
+          <li><p class="i-num">{{instp.roi_hours_num}}</p><p>{{instp.roi_hours_label}}</p></li>
+          <li><p class="i-num">{{instp.roi_fail_num}}</p><p>{{instp.roi_fail_label}}</p></li>
+          <li><p class="i-num">{{instp.roi_be_num}}</p><p>{{instp.roi_be_label}}</p></li>
+        </ul>
+        <p class="i-small">{{instp.roi_assumptions}}</p>
+        <p class="i-small"><strong>{{instp.roi_note}}</strong></p>
+      </div>
+    </section>
+
+    <section class="i-band" id="pricing" aria-labelledby="price-h">
+      <div class="i-container">
+        <h2 id="price-h">{{instp.price_h2}}</h2>
+        <p class="i-section-lead">{{instp.price_intro}}</p>
+        <!-- TODO(R2): swap the mailto CTAs for the live Lemon Squeezy checkout
+             (Clinic) and the invoice/quote form (Hospital/Network) once live. -->
+        <ul class="i-tiles i-tiles-4 i-prices">
+          <li class="i-price">
+            <h3>{{inst.clinic}}</h3>
+            <p class="i-scope">{{inst.clinic_scope}}</p>
+            <p class="i-amount"><span class="i-num">$99</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
+            <a class="i-btn i-btn-primary" href="{{MAIL_CLINIC}}">{{instp.price_buy}}</a>
+          </li>
+          <li class="i-price">
+            <h3>{{inst.hospital}}</h3>
+            <p class="i-scope">{{inst.hospital_scope}}</p>
+            <p class="i-amount"><span class="i-num">$499</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
+            <a class="i-btn i-btn-ghost" href="{{MAIL_HOSPITAL}}">{{instp.price_quote}}</a>
+          </li>
+          <li class="i-price">
+            <h3>{{inst.network}}</h3>
+            <p class="i-scope">{{inst.network_scope}}</p>
+            <p class="i-amount"><span class="i-num">$1,499</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
+            <a class="i-btn i-btn-ghost" href="{{MAIL_NETWORK}}">{{instp.price_quote}}</a>
+          </li>
+          <li class="i-price">
+            <h3>{{inst.public}}</h3>
+            <p class="i-scope">{{inst.public_scope}}</p>
+            <p class="i-amount"><span class="i-num">{{inst.free_sponsored}}</span></p>
+            <a class="i-btn i-btn-ghost" href="{{MAIL_PUBLIC}}">{{instp.price_public_cta}}</a>
+          </li>
+        </ul>
+        <p>{{instp.price_includes}}</p>
+        <p class="i-small">{{m.currency_note}} {{instp.price_checkout_note}}</p>
+        <p class="i-small i-refund">{{instp.refund}}</p>
+      </div>
+    </section>
+
+    <section id="kit" aria-labelledby="kit-h">
+      <div class="i-container">
+        <h2 id="kit-h">{{instp.kit_h2}}</h2>
+        <p class="i-section-lead">{{instp.kit_intro}}</p>
+        <!-- TODO(R3): link each item to its PDF under /institutions/kit/ once
+             the license-pack PDFs are built. Until then: no dead links. -->
+        <ul class="i-list">
+          <li>{{instp.kit_1}}</li>
+          <li>{{instp.kit_2}}</li>
+          <li>{{instp.kit_3}}</li>
+          <li>{{instp.kit_4}}</li>{{INST_TRUST}}
+        </ul>
+        <p>{{instp.kit_avail}}</p>
+        <p class="i-small">{{m.procurement_note}}</p>
+        <p><a class="i-btn i-btn-ghost" href="{{MAIL_KIT}}">{{instp.kit_cta}}</a></p>
+      </div>
+    </section>
+
+    <section class="i-band" id="pilot" aria-labelledby="pilot-h">
+      <div class="i-container">
+        <h2 id="pilot-h">{{instp.pilot_h2}}</h2>
+        <ol class="i-tiles i-tiles-4 i-steps">
+          <li><p class="i-step-n" aria-hidden="true">01</p><h3>{{instp.pilot_s1_h}}</h3><p>{{instp.pilot_s1_p}}</p></li>
+          <li><p class="i-step-n" aria-hidden="true">02</p><h3>{{instp.pilot_s2_h}}</h3><p>{{instp.pilot_s2_p}}</p></li>
+          <li><p class="i-step-n" aria-hidden="true">03</p><h3>{{instp.pilot_s3_h}}</h3><p>{{instp.pilot_s3_p}}</p></li>
+          <li><p class="i-step-n" aria-hidden="true">04</p><h3>{{instp.pilot_s4_h}}</h3><p>{{instp.pilot_s4_p}}</p></li>
+        </ol>
+        <!-- TODO(R8): point at the pilot-request form (Worker) once built. -->
+        <p><a class="i-btn i-btn-primary" href="{{MAIL_PILOT}}">{{instp.pilot_cta}}</a></p>
+      </div>
+    </section>
+  </main>
+
+{{INST_FOOTER}}
+</body>
+</html>
