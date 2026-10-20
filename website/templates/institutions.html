@@ -182,8 +182,9 @@
           <li><p class="i-step-n" aria-hidden="true">03</p><h3>{{instp.pilot_s3_h}}</h3><p>{{instp.pilot_s3_p}}</p></li>
           <li><p class="i-step-n" aria-hidden="true">04</p><h3>{{instp.pilot_s4_h}}</h3><p>{{instp.pilot_s4_p}}</p></li>
         </ol>
-        <!-- TODO(R8): point at the pilot-request form (Worker) once built. -->
-        <p><a class="i-btn i-btn-primary" href="{{MAIL_PILOT}}">{{instp.pilot_cta}}</a></p>
+        <!-- Pilot-request form (R8): POSTs to FORM_ENDPOINT in build.py (the
+             workers/forms Worker). Disabled with a mailto fallback until set. -->
+{{INST_PILOT_FORM}}
       </div>
     </section>
   </main>

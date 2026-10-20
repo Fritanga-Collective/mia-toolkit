@@ -834,6 +834,24 @@ WINDOWS_SIGNED = False
 
 INST_EMAIL = "support@miatools.tech"
 
+# Pilot-request form backend (the Cloudflare Worker in workers/forms/), e.g.
+# "https://forms.miatools.tech/submit". Empty = not deployed yet: the form
+# still renders, but its submit button is disabled and a visible note offers
+# the mailto fallback, so nothing silently breaks. Set it only after the
+# Worker is live AND the privacy-policy update (launch-readiness R4) ships.
+FORM_ENDPOINT = ""
+
+# Where the Worker 303-redirects a no-JS submission (keep in sync with
+# THANKS in workers/forms/src/index.js). Not indexed, not in the sitemap.
+INST_THANKS = {"en": "/institutions/thanks/",
+               "es": "/es/institutions/mx/gracias/"}
+
+# Disc-volume ranges for the pilot form: (value sent, i18n key suffix). The
+# values are the Worker's allow-list (DISCS in workers/forms/src/index.js).
+INST_DISC_RANGES = [("lt10", "lt10"), ("10-50", "10_50"),
+                    ("51-200", "51_200"), ("gt200", "gt200"),
+                    ("unsure", "unsure")]
+
 
 def inst_url(lang: str, market: str | None = None) -> str:
     """Root-absolute URL of the hub (market=None) or a market page."""
@@ -982,7 +1000,8 @@ def _inst_market_target(m: str, pages) -> tuple[str, str] | None:
     return None
 
 
-def inst_shell(langs: dict, lang: str, market: str | None, pages) -> str:
+def inst_shell(langs: dict, lang: str, market: str | None, pages,
+               here: bool = True) -> str:
     """Dark top bar: brand, ONE market menu, For patients.
 
     The market menu is a <details> disclosure holding plain links: it opens,
@@ -1000,7 +1019,7 @@ def inst_shell(langs: dict, lang: str, market: str | None, pages) -> str:
         if not t:
             continue
         url, loc = t
-        cur = ' aria-current="page"' if m == market else ""
+        cur = ' aria-current="page"' if (m == market and here) else ""
         hl = (f' hreflang="{loc}"'
               if loc.split("-")[0] != cur_locale.split("-")[0] else "")
         items.append(f'          <li><a href="{url}"{hl}{cur}>'
@@ -1008,13 +1027,14 @@ def inst_shell(langs: dict, lang: str, market: str | None, pages) -> str:
     current = (s[f"instp.market_{market}"] if market
                else s["instp.market_choose"])
     brand = inst_brand(lang)
+    home = inst_url(lang, market) if market else inst_url("en")
     head, sep, tail = brand.partition(" – ")
     brand_html = (f'{e(head)}<span>{e(sep + tail)}</span>' if sep
                   else e(brand))
     return (
         '  <header class="i-shell">\n'
         '    <div class="i-shell-in">\n'
-        f'      <a class="i-brand" href="{inst_url(lang, market) if market else inst_url("en")}">'
+        f'      <a class="i-brand" href="{home}">'
         f'{brand_html}</a>\n'
         '      <details class="i-market">\n'
         '        <summary><span class="i-nav-label">{{instp.market_label}}</span>'
@@ -1051,6 +1071,98 @@ def inst_footer(lang: str, hours: str) -> str:
         '  </footer>')
 
 
+def inst_pilot_form(s: dict, lang: str, market: str) -> str:
+    """The pilot-request form (#pilot). A plain HTML POST to FORM_ENDPOINT
+    that works with no JavaScript (the Worker 303-redirects to INST_THANKS);
+    /inst.js adds the utm_campaign hidden value and inline success/error. With
+    FORM_ENDPOINT empty the form renders with its submit disabled plus a
+    visible mailto fallback."""
+    e = html.escape
+    live = bool(FORM_ENDPOINT)
+    action = f' action="{e(FORM_ENDPOINT, quote=True)}"' if live else ""
+    opt = f' <span class="i-opt">({s["instp.form_optional"]})</span>'
+    req = ' <span class="i-req" aria-hidden="true">*</span>'
+
+    def field(name: str, key: str, kind: str = "text", required: bool = False,
+              auto: str = "", maxlen: int = 200) -> str:
+        fid = f"pf-{name}"
+        attrs = f' maxlength="{maxlen}"'
+        if required:
+            attrs += " required"
+        if auto:
+            attrs += f' autocomplete="{auto}"'
+        return (f'            <div class="i-field">\n'
+                f'              <label for="{fid}">{s[key]}'
+                f'{req if required else opt}</label>\n'
+                f'              <input id="{fid}" name="{name}" type="{kind}"'
+                f'{attrs}>\n'
+                f'            </div>')
+
+    discs = "\n".join(
+        f'                <option value="{v}">{s["instp.form_discs_" + k]}'
+        f'</option>' for v, k in INST_DISC_RANGES)
+    if live:
+        button = (f'          <button class="i-btn i-btn-primary" type="submit">'
+                  f'{s["instp.pilot_cta"]}</button>')
+        pending = ""
+    else:
+        button = (f'          <button class="i-btn i-btn-primary" type="submit" '
+                  f'disabled aria-describedby="pf-pending">'
+                  f'{s["instp.pilot_cta"]}</button>')
+        pending = (f'\n          <p class="i-form-pending" id="pf-pending">'
+                   f'{s["instp.form_pending"]} <a href="{{{{MAIL_PILOT}}}}">'
+                   f'{s["instp.form_pending_link"]}</a>.</p>')
+    privacy = s["instp.form_privacy"].replace("{privacy}",
+                                              page_url(lang, "privacy"))
+    return (
+        f'        <h3 id="pf-h">{s["instp.form_h3"]}</h3>\n'
+        f'        <form class="i-form" id="pilot-form" method="post"{action}'
+        f' accept-charset="utf-8" aria-labelledby="pf-h"'
+        f' data-msg-ok="{e(s["instp.form_ok"], quote=True)}"'
+        f' data-msg-err="{e(s["instp.form_err"], quote=True)}"'
+        f' data-msg-sending="{e(s["instp.form_sending"], quote=True)}">\n'
+        f'          <p class="i-small">{s["instp.form_req_note"]}</p>\n'
+        f'          <input type="hidden" name="form" value="pilot">\n'
+        f'          <input type="hidden" name="market" value="{market}">\n'
+        f'          <input type="hidden" name="lang" value="{lang}">\n'
+        f'          <input type="hidden" name="utm_campaign" value="">\n'
+        f'          <div class="i-hp" aria-hidden="true">\n'
+        f'            <label for="pf-website">{s["instp.form_hp"]}</label>\n'
+        f'            <input id="pf-website" name="website" type="text" '
+        f'tabindex="-1" autocomplete="off">\n'
+        f'          </div>\n'
+        f'          <div class="i-form-grid">\n'
+        + field("name", "instp.form_name", required=True, auto="name",
+                maxlen=120) + "\n"
+        + field("email", "instp.form_email", "email", required=True,
+                auto="email", maxlen=254) + "\n"
+        + field("organisation", "instp.form_org", required=True,
+                auto="organization") + "\n"
+        + field("role", "instp.form_role", auto="organization-title",
+                maxlen=120) + "\n"
+        + f'            <div class="i-field">\n'
+          f'              <label for="pf-discs">{s["instp.form_discs"]}{opt}'
+          f'</label>\n'
+          f'              <select id="pf-discs" name="discs_per_month">\n'
+          f'                <option value="">{s["instp.form_discs_choose"]}'
+          f'</option>\n{discs}\n'
+          f'              </select>\n'
+          f'            </div>\n'
+        + field("pacs", "instp.form_pacs") + "\n"
+        + f'            <div class="i-field i-field-wide">\n'
+          f'              <label for="pf-message">{s["instp.form_message"]}'
+          f'{opt}</label>\n'
+          f'              <textarea id="pf-message" name="message" rows="4" '
+          f'maxlength="2000"></textarea>\n'
+          f'            </div>\n'
+          f'          </div>\n'
+          f'          <p class="i-small i-form-privacy">{privacy}</p>\n'
+        + button + pending + "\n"
+        + '          <p class="i-form-status" role="status" aria-live="polite"'
+          ' hidden></p>\n'
+          '        </form>')
+
+
 def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
                      pages, cluster, template: str) -> str:
     s = dict(langs[lang])
@@ -1085,6 +1197,7 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
         "INST_USE_CASES": use_cases,
         "INST_COMPLIANCE": compliance,
         "INST_TRUST": trust,
+        "INST_PILOT_FORM": inst_pilot_form(s, lang, market),
         "MAIL_PILOT": _mailto(sub("instp.subj_pilot"), s["instp.body_pilot"]),
         "MAIL_KIT": _mailto(sub("instp.subj_kit"), s["instp.body_kit"]),
         "MAIL_CLINIC": _mailto(sub("instp.subj_clinic")),
@@ -1124,6 +1237,24 @@ def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
     return render(template, s, computed)
 
 
+def render_inst_thanks(langs: dict, lang: str, market: str | None, pages,
+                       hours: str, template: str) -> str:
+    """Thank-you page the Worker redirects a no-JS form post to (noindex)."""
+    s = langs[lang]
+    url = BASE + INST_THANKS[lang]
+    back = inst_url(lang, market) if market else inst_url("en")
+    computed = {
+        "INST_LOCALE": "es-MX" if lang == "es" else "en",
+        "PAGE_TITLE": html.escape(inst_title(s["instp.thanks_title"], lang)),
+        "CANONICAL": url,
+        "FAVICONS": "\n".join(_favicon_lines()),
+        "INST_SHELL": inst_shell(langs, lang, market, pages, here=False),
+        "INST_FOOTER": inst_footer(lang, hours),
+        "BACK_URL": back,
+    }
+    return render(template, s, computed)
+
+
 def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
     """Emit the hub + every market page. Returns (page count, sitemap URLs)."""
     markets = load_markets()
@@ -1134,6 +1265,9 @@ def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
         tmpl = f.read()
     with open(os.path.join(tdir, "institutions_hub.html"), encoding="utf-8") as f:
         hub_tmpl = f.read()
+    with open(os.path.join(tdir, "institutions_thanks.html"),
+              encoding="utf-8") as f:
+        thanks_tmpl = f.read()
 
     def write(path: str, content: str) -> None:
         d = os.path.join(site, path.strip("/"))
@@ -1145,7 +1279,19 @@ def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
     for m, lang, pdata in pages:
         write(inst_url(lang, m),
               render_inst_page(langs, m, lang, pdata, pages, cluster, tmpl))
-    return 1 + len(pages), cluster
+    # Thank-you pages: English (US + SG) and Spanish (MX).
+    thanks = 0
+    for lang, path in INST_THANKS.items():
+        own = [(m, p) for m, l, p in pages if l == lang]
+        if not own:
+            continue
+        market = own[0][0] if len(own) == 1 else None
+        hours = (own[0][1]["strings"]["m.contact_hours"] if market
+                 else langs["en"]["instp.hub_contact_hours"])
+        write(path, render_inst_thanks(langs, lang, market, pages, hours,
+                                       thanks_tmpl))
+        thanks += 1
+    return 1 + len(pages) + thanks, cluster
 
 
 def main(site: str | None = None) -> int:

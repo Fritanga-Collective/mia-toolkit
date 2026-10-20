@@ -528,6 +528,45 @@ body.inst .i-list li { margin: 0 0 8px; }
 body.inst .i-step-n { font-family: var(--i-mono); color: var(--i-primary-hover);
   font-size: 0.875rem; margin-bottom: 8px; }
 
+/* Pilot-request form (Carbon-like fields: white on the grey band) */
+body.inst .i-form { margin-top: 8px; max-width: 46rem; }
+body.inst .i-form-grid { display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px;
+  margin: 0 0 16px; }
+body.inst .i-field { display: flex; flex-direction: column; }
+body.inst .i-field-wide { grid-column: 1 / -1; }
+body.inst .i-field label { font-size: 0.875rem; color: var(--i-text);
+  margin: 0 0 6px; }
+body.inst .i-opt { color: var(--i-text-2); }
+body.inst .i-req { color: #da1e28; }
+body.inst .i-field input, body.inst .i-field select,
+body.inst .i-field textarea { font: inherit; font-size: 0.9375rem;
+  color: var(--i-text); background: var(--i-bg); border: 0;
+  border-bottom: 1px solid #8d8d8d; border-radius: 0; padding: 11px 16px;
+  min-height: 44px; width: 100%; box-sizing: border-box; }
+body.inst .i-field textarea { resize: vertical; }
+body.inst .i-field input:focus, body.inst .i-field select:focus,
+body.inst .i-field textarea:focus { outline: 2px solid var(--i-focus);
+  outline-offset: -2px; }
+body.inst .i-field input:user-invalid,
+body.inst .i-field textarea:user-invalid { outline: 2px solid #da1e28;
+  outline-offset: -2px; }
+body.inst .i-form-privacy { max-width: 40rem; }
+body.inst .i-form .i-btn[disabled] { background: #c6c6c6; color: #525252;
+  cursor: not-allowed; }
+body.inst .i-form-pending { margin-top: 12px;
+  border-left: 3px solid #f1c21b; padding-left: 12px; }
+body.inst .i-form-status { margin-top: 16px; padding: 12px 16px;
+  background: var(--i-bg); border-left: 3px solid var(--i-primary); }
+body.inst .i-form-status.is-ok { border-left-color: #24a148; }
+body.inst .i-form-status.is-err { border-left-color: #da1e28; }
+/* Honeypot: off-screen for people, still in the DOM for naive bots. */
+body.inst .i-hp { position: absolute; left: -10000px; top: auto; width: 1px;
+  height: 1px; overflow: hidden; }
+body.inst .i-thanks { padding-top: 64px; padding-bottom: 64px; }
+body.inst .i-thanks h1 { font-size: 2.25rem; line-height: 1.2;
+  font-weight: 300; margin: 0 0 20px; }
+
 /* Footer (overrides the patient footer's centred layout) */
 body.inst .i-footer { background: var(--i-shell); color: var(--i-shell-muted);
   font-size: 0.875rem; text-align: left; padding: 40px 0; }
@@ -546,6 +585,7 @@ body.inst .i-footer-grid { display: grid;
   body.inst .i-tiles-2, body.inst .i-tiles-3 {
     grid-template-columns: minmax(0, 1fr); }
   body.inst .i-footer-grid { grid-template-columns: minmax(0, 1fr); }
+  body.inst .i-form-grid { grid-template-columns: minmax(0, 1fr); }
   body.inst .i-brand { width: 100%; }
   body.inst .i-market-menu { left: 0; right: auto; }
   body.inst .i-market > summary { padding-left: 0; }

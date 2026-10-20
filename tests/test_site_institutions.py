@@ -211,7 +211,7 @@ def test_brand_constant_used(site):
         assert f'<meta property="og:site_name" content="{esc}">' in page
         assert f'"name": "{brand}"' in page  # JSON-LD Brand
         head, _, tail = esc.partition(" – ")
-        assert f'class="i-brand"' in page and f"{head}<span> – {tail}</span>" in page
+        assert 'class="i-brand"' in page and f"{head}<span> – {tail}</span>" in page
 
 
 def _spanish_pages(site):
@@ -258,3 +258,101 @@ def test_mx_procurement_documents_copy(site):
     assert "kit de compras" not in mx.lower()
     us = _read(site, "institutions/us/index.html")
     assert '<h2 id="kit-h">Procurement kit</h2>' in us
+
+
+def _pilot_form(page):
+    a = page.index('<form class="i-form" id="pilot-form"')
+    return page[a:page.index("</form>", a)]
+
+
+def test_pilot_form_present_with_hidden_fields_and_honeypot(site):
+    for m, (rel, _, lang) in MARKET_PAGES.items():
+        page = _read(site, rel)
+        form = _pilot_form(page)
+        assert 'method="post"' in form
+        for hidden in ('name="form" value="pilot"', f'name="market" value="{m}"',
+                       f'name="lang" value="{lang}"',
+                       'name="utm_campaign" value=""'):
+            assert f'<input type="hidden" {hidden}>' in form, (rel, hidden)
+        # Honeypot: off-screen, hidden from assistive tech, not tabbable.
+        assert '<div class="i-hp" aria-hidden="true">' in form
+        assert 'name="website" type="text" tabindex="-1" autocomplete="off"' in form
+        for name in ("name", "email", "organisation"):
+            assert f'name="{name}"' in form and "required" in form
+        assert 'name="email" type="email"' in form
+        for name in ("role", "discs_per_month", "pacs", "message"):
+            assert f'name="{name}"' in form, name
+        for v, _ in build.INST_DISC_RANGES:
+            assert f'<option value="{v}">' in form
+        # Every visible control has a label.
+        for fid in ("pf-name", "pf-email", "pf-organisation", "pf-role",
+                    "pf-discs", "pf-pacs", "pf-message"):
+            assert f'<label for="{fid}">' in form and f'id="{fid}"' in form
+        privacy = "/es/privacy.html" if lang == "es" else "/privacy.html"
+        assert f'href="{privacy}"' in form
+        assert 'role="status"' in form
+        # The pilot CTA is no longer just an email link.
+        pilot = page[page.index('id="pilot"'):]
+        assert 'class="i-btn i-btn-primary" href="mailto:' not in pilot
+    mx = _pilot_form(_read(site, "es/institutions/mx/index.html"))
+    assert "Correo de trabajo" in mx and "Aviso de privacidad" in mx
+
+
+def test_pilot_form_disabled_until_endpoint_set(site):
+    assert build.FORM_ENDPOINT == ""  # default until the Worker + R4 ship
+    for rel, _, _ in MARKET_PAGES.values():
+        form = _pilot_form(_read(site, rel))
+        assert " action=" not in form, rel
+        assert 'type="submit" disabled aria-describedby="pf-pending"' in form
+        assert 'id="pf-pending"' in form
+        assert 'href="mailto:support@miatools.tech?subject=' in form
+
+
+def test_pilot_form_live_when_endpoint_set(tmp_path, monkeypatch):
+    monkeypatch.setattr(build, "FORM_ENDPOINT",
+                        "https://forms.miatools.tech/submit")
+    assert build.main(str(tmp_path)) == 0
+    form = _pilot_form(_read(tmp_path, "institutions/us/index.html"))
+    assert 'action="https://forms.miatools.tech/submit"' in form
+    assert "disabled" not in form and 'id="pf-pending"' not in form
+
+
+def test_thank_you_pages(site):
+    for rel, lang, back in (
+            ("institutions/thanks/index.html", "en", "/institutions/"),
+            ("es/institutions/mx/gracias/index.html", "es-MX",
+             "/es/institutions/mx/")):
+        page = _read(site, rel)
+        assert f'<html lang="{lang}">' in page
+        assert '<meta name="robots" content="noindex">' in page
+        assert "{{" not in page
+        assert f'href="{back}"' in page
+        assert '<details class="i-market">' in page
+        assert 'aria-current="page"' not in page
+    assert "Gracias. Recibimos su solicitud." in _read(
+        site, "es/institutions/mx/gracias/index.html")
+    sm = _read(site, "sitemap.xml")
+    assert "thanks" not in sm and "gracias" not in sm
+    # The Worker redirects to exactly these paths.
+    with open(os.path.join(REPO, "workers", "forms", "src", "index.js"),
+              encoding="utf-8") as f:
+        worker = f.read()
+    for path in build.INST_THANKS.values():
+        assert f'"{path}"' in worker, path
+    for v, _ in build.INST_DISC_RANGES:
+        assert f'"{v}"' in worker, v
+
+
+def test_inst_js_is_first_party_and_storage_free(site):
+    js = _read(site, "inst.js")
+    for banned in ("localStorage", "sessionStorage", "document.cookie",
+                   "http://", "https://"):
+        assert banned not in js, banned
+    for rel in list(INST_PAGES) + ["institutions/thanks/index.html"]:
+        page = _read(site, rel)
+        assert '<script src="/inst.js" defer></script>' in page
+        # No inline <script> other than JSON-LD and the analytics beacon.
+        for chunk in page.split("<script")[1:]:
+            head = chunk[:chunk.index(">")]
+            assert ("application/ld+json" in head or 'src="/inst.js"' in head
+                    or "goatcounter" in head), head
