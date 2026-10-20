@@ -71,17 +71,27 @@ trust assets) is in the market file under `pages.<lang>`. Output:
 `/institutions/`, `/institutions/us/`, `/institutions/sg/` (en) and
 `/es/institutions/mx/` (es-MX), one hreflang cluster with the hub as
 x-default. Pages use the Carbon-style layer in `styles.css` (scoped to
-`body.inst`) and load IBM Plex from Google Fonts (TODO: self-host).
+`body.inst`) with IBM Plex self-hosted from `fonts/` (OFL, `fonts/OFL.txt`);
+patient pages load no web fonts.
 
-- **Add a language to a market** (e.g. zh/ms/ta for Singapore): add a
-  `pages.zh` entry to `markets/sg.json` (locale `zh-SG`, reviewed strings) and
-  the `instp.*` keys to `i18n/zh.json`. Pages missing keys are skipped with a
-  warning.
+- **One language per market:** MX = es-MX, US = en-US, SG = en-SG. The build
+  refuses a market file with more than one `pages` entry. The header has a
+  single market menu (`<details>` of links, works without JS) — no language
+  switcher.
+- **Brand:** `INST_BRAND` in `build.py` (one line per language) sets the
+  header brand, `<title>` suffix, `og:site_name` and the JSON-LD Brand.
+- **Pilot form:** posts to `FORM_ENDPOINT` in `build.py` — the Cloudflare
+  Worker in `workers/forms/` (see its README). Empty (default) = the form
+  renders with its button disabled plus a mailto fallback. Set it only after
+  the Worker is deployed **and** the privacy-policy update (R4) has shipped.
+  No-JS posts land on `/institutions/thanks/` or `/es/institutions/mx/gracias/`
+  (`INST_THANKS`, noindex). `inst.js` (first-party, no storage) fills the
+  hidden `utm_campaign` and shows inline success/error.
 - **Windows signing:** flip `WINDOWS_SIGNED` in `build.py` once a signed
   release ships; the compliance row switches in every language.
 - **Trust assets** (SBOM, HECVAT, VPAT…) render only when `"ready": true`.
-- CTAs are `mailto:` for now (TODOs in the template mark where checkout links,
-  the pilot form and kit PDFs go).
+- Pricing and procurement-kit CTAs are still `mailto:` (TODOs in the template
+  mark where checkout links and kit PDFs go).
 
 ## Write a blog post (`/blog`)
 
