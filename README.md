@@ -13,7 +13,10 @@ into a single, radiologist-friendly DICOM archive.
 🔒 [Privacy](https://miatools.tech/privacy.html)
 
 Private by design: no account, no cloud, no telemetry — your data never leaves
-your machine.
+your machine. The app's only network call is the **Check for Updates** you
+click yourself: one HTTPS request for a static version file
+(`https://miatools.tech/version.json`) with no identifiers. Links you click
+(website, support email) open in your own browser or mail app.
 
 **Free for personal use — forever.** Organizations deploying MIA Toolkit are
 invited to purchase an [Institutional License](https://miatools.tech/support.html#institutions) — the
@@ -31,10 +34,19 @@ This is for personal use, longitudinal review, and second-opinion consultations.
 
 Pre-built installers are attached to every
 [GitHub Release](https://github.com/Fritanga-Collective/mia-toolkit/releases/latest):
-a macOS `.dmg` and a Windows installer `.exe` (Windows 10/11, 64-bit). They are
-currently **unsigned** — macOS: right-click the app → Open the first time;
-Windows: on the SmartScreen prompt choose "More info → Run anyway". (Signing and
-notarization are in progress.)
+a macOS `.dmg` (macOS 12+) and a Windows installer `.exe` (Windows 10/11, 64-bit).
+
+- **macOS:** signed with an Apple Developer ID and notarized by Apple (since
+  v0.1.5), so it opens normally. Check with
+  `spctl --assess --type execute -vv "/Applications/MIA Toolkit.app"`.
+- **Windows:** the installer is **not code-signed yet**. On the SmartScreen
+  prompt choose **More info → Run anyway**. It installs per-user (no admin).
+
+Releases after v0.1.13 also attach a `SHA256SUMS` file, a CycloneDX SBOM per
+platform (`*.cdx.json`) and GitHub build-provenance attestations. Verify a
+download with `shasum -a 256 -c SHA256SUMS --ignore-missing` (macOS/Linux) or
+`gh attestation verify <file> --repo Fritanga-Collective/mia-toolkit`. Every
+installer's SHA-256 is also in `https://miatools.tech/version.json`.
 
 ## Build and run from source
 
@@ -103,7 +115,13 @@ choco install innosetup      # once
 & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss
 ```
 
-Code signing (SignPath): see `packaging/windows/README.md`.
+Windows code signing is not live yet (the SignPath step in the release workflow
+is dormant): see `packaging/windows/README.md`.
+
+Both frozen builds accept headless `--version` and `--selftest` flags (no GUI,
+no network): the self-test builds a DICOMDIR from a tiny synthetic study and
+exits 0/1. The release workflow runs it on the built `.dmg`/installer before
+publishing.
 
 **Linux** — no packaged installer yet; run from source as above.
 

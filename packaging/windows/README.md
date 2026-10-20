@@ -19,8 +19,24 @@ pyinstaller packaging\windows\mia-windows.spec --noconfirm
 # -> dist\MIA-Toolkit-Setup-0.1.0.exe
 ```
 
-The installer is **per-user** (`PrivilegesRequired=lowest`) — no admin prompt,
-installs to `%LOCALAPPDATA%\Programs`.
+The installer is **per-user** by default (`PrivilegesRequired=lowest`) — no
+admin prompt, installs to `%LOCALAPPDATA%\Programs\MIA Toolkit`.
+`PrivilegesRequiredOverridesAllowed=dialog` also lets the person installing pick
+"all users" in a dialog, and (per the Inno Setup docs, `dialog` implies
+`commandline`) accepts `/ALLUSERS` or `/CURRENTUSER` on the command line.
+Caveat: `DefaultDirName` uses `{localappdata}` (a per-user constant), so an
+`/ALLUSERS` install still defaults into the installing admin's profile — pass
+`/DIR="C:\Program Files\MIA Toolkit"` for a machine-wide install (not yet
+verified on a real Windows machine).
+
+Headless smoke test of an installed build (the release workflow does this):
+
+```powershell
+MIA-Toolkit-Setup-<ver>.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CURRENTUSER /DIR="C:\temp\mia"
+$env:MIA_SELFTEST_REPORT = "C:\temp\selftest.txt"
+Start-Process "C:\temp\mia\MIA Toolkit.exe" -ArgumentList --selftest -Wait -PassThru  # ExitCode 0 = pass
+Get-Content C:\temp\selftest.txt
+```
 
 ## Architecture / Windows on ARM
 
@@ -34,11 +50,16 @@ build is a possible later step — not shipped yet.
 
 ## Signing — SignPath Foundation (the Windows "notarization")
 
+> **Status:** Windows installers are **not code-signed yet** (users see the
+> SmartScreen "More info → Run anyway" prompt). The SignPath step below is wired
+> in `release.yml` but **dormant**: no `SIGNPATH_API_TOKEN` is configured, and
+> the signing route is still being decided.
+
 Windows has no notarization service like Apple's; the equivalent is an
 **Authenticode signature** plus reputation, so SmartScreen stops flagging
-"unknown publisher." We sign via **SignPath Foundation** — free code signing for
-open-source projects, with native GitHub Actions integration. The visible
-publisher on the certificate is **"SignPath Foundation"**.
+"unknown publisher." The wired-up route is **SignPath Foundation** — free code
+signing for open-source projects, with native GitHub Actions integration. The
+visible publisher on that certificate would be **"SignPath Foundation"**.
 
 > Why not Microsoft Trusted Signing? Its identity validation is only offered in
 > the **USA / Canada / EU / UK** — unavailable from Mexico (for individuals and
