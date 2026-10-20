@@ -113,3 +113,32 @@ def test_patient_homepages_have_banner_and_nav(site):
         assert s["banner.inst_link"] in page
         # R6: the stale "signed installers arrive…" note is gone.
         assert "SmartScreen" in s["index.note"]
+
+
+def _patient_pages(site):
+    for code in build.LANG_ORDER:
+        prefix = "" if code == "en" else f"{code}/"
+        for page in build.PAGES:
+            yield f"{prefix}{page}.html"
+
+
+def test_fonts_self_hosted_no_google(site):
+    """IBM Plex is served from /fonts/ (OFL licence alongside); no page makes a
+    third-party font request, and patient pages load no web fonts at all."""
+    fonts = os.path.join(site, "fonts")
+    assert os.path.isfile(os.path.join(fonts, "OFL.txt"))
+    woff2 = [f for f in os.listdir(fonts) if f.endswith(".woff2")]
+    assert len(woff2) == 15
+    css = _read(site, "styles.css")
+    for f in woff2:
+        assert f'url("/fonts/{f}")' in css, f
+    assert css.count("font-display: swap") == len(woff2)
+    for rel in INST_PAGES:
+        page = _read(site, rel)
+        assert "fonts.googleapis.com" not in page and "fonts.gstatic" not in page
+        assert '<link rel="preload" href="/fonts/' in page
+    for rel in _patient_pages(site):
+        page = _read(site, rel)
+        assert "fonts.googleapis.com" not in page, rel
+        assert "/fonts/" not in page, rel
+        assert 'class="inst"' not in page, rel

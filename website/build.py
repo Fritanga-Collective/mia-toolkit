@@ -52,6 +52,7 @@ def help_img_lang(lang: str) -> str:
     return lang if os.path.isdir(d) else "en"
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "robots.txt",
+          "fonts",
           "CNAME", "img", "version.json", "favicon.ico"]
 
 # GoatCounter site code (e.g. "miatoolkit"). Empty = no analytics script is
