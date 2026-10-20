@@ -3,9 +3,6 @@ and RipSessionController's session-vs-busy callback split."""
 
 from __future__ import annotations
 
-import os
-
-import pytest
 from pydicom.uid import generate_uid
 
 from mia_core import ripper, sources

@@ -45,3 +45,13 @@ addopts = "-q"
 # Put the repo root on sys.path so `from tests.helpers import ...` resolves
 # under the bare `pytest` command (CI), not just `python -m pytest`.
 pythonpath = ["."]
+
+[tool.ruff]
+# Lint gate for CI (PRODUCTION-READINESS G10). Start conservative — syntax
+# errors (E9) + pyflakes (F: undefined names, unused imports/variables) — and
+# widen the rule set deliberately later.
+target-version = "py39"
+extend-exclude = ["website/_site"]
+
+[tool.ruff.lint]
+select = ["E9", "F"]
