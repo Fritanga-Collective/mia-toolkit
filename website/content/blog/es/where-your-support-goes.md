@@ -20,7 +20,7 @@ Así que la descarga es gratis. Sin prueba que se vence. Sin funciones bloqueada
 
 ## Lo que MIA Toolkit de verdad hace (y lo que no)
 
-Versión clara, sin juegos de letra chiquita: MIA Toolkit te ayuda a juntar, organizar y entregar tus propias imágenes médicas. No es un dispositivo médico. No lee, interpreta ni diagnostica nada en tus estudios. No reemplaza a un radiólogo. Viene sin garantía. Lo que sí hace es asegurarse de que los archivos correctos lleguen al doctor correcto en un formato que de verdad pueda abrir.
+Versión clara, sin juegos de letra chiquita: MIA Toolkit te ayuda a juntar, organizar y entregar tus propias imágenes médicas. Es una herramienta de gestión de archivos: no lee ni interpreta tus estudios ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento. No reemplaza a un radiólogo. Viene sin garantía. Lo que sí hace es asegurarse de que los archivos correctos lleguen al doctor correcto en un formato que de verdad pueda abrir.
 
 También está hecha para ser privada. La app funciona completamente sin conexión. No hay cuenta, nada se va a la nube y no hay rastreo. Tus imágenes se quedan en tu equipo, porque no hay nada que mandarnos.
 
@@ -62,4 +62,4 @@ Sí. La app completa es gratis de descargar y de usar, sin prueba que se vence y
 A tres cosas: los certificados anuales de firma de código para que las apps abran sin advertencias que asustan, las traducciones para que más familias puedan usar la herramienta, y el tiempo de mantenimiento para que siga funcionando conforme cambian los sistemas operativos.
 
 **¿MIA Toolkit lee o diagnostica mis estudios?**
-No. Organiza y entrega tus propias imágenes médicas y arma un DICOMDIR estándar que el visor de un radiólogo puede abrir. No es un dispositivo médico, no interpreta imágenes y no reemplaza a un radiólogo. Viene sin garantía.
+No. Organiza y entrega tus propias imágenes médicas y arma un DICOMDIR estándar que el visor de un radiólogo puede abrir. Es una herramienta de gestión de archivos: no interpreta imágenes ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento, y no reemplaza a un radiólogo. Viene sin garantía.

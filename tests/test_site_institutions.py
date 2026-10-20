@@ -212,3 +212,49 @@ def test_brand_constant_used(site):
         assert f'"name": "{brand}"' in page  # JSON-LD Brand
         head, _, tail = esc.partition(" – ")
         assert f'class="i-brand"' in page and f"{head}<span> – {tail}</span>" in page
+
+
+def _spanish_pages(site):
+    for root, _, files in os.walk(os.path.join(site, "es")):
+        for f in files:
+            if f.endswith(".html"):
+                yield os.path.join(root, f)
+
+
+def test_no_spanish_device_status_claim(site):
+    """No Spanish page claims a device status ("no es un dispositivo médico");
+    the approved non-medical-purpose wording is used instead (R5)."""
+    pages = list(_spanish_pages(site))
+    assert len(pages) > 10
+    for path in pages:
+        with open(path, encoding="utf-8") as f:
+            text = f.read().lower()
+        assert "no es un dispositivo médico" not in text, path
+        assert "dispositivo médico" not in text, path
+    with open(os.path.join(REPO, "website", "i18n", "es.json"),
+              encoding="utf-8") as f:
+        es = json.load(f)
+    approved = ("no interpreta imágenes ni está destinada a fines de "
+                "diagnóstico, prevención, monitoreo ni tratamiento")
+    assert approved in es["footer.disclaimer"]
+    assert approved in es["instp.foot_disclaimer"]
+    mx = _read(site, "es/institutions/mx/index.html")
+    assert "MIA Toolkit es una herramienta de gestión de archivos" in mx
+    home = _read(site, "es/index.html")
+    assert approved in home
+
+
+def test_mx_procurement_documents_copy(site):
+    mx = _read(site, "es/institutions/mx/index.html")
+    assert '<h2 id="kit-h">Documentos para Compras y TI</h2>' in mx
+    assert ("Todo lo que piden para darnos de alta como proveedor: seguridad, "
+            "instalación, términos de licencia y certificado.") in mx
+    assert 'href="#kit">Pedir documentos para Compras</a>' in mx
+    for item in ("Ficha de seguridad (1 página)", "Guía de instalación para TI",
+                 "Términos de la licencia",
+                 "Ejemplo de certificado de licencia"):
+        assert f"<strong>{item}</strong>" in mx, item
+    assert ">Solicitar los documentos</a>" in mx
+    assert "kit de compras" not in mx.lower()
+    us = _read(site, "institutions/us/index.html")
+    assert '<h2 id="kit-h">Procurement kit</h2>' in us

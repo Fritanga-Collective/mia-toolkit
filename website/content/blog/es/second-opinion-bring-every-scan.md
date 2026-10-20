@@ -66,7 +66,7 @@ Cuando estás lidiando con algo serio, lo último que quieres es que tus imágen
 
 ## Una nota sobre lo que esta herramienta es y no es
 
-MIA Toolkit te ayuda a organizar y llevar tus *propias* imágenes médicas. Eso es todo lo que hace. No es un dispositivo médico. No lee, interpreta, diagnostica ni opina sobre tus imágenes, y no sustituye a un radiólogo calificado ni a tu equipo médico. Viene sin garantía. La lectura, el juicio y las respuestas vienen todas de tus doctores. MIA Toolkit solo se asegura de que ellos puedan ver todo. Si tienes dudas sobre tu salud, por favor habla con tu equipo médico.
+MIA Toolkit te ayuda a organizar y llevar tus *propias* imágenes médicas. Eso es todo lo que hace. Es una herramienta de gestión de archivos: no lee, interpreta ni opina sobre tus imágenes, no está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento y no sustituye a un radiólogo calificado ni a tu equipo médico. Viene sin garantía. La lectura, el juicio y las respuestas vienen todas de tus doctores. MIA Toolkit solo se asegura de que ellos puedan ver todo. Si tienes dudas sobre tu salud, por favor habla con tu equipo médico.
 
 ## Da el siguiente paso con calma
 
