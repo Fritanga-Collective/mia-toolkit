@@ -17,16 +17,23 @@
     var p = parts();
     return p.length && EXTRA.indexOf(p[0]) >= 0 ? p[0] : "en";
   }
+  // Pages served as directories (/patients/ = patients/index.html), as
+  // DIR_PAGES in build.py. "index" is the use-case chooser at / and /<lang>/.
+  var DIR_PAGES = ["patients"];
+
   function pageName() {
     var p = parts();
     if (pathLang() !== "en") p = p.slice(1);
+    if (p.length && DIR_PAGES.indexOf(p[0]) >= 0) return p[0];
     var last = p[p.length - 1] || "index.html";
     var name = last.replace(/\.html$/, "");
     return name || "index";
   }
   function urlFor(lang, page) {
     var prefix = lang === "en" ? "/" : "/" + lang + "/";
-    return page === "index" ? prefix : prefix + page + ".html";
+    if (page === "index") return prefix;
+    if (DIR_PAGES.indexOf(page) >= 0) return prefix + page + "/";
+    return prefix + page + ".html";
   }
 
   function remembered() {

@@ -31,8 +31,14 @@ LANG_ORDER = ["en", "es", "zh", "ms", "ta", "de", "fr"]
 HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
             "ta": "ta-SG", "de": "de", "fr": "fr"}
 
-PAGES = ["index", "help", "support", "privacy", "stats"]
-OG_PAGES = {"index", "help", "support"}  # privacy has no social card (as before)
+# "index" is the use-case chooser at / and /<lang>/ (templates/index.html);
+# "patients" is the patient homepage at /patients/ and /<lang>/patients/
+# (templates/patients.html, the former homepage). The patient page keeps its
+# historical `index.*` i18n keys; the chooser's copy lives under `home.*`.
+PAGES = ["index", "patients", "help", "support", "privacy", "stats"]
+OG_PAGES = {"index", "patients", "help", "support"}  # no social card on privacy
+I18N_PREFIX = {"index": "home", "patients": "index"}  # page -> i18n key prefix
+DIR_PAGES = {"patients"}  # emitted as <page>/index.html (directory URL)
 
 # The 6 guided-setup screens the /help walkthrough documents, in order (the
 # `home` screenshot lives in the Overview, not the HowTo). Slugs drive the
@@ -52,8 +58,9 @@ def help_img_lang(lang: str) -> str:
     return lang if os.path.isdir(d) else "en"
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "inst.js",
+          "home.js", "track.js",
           "robots.txt",
-          "fonts",
+          "fonts", "kit",
           "CNAME", "img", "version.json", "favicon.ico"]
 
 # GoatCounter site code (e.g. "miatoolkit"). Empty = no analytics script is
@@ -61,6 +68,15 @@ ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "inst.js",
 # emits the cookieless beacon on every page and swaps in the privacy text that
 # names GoatCounter — the build keeps the policy honest automatically.
 GOATCOUNTER = "fritanga-collective"
+
+# Which cookieless analytics receives the name-only funnel events sent by
+# track.js (miaTrack("pilot_cta_click:sg")). "goatcounter" (today), "umami",
+# "plausible", or "" for none — track.js is then a silent no-op. The build
+# substitutes this into track.js and emits the matching script tag; switching
+# provider = change this line (+ its site id below) and the privacy wording.
+ANALYTICS_PROVIDER = "goatcounter" if GOATCOUNTER else ""
+UMAMI_WEBSITE_ID = ""          # only used when ANALYTICS_PROVIDER == "umami"
+PLAUSIBLE_DOMAIN = "miatools.tech"  # only used for "plausible"
 
 # Legacy flat URLs -> new locations (meta-refresh + canonical stubs).
 LEGACY = {
@@ -74,7 +90,28 @@ LEGACY = {
 def page_url(lang: str, page: str) -> str:
     """Root-absolute URL of a page in a language."""
     prefix = "/" if lang == "en" else f"/{lang}/"
-    return prefix if page == "index" else f"{prefix}{page}.html"
+    if page == "index":
+        return prefix
+    if page in DIR_PAGES:
+        return f"{prefix}{page}/"
+    return f"{prefix}{page}.html"
+
+
+def site_links(lang: str) -> dict:
+    """Root-absolute chrome links shared by every patient-register page, so a
+    template renders the same at /, /<lang>/ and /<lang>/patients/."""
+    return {
+        "HOME": page_url(lang, "index"),        # the use-case chooser
+        "PATIENTS": page_url(lang, "patients"),  # the patient homepage
+        "HELP": page_url(lang, "help"),
+        "SUPPORT": page_url(lang, "support"),
+        "PRIVACY": page_url(lang, "privacy"),
+        "STATS": page_url(lang, "stats"),
+        # "For clinics & hospitals": the Spanish site goes straight to the
+        # (Spanish) MX page; everyone else to the English hub.
+        "INSTITUTIONS": "/es/institutions/mx/" if lang == "es"
+                        else "/institutions/",
+    }
 
 
 def load_langs() -> dict[str, dict]:
@@ -126,8 +163,9 @@ def head_seo(langs: dict, lang: str, page: str, s: dict) -> str:
     lines.append(f'  <link rel="alternate" hreflang="x-default" '
                  f'href="{BASE}{page_url("en", page)}">')
     if page in OG_PAGES:
-        title = s.get(f"{page}.og_title", s.get(f"{page}.title", ""))
-        desc = s.get(f"{page}.meta_desc", "")
+        kp = I18N_PREFIX.get(page, page)
+        title = s.get(f"{kp}.og_title", s.get(f"{kp}.title", ""))
+        desc = s.get(f"{kp}.meta_desc", "")
         lines += [
             '  <meta property="og:type" content="website">',
             '  <meta property="og:site_name" content="MIA Toolkit">',
@@ -161,13 +199,37 @@ def _ld_script(data: dict) -> str:
 
 def json_ld(lang: str, s: dict, page: str) -> str:
     if page == "index":
+        # The chooser: who we are (Organization) + the site itself (WebSite).
+        org_id = BASE + "/#org"
+        org = {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": org_id,
+            "name": "Fritanga",
+            "url": "https://fritanga.co",
+            "logo": f"{BASE}/img/icon-512.png",
+            "email": INST_EMAIL,
+            "brand": {"@type": "Brand", "name": "MIA Tools"},
+        }
+        site = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "MIA Tools",
+            "url": BASE + page_url(lang, "index"),
+            "inLanguage": HREFLANG[lang],
+            "description": s["home.meta_desc"],
+            "publisher": {"@id": org_id},
+        }
+        return _ld_script(org) + "\n" + _ld_script(site)
+
+    if page == "patients":
         data = {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "MIA Toolkit",
             "operatingSystem": "macOS, Windows",
             "applicationCategory": "HealthApplication",
-            "url": BASE + page_url(lang, "index"),
+            "url": BASE + page_url(lang, "patients"),
             "downloadUrl": "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
             "description": s["index.meta_desc"],
             "image": f"{BASE}/img/social.jpg",
@@ -452,15 +514,8 @@ def blog_langsel(cluster: list[dict], langs: dict, current_lang: str) -> str:
 
 def _blog_chrome(lang: str, prefix: str) -> dict:
     """Root-relative nav/footer links + asset prefix shared by both templates."""
-    return {
-        "P": prefix,
-        "HOME": page_url(lang, "index"),
-        "HELP": page_url(lang, "help"),
-        "SUPPORT": page_url(lang, "support"),
-        "PRIVACY": page_url(lang, "privacy"),
-        "STATS": page_url(lang, "stats"),
-        "BLOG_INDEX": blog_index_url(lang),
-    }
+    return {"P": prefix, **site_links(lang),
+            "BLOG_INDEX": blog_index_url(lang)}
 
 
 # Internal blog-post links in a post body: /blog/<slug>/ or /<lang>/blog/<slug>/.
@@ -781,15 +836,31 @@ def stats_blocks(metrics, s: dict) -> dict:
 
 GC_SNIPPET = ('  <script data-goatcounter="https://{code}.goatcounter.com/count"\n'
               '          async src="https://gc.zgo.at/count.js"></script>\n')
+ANALYTICS_SNIPPETS = {
+    "goatcounter": GC_SNIPPET,
+    "umami": ('  <script defer src="https://cloud.umami.is/script.js"\n'
+              '          data-website-id="{code}"></script>\n'),
+    "plausible": ('  <script defer data-domain="{code}"\n'
+                  '          src="https://plausible.io/js/script.js"></script>\n'),
+}
+
+
+def _analytics_snippet() -> str:
+    code = {"goatcounter": GOATCOUNTER, "umami": UMAMI_WEBSITE_ID,
+            "plausible": PLAUSIBLE_DOMAIN}.get(ANALYTICS_PROVIDER, "")
+    if not (ANALYTICS_PROVIDER and code):
+        return ""
+    return ANALYTICS_SNIPPETS[ANALYTICS_PROVIDER].format(code=code)
 
 
 def _inject_gc(html_str: str) -> str:
-    """Inject the cookieless GoatCounter beacon before the LAST </body> (if
-    enabled). Using the last close tag is robust to a stray '</body>' appearing
-    inside blog Markdown (raw HTML), which would otherwise misplace the beacon."""
-    if not GOATCOUNTER:
+    """Inject the cookieless analytics beacon (ANALYTICS_PROVIDER; GoatCounter
+    today) before the LAST </body> (if enabled). Using the last close tag is
+    robust to a stray '</body>' appearing inside blog Markdown (raw HTML),
+    which would otherwise misplace the beacon."""
+    snippet = _analytics_snippet()
+    if not snippet:
         return html_str
-    snippet = GC_SNIPPET.format(code=GOATCOUNTER)
     i = html_str.rfind("</body>")
     if i == -1:
         return html_str + snippet
@@ -845,6 +916,115 @@ FORM_ENDPOINT = ""
 # THANKS in workers/forms/src/index.js). Not indexed, not in the sitemap.
 INST_THANKS = {"en": "/institutions/thanks/",
                "es": "/es/institutions/mx/gracias/"}
+
+# One request form, several entry points. Every CTA that asks us for
+# something (the pilot CTA, each pricing tier, the procurement kit) opens the
+# SAME form in a <dialog> on the market page; the form's hidden request_type
+# says which (keep in sync with REQUEST_TYPES in workers/forms/src/index.js).
+# Without JS each CTA is a real link to a standalone, prefilled form page:
+# /institutions/<m>/pilot/ (es: /es/institutions/mx/piloto/) for the pilot,
+# /institutions/<m>/request/<slug>/ (es: …/solicitud/<slug>/) for the rest.
+# All noindex and not in the sitemap. Per type the i18n keys are
+# instp.req_title_<type> (form heading), instp.req_submit_<type> (button) and
+# instp.req_ctx_<type> (the context line at the top of the form).
+INST_REQUEST_TYPES = ["pilot", "pricing_clinic", "pricing_hospital",
+                      "pricing_network", "pricing_public", "kit"]
+INST_REQUEST_SLUG = {"pricing_clinic": "clinic", "pricing_hospital": "hospital",
+                     "pricing_network": "network", "pricing_public": "public",
+                     "kit": "kit"}
+INST_PILOT_SLUG = {"en": "pilot", "es": "piloto"}
+INST_REQUEST_DIR = {"en": "request", "es": "solicitud"}
+# mailto fallback (FORM_ENDPOINT empty) per type: (subject key, body key)
+INST_REQUEST_MAIL = {
+    "pilot": ("instp.subj_pilot", "instp.body_pilot"),
+    "pricing_clinic": ("instp.subj_clinic", ""),
+    "pricing_hospital": ("instp.subj_hospital", ""),
+    "pricing_network": ("instp.subj_network", ""),
+    "pricing_public": ("instp.subj_public", ""),
+    "kit": ("instp.subj_kit", "instp.body_kit"),
+}
+
+
+def inst_pilot_url(lang: str, market: str) -> str:
+    return inst_url(lang, market) + INST_PILOT_SLUG.get(lang, "pilot") + "/"
+
+
+def inst_request_url(lang: str, market: str, rtype: str = "pilot") -> str:
+    """No-JS fallback page for one request type."""
+    if rtype == "pilot":
+        return inst_pilot_url(lang, market)
+    return (inst_url(lang, market) + INST_REQUEST_DIR.get(lang, "request")
+            + f"/{INST_REQUEST_SLUG[rtype]}/")
+
+
+def inst_request_mailto(s: dict, rtype: str, mname: str) -> str:
+    subj, body = INST_REQUEST_MAIL[rtype]
+    return _mailto(s[subj].replace("{market}", mname), s[body] if body else "")
+
+
+def inst_request_attrs(s: dict, lang: str, market: str, rtype: str) -> str:
+    """Attributes that make a link a request-form trigger: href = the no-JS
+    page; data-* = what /inst.js swaps into the modal before opening it."""
+    e = lambda v: html.escape(v, quote=True)  # noqa: E731
+    mname = s[f"instp.market_{market}"]
+    return (f'href="{inst_request_url(lang, market, rtype)}" '
+            f'data-request="{rtype}" data-market="{market}" '
+            f'data-title="{e(s["instp.req_title_" + rtype])}" '
+            f'data-submit="{e(s["instp.req_submit_" + rtype])}" '
+            f'data-context="{e(s["instp.req_ctx_" + rtype])}" '
+            f'data-mailto="{inst_request_mailto(s, rtype, mname)}"')
+
+
+# Procurement-kit PDFs (scripts/build_procurement_pdfs.py writes them and
+# kit/manifest.json; the build copies kit/ to /kit/). Order = the list on the
+# market page; each maps to its instp.kit_N description.
+KIT_ORDER = ["security", "it-guide", "license-terms", "certificate"]
+
+
+def load_kit() -> dict:
+    path = os.path.join(HERE, "kit", "manifest.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _kit_size(n: int) -> str:
+    if n >= 1024 * 1024:
+        return f"{n / (1024 * 1024):.1f} MB"
+    return f"{max(1, round(n / 1024))} KB"
+
+
+def inst_kit_list(s: dict, lang: str, kit: dict) -> str:
+    """<li> download links for the page language's procurement-kit PDFs (title,
+    language, pages and size from kit/manifest.json). Falls back to the plain
+    instp.kit_N descriptions if a document is missing from the manifest; a
+    manifest entry whose PDF is missing fails the build (no dead links)."""
+    e = html.escape
+    base = kit.get("base_path", "/kit/")
+    docs = {d["key"]: d for d in kit.get("documents", []) if d["lang"] == lang}
+    items = []
+    for i, key in enumerate(KIT_ORDER, 1):
+        text = s[f"instp.kit_{i}"]
+        d = docs.get(key)
+        if not d:
+            items.append(f"          <li>{text}</li>")
+            continue
+        if not os.path.isfile(os.path.join(HERE, "kit", d["filename"])):
+            raise FileNotFoundError(f"kit/{d['filename']} listed in "
+                                    "kit/manifest.json but missing")
+        desc = text.split("</strong>", 1)[-1] if "</strong>" in text else ""
+        pages = s["instp.kit_page_one" if d["pages"] == 1
+                  else "instp.kit_page_many"]
+        meta = (f'PDF · {s["instp.kit_lang"]} · {d["pages"]} {pages} · '
+                f'{_kit_size(d["bytes"])}')
+        items.append(
+            f'          <li><a href="{e(base + d["filename"], quote=True)}" '
+            f'type="application/pdf" hreflang="{d["lang"]}" '
+            f'data-track="kit_download:{key}"><strong>{e(d["title"])}</strong>'
+            f'</a>{desc} <span class="i-kit-meta">{meta}</span></li>')
+    return "\n".join(items)
+
 
 # Disc-volume ranges for the pilot form: (value sent, i18n key suffix). The
 # values are the Worker's allow-list (DISCS in workers/forms/src/index.js).
@@ -1043,7 +1223,7 @@ def inst_shell(langs: dict, lang: str, market: str | None, pages,
         + "\n".join(items) + "\n"
         '        </ul>\n'
         '      </details>\n'
-        f'      <a class="i-patients" href="{page_url(lang, "index")}">'
+        f'      <a class="i-patients" href="{page_url(lang, "patients")}">'
         '{{instp.for_patients}} →</a>\n'
         '    </div>\n'
         '  </header>')
@@ -1071,7 +1251,8 @@ def inst_footer(lang: str, hours: str) -> str:
         '  </footer>')
 
 
-def inst_pilot_form(s: dict, lang: str, market: str) -> str:
+def inst_pilot_form(s: dict, lang: str, market: str, hlevel: str = "h3",
+                    rtype: str = "pilot") -> str:
     """The pilot-request form (#pilot). A plain HTML POST to FORM_ENDPOINT
     that works with no JavaScript (the Worker 303-redirects to INST_THANKS);
     /inst.js adds the utm_campaign hidden value and inline success/error. With
@@ -1101,28 +1282,33 @@ def inst_pilot_form(s: dict, lang: str, market: str) -> str:
     discs = "\n".join(
         f'                <option value="{v}">{s["instp.form_discs_" + k]}'
         f'</option>' for v, k in INST_DISC_RANGES)
+    submit = s["instp.req_submit_" + rtype]
+    mailto = inst_request_mailto(s, rtype, s[f"instp.market_{market}"])
     if live:
         button = (f'          <button class="i-btn i-btn-primary" type="submit">'
-                  f'{s["instp.pilot_cta"]}</button>')
+                  f'{submit}</button>')
         pending = ""
     else:
         button = (f'          <button class="i-btn i-btn-primary" type="submit" '
                   f'disabled aria-describedby="pf-pending">'
-                  f'{s["instp.pilot_cta"]}</button>')
+                  f'{submit}</button>')
         pending = (f'\n          <p class="i-form-pending" id="pf-pending">'
-                   f'{s["instp.form_pending"]} <a href="{{{{MAIL_PILOT}}}}">'
+                   f'{s["instp.form_pending"]} <a href="{mailto}">'
                    f'{s["instp.form_pending_link"]}</a>.</p>')
     privacy = s["instp.form_privacy"].replace("{privacy}",
                                               page_url(lang, "privacy"))
     return (
-        f'        <h3 id="pf-h">{s["instp.form_h3"]}</h3>\n'
+        f'        <{hlevel} id="pf-h">{s["instp.req_title_" + rtype]}</{hlevel}>\n'
         f'        <form class="i-form" id="pilot-form" method="post"{action}'
         f' accept-charset="utf-8" aria-labelledby="pf-h"'
         f' data-msg-ok="{e(s["instp.form_ok"], quote=True)}"'
         f' data-msg-err="{e(s["instp.form_err"], quote=True)}"'
         f' data-msg-sending="{e(s["instp.form_sending"], quote=True)}">\n'
+        f'          <p class="i-form-context" id="pf-context">'
+        f'{s["instp.req_ctx_" + rtype]}</p>\n'
         f'          <p class="i-small">{s["instp.form_req_note"]}</p>\n'
         f'          <input type="hidden" name="form" value="pilot">\n'
+        f'          <input type="hidden" name="request_type" value="{rtype}">\n'
         f'          <input type="hidden" name="market" value="{market}">\n'
         f'          <input type="hidden" name="lang" value="{lang}">\n'
         f'          <input type="hidden" name="utm_campaign" value="">\n'
@@ -1163,12 +1349,33 @@ def inst_pilot_form(s: dict, lang: str, market: str) -> str:
           '        </form>')
 
 
+def inst_pilot_block(s: dict, lang: str, market: str) -> str:
+    """#pilot CTA + the form in a <dialog>. The CTA is a real link to the
+    standalone pilot page (works without JS); /inst.js turns it into a
+    showModal() trigger. A closed <dialog> is not rendered, so without JS
+    the form only appears on the pilot page."""
+    form = inst_pilot_form(s, lang, market)
+    form = "\n".join("  " + ln if ln else ln for ln in form.split("\n"))
+    return (
+        f'        <p class="i-pilot-cta"><a class="i-btn i-btn-primary" '
+        f'id="pilot-cta" {inst_request_attrs(s, lang, market, "pilot")}>'
+        f'{s["instp.pilot_cta"]}</a></p>\n'
+        f'        <dialog class="i-dialog" id="pilot-dialog" '
+        f'aria-labelledby="pf-h" aria-describedby="pf-context">\n'
+        f'          <div class="i-dialog-in">\n'
+        f'            <button class="i-dialog-close" type="button" data-close '
+        f'aria-label="{html.escape(s["instp.dialog_close"], quote=True)}">'
+        f'<span aria-hidden="true">×</span></button>\n'
+        + form + "\n"
+        '          </div>\n'
+        '        </dialog>')
+
+
 def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
-                     pages, cluster, template: str) -> str:
+                     pages, cluster, template: str, kit: dict) -> str:
     s = dict(langs[lang])
     s.update(pdata["strings"])
     url = BASE + inst_url(lang, market)
-    mname = s[f"instp.market_{market}"]
     e = html.escape
     use_cases = "\n".join(
         f'          <article class="i-card"><h3>{e(u["title"])}</h3>'
@@ -1184,7 +1391,6 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
     # Market-specific trust assets render only once they exist ("ready").
     trust = "".join(f'\n          <li>{e(t["text"])}</li>'
                       for t in pdata.get("trust_assets", []) if t.get("ready"))
-    sub = lambda k: s[k].replace("{market}", mname)  # noqa: E731
     computed = {
         "INST_LOCALE": pdata["locale"],
         "PAGE_TITLE": e(inst_title(s["m.title"], lang)),
@@ -1197,13 +1403,13 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
         "INST_USE_CASES": use_cases,
         "INST_COMPLIANCE": compliance,
         "INST_TRUST": trust,
-        "INST_PILOT_FORM": inst_pilot_form(s, lang, market),
-        "MAIL_PILOT": _mailto(sub("instp.subj_pilot"), s["instp.body_pilot"]),
-        "MAIL_KIT": _mailto(sub("instp.subj_kit"), s["instp.body_kit"]),
-        "MAIL_CLINIC": _mailto(sub("instp.subj_clinic")),
-        "MAIL_HOSPITAL": _mailto(sub("instp.subj_hospital")),
-        "MAIL_NETWORK": _mailto(sub("instp.subj_network")),
-        "MAIL_PUBLIC": _mailto(sub("instp.subj_public")),
+        "INST_PILOT": inst_pilot_block(s, lang, market),
+        "INST_KIT": inst_kit_list(s, lang, kit),
+        "REQ_CLINIC": inst_request_attrs(s, lang, market, "pricing_clinic"),
+        "REQ_HOSPITAL": inst_request_attrs(s, lang, market, "pricing_hospital"),
+        "REQ_NETWORK": inst_request_attrs(s, lang, market, "pricing_network"),
+        "REQ_PUBLIC": inst_request_attrs(s, lang, market, "pricing_public"),
+        "REQ_KIT": inst_request_attrs(s, lang, market, "kit"),
     }
     return render(template, s, computed)
 
@@ -1255,11 +1461,36 @@ def render_inst_thanks(langs: dict, lang: str, market: str | None, pages,
     return render(template, s, computed)
 
 
-def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
+def render_inst_pilot(langs: dict, market: str, lang: str, pdata: dict,
+                      pages, template: str, rtype: str = "pilot") -> str:
+    """Standalone request-form page for one request type: the no-JS target
+    of that CTA, prefilled at build time (noindex, not in the sitemap)."""
+    s = dict(langs[lang])
+    s.update(pdata["strings"])
+    computed = {
+        "INST_LOCALE": pdata["locale"],
+        "PAGE_TITLE": html.escape(inst_title(s["instp.req_title_" + rtype],
+                                             lang)),
+        "CANONICAL": BASE + inst_request_url(lang, market, rtype),
+        "FAVICONS": "\n".join(_favicon_lines()),
+        "INST_SHELL": inst_shell(langs, lang, market, pages, here=False),
+        "INST_FOOTER": inst_footer(lang, s["m.contact_hours"]),
+        "INST_PILOT_FORM": inst_pilot_form(s, lang, market, hlevel="h1",
+                                           rtype=rtype),
+        "BACK_URL": inst_url(lang, market) + (
+            "#pricing" if rtype.startswith("pricing_")
+            else "#kit" if rtype == "kit" else "#pilot"),
+    }
+    return render(template, s, computed)
+
+
+def build_institutions(site: str, langs: dict,
+                       pages=None) -> tuple[int, list[str]]:
     """Emit the hub + every market page. Returns (page count, sitemap URLs)."""
-    markets = load_markets()
-    pages = inst_pages(langs, markets)
+    if pages is None:
+        pages = inst_pages(langs, load_markets())
     cluster = inst_cluster(pages)
+    kit = load_kit()
     tdir = os.path.join(HERE, "templates")
     with open(os.path.join(tdir, "institutions.html"), encoding="utf-8") as f:
         tmpl = f.read()
@@ -1268,6 +1499,9 @@ def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
     with open(os.path.join(tdir, "institutions_thanks.html"),
               encoding="utf-8") as f:
         thanks_tmpl = f.read()
+    with open(os.path.join(tdir, "institutions_pilot.html"),
+              encoding="utf-8") as f:
+        pilot_tmpl = f.read()
 
     def write(path: str, content: str) -> None:
         d = os.path.join(site, path.strip("/"))
@@ -1278,7 +1512,12 @@ def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
     write(inst_url("en"), render_inst_hub(langs, pages, cluster, hub_tmpl))
     for m, lang, pdata in pages:
         write(inst_url(lang, m),
-              render_inst_page(langs, m, lang, pdata, pages, cluster, tmpl))
+              render_inst_page(langs, m, lang, pdata, pages, cluster, tmpl,
+                               kit))
+        for rtype in INST_REQUEST_TYPES:
+            write(inst_request_url(lang, m, rtype),
+                  render_inst_pilot(langs, m, lang, pdata, pages, pilot_tmpl,
+                                    rtype))
     # Thank-you pages: English (US + SG) and Spanish (MX).
     thanks = 0
     for lang, path in INST_THANKS.items():
@@ -1291,7 +1530,49 @@ def build_institutions(site: str, langs: dict) -> tuple[int, list[str]]:
         write(path, render_inst_thanks(langs, lang, market, pages, hours,
                                        thanks_tmpl))
         thanks += 1
-    return 1 + len(pages) + thanks, cluster
+    return (1 + len(pages) * (1 + len(INST_REQUEST_TYPES)) + thanks,
+            cluster)
+
+
+# Chooser region pre-selection by page language (others: the first option).
+HOME_REGION_DEFAULT = {"es": "mx", "zh": "sg", "ms": "sg", "ta": "sg"}
+
+
+def home_region_form(s: dict, lang: str, ipages) -> str:
+    """The chooser's "Select your region" control. Without JS the GET form
+    lands on the /institutions/ hub (which lists every market) and the
+    <noscript> list links each market page directly; /home.js sends the
+    visitor straight to the selected market page instead."""
+    e = html.escape
+    targets = [(m, _inst_market_target(m, ipages)) for m in INST_MARKETS]
+    targets = [(m, t) for m, t in targets if t]
+    want = HOME_REGION_DEFAULT.get(lang, "us")
+    opts, links = [], []
+    for m, (url, loc) in targets:
+        sel = " selected" if m == want else ""
+        name = s[f"home.region_{m}"]
+        opts.append(f'                <option value="{url}" data-market="{m}"'
+                    f'{sel}>{name}</option>')
+        links.append(f'              <li><a href="{url}" hreflang="{loc}">'
+                     f'{name}</a></li>')
+    return (
+        f'            <form class="region-form" action="{inst_url("en")}" '
+        f'method="get" data-region-form>\n'
+        f'              <label for="region-select">{s["home.region_label"]}'
+        f'</label>\n'
+        f'              <div class="region-row">\n'
+        f'                <select id="region-select" name="region">\n'
+        + "\n".join(opts) + "\n"
+        f'                </select>\n'
+        f'                <button class="btn btn-light" type="submit">'
+        f'{e(s["home.region_go"])} <span aria-hidden="true">→</span></button>\n'
+        f'              </div>\n'
+        f'            </form>\n'
+        f'            <noscript>\n'
+        f'            <ul class="region-links" aria-label="{s["home.region_label"]}">\n'
+        + "\n".join(links) + "\n"
+        '            </ul>\n'
+        '            </noscript>')
 
 
 def main(site: str | None = None) -> int:
@@ -1303,9 +1584,13 @@ def main(site: str | None = None) -> int:
     shutil.rmtree(site, ignore_errors=True)
     os.makedirs(site)
 
-    templates = {p: open(os.path.join(HERE, "templates", f"{p}.html"),
-                         encoding="utf-8").read() for p in PAGES}
+    templates = {}
+    for p in PAGES:
+        with open(os.path.join(HERE, "templates", f"{p}.html"),
+                  encoding="utf-8") as f:
+            templates[p] = f.read()
     metrics = load_metrics()
+    ipages = inst_pages(langs, load_markets())
 
     pages = 0
     for lang, s in langs.items():
@@ -1314,9 +1599,12 @@ def main(site: str | None = None) -> int:
             s["privacy.site_li1"] = s["privacy.site_li1_gc"]
         outdir = site if lang == "en" else os.path.join(site, lang)
         os.makedirs(outdir, exist_ok=True)
-        prefix = "" if lang == "en" else "../"
         for page in PAGES:
+            # Relative path back to the site root (for styles/scripts/img).
+            prefix = ("" if lang == "en" else "../") + (
+                "../" if page in DIR_PAGES else "")
             computed = {
+                **site_links(lang),
                 "P": prefix,
                 "LANG": lang,   # directory code (en/es/zh/…), not the _lang
                                 # locale (es-MX); used for per-language asset paths
@@ -1327,9 +1615,19 @@ def main(site: str | None = None) -> int:
             }
             if page == "stats":
                 computed.update(stats_blocks(metrics, s))
-            html = _inject_gc(render(templates[page], s, computed))
-            with open(os.path.join(outdir, f"{page}.html"), "w",
-                      encoding="utf-8") as f:
+            if page == "index":
+                computed["REGION_FORM"] = home_region_form(s, lang, ipages)
+            html = render(templates[page], s, computed)
+            # i18n strings may carry a relative help link (index.note);
+            # make it root-absolute so it works from /patients/ too.
+            html = html.replace('href="help.html#', f'href="{page_url(lang, "help")}#')
+            html = _inject_gc(html)
+            if page in DIR_PAGES:
+                os.makedirs(os.path.join(outdir, page), exist_ok=True)
+                out = os.path.join(outdir, page, "index.html")
+            else:
+                out = os.path.join(outdir, f"{page}.html")
+            with open(out, "w", encoding="utf-8") as f:
                 f.write(html)
             pages += 1
 
@@ -1391,7 +1689,7 @@ def main(site: str | None = None) -> int:
                 f.write(rss_feed(en_posts))
 
     # ── Institutions (/institutions/) ─────────────────────────────
-    inst_count, inst_alts = build_institutions(site, langs)
+    inst_count, inst_alts = build_institutions(site, langs, ipages)
 
     for legacy, target in LEGACY.items():
         with open(os.path.join(site, legacy), "w", encoding="utf-8") as f:
@@ -1406,7 +1704,13 @@ def main(site: str | None = None) -> int:
             print(f"  ! asset missing: {asset}")
             continue
         dst = os.path.join(site, asset)
-        if os.path.isdir(src):
+        if asset == "track.js":  # bake the configured analytics provider in
+            with open(src, encoding="utf-8") as f:
+                js = f.read().replace("__ANALYTICS_PROVIDER__",
+                                      ANALYTICS_PROVIDER)
+            with open(dst, "w", encoding="utf-8") as f:
+                f.write(js)
+        elif os.path.isdir(src):
             shutil.copytree(src, dst)
         else:
             shutil.copy2(src, dst)

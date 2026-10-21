@@ -11,21 +11,15 @@
 {{JSON_LD}}
 </head>
 <body>
-  <div class="inst-banner">
-    <div class="wrap">
-      {{banner.inst_text}} <span aria-hidden="true">→</span>
-      <a href="/institutions/">{{banner.inst_link}}</a>
-    </div>
-  </div>
   <header>
     <div class="wrap topbar">
-      <a class="brand" href="index.html">MIA Toolkit</a>
+      <a class="brand" href="{{HOME}}">MIA Toolkit</a>
       <nav class="lang">
-        <a href="help.html">{{nav.help}}</a>
+        <a href="{{HELP}}">{{nav.help}}</a>
         <span>|</span>
-        <a href="support.html">{{nav.support}}</a>
+        <a href="{{SUPPORT}}">{{nav.support}}</a>
         <span>|</span>
-        <a href="/institutions/">{{nav.institutions}}</a>
+        <a href="{{INSTITUTIONS}}">{{nav.institutions}}</a>
 {{LANGSEL}}
       </nav>
     </div>
@@ -175,8 +169,8 @@
         <h2>{{help.cta_h2}}</h2>
         <p>{{help.cta_p}}</p>
         <p>
-          <a class="btn" href="index.html#download">{{help.cta_download}}</a>
-          <a class="btn-secondary" href="support.html">{{help.cta_support}}</a>
+          <a class="btn" href="{{PATIENTS}}#download">{{help.cta_download}}</a>
+          <a class="btn-secondary" href="{{SUPPORT}}">{{help.cta_support}}</a>
         </p>
       </section>
     </div>
@@ -185,9 +179,9 @@
   <footer>
     <div class="wrap">
       <p>{{footer.ethos}} ·
-        <a href="help.html">{{footer.help}}</a> ·
-        <a href="privacy.html">{{footer.privacy}}</a> ·
-        <a href="stats.html">{{footer.stats}}</a></p>
+        <a href="{{HELP}}">{{footer.help}}</a> ·
+        <a href="{{PRIVACY}}">{{footer.privacy}}</a> ·
+        <a href="{{STATS}}">{{footer.stats}}</a></p>
       <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
     </div>
   </footer>

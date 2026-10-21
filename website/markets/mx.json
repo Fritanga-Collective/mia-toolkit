@@ -23,9 +23,7 @@
         {"topic": "Finalidad de uso", "text": "MIA Toolkit es una herramienta de gestión de archivos: copia, organiza y convierte estudios DICOM de CDs a un archivo DICOMDIR en USB. No interpreta, no mide y no sustituye a un sistema PACS ni a una estación de diagnóstico. No está destinado a fines de diagnóstico, prevención, monitoreo ni tratamiento."},
         {"topic": "Datos personales (LFPDPPP, vigente desde el 21 de marzo de 2025)", "text": "La aplicación no recaba ni transmite datos personales: los estudios se procesan en su equipo y nada sale de sus instalaciones. El soporte trabaja solo con capturas o registros sin datos de pacientes."}
       ],
-      "trust_assets": [
-        {"text": "Documentos para Compras y TI en español (es-MX)", "ready": false}
-      ]
+      "trust_assets": []
     }
   }
 }

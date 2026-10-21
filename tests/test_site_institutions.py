@@ -1,9 +1,9 @@
-"""Tests for the /institutions/ section and the patient-page banner.
+"""Tests for the /institutions/ section and its links from patient pages.
 
 Runs the full website build into a temp directory (build.main(site=...)) and
 checks the generated HTML: institution pages exist with the hreflang cluster,
 the sitemap lists them, the hard-rule copy is present (and the never-say
-phrases are absent), and every patient homepage carries the banner.
+phrases are absent), and patient pages link "For clinics & hospitals".
 """
 
 from __future__ import annotations
@@ -101,25 +101,33 @@ def test_ctas_are_real_links(site):
     assert "mailto:support@miatools.tech?subject=" in us
 
 
-def test_patient_homepages_have_banner_and_nav(site):
+def _rel(code, page):
+    """Output file of a patient-register page (build.page_url → file)."""
+    url = build.page_url(code, page).lstrip("/")
+    return url + "index.html" if url.endswith("/") or not url else url
+
+
+def test_patient_pages_have_institutions_nav_link_and_no_banner(site):
     for code in build.LANG_ORDER:
-        rel = "index.html" if code == "en" else f"{code}/index.html"
-        page = _read(site, rel)
-        assert 'class="inst-banner"' in page, code
-        assert page.count('href="/institutions/"') >= 2, code  # banner + nav
         with open(os.path.join(REPO, "website", "i18n", f"{code}.json"),
                   encoding="utf-8") as f:
             s = json.load(f)
-        assert s["banner.inst_link"] in page
+        assert "banner.inst_link" not in s and "banner.inst_text" not in s
+        target = "/es/institutions/mx/" if code == "es" else "/institutions/"
+        for page in ("patients", "help", "support", "privacy", "stats"):
+            html = _read(site, _rel(code, page))
+            assert 'class="inst-banner"' not in html, (code, page)
+            assert f'<a href="{target}">{s["nav.institutions"]}</a>' in html, (
+                code, page)
         # R6: the stale "signed installers arrive…" note is gone.
         assert "SmartScreen" in s["index.note"]
+    assert "inst-banner" not in _read(site, "styles.css")
 
 
 def _patient_pages(site):
     for code in build.LANG_ORDER:
-        prefix = "" if code == "en" else f"{code}/"
         for page in build.PAGES:
-            yield f"{prefix}{page}.html"
+            yield _rel(code, page)
 
 
 def test_fonts_self_hosted_no_google(site):
@@ -179,7 +187,7 @@ def test_header_has_one_market_menu(site):
         page = _read(site, rel)
         shell = page[page.index('<header class="i-shell">'):page.index("</header>")]
         assert shell.count('<details class="i-market">') == 1, rel
-        label = "Mercado" if lang == "es" else "Market"
+        label = "Región" if lang == "es" else "Region"
         assert f'<span class="i-nav-label">{label}</span>' in shell
         for other, url in MARKET_URLS.items():
             cur = ' aria-current="page"' if other == m else ""
@@ -190,7 +198,7 @@ def test_header_has_one_market_menu(site):
         # No language switcher on institution pages.
         assert "Language" not in shell and "Idioma" not in shell
         assert "i-nav" not in shell.replace("i-nav-label", "")
-        patients = "/es/" if lang == "es" else "/"
+        patients = "/es/patients/" if lang == "es" else "/patients/"
         assert f'class="i-patients" href="{patients}"' in shell
     hub = _read(site, "institutions/index.html")
     assert hub.count('<details class="i-market">') == 1
@@ -246,18 +254,25 @@ def test_no_spanish_device_status_claim(site):
 
 def test_mx_procurement_documents_copy(site):
     mx = _read(site, "es/institutions/mx/index.html")
-    assert '<h2 id="kit-h">Documentos para Compras y TI</h2>' in mx
+    assert '<h2 id="kit-h">Kit de Cumplimiento para IT</h2>' in mx
     assert ("Todo lo que piden para darnos de alta como proveedor: seguridad, "
             "instalación, términos de licencia y certificado.") in mx
-    assert 'href="#kit">Pedir documentos para Compras</a>' in mx
-    for item in ("Ficha de seguridad (1 página)", "Guía de instalación para TI",
-                 "Términos de la licencia",
-                 "Ejemplo de certificado de licencia"):
-        assert f"<strong>{item}</strong>" in mx, item
-    assert ">Solicitar los documentos</a>" in mx
-    assert "kit de compras" not in mx.lower()
+    assert 'href="#kit">Ver el Kit de Cumplimiento para IT</a>' in mx
+    for item in ("Ficha de seguridad", "Guía de instalación para TI",
+                 "Términos de la licencia institucional",
+                 "Certificado de licencia (muestra)"):
+        assert f"<strong>{item}</strong></a>" in mx, item
+    assert ">Solicitar el paquete completo por correo</a>" in mx
+    assert "Disponibles a solicitud" not in mx
+    for old in ("kit de compras", "documentos para compras y ti"):
+        assert old not in mx.lower(), old
+    with open(os.path.join(REPO, "website", "kit", "manifest.json"),
+              encoding="utf-8") as f:
+        assert json.load(f)["kit_name"]["es"] == "Kit de Cumplimiento para IT"
     us = _read(site, "institutions/us/index.html")
     assert '<h2 id="kit-h">Procurement kit</h2>' in us
+    assert "available on request" not in us.lower()
+    assert ">Request the full package by email</a>" in us
 
 
 def _pilot_form(page):
@@ -348,11 +363,15 @@ def test_inst_js_is_first_party_and_storage_free(site):
     for banned in ("localStorage", "sessionStorage", "document.cookie",
                    "http://", "https://"):
         assert banned not in js, banned
-    for rel in list(INST_PAGES) + ["institutions/thanks/index.html"]:
+    for rel in list(INST_PAGES) + ["institutions/thanks/index.html",
+                                   "institutions/us/pilot/index.html",
+                                   "es/institutions/mx/piloto/index.html"]:
         page = _read(site, rel)
         assert '<script src="/inst.js" defer></script>' in page
+        assert '<script src="/track.js" defer></script>' in page
         # No inline <script> other than JSON-LD and the analytics beacon.
         for chunk in page.split("<script")[1:]:
             head = chunk[:chunk.index(">")]
             assert ("application/ld+json" in head or 'src="/inst.js"' in head
+                    or 'src="/track.js"' in head
                     or "goatcounter" in head), head

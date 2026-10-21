@@ -10,17 +10,11 @@
 {{HEAD_SEO}}
 </head>
 <body>
-  <div class="inst-banner">
-    <div class="wrap">
-      {{banner.inst_text}} <span aria-hidden="true">→</span>
-      <a href="/institutions/">{{banner.inst_link}}</a>
-    </div>
-  </div>
   <header>
     <div class="wrap topbar">
-      <a class="brand" href="index.html">MIA Toolkit</a>
+      <a class="brand" href="{{HOME}}">MIA Toolkit</a>
       <nav class="lang">
-        <a href="/institutions/">{{nav.institutions}}</a>
+        <a href="{{INSTITUTIONS}}">{{nav.institutions}}</a>
 {{LANGSEL}}
       </nav>
     </div>
@@ -77,7 +71,7 @@
       </section>
 
       <section class="links">
-        <a href="index.html">{{privacy.back}}</a>
+        <a href="{{PATIENTS}}">{{privacy.back}}</a>
       </section>
     </div>
   </main>
@@ -85,9 +79,9 @@
   <footer>
     <div class="wrap">
       <p>{{footer.ethos}} ·
-        <a href="help.html">{{footer.help}}</a> ·
-        <a href="privacy.html">{{footer.privacy}}</a> ·
-        <a href="stats.html">{{footer.stats}}</a></p>
+        <a href="{{HELP}}">{{footer.help}}</a> ·
+        <a href="{{PRIVACY}}">{{footer.privacy}}</a> ·
+        <a href="{{STATS}}">{{footer.stats}}</a></p>
       <p class="made-by">{{footer.made_by_pre}}<a href="https://fritanga.co">Fritanga</a>{{footer.made_by_post}}</p>
     </div>
   </footer>

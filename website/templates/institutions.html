@@ -11,6 +11,7 @@
        which doesn't exist for /institutions/<market>/. The market is chosen
        from the menu in the top bar, never forced. inst.js is a progressive
        enhancement only (first-party, no storage, no cookies). -->
+  <script src="/track.js" defer></script>
   <script src="/inst.js" defer></script>
 {{HEAD_SEO}}
 {{JSON_LD}}
@@ -121,32 +122,33 @@
       <div class="i-container">
         <h2 id="price-h">{{instp.price_h2}}</h2>
         <p class="i-section-lead">{{instp.price_intro}}</p>
-        <!-- TODO(R2): swap the mailto CTAs for the live Lemon Squeezy checkout
-             (Clinic) and the invoice/quote form (Hospital/Network) once live. -->
+        <!-- Each tier opens the shared request form (modal; no-JS: its own
+             prefilled page) with request_type=pricing_<tier>. TODO(R2): the
+             Clinic button can become the live checkout once it exists. -->
         <ul class="i-tiles i-tiles-4 i-prices">
           <li class="i-price">
             <h3>{{inst.clinic}}</h3>
             <p class="i-scope">{{inst.clinic_scope}}</p>
             <p class="i-amount"><span class="i-num">$99</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
-            <a class="i-btn i-btn-primary" href="{{MAIL_CLINIC}}">{{instp.price_buy}}</a>
+            <a class="i-btn i-btn-primary" {{REQ_CLINIC}}>{{instp.price_buy}}</a>
           </li>
           <li class="i-price">
             <h3>{{inst.hospital}}</h3>
             <p class="i-scope">{{inst.hospital_scope}}</p>
             <p class="i-amount"><span class="i-num">$499</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
-            <a class="i-btn i-btn-ghost" href="{{MAIL_HOSPITAL}}">{{instp.price_quote}}</a>
+            <a class="i-btn i-btn-ghost" {{REQ_HOSPITAL}}>{{instp.price_invoice}}</a>
           </li>
           <li class="i-price">
             <h3>{{inst.network}}</h3>
             <p class="i-scope">{{inst.network_scope}}</p>
             <p class="i-amount"><span class="i-num">$1,499</span> <span class="i-unit">USD {{instp.price_per_year}}</span></p>
-            <a class="i-btn i-btn-ghost" href="{{MAIL_NETWORK}}">{{instp.price_quote}}</a>
+            <a class="i-btn i-btn-ghost" {{REQ_NETWORK}}>{{instp.price_quote}}</a>
           </li>
           <li class="i-price">
             <h3>{{inst.public}}</h3>
             <p class="i-scope">{{inst.public_scope}}</p>
             <p class="i-amount"><span class="i-num">{{inst.free_sponsored}}</span></p>
-            <a class="i-btn i-btn-ghost" href="{{MAIL_PUBLIC}}">{{instp.price_public_cta}}</a>
+            <a class="i-btn i-btn-ghost" {{REQ_PUBLIC}}>{{instp.price_public_cta}}</a>
           </li>
         </ul>
         <p>{{instp.price_includes}}</p>
@@ -159,17 +161,13 @@
       <div class="i-container">
         <h2 id="kit-h">{{instp.kit_h2}}</h2>
         <p class="i-section-lead">{{instp.kit_intro}}</p>
-        <!-- TODO(R3): link each item to its PDF under /institutions/kit/ once
-             the license-pack PDFs are built. Until then: no dead links. -->
-        <ul class="i-list">
-          <li>{{instp.kit_1}}</li>
-          <li>{{instp.kit_2}}</li>
-          <li>{{instp.kit_3}}</li>
-          <li>{{instp.kit_4}}</li>{{INST_TRUST}}
+        <!-- PDF links come from kit/manifest.json (title, pages, size). -->
+        <ul class="i-list i-kit">
+{{INST_KIT}}{{INST_TRUST}}
         </ul>
         <p>{{instp.kit_avail}}</p>
         <p class="i-small">{{m.procurement_note}}</p>
-        <p><a class="i-btn i-btn-ghost" href="{{MAIL_KIT}}">{{instp.kit_cta}}</a></p>
+        <p><a class="i-btn i-btn-ghost" {{REQ_KIT}}>{{instp.kit_cta}}</a></p>
       </div>
     </section>
 
@@ -182,9 +180,11 @@
           <li><p class="i-step-n" aria-hidden="true">03</p><h3>{{instp.pilot_s3_h}}</h3><p>{{instp.pilot_s3_p}}</p></li>
           <li><p class="i-step-n" aria-hidden="true">04</p><h3>{{instp.pilot_s4_h}}</h3><p>{{instp.pilot_s4_p}}</p></li>
         </ol>
-        <!-- Pilot-request form (R8): POSTs to FORM_ENDPOINT in build.py (the
-             workers/forms Worker). Disabled with a mailto fallback until set. -->
-{{INST_PILOT_FORM}}
+        <!-- Request form (R8): one CTA, the form in a <dialog> (inst.js). No
+             JS: the CTA links to the standalone form page. POSTs to
+             FORM_ENDPOINT in build.py (the workers/forms Worker); disabled
+             with a mailto fallback until set. -->
+{{INST_PILOT}}
       </div>
     </section>
   </main>
