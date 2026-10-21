@@ -378,3 +378,54 @@ def test_inst_js_is_first_party_and_storage_free(site):
             assert ("application/ld+json" in head or 'src="/inst.js"' in head
                     or 'src="/track.js"' in head
                     or "goatcounter" in head), head
+
+
+# Hero + product-card illustrations (replaced the "At a glance" box).
+IMG_ALTS = {
+    "en": ("Imaging CDs dissolving into particles that form a single USB drive",
+           "Glass discs turning into a stream of particles",
+           "Several imaging sources connected through one hub"),
+    "es": ("Discos de estudios que se convierten en partículas y forman una "
+           "sola memoria USB",
+           "Discos de cristal que se convierten en un flujo de partículas",
+           "Varias fuentes de imagen conectadas por un solo punto"),
+}
+
+
+def test_institution_pages_have_responsive_illustrations(site):
+    for rel, locale in INST_PAGES.items():
+        page = _read(site, rel)
+        lang = locale.split("-")[0]
+        hero_alt, tk_alt, br_alt = IMG_ALTS[lang]
+        # "At a glance" box and its strings are gone (both languages).
+        assert "i-glance" not in page, rel
+        assert "At a glance" not in page and "En resumen" not in page, rel
+        # Hero: disc-to-usb-real, eager + high priority, sized (no CLS).
+        assert '<picture class="i-hero-img">' in page, rel
+        assert ('srcset="/img/inst/disc-to-usb-real-800.webp 800w, '
+                '/img/inst/disc-to-usb-real-1600.webp 1600w"') in page, rel
+        assert 'src="/img/inst/disc-to-usb-real-1600.jpg"' in page, rel
+        assert 'loading="eager" fetchpriority="high"' in page, rel
+        assert f'alt="{hero_alt}"' in page, rel
+        assert page.count('width="1600" height="900"') >= 1, rel
+        if rel == "institutions/index.html":
+            continue  # hub: hero image only, no products section
+        # Product cards: Toolkit (abstract discs) + Bridge (network beam), lazy.
+        for slug in ("disc-to-usb-abstract", "network-to-pacs-beam"):
+            assert f'/img/inst/{slug}-800.webp 800w' in page, (rel, slug)
+            assert f'src="/img/inst/{slug}-1600.jpg"' in page, (rel, slug)
+        assert page.count('loading="lazy"') >= 2, rel
+        assert page.count("<picture") == 3, rel
+        assert tk_alt in page and br_alt in page, rel
+        other = IMG_ALTS["es" if lang == "en" else "en"]
+        assert other[0] not in page, f"{rel}: alt text in the wrong language"
+
+
+def test_institution_image_files_exist_and_are_small(site):
+    for slug in ("disc-to-usb-real", "disc-to-usb-abstract",
+                 "network-to-pacs-beam"):
+        for name in (f"{slug}-800.webp", f"{slug}-1600.webp",
+                     f"{slug}-1600.jpg"):
+            path = os.path.join(site, "img", "inst", name)
+            assert os.path.isfile(path), name
+            assert os.path.getsize(path) <= 180 * 1024, name

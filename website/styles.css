@@ -483,14 +483,11 @@ body.inst .i-hero h1 { font-size: 2.625rem; line-height: 1.2;
 body.inst .i-lead { font-size: 1.125rem; color: var(--i-text-2);
   max-width: 40rem; margin-bottom: 28px; }
 body.inst .i-actions { display: flex; flex-wrap: wrap; gap: 1px; }
-body.inst .i-glance { background: var(--i-layer);
-  border-top: 2px solid var(--i-primary); padding: 16px; }
-body.inst .i-glance dl { margin: 0; }
-body.inst .i-glance dl > div { padding: 10px 0;
-  border-top: 1px solid var(--i-border); }
-body.inst .i-glance dt { font-family: var(--i-mono); font-size: 0.75rem;
-  color: var(--i-text-2); }
-body.inst .i-glance dd { margin: 2px 0 0; font-size: 0.9375rem; }
+/* Hero illustration (replaces the old "At a glance" box): 16:9, 1px rule. */
+body.inst .i-hero-media { align-self: center; }
+body.inst .i-hero-img img { display: block; width: 100%; height: auto;
+  aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid #e0e0e0;
+  background: #0b1430; box-sizing: border-box; }
 
 /* Buttons: square, Carbon-like */
 body.inst .i-btn { display: inline-flex; align-items: center;
@@ -525,6 +522,13 @@ body.inst .i-src { font-family: var(--i-mono); font-size: 0.75rem;
 
 /* Cards + status tags */
 body.inst .i-card > :last-child { margin-bottom: 0; }
+/* Product-card banner: 21:9 crop of the 16:9 illustration, flush with the
+   card edges (the tile has 20px 16px padding). */
+body.inst .i-card-img { display: block; margin: -20px -16px 16px; }
+body.inst .i-card-img img { display: block; width: 100%; height: auto;
+  aspect-ratio: 21 / 9; object-fit: cover; background: #0b1430; }
+/* Network scenes: keep the PACS server (upper right) in a tight crop. */
+body.inst .i-img-server img { object-position: 70% 35%; }
 body.inst .i-tag { display: inline-block; font-family: var(--i-mono);
   font-size: 0.75rem; padding: 2px 8px; }
 body.inst .i-tag-ok { background: var(--i-ok-bg); color: var(--i-ok-text); }
