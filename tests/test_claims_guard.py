@@ -90,11 +90,11 @@ def _sources():
     for g in json_globs:
         for p in sorted(glob.glob(os.path.join(REPO, g), recursive=True)):
             with open(p, encoding="utf-8") as f:
-                out.append((os.path.relpath(p, REPO), "\n".join(_strings(json.load(f)))))
+                out.append((os.path.relpath(p, REPO).replace(os.sep, "/"), "\n".join(_strings(json.load(f)))))
     for g in text_globs:
         for p in sorted(glob.glob(os.path.join(REPO, g), recursive=True)):
             with open(p, encoding="utf-8") as f:
-                out.append((os.path.relpath(p, REPO), _drop_front_matter_notes(f.read())))
+                out.append((os.path.relpath(p, REPO).replace(os.sep, "/"), _drop_front_matter_notes(f.read())))
     return out
 
 
