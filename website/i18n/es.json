@@ -308,7 +308,7 @@
   "instp.form_message": "¿Algo más que debamos saber?",
   "instp.form_optional": "opcional",
   "instp.form_hp": "Deje este campo vacío",
-  "instp.form_privacy": "Usamos lo que nos envíe solo para responderle y llevar a cabo su piloto. Sin rastreo y sin listas de correo. Si llegó por un enlace que le enviamos, se incluye su código de referencia corto. Por favor, no incluya datos de pacientes. <a href=\"{privacy}\">Aviso de privacidad</a>.",
+  "instp.form_privacy": "Usamos lo que nos envíe solo para responderle y llevar a cabo su piloto. Sin rastreo y sin listas de correo. Por favor, no incluya datos de pacientes. <a href=\"{privacy}\">Aviso de privacidad</a>.",
   "instp.form_pending": "Las solicitudes en línea abren pronto. Mientras tanto, escríbanos:",
   "instp.form_pending_link": "enviar su solicitud por correo",
   "instp.form_sending": "Enviando…",
