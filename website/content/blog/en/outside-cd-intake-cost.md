@@ -62,7 +62,7 @@ At the end of two weeks, work out four numbers from your sheet:
 
 Then:
 
-- **Staff hours per year** ≈ D × 52 × (M + F × R) ÷ 60
+- **Staff hours per year** ≈ total hands-on staff minutes over the two weeks × 26 ÷ 60. Include initial handling and rework, counting each minute only once.
 - **Staff cost per year** ≈ staff hours per year × your loaded hourly cost for the roles involved
 
 Use your own hourly cost; finance can give you a loaded figure. Compare your M and F with the published benchmarks above: if you are close to a median of 10 minutes and a failure rate in the 22–30% range, you are in the range the literature describes. If you are far off, that is worth knowing too.
