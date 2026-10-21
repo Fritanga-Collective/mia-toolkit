@@ -1,7 +1,8 @@
 /**
  * MIA Tools — forms Worker (Cloudflare Workers + D1).
  *
- * Receives the institutional pilot-request form from https://miatools.tech,
+ * Receives the institutional pilot-request form from https://miatools.tech
+ * (and the MIA Bridge design-partner form from https://bridge.miatools.tech),
  * validates it, stores one row in D1 and either 303-redirects (plain HTML
  * POST, no JS) or answers JSON (fetch from website/inst.js).
  *
@@ -27,9 +28,25 @@ export const LIMITS = {
   pacs: 200,
   message: 2000,
 };
+// Optional MIA Bridge design-partner fields (form=bridge_partner). Stored as
+// NULL when empty. "region" is free text (the Bridge form is not per market).
+export const BRIDGE_LIMITS = {
+  sites_count: 20,
+  pacs_vendor: 120,
+  pacs_version: 60,
+  timeline: 120,
+  region: 120,
+};
+export const PROTOCOLS = new Set(["", "dimse", "dicomweb", "unsure"]);
 export const MAX_BODY_BYTES = 16 * 1024;
-export const FORMS = new Set(["pilot"]);
+export const FORMS = new Set(["pilot", "bridge_partner"]);
 export const MARKETS = new Set(["mx", "us", "sg"]);
+// What the visitor clicked before the form opened (pilot CTA, a pricing
+// tier, the procurement kit). Keep in sync with INST_REQUEST_TYPES in
+// website/build.py. Missing = "pilot" (older pages); unknown = rejected.
+export const REQUEST_TYPES = new Set(["pilot", "pricing_clinic",
+  "pricing_hospital", "pricing_network", "pricing_public", "kit",
+  "bridge_partner"]);
 // Keep in sync with INST_DISC_RANGES in website/build.py.
 export const DISCS = new Set(["", "lt10", "10-50", "51-200", "gt200", "unsure"]);
 // Keep in sync with INST_THANKS in website/build.py.
@@ -76,7 +93,7 @@ export function _resetRateLimit() {
 
 // ───────────────────────────── helpers ─────────────────────────────
 function allowedOrigins(env) {
-  return (env.ALLOWED_ORIGINS || "https://miatools.tech")
+  return (env.ALLOWED_ORIGINS || "https://miatools.tech,https://bridge.miatools.tech")
     .split(",").map((s) => s.trim()).filter(Boolean);
 }
 
@@ -129,10 +146,17 @@ export function validate(input) {
 
   const form = clean(get("form"), 20) || "pilot";
   if (!FORMS.has(form)) errors.push("form");
+  const bridge = form === "bridge_partner";
   const market = clean(get("market"), 4) || "";
-  if (!MARKETS.has(market)) errors.push("market");
+  // The Bridge form is not tied to a market page; the pilot form must be.
+  if (!(MARKETS.has(market) || (bridge && market === ""))) errors.push("market");
 
-  const row = { form, market };
+  const requestType = clean(get("request_type"), 32) || (bridge ? "bridge_partner" : "pilot");
+  if (!REQUEST_TYPES.has(requestType)) errors.push("request_type");
+  // bridge_partner goes with the Bridge form only, and vice versa.
+  if (bridge !== (requestType === "bridge_partner")) errors.push("request_type");
+
+  const row = { form, market, request_type: requestType };
   for (const [k, max] of Object.entries(LIMITS)) {
     const v = clean(get(k), max);
     if (v === null) errors.push(k);
@@ -141,6 +165,15 @@ export function validate(input) {
   if (!row.name) errors.push("name");
   if (!row.organisation) errors.push("organisation");
   if (!row.email || !EMAIL_RE.test(row.email)) errors.push("email");
+
+  for (const [k, max] of Object.entries(BRIDGE_LIMITS)) {
+    const v = clean(get(k), max);
+    if (v === null) errors.push(k);
+    row[k] = v || null;
+  }
+  const protocol = clean(get("protocol"), 10);
+  if (protocol === null || !PROTOCOLS.has(protocol)) errors.push("protocol");
+  row.protocol = protocol && PROTOCOLS.has(protocol) ? protocol : null;
 
   const discs = clean(get("discs_per_month"), 10);
   row.discs_per_month = discs !== null && DISCS.has(discs) ? discs : "";
@@ -221,13 +254,16 @@ function marketPage(env, market) {
 
 // ───────────────────────────── storage ─────────────────────────────
 export const INSERT_SQL =
-  "INSERT INTO submissions (form, market, campaign, name, email, organisation, "
-  + "role, discs_per_month, pacs, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  "INSERT INTO submissions (form, request_type, market, campaign, name, email, "
+  + "organisation, role, discs_per_month, pacs, message, sites_count, "
+  + "pacs_vendor, pacs_version, protocol, timeline, region) "
+  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 async function store(env, row) {
   await env.DB.prepare(INSERT_SQL).bind(
-    row.form, row.market, row.campaign, row.name, row.email, row.organisation,
-    row.role, row.discs_per_month, row.pacs, row.message,
+    row.form, row.request_type, row.market, row.campaign, row.name, row.email, row.organisation,
+    row.role, row.discs_per_month, row.pacs, row.message, row.sites_count,
+    row.pacs_vendor, row.pacs_version, row.protocol, row.timeline, row.region,
   ).run();
 }
 
@@ -240,13 +276,19 @@ export function emailRequest(env, row) {
   if (!provider || !env.EMAIL_API_KEY || !env.NOTIFY_TO || !env.NOTIFY_FROM) {
     return null;
   }
-  const subject = `New ${row.form} request — ${row.organisation} (${row.market.toUpperCase()})`;
+  const subject = `New ${row.request_type} request — ${row.organisation} (${(row.market || row.region || "-").toUpperCase()})`;
   const text = [
-    `Form: ${row.form}`, `Market: ${row.market}`,
+    `Form: ${row.form}`, `Request type: ${row.request_type}`, `Market: ${row.market}`,
     `Campaign: ${row.campaign || "-"}`, `Name: ${row.name}`,
     `Email: ${row.email}`, `Organisation: ${row.organisation}`,
     `Role: ${row.role || "-"}`, `Discs per month: ${row.discs_per_month || "-"}`,
-    `PACS/viewer: ${row.pacs || "-"}`, "", row.message || "(no message)",
+    `PACS/viewer: ${row.pacs || "-"}`,
+    ...(row.form === "bridge_partner" ? [
+      `Region: ${row.region || "-"}`, `Sites: ${row.sites_count || "-"}`,
+      `PACS vendor: ${row.pacs_vendor || "-"}`, `PACS version: ${row.pacs_version || "-"}`,
+      `Protocol: ${row.protocol || "-"}`, `Timeline: ${row.timeline || "-"}`,
+    ] : []),
+    "", row.message || "(no message)",
   ].join("\n");
   if (provider === "zeptomail") {
     return {
@@ -291,8 +333,10 @@ async function notify(env, row, fetchImpl) {
 }
 
 // ───────────────────────────── export (CSV) ─────────────────────────────
-export const COLUMNS = ["id", "created_at", "form", "market", "campaign", "name",
-  "email", "organisation", "role", "discs_per_month", "pacs", "message"];
+export const COLUMNS = ["id", "created_at", "form", "request_type", "market",
+  "campaign", "name",
+  "email", "organisation", "role", "discs_per_month", "pacs", "message",
+  "sites_count", "pacs_vendor", "pacs_version", "protocol", "timeline", "region"];
 
 export function csvCell(v) {
   let s = v == null ? "" : String(v);
@@ -362,7 +406,10 @@ async function handleSubmit(request, env, ctx, fetchImpl) {
 
   const v = validate(parsed.data);
   const market = MARKETS.has(parsed.data.market) ? parsed.data.market : "us";
-  const thanks = siteOrigin(env) + THANKS[market];
+  const isBridge = parsed.data.form === "bridge_partner";
+  const bridgeThanks = env.BRIDGE_THANKS || "https://bridge.miatools.tech/thanks/";
+  const thanks = isBridge ? bridgeThanks : siteOrigin(env) + THANKS[market];
+  const back = isBridge ? new URL(bridgeThanks).origin + "/" : marketPage(env, market);
   if (v.spam) {
     // Honeypot filled: pretend success, store nothing.
     return asJson ? json({ ok: true }, 200, cors)
@@ -370,7 +417,7 @@ async function handleSubmit(request, env, ctx, fetchImpl) {
   }
   if (!v.ok) {
     return asJson ? json({ ok: false, error: "invalid", fields: v.errors }, 400, cors)
-      : errorPage(parsed.data.lang === "es" ? "es" : "en", 400, marketPage(env, market));
+      : errorPage(parsed.data.lang === "es" ? "es" : "en", 400, back);
   }
 
   try {
@@ -378,7 +425,7 @@ async function handleSubmit(request, env, ctx, fetchImpl) {
   } catch (e) {
     console.error("store: D1 insert failed");
     return asJson ? json({ ok: false, error: "server" }, 500, cors)
-      : errorPage(v.row.lang, 500, marketPage(env, market));
+      : errorPage(v.row.lang, 500, back);
   }
   const send = notify(env, v.row, fetchImpl);
   if (ctx && typeof ctx.waitUntil === "function") ctx.waitUntil(send);

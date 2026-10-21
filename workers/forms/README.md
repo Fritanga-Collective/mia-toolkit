@@ -2,7 +2,22 @@
 
 Cloudflare Worker + D1 backend for the institutional **pilot-request form** on
 `/institutions/<market>/#pilot`. One row per request in D1; optional
-notification email; a token-protected CSV export. No cookies, no IPs stored or
+notification email; a token-protected CSV export. The same form also carries
+pricing and procurement-kit requests: a `request_type` field records what was
+clicked (`pilot` | `pricing_clinic` | `pricing_hospital` | `pricing_network` |
+`pricing_public` | `kit`; missing = `pilot`, anything else is rejected). For a
+D1 database created before this column existed, run the `ALTER TABLE` line at
+the top of `schema.sql` once.
+
+**MIA Bridge design-partner form** (bridge.miatools.tech): POST with
+`form=bridge_partner` (and `request_type=bridge_partner`, the default for that
+form). `market` may be empty. Accepted optional fields, size-limited and stored
+as NULL when empty: `region` (120), `sites_count` (20), `pacs_vendor` (120),
+`pacs_version` (60), `protocol` (`dimse` | `dicomweb` | `unsure`), `timeline`
+(120), plus the usual `name`, `email`, `organisation`, `role`,
+`discs_per_month`, `message`, `lang`, `utm_campaign` and the `website`
+honeypot. No-JS posts 303 to `BRIDGE_THANKS` (default
+`https://bridge.miatools.tech/thanks/`). No cookies, no IPs stored or
 logged, no third-party scripts on the site.
 
 > **Before going live:** ship the privacy-policy update (launch-readiness
@@ -15,7 +30,7 @@ logged, no third-party scripts on the site.
 
 | Route | |
 |---|---|
-| `POST /submit` | `application/x-www-form-urlencoded` (no-JS form) or JSON (fetch). Origin must be in `ALLOWED_ORIGINS` (default `https://miatools.tech`), else 403. Validates and size-limits every field (body ≤ 16 KB). Honeypot `website` filled → pretends success, stores nothing. In-memory per-isolate rate limit (5 per 10 min per client; salted hash in memory only, never persisted). Stores the row in D1, then **303 → thank-you page** (no JS) or `{"ok": true}` (when `Accept: application/json`). |
+| `POST /submit` | `application/x-www-form-urlencoded` (no-JS form) or JSON (fetch). Origin must be in `ALLOWED_ORIGINS` (default `https://miatools.tech,https://bridge.miatools.tech`), else 403. Validates and size-limits every field (body ≤ 16 KB). Honeypot `website` filled → pretends success, stores nothing. In-memory per-isolate rate limit (5 per 10 min per client; salted hash in memory only, never persisted). Stores the row in D1, then **303 → thank-you page** (no JS) or `{"ok": true}` (when `Accept: application/json`). |
 | `OPTIONS /submit` | CORS preflight, allowed origins only. |
 | `GET /export` | CSV of all rows. Needs `Authorization: Bearer $EXPORT_TOKEN`; returns 404 if no token is configured. Cells starting with `= + - @` are prefixed with `'` (spreadsheet formula injection). |
 | `GET /health` | `ok` |
