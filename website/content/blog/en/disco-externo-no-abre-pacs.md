@@ -53,7 +53,7 @@ Step 2 is what **MIA Toolkit** does: a desktop app for macOS and Windows that re
 
 When you are done, finish the line you started in step 1:
 
-- **Minutes** from receiving the disc to the study being imported (or given up on).
+- **Hands-on staff minutes** actually spent logging, checking and importing the disc, including retries and follow-up; exclude time waiting in a queue or copying unattended.
 - **Imported?** Yes or no.
 - **Reason**, if it failed: no DICOMDIR, damaged disc, ZIP, identity mismatch, other.
 
