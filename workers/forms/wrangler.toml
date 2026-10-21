@@ -7,6 +7,10 @@ compatibility_date = "2026-09-01"
 # right sidebar), or delete this line and let `wrangler login` pick it.
 account_id = "cb3e127f02ff24cbed7502b7274a8069"
 
+# Custom domain (miatools.tech is on this Cloudflare account). Must stay a
+# top-level key, i.e. above any [table] header, or TOML nests it.
+routes = [{ pattern = "forms.miatools.tech", custom_domain = true }]
+
 # Keep request logs off: Workers Logs would record request metadata (incl.
 # client IPs). The Worker itself never logs IPs or field values.
 [observability]
@@ -33,5 +37,3 @@ database_name = "mia-forms"
 # PLACEHOLDER — paste the id printed by `npx wrangler d1 create mia-forms`.
 database_id = "60ffaec7-9784-4a73-bd71-b48b796ca427"
 
-# Optional custom domain (needs miatools.tech on Cloudflare DNS):
-routes = [{ pattern = "forms.miatools.tech", custom_domain = true }]

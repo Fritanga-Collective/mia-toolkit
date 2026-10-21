@@ -1603,6 +1603,15 @@ def home_region_form(s: dict, lang: str, ipages) -> str:
         '            </noscript>')
 
 
+def _display_path(path: str) -> str:
+    """Path relative to the cwd for the build summary; absolute when that
+    isn't possible (Windows: output and cwd on different drives)."""
+    try:
+        return os.path.relpath(path)
+    except ValueError:
+        return os.path.abspath(path)
+
+
 def main(site: str | None = None) -> int:
     langs = load_langs()
     if "en" not in langs:
@@ -1747,7 +1756,7 @@ def main(site: str | None = None) -> int:
           f"({', '.join(langs)}), {blog_pages} blog pages "
           f"({len(posts)} posts), {inst_count} institution pages, "
           f"{len(LEGACY)} redirects, sitemap, assets "
-          f"→ {os.path.relpath(site)}")
+          f"→ {_display_path(site)}")
     return 0
 
 
