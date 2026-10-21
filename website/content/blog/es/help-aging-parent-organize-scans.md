@@ -3,6 +3,8 @@ title: Cómo ayudar a un padre mayor a organizar años de estudios médicos
 slug: help-aging-parent-organize-scans
 date: 2026-07-16
 summary: Un plan tranquilo y sin tecnicismos para juntar los discos de imágenes regados de un padre — incluso desde otro país — en una sola USB con respaldo que puedes llevar a cualquier consulta.
+og_title: Cómo ayudar a tu padre mayor a organizar sus estudios
+og_description: Un plan tranquilo y sin tecnicismos para juntar los discos regados de un padre — incluso desde otro país — en una sola USB con respaldo para cada consulta.
 languages: [en, es]
 status: published
 tags: [stories, caregivers]

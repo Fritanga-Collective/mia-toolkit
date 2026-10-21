@@ -36,12 +36,38 @@ HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
 # (templates/patients.html, the former homepage). The patient page keeps its
 # historical `index.*` i18n keys; the chooser's copy lives under `home.*`.
 PAGES = ["index", "patients", "help", "support", "privacy", "stats"]
-OG_PAGES = {"index", "patients", "help", "support"}  # no social card on privacy
+OG_PAGES = {"index", "patients", "help", "support", "privacy", "stats"}
 I18N_PREFIX = {"index": "home", "patients": "index"}  # page -> i18n key prefix
 # Social-card image per page: 1200x630 crops in img/og/ (1.91:1, the size
-# Facebook, LinkedIn and X recommend). Pages not listed keep social.jpg.
+# Facebook, LinkedIn and X recommend). Pages not listed use OG_IMAGE_DEFAULT.
 OG_IMAGE = {"index": "/img/og/mia-tools.jpg", "patients": "/img/og/patients.jpg",
+            "help": "/img/og/patients.jpg", "blog": "/img/og/patients.jpg",
             "institutions": "/img/og/mia-tools.jpg"}
+OG_IMAGE_DEFAULT = "/img/og/mia-tools.jpg"
+
+
+def og_meta(title: str, desc: str, url: str, image: str, site_name: str,
+            locale: str = "") -> list[str]:
+    """OG + Twitter card lines for pages without their own head_seo
+    (institution form and thank-you pages, redirect stubs). Escapes."""
+    t, d = html.escape(title, quote=True), html.escape(desc, quote=True)
+    img = image if image.startswith("http") else BASE + image
+    lines = ['  <meta property="og:type" content="website">',
+             f'  <meta property="og:site_name" content="{html.escape(site_name, quote=True)}">',
+             f'  <meta property="og:title" content="{t}">',
+             f'  <meta property="og:description" content="{d}">',
+             f'  <meta property="og:url" content="{url}">']
+    if locale:
+        lines.append(f'  <meta property="og:locale" content="{locale}">')
+    return lines + [
+        f'  <meta property="og:image" content="{img}">',
+        '  <meta property="og:image:width" content="1200">',
+        '  <meta property="og:image:height" content="630">',
+        f'  <meta property="og:image:alt" content="{t}">',
+        '  <meta name="twitter:card" content="summary_large_image">',
+        f'  <meta name="twitter:title" content="{t}">',
+        f'  <meta name="twitter:description" content="{d}">',
+        f'  <meta name="twitter:image" content="{img}">']
 DIR_PAGES = {"patients"}  # emitted as <page>/index.html (directory URL)
 
 # The 6 guided-setup screens the /help walkthrough documents, in order (the
@@ -88,6 +114,9 @@ LEGACY = {
     "privacidad.html": "/es/privacy.html",
     "zh.html": "/zh/", "support-zh.html": "/zh/support.html",
     "privacy-zh.html": "/zh/privacy.html",
+    # Mexico is published in Spanish only; catch the guessable English path.
+    "institutions/mx/index.html": "/es/institutions/mx/",
+    "es/institutions/index.html": "/es/institutions/mx/",
 }
 
 
@@ -173,8 +202,7 @@ def head_seo(langs: dict, lang: str, page: str, s: dict) -> str:
         kp = I18N_PREFIX.get(page, page)
         title = s.get(f"{kp}.og_title", s.get(f"{kp}.title", ""))
         desc = s.get(f"{kp}.og_desc", s.get(f"{kp}.meta_desc", ""))
-        og_img, og_w, og_h = (OG_IMAGE[page], 1200, 630) if page in OG_IMAGE \
-            else ("/img/social.jpg", 1200, 633)
+        og_img, og_w, og_h = OG_IMAGE.get(page, OG_IMAGE_DEFAULT), 1200, 630
         lines += [
             '  <meta property="og:type" content="website">',
             '  <meta property="og:site_name" content="MIA Toolkit">',
@@ -241,7 +269,7 @@ def json_ld(lang: str, s: dict, page: str) -> str:
             "url": BASE + page_url(lang, "patients"),
             "downloadUrl": "https://github.com/Fritanga-Collective/mia-toolkit/releases/latest",
             "description": s["index.meta_desc"],
-            "image": f"{BASE}/img/social.jpg",
+            "image": BASE + OG_IMAGE["patients"],
             "isAccessibleForFree": True,
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
             "publisher": {"@type": "Organization", "name": "Fritanga",
@@ -428,6 +456,14 @@ def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
     clusters: dict[str, list[dict]] = {}
     for p in posts:
         clusters.setdefault(p["slug"], []).append(p)
+    # A translation without its own `image` reuses the cluster's (English
+    # first), so every language shares the post's hero and social card.
+    for cl in clusters.values():
+        imgs = [q["image"] for q in sorted(cl, key=lambda q: q["lang"] != "en")
+                if q["image"]]
+        for q in cl:
+            if not q["image"] and imgs:
+                q["image"] = imgs[0]
     return posts, clusters
 
 
@@ -456,7 +492,7 @@ def blog_head_seo(post: dict, cluster: list[dict]) -> str:
     desc = html.escape(post.get("og_description") or post["summary"],
                        quote=True)
     custom = _post_image_url(post)
-    image = custom or f"{BASE}/img/social.jpg"
+    image = custom or BASE + OG_IMAGE["blog"]
     lines += [
         '  <meta property="og:type" content="article">',
         '  <meta property="og:site_name" content="MIA Toolkit">',
@@ -466,10 +502,10 @@ def blog_head_seo(post: dict, cluster: list[dict]) -> str:
         f'  <meta property="article:published_time" content="{post["date"]}">',
         f'  <meta property="og:image" content="{image}">',
     ]
-    if not custom:  # 1200x633 describes social.jpg only
+    if not custom:  # 1200x630 describes the default card only
         lines += [
             '  <meta property="og:image:width" content="1200">',
-            '  <meta property="og:image:height" content="633">',
+            '  <meta property="og:image:height" content="630">',
         ]
     lines += [
         '  <meta name="twitter:card" content="summary_large_image">',
@@ -489,7 +525,7 @@ def blog_json_ld(post: dict, cluster: list[dict]) -> str:
         "datePublished": post["date"],
         "inLanguage": HREFLANG.get(post["lang"], post["lang"]),
         "description": post["summary"],
-        "image": _post_image_url(post) or f"{BASE}/img/social.jpg",
+        "image": _post_image_url(post) or BASE + OG_IMAGE["blog"],
         "author": {"@type": "Organization", "name": "Fritanga",
                    "url": "https://fritanga.co"},
         "publisher": {"@type": "Organization", "name": "Fritanga",
@@ -678,20 +714,23 @@ def blog_index_head_seo(lang: str, langs: dict, posts: list[dict]) -> str:
         lines.append(f'  <link rel="alternate" hreflang="x-default" '
                      f'href="{BASE}{blog_index_url("en")}">')
     title = html.escape(langs[lang]["blog.index_title"], quote=True)
-    desc = html.escape(langs[lang]["blog.meta_desc"], quote=True)
+    desc = html.escape(langs[lang].get("blog.og_desc",
+                                       langs[lang]["blog.meta_desc"]),
+                       quote=True)
+    img = BASE + OG_IMAGE["blog"]
     lines += [
         '  <meta property="og:type" content="website">',
         '  <meta property="og:site_name" content="MIA Toolkit">',
         f'  <meta property="og:title" content="{title}">',
         f'  <meta property="og:description" content="{desc}">',
         f'  <meta property="og:url" content="{url}">',
-        f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
+        f'  <meta property="og:image" content="{img}">',
         '  <meta property="og:image:width" content="1200">',
-        '  <meta property="og:image:height" content="633">',
+        '  <meta property="og:image:height" content="630">',
         '  <meta name="twitter:card" content="summary_large_image">',
         f'  <meta name="twitter:title" content="{title}">',
         f'  <meta name="twitter:description" content="{desc}">',
-        f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+        f'  <meta name="twitter:image" content="{img}">',
     ]
     return "\n".join(lines)
 
@@ -750,14 +789,17 @@ def render(template: str, s: dict, computed: dict) -> str:
     return out
 
 
-def redirect_stub(target: str) -> str:
+def redirect_stub(target: str, card: str = "") -> str:
+    """Meta-refresh stub. `card` is the target page's og:/twitter: lines, so
+    a link shared to the old URL still previews like the page it opens."""
     url = BASE + target
+    card = f"\n{card}" if card else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="refresh" content="0; url={target}">
-  <link rel="canonical" href="{url}">
+  <link rel="canonical" href="{url}">{card}
   <title>Redirecting…</title>
 </head>
 <body>
@@ -1579,7 +1621,12 @@ def render_inst_thanks(langs: dict, lang: str, market: str | None, pages,
         "INST_LOCALE": "es-MX" if lang == "es" else "en",
         "PAGE_TITLE": html.escape(inst_title(s["instp.thanks_title"], lang)),
         "CANONICAL": url,
-        "FAVICONS": "\n".join(_favicon_lines()),
+        "FAVICONS": "\n".join(_favicon_lines() + og_meta(
+            s["instp.thanks_title"],
+            langs["en"].get("instp.hub_og_desc", langs["en"]["instp.hub_meta"])
+            if lang == "en" else s.get("instp.hub_og_desc",
+                                       s.get("instp.hub_meta", "")),
+            url, OG_IMAGE["institutions"], inst_brand(lang))),
         "INST_SHELL": inst_shell(langs, lang, market, pages, here=False),
         "INST_FOOTER": inst_footer(lang, hours),
         "BACK_URL": back,
@@ -1598,7 +1645,11 @@ def render_inst_pilot(langs: dict, market: str, lang: str, pdata: dict,
         "PAGE_TITLE": html.escape(inst_title(s["instp.req_title_" + rtype],
                                              lang)),
         "CANONICAL": BASE + inst_request_url(lang, market, rtype),
-        "FAVICONS": "\n".join(_favicon_lines()),
+        "FAVICONS": "\n".join(_favicon_lines() + og_meta(
+            s["instp.req_title_" + rtype],
+            s.get("m.og_desc", s["m.meta_desc"]),
+            BASE + inst_request_url(lang, market, rtype),
+            OG_IMAGE["institutions"], inst_brand(lang), pdata["og_locale"])),
         "INST_SHELL": inst_shell(langs, lang, market, pages, here=False),
         "INST_FOOTER": inst_footer(lang, s["m.contact_hours"]),
         "INST_PILOT_FORM": inst_pilot_form(s, lang, market, hlevel="h1",
@@ -1827,8 +1878,19 @@ def main(site: str | None = None) -> int:
     inst_count, inst_alts = build_institutions(site, langs, ipages)
 
     for legacy, target in LEGACY.items():
-        with open(os.path.join(site, legacy), "w", encoding="utf-8") as f:
-            f.write(redirect_stub(target))
+        tfile = os.path.join(site, target.strip("/"))
+        if target.endswith("/"):
+            tfile = os.path.join(tfile, "index.html")
+        card = ""
+        if os.path.exists(tfile):
+            with open(tfile, encoding="utf-8") as f:
+                card = "\n".join(re.findall(
+                    r'^ *<meta (?:property="og:|name="twitter:).*>$', f.read(),
+                    re.M))
+        path = os.path.join(site, legacy)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(redirect_stub(target, card))
 
     with open(os.path.join(site, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(sitemap(langs, posts, clusters, inst_alts))

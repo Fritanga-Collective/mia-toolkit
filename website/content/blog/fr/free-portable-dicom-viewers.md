@@ -3,6 +3,8 @@ title: Les meilleures visionneuses DICOM gratuites et portables pour Windows et 
 slug: free-portable-dicom-viewers
 date: 2026-06-30
 summary: Comparatif des visionneuses DICOM gratuites pour Windows et Mac — et une astuce simple pour placer une visionneuse portable sur la même clé USB, afin que n'importe qui puisse ouvrir vos images sans aucune installation.
+og_title: Visionneuses DICOM gratuites et portables, Windows et Mac
+og_description: Comparatif des visionneuses DICOM gratuites pour Windows et Mac — et une astuce pour placer une visionneuse portable sur votre clé USB, sans installation.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, viewers]

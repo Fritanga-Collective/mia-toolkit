@@ -3,6 +3,8 @@ title: Cómo pasar un cajón de discos de imágenes del hospital a una sola USB 
 slug: how-to-use-mia-toolkit-guide
 date: 2026-07-23
 summary: Una guía de principio a fin para convertir un cajón de discos de imágenes del hospital en una sola USB ordenada que cualquier radiólogo puede abrir — copiar, revisar, agregar informes, entregar.
+og_title: Cómo pasar un cajón de discos del hospital a una sola USB
+og_description: Guía de principio a fin para pasar un cajón de discos del hospital a una sola USB ordenada que cualquier radiólogo abre: copiar, revisar, agregar informes.
 languages: [en, es]
 status: published
 tags: [guides]

@@ -3,6 +3,8 @@ title: Los mejores visores DICOM gratis y portátiles para Windows y Mac
 slug: free-portable-dicom-viewers
 date: 2026-06-30
 summary: Comparamos los visores DICOM gratuitos para Windows y Mac — más un truco sencillo para poner un visor portátil en la misma USB, para que cualquiera abra tus estudios sin instalar nada.
+og_title: Visores DICOM gratis y portátiles para Windows y Mac
+og_description: Comparamos visores DICOM gratis para Windows y Mac — y un truco para llevar un visor portátil en tu USB y que cualquiera abra tus estudios sin instalar.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, viewers]

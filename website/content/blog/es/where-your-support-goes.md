@@ -3,6 +3,7 @@ title: A dónde va tu apoyo (y por qué esta herramienta es gratis)
 slug: where-your-support-goes
 date: 2026-07-28
 summary: MIA Toolkit es gratis y siempre lo será — aquí va una mirada honesta a lo que de verdad paga el apoyo voluntario, y al cruce de subsidio que la mantiene abierta para todos.
+og_description: MIA Toolkit es gratis y siempre lo será — una mirada honesta a lo que de verdad paga el apoyo voluntario, y al cruce de subsidio que la mantiene abierta.
 languages: [en, es]
 status: published
 tags: [transparency]

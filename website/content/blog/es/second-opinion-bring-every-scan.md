@@ -3,6 +3,8 @@ title: ¿Vas por una segunda opinión? Lleva todos tus estudios, no solo el más
 slug: second-opinion-bring-every-scan
 date: 2026-07-14
 summary: Una segunda opinión es mucho más fuerte con toda tu historia de imágenes, no solo con el disco más nuevo — aquí te decimos por qué, y cómo juntarlo todo en una sola USB que tú controlas.
+og_title: ¿Segunda opinión? Lleva todos tus estudios, no solo el nuevo
+og_description: Una segunda opinión es mucho más fuerte con toda tu historia de imágenes, no solo el último disco — por qué, y cómo juntarla en una USB que tú controlas.
 languages: [en, es]
 status: published
 tags: [stories, second-opinion]

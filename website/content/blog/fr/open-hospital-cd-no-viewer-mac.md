@@ -3,6 +3,8 @@ title: Comment ouvrir un CD d'imagerie d'hôpital quand il n'y a pas de visionne
 slug: open-hospital-cd-no-viewer-mac
 date: 2026-07-07
 summary: Votre CD d'hôpital ne s'ouvre pas ? Les images sont presque certainement intactes — voici comment passer outre la visionneuse défaillante et ouvrir vos examens sur un Mac ou un PC Windows.
+og_title: Ouvrir un CD d'hôpital sans visionneuse (ou sur un Mac)
+og_description: Votre CD d'hôpital ne s'ouvre pas ? Les images sont presque certainement intactes — voici comment ouvrir vos examens sur un Mac ou un PC Windows.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, mac]

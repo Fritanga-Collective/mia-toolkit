@@ -3,6 +3,8 @@ title: Cara Berkongsi Imbasan Anda pada Satu USB dengan Doktor atau Ahli Radiolo
 slug: share-scans-one-usb
 date: 2026-07-02
 summary: Panduan langkah demi langkah dalam bahasa biasa untuk meletakkan semua pengimejan anda pada satu USB yang boleh dibuka oleh doktor — apa yang patut ada padanya, cara ahli radiologi membacanya, dan apa yang patut dikatakan.
+og_title: Cara Berkongsi Imbasan Anda pada Satu USB dengan Doktor
+og_description: Panduan mudah meletakkan semua pengimejan anda pada satu USB yang boleh dibuka doktor — apa yang patut ada padanya dan cara ahli radiologi membacanya.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]

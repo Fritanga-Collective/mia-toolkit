@@ -3,9 +3,11 @@ title: Getting a Second Opinion? Bring Every Scan, Not Just the Latest
 slug: second-opinion-bring-every-scan
 date: 2026-07-14
 summary: A second opinion is far stronger with your whole imaging history, not just the newest disc — here's why, and how to gather it all onto one USB you control.
+og_title: Second Opinion? Bring Every Scan, Not Just the Latest
 languages: [en, es]
 status: published
 tags: [stories, second-opinion]
+image: /img/blog/bring-prior-mammograms.jpg
 ---
 
 If you are reading this, you may be facing news you never wanted to hear. And now you are doing something brave and smart: you are getting a second opinion.

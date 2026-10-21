@@ -3,6 +3,8 @@ title: Cómo abrir un disco de imágenes del hospital cuando no hay visor (o no 
 slug: open-hospital-cd-no-viewer-mac
 date: 2026-07-07
 summary: ¿Tu disco del hospital no abre? Las imágenes casi seguro están bien — aquí te decimos cómo ver más allá del visor descompuesto y abrir tus estudios en una Mac o una PC con Windows.
+og_title: Cómo abrir un disco del hospital sin visor o en una Mac
+og_description: ¿Tu disco del hospital no abre? Las imágenes casi seguro están bien — así ves más allá del visor descompuesto y abres tus estudios en una Mac o una PC.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, mac]

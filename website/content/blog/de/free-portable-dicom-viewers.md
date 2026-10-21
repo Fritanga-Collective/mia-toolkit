@@ -3,6 +3,8 @@ title: Die besten kostenlosen, portablen DICOM-Viewer für Windows und Mac
 slug: free-portable-dicom-viewers
 date: 2026-06-30
 summary: Kostenlose DICOM-Viewer für Windows und Mac im Vergleich — dazu ein einfacher Trick, mit dem Sie einen portablen Viewer auf denselben USB-Stick legen, damit jeder Ihre Aufnahmen ganz ohne Einrichtung öffnen kann.
+og_title: Kostenlose, portable DICOM-Viewer für Windows und Mac
+og_description: Kostenlose DICOM-Viewer für Windows und Mac im Vergleich — dazu ein Trick, mit dem jeder Ihre Aufnahmen vom USB-Stick ganz ohne Einrichtung öffnen kann.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, viewers]

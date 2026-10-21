@@ -3,6 +3,8 @@ title: Penonton DICOM Percuma dan Mudah Alih Terbaik untuk Windows dan Mac
 slug: free-portable-dicom-viewers
 date: 2026-06-30
 summary: Perbandingan penonton DICOM percuma untuk Windows dan Mac — serta satu helah mudah untuk meletakkan penonton mudah alih pada USB yang sama supaya sesiapa sahaja boleh membuka imbasan anda tanpa sebarang persediaan.
+og_title: Penonton DICOM Percuma dan Mudah Alih untuk Windows dan Mac
+og_description: Perbandingan penonton DICOM percuma untuk Windows dan Mac — serta helah mudah meletakkan penonton mudah alih pada USB yang sama untuk membuka imbasan anda.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, viewers]

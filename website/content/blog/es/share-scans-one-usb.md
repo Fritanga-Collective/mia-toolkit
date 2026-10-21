@@ -3,6 +3,8 @@ title: Cómo compartir tus estudios en una sola USB con tu doctor o radiólogo
 slug: share-scans-one-usb
 date: 2026-07-02
 summary: Una explicación en palabras claras de cómo poner todas tus imágenes en una sola USB que un doctor pueda abrir — qué debe llevar, cómo la lee un radiólogo y qué decir al entregarla.
+og_title: Cómo compartir tus estudios en una USB con tu doctor
+og_description: Cómo poner todas tus imágenes en una sola USB que un doctor pueda abrir — qué debe llevar, cómo la lee un radiólogo y qué decir al entregarla.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]

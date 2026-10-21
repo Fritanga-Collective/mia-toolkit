@@ -3,6 +3,8 @@ title: Cara Membuka CD Pengimejan Hospital Apabila Tiada Penonton (atau Ia Tidak
 slug: open-hospital-cd-no-viewer-mac
 date: 2026-07-07
 summary: CD hospital anda tidak mahu dibuka? Imej itu hampir pasti baik-baik sahaja — berikut ialah cara melihat melepasi penonton yang rosak dan membuka imbasan anda pada Mac atau PC Windows.
+og_title: Cara Membuka CD Hospital Tanpa Penonton atau pada Mac
+og_description: CD hospital anda tidak mahu dibuka? Imej itu hampir pasti baik-baik sahaja — berikut ialah cara membuka imbasan anda pada Mac atau PC Windows.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, mac]

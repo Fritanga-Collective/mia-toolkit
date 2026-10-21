@@ -3,6 +3,8 @@ title: How to Format a USB Drive So Any Doctor Can Open Your Medical Images
 slug: format-usb-drive
 date: 2026-06-19
 summary: The format you choose decides whether a clinic's computer can read your drive — here is why FAT32 (or exFAT for large archives) is the safe pick, and how to set it.
+og_title: How to Format a USB Drive So Any Doctor Can Open Your Scans
+og_description: The format you choose decides whether a clinic's computer can read your drive — why FAT32 (or exFAT for big archives) is the safe pick, and how to set it.
 languages: [en]
 status: published
 tags: [guides, usb]

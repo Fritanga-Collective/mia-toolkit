@@ -3,6 +3,8 @@ title: So öffnen Sie eine Krankenhaus-CD, wenn es keinen Viewer gibt (oder sie 
 slug: open-hospital-cd-no-viewer-mac
 date: 2026-07-07
 summary: Ihre Krankenhaus-CD lässt sich nicht öffnen? Die Bilder sind mit ziemlicher Sicherheit in Ordnung — hier erfahren Sie, wie Sie am defekten Viewer vorbeischauen und Ihre Aufnahmen auf einem Mac oder Windows-PC öffnen.
+og_title: Krankenhaus-CD ohne Viewer oder auf dem Mac öffnen
+og_description: Ihre Krankenhaus-CD lässt sich nicht öffnen? Die Bilder sind mit ziemlicher Sicherheit in Ordnung — so öffnen Sie Ihre Aufnahmen am Mac oder Windows-PC.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, mac]
