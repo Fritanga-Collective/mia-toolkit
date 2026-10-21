@@ -1,0 +1,5 @@
+# Build-time only: scripts/build_procurement_pdfs.py (procurement-kit PDFs).
+# WeasyPrint needs Pango on the system (macOS: `brew install pango`).
+weasyprint==70.0
+markdown==3.9
+pymupdf==2.0  # only for --preview PNGs

@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "date": "2026-10-20",
+  "brand": {
+    "en": "MIA Tools – Clinics & Hospitals",
+    "es": "MIA Tools – Clínicas y Hospitales"
+  },
+  "kit_name": {
+    "en": "Procurement kit",
+    "es": "Documentos para Compras y TI"
+  },
+  "base_path": "/kit/",
+  "documents": [
+    {
+      "lang": "en",
+      "key": "security",
+      "title": "Security One-Pager",
+      "filename": "en/mia-security-onepager-en.pdf",
+      "pages": 1,
+      "bytes": 32223,
+      "sha256": "9b8d3b16704c552ce93f4377f98ff585eb08edb53a82b9dd737e908f074e2e7a"
+    },
+    {
+      "lang": "es",
+      "key": "security",
+      "title": "Ficha de seguridad",
+      "filename": "es/mia-ficha-seguridad-es.pdf",
+      "pages": 1,
+      "bytes": 32298,
+      "sha256": "85a85d266b5980390bf252bda7a7a723aee0f58da30eb71eb1c0424e32358e4f"
+    },
+    {
+      "lang": "en",
+      "key": "it-guide",
+      "title": "IT Deployment Guide",
+      "filename": "en/mia-it-deployment-guide-en.pdf",
+      "pages": 4,
+      "bytes": 58720,
+      "sha256": "8a4e9bfcf9ea51abd9107e0b3c8a20c831d09b8b9913f7e02b31a7be005f4b1a"
+    },
+    {
+      "lang": "es",
+      "key": "it-guide",
+      "title": "Guía de instalación para TI",
+      "filename": "es/mia-guia-instalacion-ti-es.pdf",
+      "pages": 4,
+      "bytes": 60810,
+      "sha256": "a65dc5ad9cf2668975d4e3774d09df9b507d8693aa4709a5eb3d785f0dba6543"
+    },
+    {
+      "lang": "en",
+      "key": "license-terms",
+      "title": "Institutional License Terms",
+      "filename": "en/mia-license-terms-en.pdf",
+      "pages": 2,
+      "bytes": 27626,
+      "sha256": "addf8f08d1550f38c169ce2255275405eeb432a4f28166e8b86c7b4d7d0ee7c4"
+    },
+    {
+      "lang": "es",
+      "key": "license-terms",
+      "title": "Términos de la licencia institucional",
+      "filename": "es/mia-terminos-licencia-es.pdf",
+      "pages": 2,
+      "bytes": 31462,
+      "sha256": "b76a89851d715af6f3ddf6ec05b477f2b0db1896efd73571bef9e7e6b0dc4ae8"
+    },
+    {
+      "lang": "en",
+      "key": "certificate",
+      "title": "Sample License Certificate",
+      "filename": "en/mia-sample-certificate-en.pdf",
+      "pages": 1,
+      "bytes": 24173,
+      "sha256": "5e63b14f4f85110efe542be83c0a4d4ccc4c390df2122f5e8c0553581685e920"
+    },
+    {
+      "lang": "es",
+      "key": "certificate",
+      "title": "Certificado de licencia (muestra)",
+      "filename": "es/mia-certificado-muestra-es.pdf",
+      "pages": 1,
+      "bytes": 24820,
+      "sha256": "8b627ad31b16edd476b626c8e88989ca8a8dd7bba052d8afe1b506bc7e5745c3"
+    }
+  ]
+}
