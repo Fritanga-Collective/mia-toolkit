@@ -398,7 +398,7 @@
   "instp.br_url": "https://bridge.miatools.tech/en/",
   "privacy.org_h2": "Clinics and hospitals: forms and outreach links",
   "privacy.org_li1": "If you use a request form on our institutional pages (pilot, pricing, procurement kit, MIA Bridge pilot program), we collect only what you type: your name, work email, organisation, role and your answers. We use it <strong>only to reply and to run your pilot or request</strong>.",
-  "privacy.org_li2": "Form submissions are stored in a database on <strong>Cloudflare</strong> (United States region) that only we can access. We keep them for <strong>24 months after our last contact</strong>, then delete them; write to us any time to have them deleted sooner. We store no IP address, no cookie and no device identifier with them.",
+  "privacy.org_li2": "Form submissions are stored in a database on <strong>Cloudflare</strong> (United States region) that only we can access. We keep them for <strong>24 months after our last contact</strong>, then delete them; write to us any time to have them deleted sooner. We store no IP address, no cookie and no device identifier with them. Each submission also triggers an email to our support inbox, delivered by <strong>Resend</strong> (our email-delivery provider), containing the details you entered.",
   "privacy.org_li3": "Links in emails we send to organisations may carry a short code that identifies the <strong>organisation</strong> (never the person), so we can see in aggregate that our note arrived. Ask us and we'll send a link without a code.",
   "privacy.org_li4": "Our emails contain no tracking pixels or read receipts."
 }
