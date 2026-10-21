@@ -313,10 +313,13 @@ def test_pilot_form_present_with_hidden_fields_and_honeypot(site):
     assert "Correo de trabajo" in mx and "Aviso de privacidad" in mx
 
 
-def test_pilot_form_disabled_until_endpoint_set(site):
-    assert build.FORM_ENDPOINT == ""  # default until the Worker + R4 ship
+def test_pilot_form_disabled_without_endpoint(tmp_path, monkeypatch):
+    # With no endpoint configured the form must fail safe: no action,
+    # disabled submit and a mailto fallback (nothing silently breaks).
+    monkeypatch.setattr(build, "FORM_ENDPOINT", "")
+    assert build.main(str(tmp_path)) == 0
     for rel, _, _ in MARKET_PAGES.values():
-        form = _pilot_form(_read(site, rel))
+        form = _pilot_form(_read(tmp_path, rel))
         assert " action=" not in form, rel
         assert 'type="submit" disabled aria-describedby="pf-pending"' in form
         assert 'id="pf-pending"' in form

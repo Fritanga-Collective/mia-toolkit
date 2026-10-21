@@ -938,7 +938,7 @@ INST_EMAIL = "support@miatools.tech"
 # still renders, but its submit button is disabled and a visible note offers
 # the mailto fallback, so nothing silently breaks. Set it only after the
 # Worker is live AND the privacy-policy update (launch-readiness R4) ships.
-FORM_ENDPOINT = ""
+FORM_ENDPOINT = "https://forms.miatools.tech/submit"
 
 # Where the Worker 303-redirects a no-JS submission (keep in sync with
 # THANKS in workers/forms/src/index.js). Not indexed, not in the sitemap.
