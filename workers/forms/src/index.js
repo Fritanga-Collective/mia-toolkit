@@ -17,7 +17,18 @@
  *   POST /submit   form-urlencoded or JSON → store → 303 / JSON
  *   OPTIONS /submit  CORS preflight (allowed origins only)
  *   GET /export    CSV of all rows; needs "Authorization: Bearer <EXPORT_TOKEN>"
+ *   GET /export-links  CSV of the go-link table (same bearer token)
  *   GET /health    "ok"
+ *
+ * Go links (institutional outreach, bucket `k` codes):
+ *   GET|HEAD /go/<code>        on any host (forms.miatools.tech/go/k7q2)
+ *   GET|HEAD /<code>, /        on GO_HOST (go.miatools.tech/k7q2)
+ *   → 302 to the market page with ?utm_source=o&utm_campaign=<code>; an
+ *   unknown or inactive code → 302 to the neutral /institutions/ hub, no utm.
+ *   The `links` table holds only code, market, lang, active, click count and
+ *   the UTC date of the last click: no institution name, IP, user agent or
+ *   cookie. HEAD requests, prefetches and link-preview bots are redirected but
+ *   not counted (the user agent is matched in memory, never stored).
  */
 
 export const LIMITS = {
@@ -374,7 +385,8 @@ function timingSafeEqual(a, b) {
   return diff === 0;
 }
 
-async function handleExport(request, env) {
+/** null when the bearer token is right, else the 404/401 response. */
+function exportAuthError(request, env) {
   if (!env.EXPORT_TOKEN) return new Response("Not found", { status: 404 });
   const auth = request.headers.get("Authorization") || "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
@@ -382,6 +394,25 @@ async function handleExport(request, env) {
     return new Response("Unauthorized", { status: 401,
       headers: { "WWW-Authenticate": "Bearer", "Cache-Control": "no-store" } });
   }
+  return null;
+}
+
+async function handleExportLinks(request, env) {
+  const denied = exportAuthError(request, env);
+  if (denied) return denied;
+  const { results } = await env.DB.prepare(
+    `SELECT ${LINK_COLUMNS.join(", ")} FROM links ORDER BY code`).all();
+  return new Response(linksCsv(results || []), {
+    status: 200,
+    headers: { "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": 'attachment; filename="links.csv"',
+      "Cache-Control": "no-store" },
+  });
+}
+
+async function handleExport(request, env) {
+  const denied = exportAuthError(request, env);
+  if (denied) return denied;
   const { results } = await env.DB.prepare(
     `SELECT ${COLUMNS.join(", ")} FROM submissions ORDER BY id`).all();
   return new Response(toCsv(results || []), {
@@ -390,6 +421,90 @@ async function handleExport(request, env) {
       "Content-Disposition": 'attachment; filename="submissions.csv"',
       "Cache-Control": "no-store" },
   });
+}
+
+// ───────────────────────────── go links ─────────────────────────────
+export const GO_CODE_RE = /^k[a-z2-7]{3}$/;
+export const GO_PAGES = {
+  mx: "/es/institutions/mx/",
+  us: "/institutions/us/",
+  sg: "/institutions/sg/",
+};
+export const GO_FALLBACK = "/institutions/";
+// Link unfurlers, mail-security scanners and crawlers that fetch a URL
+// without a person clicking it (LinkedInBot, TelegramBot, Discordbot, … are
+// caught by "bot"). In-app browsers (e.g. "LinkedInApp") are people and do
+// count. Matched in memory only; never stored.
+export const BOT_UA_RE = new RegExp([
+  "bot\\b", "bot/", "crawler", "spider", "preview", "facebookexternalhit",
+  "slackbot", "whatsapp/", "embedly",
+  "quora link", "outbrain", "vkshare", "w3c_validator",
+  "googleimageproxy", "yahoomailproxy", "microsoft office", "ms-office",
+  "safelinks", "proofpoint", "mimecast", "barracuda", "headless", "curl/",
+  "wget/", "python-requests", "go-http-client", "okhttp", "node-fetch",
+].join("|"), "i");
+export const LINK_COLUMNS = ["code", "market", "lang", "active", "clicks", "last_click"];
+export const GO_HIT_SQL =
+  "UPDATE links SET clicks = clicks + 1, last_click = ? "
+  + "WHERE code = ? AND active = 1 RETURNING market";
+export const GO_PEEK_SQL = "SELECT market FROM links WHERE code = ? AND active = 1";
+
+/** The go-link code a request asks for, "" for the go host's root, or null
+ * when the path is not a go link at all. */
+export function goCode(url, env) {
+  const goHost = (env.GO_HOST || "go.miatools.tech").toLowerCase();
+  const path = url.pathname.replace(/\/+$/, "");
+  let m = /^\/go\/([^/]+)$/.exec(path);
+  if (m) return m[1].toLowerCase();
+  if (url.hostname.toLowerCase() !== goHost) return null;
+  if (path === "") return "";
+  m = /^\/([^/]+)$/.exec(path);
+  return m ? m[1].toLowerCase() : null;
+}
+
+/** True when the request is not a person following the link: HEAD, a
+ * browser prefetch/prerender, or a known preview bot / scanner. */
+export function isAutomated(request) {
+  if (request.method === "HEAD") return true;
+  const purpose = (request.headers.get("Sec-Purpose") || request.headers.get("Purpose")
+    || request.headers.get("X-Purpose") || request.headers.get("X-Moz") || "").toLowerCase();
+  if (purpose.includes("prefetch") || purpose.includes("prerender") || purpose.includes("preview")) {
+    return true;
+  }
+  const ua = request.headers.get("User-Agent") || "";
+  return !ua || BOT_UA_RE.test(ua);
+}
+
+export function goTarget(env, market, code) {
+  const base = siteOrigin(env);
+  if (!market || !GO_PAGES[market]) return base + GO_FALLBACK;
+  return `${base}${GO_PAGES[market]}?utm_source=o&utm_campaign=${encodeURIComponent(code)}`;
+}
+
+function redirect(location) {
+  return new Response(null, { status: 302, headers: { Location: location,
+    "Cache-Control": "no-store", "X-Robots-Tag": "noindex", "Referrer-Policy": "no-referrer" } });
+}
+
+async function handleGo(request, env, code, now = new Date()) {
+  if (!code || !GO_CODE_RE.test(code) || !env.DB) return redirect(goTarget(env, null));
+  let market = null;
+  try {
+    const today = now.toISOString().slice(0, 10); // UTC date only
+    const row = isAutomated(request)
+      ? await env.DB.prepare(GO_PEEK_SQL).bind(code).first()
+      : await env.DB.prepare(GO_HIT_SQL).bind(today, code).first();
+    market = row ? row.market : null;
+  } catch (e) {
+    console.error("go: D1 lookup failed");
+  }
+  return redirect(goTarget(env, market, code));
+}
+
+export function linksCsv(rows) {
+  const lines = [LINK_COLUMNS.join(",")];
+  for (const r of rows) lines.push(LINK_COLUMNS.map((c) => csvCell(r[c])).join(","));
+  return lines.join("\r\n") + "\r\n";
 }
 
 // ───────────────────────────── submit ─────────────────────────────
@@ -452,6 +567,10 @@ async function handleSubmit(request, env, ctx, fetchImpl) {
 
 export async function handle(request, env, ctx, fetchImpl = fetch) {
   const url = new URL(request.url);
+  if (request.method === "GET" || request.method === "HEAD") {
+    const code = goCode(url, env);
+    if (code !== null) return handleGo(request, env, code);
+  }
   if (url.pathname === "/submit") {
     if (request.method === "OPTIONS") {
       const origin = checkOrigin(request, env);
@@ -463,6 +582,9 @@ export async function handle(request, env, ctx, fetchImpl = fetch) {
   }
   if (url.pathname === "/export" && request.method === "GET") {
     return handleExport(request, env);
+  }
+  if (url.pathname === "/export-links" && request.method === "GET") {
+    return handleExportLinks(request, env);
   }
   if (url.pathname === "/health") return new Response("ok");
   return new Response("Not found", { status: 404 });
