@@ -383,11 +383,11 @@ def test_inst_js_is_first_party_and_storage_free(site):
 # Hero + product-card illustrations (replaced the "At a glance" box).
 IMG_ALTS = {
     "en": ("Imaging CDs dissolving into particles that form a single USB drive",
-           "Glass discs turning into a stream of particles",
+           "Hospital imaging CDs turning into one organised USB drive",
            "Several imaging sources connected through one hub"),
     "es": ("Discos de estudios que se convierten en partículas y forman una "
            "sola memoria USB",
-           "Discos de cristal que se convierten en un flujo de partículas",
+           "Discos de estudios del hospital que se convierten en una sola memoria USB organizada",
            "Varias fuentes de imagen conectadas por un solo punto"),
 }
 
@@ -410,8 +410,8 @@ def test_institution_pages_have_responsive_illustrations(site):
         assert page.count('width="1600" height="900"') >= 1, rel
         if rel == "institutions/index.html":
             continue  # hub: hero image only, no products section
-        # Product cards: Toolkit (abstract discs) + Bridge (network beam), lazy.
-        for slug in ("disc-to-usb-abstract", "network-to-pacs-beam"):
+        # Product cards: Toolkit (CDs → USB) + Bridge (network beam), lazy.
+        for slug in ("disc-to-usb-real", "network-to-pacs-beam"):
             assert f'/img/inst/{slug}-800.webp 800w' in page, (rel, slug)
             assert f'src="/img/inst/{slug}-1600.jpg"' in page, (rel, slug)
         assert page.count('loading="lazy"') >= 2, rel
@@ -422,8 +422,7 @@ def test_institution_pages_have_responsive_illustrations(site):
 
 
 def test_institution_image_files_exist_and_are_small(site):
-    for slug in ("disc-to-usb-real", "disc-to-usb-abstract",
-                 "network-to-pacs-beam"):
+    for slug in ("disc-to-usb-real", "network-to-pacs-beam"):
         for name in (f"{slug}-800.webp", f"{slug}-1600.webp",
                      f"{slug}-1600.jpg"):
             path = os.path.join(site, "img", "inst", name)
