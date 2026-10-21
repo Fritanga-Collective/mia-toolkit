@@ -8,6 +8,8 @@
       "strings": {
         "m.title": "Outside-CD import, offline — US hospitals and imaging centers",
         "m.meta_desc": "Import the outside imaging CDs patients bring in — offline, on one workstation, nothing sent anywhere. Annual licenses from $99; free 60-day pilot.",
+        "m.og_title": "Outside-CD import, offline — US hospitals & imaging centers",
+        "m.og_desc": "Import outside imaging CDs offline, on one workstation, nothing sent anywhere. Procurement kit ready; licenses from $99/yr; free 60-day pilot.",
         "m.eyebrow": "United States · hospitals, practices & imaging centers",
         "m.uc_lead": "For critical-access hospitals, orthopedic, neurology and oncology practices, second-opinion programs, teleradiology groups and independent imaging centers.",
         "m.currency_note": "Prices are in US dollars (USD).",
