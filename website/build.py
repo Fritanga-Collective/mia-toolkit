@@ -38,6 +38,10 @@ HREFLANG = {"en": "en", "es": "es", "zh": "zh-Hans", "ms": "ms-SG",
 PAGES = ["index", "patients", "help", "support", "privacy", "stats"]
 OG_PAGES = {"index", "patients", "help", "support"}  # no social card on privacy
 I18N_PREFIX = {"index": "home", "patients": "index"}  # page -> i18n key prefix
+# Social-card image per page: 1200x630 crops in img/og/ (1.91:1, the size
+# Facebook, LinkedIn and X recommend). Pages not listed keep social.jpg.
+OG_IMAGE = {"index": "/img/og/mia-tools.jpg", "patients": "/img/og/patients.jpg",
+            "institutions": "/img/og/mia-tools.jpg"}
 DIR_PAGES = {"patients"}  # emitted as <page>/index.html (directory URL)
 
 # The 6 guided-setup screens the /help walkthrough documents, in order (the
@@ -168,7 +172,9 @@ def head_seo(langs: dict, lang: str, page: str, s: dict) -> str:
     if page in OG_PAGES:
         kp = I18N_PREFIX.get(page, page)
         title = s.get(f"{kp}.og_title", s.get(f"{kp}.title", ""))
-        desc = s.get(f"{kp}.meta_desc", "")
+        desc = s.get(f"{kp}.og_desc", s.get(f"{kp}.meta_desc", ""))
+        og_img, og_w, og_h = (OG_IMAGE[page], 1200, 630) if page in OG_IMAGE \
+            else ("/img/social.jpg", 1200, 633)
         lines += [
             '  <meta property="og:type" content="website">',
             '  <meta property="og:site_name" content="MIA Toolkit">',
@@ -182,14 +188,14 @@ def head_seo(langs: dict, lang: str, page: str, s: dict) -> str:
                 lines.append(f'  <meta property="og:locale:alternate" '
                              f'content="{langs[code]["_og_locale"]}">')
         lines += [
-            f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
-            '  <meta property="og:image:width" content="1200">',
-            '  <meta property="og:image:height" content="633">',
+            f'  <meta property="og:image" content="{BASE}{og_img}">',
+            f'  <meta property="og:image:width" content="{og_w}">',
+            f'  <meta property="og:image:height" content="{og_h}">',
             f'  <meta property="og:image:alt" content="{title}">',
             '  <meta name="twitter:card" content="summary_large_image">',
             f'  <meta name="twitter:title" content="{title}">',
             f'  <meta name="twitter:description" content="{desc}">',
-            f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+            f'  <meta name="twitter:image" content="{BASE}{og_img}">',
         ]
     return "\n".join(lines)
 
@@ -412,6 +418,10 @@ def load_posts() -> tuple[list[dict], dict[str, list[dict]]]:
                 "tags": meta.get("tags", []),
                 "status": meta.get("status", ""),
                 "image": meta.get("image", ""),
+                # Optional social-card texts (≤60 / ≤155 chars); fall back to
+                # title / summary, which stay the H1 and the meta description.
+                "og_title": meta.get("og_title", ""),
+                "og_description": meta.get("og_description", ""),
                 "translation": meta.get("translation", ""),
                 "body": body,
             })
@@ -442,8 +452,9 @@ def blog_head_seo(post: dict, cluster: list[dict]) -> str:
     if "en" in cluster_langs:  # x-default → English when a translation exists
         lines.append(f'  <link rel="alternate" hreflang="x-default" '
                      f'href="{BASE}{blog_post_url("en", slug)}">')
-    title = html.escape(post["title"], quote=True)
-    desc = html.escape(post["summary"], quote=True)
+    title = html.escape(post.get("og_title") or post["title"], quote=True)
+    desc = html.escape(post.get("og_description") or post["summary"],
+                       quote=True)
     custom = _post_image_url(post)
     image = custom or f"{BASE}/img/social.jpg"
     lines += [
@@ -1169,7 +1180,10 @@ def _mailto(subject: str, body: str = "") -> str:
 
 def inst_head_seo(url: str, cluster: list[tuple[str, str]], title: str,
                   desc: str, og_locale: str, lang: str) -> str:
+    """`title`/`desc` are the social-card texts (≤60 / ≤155 chars): the
+    og:site_name already carries the brand, so no "| MIA Tools" suffix."""
     title, desc = html.escape(title, quote=True), html.escape(desc, quote=True)
+    og_img = BASE + OG_IMAGE["institutions"]
     site_name = html.escape(inst_brand(lang), quote=True)
     lines = [f'  <link rel="canonical" href="{url}">'] + _favicon_lines()
     lines += [f'  <link rel="alternate" hreflang="{hl}" href="{href}">'
@@ -1181,13 +1195,14 @@ def inst_head_seo(url: str, cluster: list[tuple[str, str]], title: str,
         f'  <meta property="og:description" content="{desc}">',
         f'  <meta property="og:url" content="{url}">',
         f'  <meta property="og:locale" content="{og_locale}">',
-        f'  <meta property="og:image" content="{BASE}/img/social.jpg">',
+        f'  <meta property="og:image" content="{og_img}">',
         '  <meta property="og:image:width" content="1200">',
-        '  <meta property="og:image:height" content="633">',
+        '  <meta property="og:image:height" content="630">',
+        f'  <meta property="og:image:alt" content="{title}">',
         '  <meta name="twitter:card" content="summary_large_image">',
         f'  <meta name="twitter:title" content="{title}">',
         f'  <meta name="twitter:description" content="{desc}">',
-        f'  <meta name="twitter:image" content="{BASE}/img/social.jpg">',
+        f'  <meta name="twitter:image" content="{og_img}">',
     ]
     return "\n".join(lines)
 
@@ -1498,8 +1513,10 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
     computed = {
         "INST_LOCALE": pdata["locale"],
         "PAGE_TITLE": e(inst_title(s["m.title"], lang)),
-        "HEAD_SEO": inst_head_seo(url, cluster, inst_title(s["m.title"], lang),
-                                  s["m.meta_desc"], pdata["og_locale"], lang),
+        "HEAD_SEO": inst_head_seo(url, cluster,
+                                  s.get("m.og_title", s["m.title"]),
+                                  s.get("m.og_desc", s["m.meta_desc"]),
+                                  pdata["og_locale"], lang),
         "JSON_LD": inst_json_ld(s, url, pdata["locale"], s["m.meta_desc"],
                                 lang),
         "INST_SHELL": inst_shell(langs, lang, market, pages),
@@ -1538,8 +1555,11 @@ def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
     computed = {
         "PAGE_TITLE": html.escape(inst_title(s["instp.hub_title"], "en")),
         "HEAD_SEO": inst_head_seo(url, cluster,
-                                  inst_title(s["instp.hub_title"], "en"),
-                                  s["instp.hub_meta"], s["_og_locale"], "en"),
+                                  s.get("instp.hub_og_title",
+                                        s["instp.hub_title"]),
+                                  s.get("instp.hub_og_desc",
+                                        s["instp.hub_meta"]),
+                                  s["_og_locale"], "en"),
         "JSON_LD": inst_json_ld(s, url, "en", s["instp.hub_meta"], "en"),
         "INST_SHELL": inst_shell(langs, "en", None, pages),
         "INST_FOOTER": inst_footer("en", s["instp.hub_contact_hours"]),
