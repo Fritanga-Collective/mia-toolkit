@@ -53,7 +53,7 @@ Para el punto 2 existe **MIA Toolkit**: una aplicación de escritorio para macOS
 
 Al terminar, complete la línea del paso 1:
 
-- **Minutos** desde que recibió el disco hasta que el estudio quedó importado (o hasta que se dio por perdido).
+- **Minutos de trabajo activo del personal** dedicados a registrar, revisar e importar el disco, incluidos los reintentos y el seguimiento; excluya las esperas en cola y las copias sin intervención.
 - **¿Se importó?** Sí o no.
 - **Motivo**, si falló: sin DICOMDIR, disco dañado, ZIP, identidad no coincide, otro.
 
