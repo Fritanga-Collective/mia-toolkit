@@ -9,7 +9,6 @@ import sys
 import pytest
 from openpyxl import load_workbook
 
-from mia_core import inventory
 from mia_core.inventory import scan_directory, write_inventory_xlsx, xlsx_safe
 from mia_core.ripper import rip_disc
 from tests.helpers import make_dicom

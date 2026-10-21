@@ -6,8 +6,6 @@ import json
 import os
 from datetime import datetime, timezone
 
-import pytest
-
 from mia_core import delivery_target as dt
 from mia_core import diagnostics
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import tkinter as tk
 from tkinter import ttk
 from typing import Any
 

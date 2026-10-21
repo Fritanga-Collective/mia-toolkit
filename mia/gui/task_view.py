@@ -18,7 +18,7 @@ from . import jobs
 from .i18n import _
 from .messages import exception_detail, humanize_exception
 from .progress_panel import ProgressLogPanel
-from .sysutil import open_path, reveal  # re-exported for the view modules
+from .sysutil import open_path, reveal  # noqa: F401 — re-exported for the view modules
 
 
 class TaskView(ttk.Frame):
