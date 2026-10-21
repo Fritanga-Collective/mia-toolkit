@@ -239,8 +239,8 @@
   "instp.tk_link_pricing": "Pricing",
   "instp.br_status": "Pilot partners wanted",
   "instp.br_h3": "MIA Bridge",
-  "instp.br_p": "A planned companion for sites that want outside studies to reach their PACS with fewer manual steps. We are designing it with partner sites, so there is no price yet. It will live on its own subdomain, so MIA Toolkit stays a tool that sends nothing.",
-  "instp.br_cta": "Become a design partner",
+  "instp.br_p": "Imports outside studies straight into your PACS and pulls PACS studies onto clean patient media — on-premise, inside your network.",
+  "instp.br_cta": "Join as a pilot partner",
   "instp.uc_h2": "Where it fits",
   "instp.comp_h2": "Compliance and security",
   "instp.comp_intro": "What MIA Toolkit is, and what it is not. Each statement names its basis; ask us for the documents behind it.",
@@ -394,5 +394,6 @@
   "instp.req_ctx_pricing_public": "Request: Public health &amp; NGOs — free or sponsored access",
   "instp.req_title_kit": "Request the procurement kit",
   "instp.req_submit_kit": "Request the kit",
-  "instp.req_ctx_kit": "Request: full procurement kit by email"
+  "instp.req_ctx_kit": "Request: full procurement kit by email",
+  "instp.br_url": "https://bridge.miatools.tech/en/"
 }

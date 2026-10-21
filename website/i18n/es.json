@@ -239,8 +239,8 @@
   "instp.tk_link_pricing": "Precios",
   "instp.br_status": "Buscamos clínicas piloto",
   "instp.br_h3": "MIA Bridge",
-  "instp.br_p": "Un complemento en planeación para los sitios que quieren que los estudios externos lleguen a su PACS con menos pasos manuales. Lo estamos diseñando con instituciones socias, así que todavía no tiene precio. Vivirá en su propio subdominio, para que MIA Toolkit siga siendo una herramienta que no envía nada.",
-  "instp.br_cta": "Ser socio de diseño",
+  "instp.br_p": "Importa estudios externos directo a su PACS y lleva estudios del PACS a medios limpios para el paciente — en sus instalaciones, dentro de su red.",
+  "instp.br_cta": "Unirse como clínica piloto",
   "instp.uc_h2": "Dónde encaja",
   "instp.comp_h2": "Marco regulatorio y seguridad",
   "instp.comp_intro": "Qué es MIA Toolkit y qué no es. Cada punto indica su fundamento; pídanos los documentos que lo respaldan.",
@@ -381,5 +381,6 @@
   "instp.req_ctx_pricing_public": "Solicitud: Salud pública y ONGs — acceso gratuito o patrocinado",
   "instp.req_title_kit": "Solicitar el Kit de Cumplimiento para IT",
   "instp.req_submit_kit": "Solicitar el kit",
-  "instp.req_ctx_kit": "Solicitud: Kit de Cumplimiento para IT completo por correo"
+  "instp.req_ctx_kit": "Solicitud: Kit de Cumplimiento para IT completo por correo",
+  "instp.br_url": "https://bridge.miatools.tech/"
 }

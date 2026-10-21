@@ -386,4 +386,30 @@ def test_bridge_status_label(site):
     mx = _read(site, "es/institutions/mx/index.html")
     assert ">Pilot partners wanted</span>" in us and "In design" not in us
     assert ">Buscamos clínicas piloto</span>" in mx and "En diseño" not in mx
-    assert 'href="https://bridge.miatools.tech"' in us
+    assert 'href="https://bridge.miatools.tech/en/">' in us
+    assert 'href="https://bridge.miatools.tech/">' in mx
+    assert ("Imports outside studies straight into your PACS and pulls PACS "
+            "studies onto clean patient media — on-premise, inside your network.") in us
+    assert ("Importa estudios externos directo a su PACS y lleva estudios del "
+            "PACS a medios limpios para el paciente — en sus instalaciones, "
+            "dentro de su red.") in mx
+
+
+BRIDGE_BANNED = ("in design", "en diseño", "not available yet",
+                 "aún no está disponible", "separate, paid", "no price yet",
+                 "todavía no tiene precio", "design partner", "socio de diseño",
+                 "planned companion", "en planeación", "will live", "vivirá")
+
+
+def test_no_hypothetical_bridge_copy_anywhere(site):
+    for root, _, files in os.walk(site):
+        for f in files:
+            if not f.endswith(".html"):
+                continue
+            with open(os.path.join(root, f), encoding="utf-8") as fh:
+                text = fh.read()
+            if "bridge" not in text.lower():
+                continue
+            low = text.lower()
+            for phrase in BRIDGE_BANNED:
+                assert phrase not in low, (os.path.join(root, f), phrase)
