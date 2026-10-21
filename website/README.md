@@ -215,7 +215,7 @@ schedule.
 For a translation produced with machine assistance (not a native-speaker
 original), add `translation: machine` to its front-matter. The build appends a
 small italic footer note inviting corrections at `support@miatools.tech`
-(localized via the optional `blog.mt_note` i18n key, English fallback). Omit the
+(localized via the optional `blog.tr_note` i18n key, English fallback). Omit the
 field for native originals (en, the es originals, zh).
 
 ## Privacy-respecting stats (optional)

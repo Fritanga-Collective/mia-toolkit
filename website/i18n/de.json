@@ -200,7 +200,7 @@
   "blog.published": "Veröffentlicht",
   "blog.back": "← Zurück zum Blog",
   "blog.read_more": "Weiterlesen →",
-  "blog.mt_note": "Mit maschineller Unterstützung übersetzt — Korrekturen willkommen unter <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a>.",
+  "blog.tr_note": "Übersetzungen willkommen — Korrekturen unter <a href=\"mailto:support@miatools.tech\">support@miatools.tech</a>.",
   "_blog_url": "/de/blog/",
   "nav.blog": "Blog",
   "home.title": "MIA Tools — medizinische Bilder, geordnet",
