@@ -129,7 +129,7 @@
   "privacy.title": "Política de privacidad — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit está hecho para que no podamos ver tus datos: app sin conexión, sin cuenta, sin telemetría, sin cookies, sin rastreo.",
   "privacy.h1": "Política de privacidad",
-  "privacy.effective": "Vigente desde: 5 de junio de 2026",
+  "privacy.effective": "Vigente desde: 21 de octubre de 2026",
   "privacy.intro": "MIA Toolkit está hecho para que <strong>no podamos</strong> ver tus datos — no es un \"prometemos no mirar\", sino un \"no hay nada que podamos mirar\". Esta página explica exactamente qué significa eso.",
   "privacy.app_h2": "La aplicación",
   "privacy.app_li1": "Funciona <strong>completamente sin conexión</strong>. Internet solo se necesita una vez, para descargarla.",
@@ -382,5 +382,10 @@
   "instp.req_title_kit": "Solicitar el Kit de Cumplimiento para IT",
   "instp.req_submit_kit": "Solicitar el kit",
   "instp.req_ctx_kit": "Solicitud: Kit de Cumplimiento para IT completo por correo",
-  "instp.br_url": "https://bridge.miatools.tech/"
+  "instp.br_url": "https://bridge.miatools.tech/",
+  "privacy.org_h2": "Clínicas y hospitales: formularios y enlaces de contacto",
+  "privacy.org_li1": "Si usa un formulario de solicitud en nuestras páginas para instituciones (piloto, precios, kit de cumplimiento, programa piloto de MIA Bridge), solo recopilamos lo que usted escribe: nombre, correo de trabajo, organización, puesto y sus respuestas. Lo usamos <strong>solo para responderle y atender su piloto o solicitud</strong>.",
+  "privacy.org_li2": "Las solicitudes se guardan en una base de datos en <strong>Cloudflare</strong> (región de Estados Unidos) a la que solo nosotros tenemos acceso. Las conservamos <strong>24 meses después del último contacto</strong> y luego las borramos; escríbanos cuando quiera para borrarlas antes. No guardamos direcciones IP, cookies ni identificadores de dispositivo.",
+  "privacy.org_li3": "Los enlaces en los correos que enviamos a organizaciones pueden llevar un código corto que identifica a la <strong>organización</strong> (nunca a la persona), para saber de forma agregada que nuestro mensaje llegó. Si lo pide, le enviamos un enlace sin código.",
+  "privacy.org_li4": "Nuestros correos no contienen píxeles de rastreo ni confirmaciones de lectura."
 }

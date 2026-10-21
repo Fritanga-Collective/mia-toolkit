@@ -5,7 +5,7 @@ compatibility_date = "2026-09-01"
 
 # PLACEHOLDER — your Cloudflare account id (dashboard → Workers & Pages →
 # right sidebar), or delete this line and let `wrangler login` pick it.
-# account_id = "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID"
+account_id = "cb3e127f02ff24cbed7502b7274a8069"
 
 # Keep request logs off: Workers Logs would record request metadata (incl.
 # client IPs). The Worker itself never logs IPs or field values.
@@ -31,7 +31,7 @@ NOTIFY_FROM = ""   # a sender address verified with the provider
 binding = "DB"
 database_name = "mia-forms"
 # PLACEHOLDER — paste the id printed by `npx wrangler d1 create mia-forms`.
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "60ffaec7-9784-4a73-bd71-b48b796ca427"
 
 # Optional custom domain (needs miatools.tech on Cloudflare DNS):
-# routes = [{ pattern = "forms.miatools.tech", custom_domain = true }]
+routes = [{ pattern = "forms.miatools.tech", custom_domain = true }]

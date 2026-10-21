@@ -129,7 +129,7 @@
   "privacy.title": "Politique de confidentialité — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit est conçu pour que nous ne puissions pas voir vos données : application hors ligne, aucun compte, aucune télémétrie, aucun cookie, aucun suivi.",
   "privacy.h1": "Politique de confidentialité",
-  "privacy.effective": "En vigueur le : 5 juin 2026",
+  "privacy.effective": "En vigueur le : 21 octobre 2026",
   "privacy.intro": "MIA Toolkit est conçu pour que nous <strong>ne puissions pas</strong> voir vos données — non pas « nous promettons de ne pas regarder », mais « il n'y a rien à regarder ». Cette page explique précisément ce que cela signifie.",
   "privacy.app_h2": "L'application",
   "privacy.app_li1": "Fonctionne <strong>entièrement hors ligne</strong>. Internet n'est nécessaire qu'une seule fois, pour la télécharger.",
@@ -229,5 +229,10 @@
   "home.trust_private": "Sans compte, sans cloud",
   "home.trust_oss": "Open source (MIT)",
   "home.trust_os": "macOS · Windows · Linux (depuis les sources)",
-  "home.trust_langs": "7 langues"
+  "home.trust_langs": "7 langues",
+  "privacy.org_h2": "Cliniques et hôpitaux : formulaires et liens de contact",
+  "privacy.org_li1": "Si vous utilisez un formulaire de demande sur nos pages destinées aux établissements (pilote, tarifs, dossier d’achat, programme pilote MIA Bridge), nous ne recueillons que ce que vous saisissez : nom, e-mail professionnel, organisation, fonction et vos réponses. Nous les utilisons <strong>uniquement pour vous répondre et mener votre pilote ou votre demande</strong>.",
+  "privacy.org_li2": "Les demandes sont conservées dans une base de données chez <strong>Cloudflare</strong> (région États-Unis) à laquelle nous seuls avons accès. Nous les gardons <strong>24 mois après le dernier contact</strong>, puis nous les supprimons ; écrivez-nous à tout moment pour une suppression anticipée. Nous ne conservons ni adresse IP, ni cookie, ni identifiant d’appareil.",
+  "privacy.org_li3": "Les liens des e-mails que nous envoyons aux organisations peuvent contenir un court code qui identifie l’<strong>organisation</strong> (jamais la personne), afin de savoir de manière agrégée que notre message est arrivé. Sur demande, nous vous envoyons un lien sans code.",
+  "privacy.org_li4": "Nos e-mails ne contiennent ni pixels de suivi ni accusés de lecture."
 }

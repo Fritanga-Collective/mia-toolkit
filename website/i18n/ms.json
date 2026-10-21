@@ -129,7 +129,7 @@
   "privacy.title": "Dasar Privasi — MIA Toolkit",
   "privacy.meta_desc": "MIA Toolkit dibina supaya kami tidak dapat melihat data anda: aplikasi luar talian, tiada akaun, tiada telemetri, tiada kuki, tiada penjejakan.",
   "privacy.h1": "Dasar Privasi",
-  "privacy.effective": "Berkuat kuasa: 5 Jun 2026",
+  "privacy.effective": "Berkuat kuasa: 21 Oktober 2026",
   "privacy.intro": "MIA Toolkit dibina supaya kami <strong>tidak dapat</strong> melihat data anda — bukan \"kami berjanji untuk tidak melihat,\" tetapi \"memang tiada apa-apa untuk kami lihat.\" Halaman ini menerangkan dengan tepat apa maksudnya.",
   "privacy.app_h2": "Aplikasi",
   "privacy.app_li1": "Berjalan <strong>sepenuhnya luar talian</strong>. Internet hanya diperlukan sekali sahaja, untuk memuat turunnya.",
@@ -229,5 +229,10 @@
   "home.trust_private": "Tanpa akaun, tanpa awan",
   "home.trust_oss": "Sumber terbuka (MIT)",
   "home.trust_os": "macOS · Windows · Linux (dari kod sumber)",
-  "home.trust_langs": "7 bahasa"
+  "home.trust_langs": "7 bahasa",
+  "privacy.org_h2": "Klinik dan hospital: borang dan pautan jangkauan",
+  "privacy.org_li1": "Jika anda menggunakan borang permohonan di halaman institusi kami (perintis, harga, kit perolehan, program perintis MIA Bridge), kami hanya mengumpul apa yang anda taip: nama, e-mel kerja, organisasi, jawatan dan jawapan anda. Kami menggunakannya <strong>hanya untuk membalas dan menjalankan perintis atau permohonan anda</strong>.",
+  "privacy.org_li2": "Penyerahan borang disimpan dalam pangkalan data di <strong>Cloudflare</strong> (rantau Amerika Syarikat) yang hanya boleh diakses oleh kami. Kami menyimpannya <strong>selama 24 bulan selepas hubungan terakhir</strong>, kemudian memadamnya; hubungi kami bila-bila masa untuk memadamnya lebih awal. Kami tidak menyimpan alamat IP, kuki atau pengecam peranti.",
+  "privacy.org_li3": "Pautan dalam e-mel yang kami hantar kepada organisasi mungkin mengandungi kod pendek yang mengenal pasti <strong>organisasi</strong> (bukan individu), supaya kami tahu secara agregat bahawa mesej kami sampai. Minta kepada kami dan kami akan menghantar pautan tanpa kod.",
+  "privacy.org_li4": "E-mel kami tidak mengandungi piksel penjejakan atau resit baca."
 }
