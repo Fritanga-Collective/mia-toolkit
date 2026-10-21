@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 
 import {
   handle, validate, toCsv, csvCell, emailRequest, _resetRateLimit, RATE,
-  INSERT_SQL, MAX_BODY_BYTES, REQUEST_TYPES, COLUMNS, BRIDGE_LIMITS,
+  INSERT_SQL, MAX_BODY_BYTES, REQUEST_TYPES, COLUMNS, BRIDGE_ENUMS,
 } from "../src/index.js";
 
 const ORIGIN = "https://miatools.tech";
@@ -67,7 +67,7 @@ test("no-JS form post is stored and 303-redirected to the thank-you page", async
   assert.deepEqual(e.DB.calls[0].args, [
     "pilot", "pilot", "us", "k7q2", "Dana Lee", "dana@hospital.example", "General Hospital",
     "Imaging manager", "10-50", "Acme PACS", "Hello",
-    null, null, null, null, null, null,
+    null, null, null, null, null,
   ]);
 });
 
@@ -96,50 +96,73 @@ test("request_type: pricing/kit types stored; missing defaults to pilot; unknown
   assert.match(JSON.parse(mail.init.body).subject, /pricing_hospital/);
 });
 
+// Exactly the fields the Bridge site posts (mia-bridge-site README table).
 const BRIDGE = {
-  form: "bridge_partner", request_type: "bridge_partner", lang: "en", utm_campaign: "b1",
+  form: "bridge_partner", lang: "es", utm_campaign: "b1", website: "",
   name: "Sam Tan", email: "sam@imaging.example", organisation: "Imaging Group",
-  role: "IT lead", region: "Singapore", discs_per_month: "51-200",
-  sites_count: "4", pacs_vendor: "Acme", pacs_version: "7.2", protocol: "dicomweb",
-  timeline: "Q1 2027", message: "Interested", website: "",
+  role: "it", country: "mx", segment: "imaging_centre", sites: "2-5",
+  discs_per_month: "51-200", pacs: "Acme PACS 7.2", protocol: "both",
+  timeline: "1-3m", message: "Interested",
 };
 const BRIDGE_ORIGIN = "https://bridge.miatools.tech";
 
-test("bridge_partner: allowed from bridge.miatools.tech, stored with its fields", async () => {
+test("bridge_partner: allowed from bridge.miatools.tech, stored, redirected by lang", async () => {
   const e = env({ ALLOWED_ORIGINS: undefined });
   const r = await handle(post(BRIDGE, { origin: BRIDGE_ORIGIN }), e, undefined, noFetch);
   assert.equal(r.status, 303);
-  assert.equal(r.headers.get("Location"), "https://bridge.miatools.tech/thanks/");
-  const args = e.DB.calls[0].args;
-  assert.deepEqual(args.slice(0, 3), ["bridge_partner", "bridge_partner", ""]);
-  assert.deepEqual(args.slice(-6), ["4", "Acme", "7.2", "dicomweb", "Q1 2027", "Singapore"]);
+  assert.equal(r.headers.get("Location"), "https://bridge.miatools.tech/gracias/");
+  assert.deepEqual(e.DB.calls[0].args, [
+    "bridge_partner", "bridge_partner", "", "b1", "Sam Tan", "sam@imaging.example",
+    "Imaging Group", "it", "51-200", "Acme PACS 7.2", "Interested",
+    "mx", "imaging_centre", "2-5", "both", "1-3m",
+  ]);
+  const en = await handle(post({ ...BRIDGE, lang: "en" }, { origin: BRIDGE_ORIGIN, ip: "192.0.2.40" }),
+    env({ ALLOWED_ORIGINS: undefined }), undefined, noFetch);
+  assert.equal(en.headers.get("Location"), "https://bridge.miatools.tech/en/thanks/");
   const j = await handle(post(BRIDGE, { origin: BRIDGE_ORIGIN, accept: "application/json", ip: "192.0.2.50" }),
     env({ ALLOWED_ORIGINS: undefined }), undefined, noFetch);
+  assert.deepEqual(await j.json(), { ok: true });
   assert.equal(j.headers.get("Access-Control-Allow-Origin"), BRIDGE_ORIGIN);
-  // Default allow-list (no ALLOWED_ORIGINS var) includes both sites, nothing else.
+  // Default allow-list (no ALLOWED_ORIGINS var) is both sites, nothing else.
   const evil = await handle(post(BRIDGE, { origin: "https://evil.example", ip: "192.0.2.51" }),
     env({ ALLOWED_ORIGINS: undefined }), undefined, noFetch);
   assert.equal(evil.status, 403);
+  // Invalid Bridge post: error page links back to the Bridge site.
+  const bad = await handle(post({ ...BRIDGE, country: "" , lang: "en" }, { origin: BRIDGE_ORIGIN, ip: "192.0.2.52" }),
+    env({ ALLOWED_ORIGINS: undefined }), undefined, noFetch);
+  assert.equal(bad.status, 400);
+  assert.match(await bad.text(), /href="https:\/\/bridge\.miatools\.tech\/en\/"/);
 });
 
-test("bridge_partner: enum + size validation, optional fields become null", () => {
+test("bridge_partner: enums validated, required role + country, optional → null", () => {
   assert.equal(validate(BRIDGE).ok, true);
-  assert.ok(validate({ ...BRIDGE, protocol: "ftp" }).errors.includes("protocol"));
-  for (const [k, max] of Object.entries(BRIDGE_LIMITS)) {
-    assert.ok(validate({ ...BRIDGE, [k]: "x".repeat(max + 1) }).errors.includes(k), k);
+  for (const [k, allowed] of Object.entries(BRIDGE_ENUMS)) {
+    assert.ok(validate({ ...BRIDGE, [k]: "nope" }).errors.includes(k), k);
+    for (const v of allowed) {
+      const res = validate({ ...BRIDGE, [k]: v });
+      assert.equal(res.ok, v !== "" || !["role", "country"].includes(k), `${k}=${v}`);
+    }
   }
-  const minimal = validate({ form: "bridge_partner", name: "A", email: "a@b.co",
-    organisation: "Org" });
+  for (const k of ["role", "country", "name", "email", "organisation"]) {
+    assert.ok(validate({ ...BRIDGE, [k]: "" }).errors.includes(k), k);
+  }
+  const minimal = validate({ form: "bridge_partner", lang: "en", name: "A",
+    email: "a@b.co", organisation: "Org", role: "clinical", country: "latam" });
   assert.equal(minimal.ok, true);
   assert.equal(minimal.row.request_type, "bridge_partner");
-  assert.equal(minimal.row.protocol, null);
-  assert.equal(minimal.row.sites_count, null);
-  // The pilot form still needs a market and can't claim bridge_partner.
+  assert.equal(minimal.row.market, "");
+  for (const k of ["segment", "sites", "protocol", "timeline"]) {
+    assert.equal(minimal.row[k], null, k);
+  }
+  // A stray market is ignored for Bridge (no market check), invalid ones dropped.
+  assert.equal(validate({ ...BRIDGE, market: "zz" }).ok, true);
+  // The pilot form still needs a market, keeps free-text role, and can't
+  // claim bridge_partner; its rows carry NULL for the Bridge columns.
   assert.ok(validate({ ...GOOD, market: "" }).errors.includes("market"));
+  assert.equal(validate(GOOD).row.role, "Imaging manager");
   assert.ok(validate({ ...GOOD, request_type: "bridge_partner" }).errors.includes("request_type"));
   assert.ok(validate({ ...BRIDGE, request_type: "pilot" }).errors.includes("request_type"));
-  // Pilot rows carry NULL for the Bridge columns.
-  assert.equal(validate(GOOD).row.pacs_vendor, null);
+  assert.equal(validate(GOOD).row.country, null);
 });
 
 test("MX posts redirect to the Spanish thank-you page", async () => {
@@ -293,7 +316,7 @@ test("export needs the bearer token and neutralises formulas", async () => {
 test("csv helpers", () => {
   assert.equal(csvCell("+1"), "'+1");
   assert.equal(csvCell(null), "");
-  assert.equal(toCsv([]).split("\r\n")[0].split(",").length, 19);
+  assert.equal(toCsv([]).split("\r\n")[0].split(",").length, 18);
 });
 
 test("other routes and methods", async () => {

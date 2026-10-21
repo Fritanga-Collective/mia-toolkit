@@ -28,16 +28,23 @@ export const LIMITS = {
   pacs: 200,
   message: 2000,
 };
-// Optional MIA Bridge design-partner fields (form=bridge_partner). Stored as
-// NULL when empty. "region" is free text (the Bridge form is not per market).
-export const BRIDGE_LIMITS = {
-  sites_count: 20,
-  pacs_vendor: 120,
-  pacs_version: 60,
-  timeline: 120,
-  region: 120,
+// MIA Bridge design-partner form (form=bridge_partner, bridge.miatools.tech;
+// field table in the mia-bridge-site README). It sends no `market`; `role`
+// is an enum there and, with `country`, required. The other enums are
+// optional ("" allowed) and stored as NULL when empty.
+export const BRIDGE_ENUMS = {
+  role: new Set(["clinical", "management", "it", "other"]),
+  country: new Set(["mx", "us", "sg", "latam", "other"]),
+  segment: new Set(["", "chain", "imaging_centre", "hospital", "telerad", "other"]),
+  sites: new Set(["", "1", "2-5", "6-20", "gt20"]),
+  protocol: new Set(["", "dimse", "dicomweb", "both", "unsure"]),
+  timeline: new Set(["", "now", "1-3m", "3-6m", "exploring"]),
 };
-export const PROTOCOLS = new Set(["", "dimse", "dicomweb", "unsure"]);
+export const BRIDGE_REQUIRED = new Set(["role", "country"]);
+export const BRIDGE_COLUMNS = ["country", "segment", "sites", "protocol", "timeline"];
+// Keep in sync with the Bridge site's thank-you pages.
+export const BRIDGE_THANKS = { es: "/gracias/", en: "/en/thanks/" };
+export const BRIDGE_HOME = { es: "/", en: "/en/" };
 export const MAX_BODY_BYTES = 16 * 1024;
 export const FORMS = new Set(["pilot", "bridge_partner"]);
 export const MARKETS = new Set(["mx", "us", "sg"]);
@@ -147,9 +154,11 @@ export function validate(input) {
   const form = clean(get("form"), 20) || "pilot";
   if (!FORMS.has(form)) errors.push("form");
   const bridge = form === "bridge_partner";
-  const market = clean(get("market"), 4) || "";
-  // The Bridge form is not tied to a market page; the pilot form must be.
-  if (!(MARKETS.has(market) || (bridge && market === ""))) errors.push("market");
+  let market = clean(get("market"), 4) || "";
+  // The Bridge form sends no market (country comes in `country`): skip the
+  // check there. The pilot form must name one of its market pages.
+  if (bridge) market = MARKETS.has(market) ? market : "";
+  else if (!MARKETS.has(market)) errors.push("market");
 
   const requestType = clean(get("request_type"), 32) || (bridge ? "bridge_partner" : "pilot");
   if (!REQUEST_TYPES.has(requestType)) errors.push("request_type");
@@ -166,14 +175,18 @@ export function validate(input) {
   if (!row.organisation) errors.push("organisation");
   if (!row.email || !EMAIL_RE.test(row.email)) errors.push("email");
 
-  for (const [k, max] of Object.entries(BRIDGE_LIMITS)) {
-    const v = clean(get(k), max);
-    if (v === null) errors.push(k);
-    row[k] = v || null;
+  for (const k of BRIDGE_COLUMNS) row[k] = null;
+  if (bridge) {
+    for (const [k, allowed] of Object.entries(BRIDGE_ENUMS)) {
+      const v = clean(get(k), 20);
+      if (v === null || !allowed.has(v) || (BRIDGE_REQUIRED.has(k) && !v)) {
+        errors.push(k);
+        continue;
+      }
+      if (k === "role") row.role = v;
+      else row[k] = v || null;
+    }
   }
-  const protocol = clean(get("protocol"), 10);
-  if (protocol === null || !PROTOCOLS.has(protocol)) errors.push("protocol");
-  row.protocol = protocol && PROTOCOLS.has(protocol) ? protocol : null;
 
   const discs = clean(get("discs_per_month"), 10);
   row.discs_per_month = discs !== null && DISCS.has(discs) ? discs : "";
@@ -255,15 +268,15 @@ function marketPage(env, market) {
 // ───────────────────────────── storage ─────────────────────────────
 export const INSERT_SQL =
   "INSERT INTO submissions (form, request_type, market, campaign, name, email, "
-  + "organisation, role, discs_per_month, pacs, message, sites_count, "
-  + "pacs_vendor, pacs_version, protocol, timeline, region) "
-  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  + "organisation, role, discs_per_month, pacs, message, country, segment, "
+  + "sites, protocol, timeline) "
+  + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 async function store(env, row) {
   await env.DB.prepare(INSERT_SQL).bind(
     row.form, row.request_type, row.market, row.campaign, row.name, row.email, row.organisation,
-    row.role, row.discs_per_month, row.pacs, row.message, row.sites_count,
-    row.pacs_vendor, row.pacs_version, row.protocol, row.timeline, row.region,
+    row.role, row.discs_per_month, row.pacs, row.message, row.country,
+    row.segment, row.sites, row.protocol, row.timeline,
   ).run();
 }
 
@@ -276,7 +289,7 @@ export function emailRequest(env, row) {
   if (!provider || !env.EMAIL_API_KEY || !env.NOTIFY_TO || !env.NOTIFY_FROM) {
     return null;
   }
-  const subject = `New ${row.request_type} request — ${row.organisation} (${(row.market || row.region || "-").toUpperCase()})`;
+  const subject = `New ${row.request_type} request — ${row.organisation} (${(row.market || row.country || "-").toUpperCase()})`;
   const text = [
     `Form: ${row.form}`, `Request type: ${row.request_type}`, `Market: ${row.market}`,
     `Campaign: ${row.campaign || "-"}`, `Name: ${row.name}`,
@@ -284,9 +297,9 @@ export function emailRequest(env, row) {
     `Role: ${row.role || "-"}`, `Discs per month: ${row.discs_per_month || "-"}`,
     `PACS/viewer: ${row.pacs || "-"}`,
     ...(row.form === "bridge_partner" ? [
-      `Region: ${row.region || "-"}`, `Sites: ${row.sites_count || "-"}`,
-      `PACS vendor: ${row.pacs_vendor || "-"}`, `PACS version: ${row.pacs_version || "-"}`,
-      `Protocol: ${row.protocol || "-"}`, `Timeline: ${row.timeline || "-"}`,
+      `Country: ${row.country || "-"}`, `Segment: ${row.segment || "-"}`,
+      `Sites: ${row.sites || "-"}`, `Protocol: ${row.protocol || "-"}`,
+      `Timeline: ${row.timeline || "-"}`,
     ] : []),
     "", row.message || "(no message)",
   ].join("\n");
@@ -336,7 +349,7 @@ async function notify(env, row, fetchImpl) {
 export const COLUMNS = ["id", "created_at", "form", "request_type", "market",
   "campaign", "name",
   "email", "organisation", "role", "discs_per_month", "pacs", "message",
-  "sites_count", "pacs_vendor", "pacs_version", "protocol", "timeline", "region"];
+  ...BRIDGE_COLUMNS];
 
 export function csvCell(v) {
   let s = v == null ? "" : String(v);
@@ -407,9 +420,11 @@ async function handleSubmit(request, env, ctx, fetchImpl) {
   const v = validate(parsed.data);
   const market = MARKETS.has(parsed.data.market) ? parsed.data.market : "us";
   const isBridge = parsed.data.form === "bridge_partner";
-  const bridgeThanks = env.BRIDGE_THANKS || "https://bridge.miatools.tech/thanks/";
-  const thanks = isBridge ? bridgeThanks : siteOrigin(env) + THANKS[market];
-  const back = isBridge ? new URL(bridgeThanks).origin + "/" : marketPage(env, market);
+  const blang = parsed.data.lang === "en" ? "en" : "es";  // Bridge default: es
+  const bridgeOrigin = (env.BRIDGE_ORIGIN || "https://bridge.miatools.tech").replace(/\/+$/, "");
+  const thanks = isBridge ? bridgeOrigin + BRIDGE_THANKS[blang]
+    : siteOrigin(env) + THANKS[market];
+  const back = isBridge ? bridgeOrigin + BRIDGE_HOME[blang] : marketPage(env, market);
   if (v.spam) {
     // Honeypot filled: pretend success, store nothing.
     return asJson ? json({ ok: true }, 200, cors)

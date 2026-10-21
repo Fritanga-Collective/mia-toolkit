@@ -15,8 +15,9 @@ enabled = false
 [vars]
 # Comma-separated origins allowed to POST (CORS + Origin check).
 ALLOWED_ORIGINS = "https://miatools.tech,https://bridge.miatools.tech"
-# Where a no-JS MIA Bridge design-partner post (form=bridge_partner) lands.
-BRIDGE_THANKS = "https://bridge.miatools.tech/thanks/"
+# MIA Bridge site (form=bridge_partner): no-JS posts land on its /gracias/
+# (es) or /en/thanks/ (en); error pages link back to / or /en/.
+BRIDGE_ORIGIN = "https://bridge.miatools.tech"
 # Base for the thank-you redirects and the "back" links.
 SITE_ORIGIN = "https://miatools.tech"
 # Optional notification email. Leave EMAIL_PROVIDER empty to skip it.

@@ -7,17 +7,7 @@ pricing and procurement-kit requests: a `request_type` field records what was
 clicked (`pilot` | `pricing_clinic` | `pricing_hospital` | `pricing_network` |
 `pricing_public` | `kit`; missing = `pilot`, anything else is rejected). For a
 D1 database created before this column existed, run the `ALTER TABLE` line at
-the top of `schema.sql` once.
-
-**MIA Bridge design-partner form** (bridge.miatools.tech): POST with
-`form=bridge_partner` (and `request_type=bridge_partner`, the default for that
-form). `market` may be empty. Accepted optional fields, size-limited and stored
-as NULL when empty: `region` (120), `sites_count` (20), `pacs_vendor` (120),
-`pacs_version` (60), `protocol` (`dimse` | `dicomweb` | `unsure`), `timeline`
-(120), plus the usual `name`, `email`, `organisation`, `role`,
-`discs_per_month`, `message`, `lang`, `utm_campaign` and the `website`
-honeypot. No-JS posts 303 to `BRIDGE_THANKS` (default
-`https://bridge.miatools.tech/thanks/`). No cookies, no IPs stored or
+the top of `schema.sql` once. No cookies, no IPs stored or
 logged, no third-party scripts on the site.
 
 > **Before going live:** ship the privacy-policy update (launch-readiness
@@ -25,6 +15,18 @@ logged, no third-party scripts on the site.
 > **first**. The form's privacy line links to the privacy page and promises
 > "used only to reply and run your pilot, no tracking" — the policy must say
 > the same before `FORM_ENDPOINT` is set.
+
+**MIA Bridge design-partner form** (bridge.miatools.tech, field table in the
+`mia-bridge-site` README): `form=bridge_partner` (its `request_type` defaults to
+`bridge_partner`) with hidden `lang` (es | en), `utm_campaign`, the `website`
+honeypot; required `name`, `email`, `organisation`, `role` (clinical |
+management | it | other), `country` (mx | us | sg | latam | other); optional
+`segment` (chain | imaging_centre | hospital | telerad | other), `sites`
+(1 | 2-5 | 6-20 | gt20), `discs_per_month`, `pacs`, `protocol` (dimse |
+dicomweb | both | unsure), `timeline` (now | 1-3m | 3-6m | exploring),
+`message`. No `market` is sent (or checked). Empty optional enums are stored as
+NULL. No-JS posts 303 to `BRIDGE_ORIGIN` + `/gracias/` (es) or `/en/thanks/`
+(en).
 
 ## What it does
 
