@@ -1425,7 +1425,7 @@ def inst_images(s: dict) -> dict:
     return {
         "IMG_HERO": inst_picture("disc-to-usb-real", s["instp.img_hero_alt"],
                                  "i-hero-img", hero_sizes, eager=True),
-        "IMG_TK": inst_picture("disc-to-usb-abstract", s["instp.img_tk_alt"],
+        "IMG_TK": inst_picture("disc-to-usb-real", s["instp.img_tk_alt"],
                                "i-card-img", card_sizes),
         "IMG_BR": inst_picture("network-to-pacs-beam", s["instp.img_br_alt"],
                                "i-card-img i-img-server", card_sizes),
