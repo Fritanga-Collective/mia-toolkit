@@ -27,9 +27,9 @@ SITE_ORIGIN = "https://miatools.tech"
 # Optional notification email. Leave EMAIL_PROVIDER empty to skip it.
 # "zeptomail" (Zoho ZeptoMail) or "resend". The API key is a SECRET:
 #   npx wrangler secret put EMAIL_API_KEY
-EMAIL_PROVIDER = ""
+EMAIL_PROVIDER = "resend"
 NOTIFY_TO = "support@miatools.tech"
-NOTIFY_FROM = ""   # a sender address verified with the provider
+NOTIFY_FROM = "MIA Tools forms <forms@notify.miatools.tech>"   # notify.miatools.tech is verified in Resend
 
 [[d1_databases]]
 binding = "DB"
