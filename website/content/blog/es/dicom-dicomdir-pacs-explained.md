@@ -42,7 +42,7 @@ Aquí es donde MIA Toolkit ayuda. Mucha gente termina con un montón de discos d
 
 Unas cosas que vale la pena saber: MIA Toolkit funciona completamente **sin conexión**. No hay cuenta, nada se va a la nube y no hay rastreo — tus imágenes se quedan en tu computadora y en tu USB. Y es **gratis y de código abierto, y siempre lo será.**
 
-Una nota honesta y rápida: MIA Toolkit organiza y entrega tus *propias* imágenes. No es un dispositivo médico, no interpreta ni lee tus imágenes y no sustituye a un radiólogo ni a un doctor. Solo copia, inventaría y empaqueta lo que ya tienes, sin garantía.
+Una nota honesta y rápida: MIA Toolkit organiza y entrega tus *propias* imágenes. Es una herramienta de gestión de archivos: no lee ni interpreta tus imágenes, no está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento y no sustituye a un radiólogo ni a un doctor. Solo copia, inventaría y empaqueta lo que ya tienes, sin garantía.
 
 Si te suena útil, [descárgalo gratis](/es/?utm_campaign=bdx) — hay una [guía paso a paso](/es/help.html). ¿Dudas? Escríbenos a [support@miatools.tech](mailto:support@miatools.tech).
 

@@ -68,7 +68,7 @@ Tu privacidad sigue siendo tuya todo el tiempo. MIA Toolkit funciona completamen
 
 Y es gratis. MIA Toolkit es gratis y siempre lo será.
 
-Un descargo de responsabilidad en palabras claras: MIA Toolkit te ayuda a organizar y entregar tus *propias* imágenes médicas. No es un dispositivo médico. No interpreta ni lee tus imágenes, y no te puede decir qué significan. No sustituye a un radiólogo ni a ningún otro doctor. Los visores que se mencionan aquí los hacen otras empresas y se listan solo como opciones; verifica tú mismo sus licencias y descargas. Todo aquí se ofrece sin ninguna garantía.
+Un descargo de responsabilidad en palabras claras: MIA Toolkit te ayuda a organizar y entregar tus *propias* imágenes médicas. Es una herramienta de gestión de archivos: no interpreta ni lee tus imágenes, no te puede decir qué significan y no está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento. No sustituye a un radiólogo ni a ningún otro doctor. Los visores que se mencionan aquí los hacen otras empresas y se listan solo como opciones; verifica tú mismo sus licencias y descargas. Todo aquí se ofrece sin ninguna garantía.
 
 Si quieres probarlo, puedes [descargar MIA Toolkit gratis](/es/?utm_campaign=bpv) — hay una [guía paso a paso](/es/help.html). Tus dudas son bienvenidas en [support@miatools.tech](mailto:support@miatools.tech).
 

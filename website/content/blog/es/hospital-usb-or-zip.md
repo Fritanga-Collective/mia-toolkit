@@ -48,4 +48,4 @@ Y ya. En el paso de **Revisar** vas a ver los estudios nuevos junto con todo lo 
 
 ---
 
-*MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. No interpreta las imágenes, no es un dispositivo médico y no sustituye la revisión de un radiólogo profesional. Sin garantía.*
+*MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. Es una herramienta de gestión de archivos: no interpreta imágenes ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento, y no sustituye la revisión de un radiólogo profesional. Sin garantía.*

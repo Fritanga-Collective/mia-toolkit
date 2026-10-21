@@ -1,0 +1,29 @@
+{
+  "_doc": "Datos de mercado para /es/institutions/mx/ (es-MX). Línea regulatoria: usar SOLO la línea provisional de INSTITUTIONS-LAUNCH-READINESS R5 hasta que un abogado sanitario la confirme. Nunca: 'no es un dispositivo médico', 'aprobado/certificado por COFEPRIS', 'exento de registro sanitario', 'cumple NOM-024', 'para diagnóstico', 'visor médico', 'seguridad del paciente', 'cumplimiento normativo garantizado'. Un idioma por mercado: México se publica solo en español (es-MX).",
+  "code": "mx",
+  "pages": {
+    "es": {
+      "locale": "es-MX",
+      "og_locale": "es_MX",
+      "strings": {
+        "m.title": "Discos de imagen externos, importados sin conexión — México",
+        "m.meta_desc": "Importe en minutos los CD de imagen que traen los pacientes, en un solo equipo y sin enviar nada. Licencias anuales desde 99 USD; piloto gratuito de 60 días.",
+        "m.eyebrow": "México · centros de imagen y hospitales",
+        "m.uc_lead": "Para centros de imagen independientes, cadenas de diagnóstico y hospitales privados. Primera ciudad piloto: Monterrey.",
+        "m.currency_note": "Precios en dólares estadounidenses (USD). Si necesita una cotización en pesos, escríbanos.",
+        "m.procurement_note": "Sitios pequeños: pago con tarjeta en línea (próximamente). Cadenas y hospitales: por cotización. ¿Requiere CFDI? Escríbanos antes de comprar para confirmar las opciones disponibles.",
+        "m.contact_hours": "Soporte por correo · primera respuesta en un plazo objetivo de 2 días hábiles"
+      },
+      "use_cases": [
+        {"title": "Recepción de discos externos", "text": "Lea en recepción los CD que traen los pacientes y entregue a su equipo un solo conjunto de estudios organizado, en lugar de una pila de discos."},
+        {"title": "USB de egreso para pacientes", "text": "Consolide los discos de un paciente en una sola USB con un DICOMDIR estándar para su egreso o traslado."},
+        {"title": "Exportación estándar en toda la cadena", "text": "La misma herramienta y el mismo formato de salida en todas sus sucursales, con una sola licencia de Red."}
+      ],
+      "compliance": [
+        {"topic": "Finalidad de uso", "text": "MIA Toolkit es una herramienta de gestión de archivos: copia, organiza y convierte estudios DICOM de CDs a un archivo DICOMDIR en USB. No interpreta, no mide y no sustituye a un sistema PACS ni a una estación de diagnóstico. No está destinado a fines de diagnóstico, prevención, monitoreo ni tratamiento."},
+        {"topic": "Datos personales (LFPDPPP, vigente desde el 21 de marzo de 2025)", "text": "La aplicación no recaba ni transmite datos personales: los estudios se procesan en su equipo y nada sale de sus instalaciones. El soporte trabaja solo con capturas o registros sin datos de pacientes."}
+      ],
+      "trust_assets": []
+    }
+  }
+}

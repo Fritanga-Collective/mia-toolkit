@@ -55,7 +55,7 @@ MIA Toolkit es gratis, y siempre lo será. Si te ayuda y algún día quieres [ap
 
 ## Unas palabras honestas
 
-MIA Toolkit te ayuda a organizar y entregar tus *propias* imágenes médicas. No lee ni interpreta tus estudios, no es un dispositivo médico y no sustituye a un doctor ni a un radiólogo revisando tus imágenes. No es una herramienta de diagnóstico y viene sin garantía. Las fotos son tuyas; el juicio médico les toca a los profesionales que te atienden. Piensa en MIA Toolkit como la forma de poner esas fotos en sus manos, de manera clara y confiable.
+MIA Toolkit te ayuda a organizar y entregar tus *propias* imágenes médicas. Es una herramienta de gestión de archivos: no lee ni interpreta tus estudios, no está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento y no sustituye a un doctor ni a un radiólogo revisando tus imágenes. Viene sin garantía. Las fotos son tuyas; el juicio médico les toca a los profesionales que te atienden. Piensa en MIA Toolkit como la forma de poner esas fotos en sus manos, de manera clara y confiable.
 
 Esto le sirve mucho a quien cuida de un familiar mayor, ese cuyos estudios están regados entre el IMSS, el ISSSTE y dos o tres consultorios privados. Juntarlos en un solo lugar es uno de los regalos más grandes que le puedes dar.
 

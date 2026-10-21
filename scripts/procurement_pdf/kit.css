@@ -1,0 +1,196 @@
+/* Procurement-kit PDF styles: IBM Carbon foundations (type, colour, grid,
+   square edges), not IBM branding. Rendered by WeasyPrint.
+   Variables the generator fills: none here; brand/footer strings are
+   injected as a small per-document <style> block (see build script). */
+
+@font-face { font-family: "Plex Sans"; src: url("fonts/IBMPlexSans-Regular.ttf"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Plex Sans"; src: url("fonts/IBMPlexSans-Italic.ttf"); font-weight: 400; font-style: italic; }
+@font-face { font-family: "Plex Sans"; src: url("fonts/IBMPlexSans-SemiBold.ttf"); font-weight: 600; font-style: normal; }
+@font-face { font-family: "Plex Sans"; src: url("fonts/IBMPlexSans-Bold.ttf"); font-weight: 700; font-style: normal; }
+@font-face { font-family: "Plex Mono"; src: url("fonts/IBMPlexMono-Regular.ttf"); font-weight: 400; font-style: normal; }
+@font-face { font-family: "Plex Mono"; src: url("fonts/IBMPlexMono-SemiBold.ttf"); font-weight: 600; font-style: normal; }
+
+:root {
+  --gray-100: #161616;
+  --gray-80: #393939;
+  --gray-70: #525252;
+  --gray-60: #6f6f6f;
+  --gray-20: #e0e0e0;
+  --gray-10: #f4f4f4;
+  --blue-60: #0f62fe;
+}
+
+@page {
+  size: letter;
+  margin: 18mm 17mm 17mm 17mm;
+  @bottom-left {
+    content: string(footer);
+    font: 400 7pt "Plex Sans";
+    color: #525252;
+    white-space: pre;
+    vertical-align: top;
+    padding-top: 3.2mm;
+  }
+  @bottom-right {
+    content: string(pagelabel) " " counter(page) " " string(oflabel) " " counter(pages);
+    font: 400 7pt "Plex Mono";
+    color: #525252;
+    vertical-align: top;
+    padding-top: 3.2mm;
+  }
+}
+
+/* Dark header band + footer rule, repeated on every page (position: fixed). */
+.band-top {
+  position: fixed; top: -18mm; left: -17mm; width: 215.9mm; height: 11mm;
+  background: #161616; color: #ffffff;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 17mm; box-sizing: border-box;
+}
+.band-top .brand { font: 600 9pt "Plex Sans"; color: #ffffff; }
+.band-top .kit { font: 400 6.8pt "Plex Mono"; letter-spacing: 0.08em; text-transform: uppercase; color: #c6c6c6; }
+.rule-bottom { position: fixed; bottom: -2mm; left: 0; right: 0; border-top: 1px solid #e0e0e0; height: 0; }
+
+/* Strings for the margin boxes are set from a hidden element. */
+.strings { height: 0; overflow: hidden; margin: 0; font-size: 0; }
+.s-footer { string-set: footer content(); }
+.s-page { string-set: pagelabel content(); }
+.s-of { string-set: oflabel content(); }
+
+html { font-family: "Plex Sans"; font-size: 9.2pt; line-height: 1.45; color: #161616; }
+body { margin: 0; }
+
+.eyebrow {
+  font: 400 7.2pt "Plex Mono";
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f62fe;
+  margin: 0 0 1.5mm;
+}
+h1 { font-weight: 400; font-size: 21pt; line-height: 1.2; margin: 0 0 3mm; letter-spacing: -0.01em; }
+h2 {
+  font-weight: 600; font-size: 10.5pt; line-height: 1.3;
+  margin: 5mm 0 1.8mm; padding-top: 2.2mm;
+  border-top: 1px solid #e0e0e0;
+  break-after: avoid;
+}
+h3 { font-weight: 600; font-size: 9.4pt; margin: 3.5mm 0 1.2mm; break-after: avoid; }
+p { margin: 0 0 2mm; orphans: 3; widows: 3; }
+ul, ol { margin: 0 0 2mm; padding-left: 4.5mm; }
+li { margin: 0 0 1mm; orphans: 2; widows: 2; }
+li > p { margin: 0; }
+strong { font-weight: 600; }
+a { color: #0f62fe; text-decoration: none; }
+code {
+  font-family: "Plex Mono"; font-size: 0.86em;
+  background: #f4f4f4; padding: 0 0.3mm;
+  overflow-wrap: anywhere;
+}
+pre {
+  font-family: "Plex Mono"; font-size: 7pt; line-height: 1.45;
+  background: #f4f4f4; border-left: 2px solid #393939;
+  padding: 2.5mm 3mm; margin: 0 0 2.5mm;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  break-inside: avoid;
+}
+pre code { background: none; padding: 0; font-size: 1em; }
+
+/* Intro lead + document control block */
+.lead { font-size: 10pt; line-height: 1.5; color: #393939; margin-bottom: 3.5mm; }
+table.control {
+  width: 100%; border-collapse: collapse; margin: 0 0 4mm;
+  background: #f4f4f4; font-size: 7.4pt; table-layout: fixed;
+}
+table.control th, table.control td { padding: 1.6mm 2.5mm 1.4mm; text-align: left; vertical-align: top; border: 0; }
+table.control th {
+  font: 400 6.4pt "Plex Mono"; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #525252; padding-bottom: 0;
+}
+table.control td { font-weight: 600; padding-top: 0.4mm; }
+
+/* Data tables */
+table.data { width: 100%; border-collapse: collapse; margin: 1mm 0 3mm; font-size: 8.2pt; break-inside: auto; }
+table.data th {
+  background: #e0e0e0; font-weight: 600; text-align: left;
+  padding: 1.6mm 2.2mm; vertical-align: bottom;
+}
+table.data td { padding: 1.6mm 2.2mm; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+table.data tr { break-inside: avoid; }
+table.data td:first-child { font-weight: 600; }
+table.data.plain td:first-child { font-weight: 400; }
+
+/* Info band (gray-10) and market box */
+.band { background: #f4f4f4; padding: 3mm 3.5mm 1.5mm; margin: 0 0 2.5mm; break-inside: avoid; }
+.band > :last-child { margin-bottom: 1.5mm; }
+.market { border: 1px solid #e0e0e0; border-top: 2px solid #0f62fe; padding: 2.5mm 3.5mm 1mm; margin: 1mm 0 3mm; break-inside: avoid; }
+.market .eyebrow { margin-bottom: 1.5mm; }
+.market h4 { font: 600 8.6pt "Plex Sans"; margin: 1.5mm 0 0.6mm; }
+.market p { margin-bottom: 1.5mm; }
+.note { font-size: 7.8pt; color: #525252; }
+
+/* Data-flow diagram */
+.flow { display: flex; align-items: stretch; margin: 1mm 0 2mm; break-inside: avoid; }
+.flow .node { flex: 1; border: 1px solid #8d8d8d; padding: 2mm 2.4mm; background: #ffffff; }
+.flow .node b { display: block; font-weight: 600; font-size: 8.4pt; }
+.flow .node span { display: block; font-size: 7.4pt; color: #525252; line-height: 1.35; }
+.flow .node.local { background: #f4f4f4; border-color: #161616; }
+.flow .arrow { width: 13mm; text-align: center; align-self: center; font: 400 7pt "Plex Mono"; color: #525252; }
+.flow-caption { font: 400 7pt "Plex Mono"; color: #393939; margin: 0 0 2mm; letter-spacing: 0.02em; }
+
+/* One-pager: two columns, tighter */
+body.onepager { font-size: 7.85pt; line-height: 1.31; }
+body.onepager h1 { font-size: 17pt; margin-bottom: 1.6mm; }
+body.onepager .lead { font-size: 8.5pt; line-height: 1.42; margin-bottom: 2.2mm; }
+body.onepager .cols { display: flex; gap: 6mm; }
+body.onepager .col { flex: 1 1 0; min-width: 0; }
+body.onepager h2 { font-size: 8.9pt; margin: 2.2mm 0 1mm; padding-top: 1.4mm; }
+body.onepager .col > h2:first-child { margin-top: 0; }
+body.onepager p { margin-bottom: 1.4mm; }
+body.onepager li { margin-bottom: 0.5mm; }
+body.onepager ul { margin-bottom: 1.4mm; }
+body.onepager table.control { margin-bottom: 2.4mm; }
+body.onepager .flow .node { padding: 1.5mm 2mm; }
+body.onepager .flow-caption { margin-bottom: 1.2mm; }
+body.onepager .market { padding: 2mm 3mm 0.5mm; }
+
+/* Certificate */
+body.certificate .cert {
+  position: relative; border: 1px solid #161616; outline: 1px solid #e0e0e0; outline-offset: 2mm;
+  margin: 4mm 2mm 0; padding: 12mm 14mm 10mm; text-align: center;
+}
+body.certificate .cert h1 { font-size: 24pt; margin-bottom: 1mm; }
+body.certificate .cert .product { font: 400 9pt "Plex Mono"; letter-spacing: 0.1em; text-transform: uppercase; color: #525252; margin-bottom: 8mm; }
+body.certificate .cert .certifies { color: #525252; margin-bottom: 2mm; }
+body.certificate .cert .org { font-size: 18pt; font-weight: 600; margin: 0 0 3mm; padding-bottom: 2mm; border-bottom: 1px solid #e0e0e0; }
+body.certificate .cert .holds { font-size: 10pt; margin-bottom: 7mm; }
+body.certificate table.fields { margin: 0 auto 7mm; border-collapse: collapse; width: 75%; font-size: 9pt; text-align: left; }
+body.certificate table.fields th, body.certificate table.fields td { padding: 2mm 3mm; border-bottom: 1px solid #e0e0e0; }
+body.certificate table.fields th { font-weight: 600; width: 40%; background: #f4f4f4; }
+body.certificate .placeholder { font-family: "Plex Mono"; font-size: 0.92em; color: #0f62fe; }
+body.certificate .statement { font-size: 8.4pt; color: #393939; text-align: left; margin: 0 0 7mm; }
+body.certificate .issuer { font-size: 8.6pt; line-height: 1.5; }
+body.certificate .issuer .eyebrow { color: #525252; }
+.watermark {
+  position: absolute; top: 34%; left: 0; right: 0; text-align: center;
+  font: 700 92pt "Plex Sans"; letter-spacing: 0.12em; color: rgba(15, 98, 254, 0.10);
+  transform: rotate(-30deg); z-index: 10;
+}
+.sample-banner {
+  background: #161616; color: #ffffff; font: 400 7.4pt "Plex Mono";
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 2mm 3mm; margin: 0 2mm 2mm; text-align: center;
+}
+
+.flowband { padding: 2.2mm 3.5mm 0.6mm; }
+body.onepager .flowband h2, .flowband h2 { border: 0; margin: 0 0 1.5mm; padding: 0; }
+.flowband .flow .node { background: #ffffff; }
+.flowband .flow .node.local { background: #e0e0e0; }
+.flowband .flow-caption { margin-bottom: 1.2mm; }
+
+sup { font-size: 0.75em; line-height: 0; vertical-align: 0.45em; }
+blockquote {
+  margin: 1mm 0 3mm; padding: 2.5mm 3.5mm 1mm; background: #f4f4f4;
+  border-left: 2px solid #0f62fe; break-inside: avoid;
+}
+blockquote p { margin-bottom: 1.5mm; }
+body.certificate .sample-banner { margin: 0 0 3mm; }
+body.certificate .cert { margin: 4mm 2.5mm 0; }

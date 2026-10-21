@@ -69,7 +69,7 @@ MIA Toolkit funciona completamente **sin conexión**. No hay cuenta que crear, n
 
 ## Unas palabras honestas sobre lo que esto es
 
-MIA Toolkit te ayuda a **organizar y cargar tus propias imágenes médicas**. No es un dispositivo médico. No lee, interpreta ni diagnostica tus imágenes, y no sustituye a un radiólogo ni a tu doctor. Viene sin garantía. La lectura y las respuestas vienen de profesionales médicos calificados, siempre.
+MIA Toolkit te ayuda a **organizar y cargar tus propias imágenes médicas**. Es una herramienta de gestión de archivos: no lee ni interpreta tus imágenes ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento, y no sustituye a un radiólogo ni a tu doctor. Viene sin garantía. La lectura y las respuestas vienen de profesionales médicos calificados, siempre.
 
 Si quieres probarlo, puedes [descargarlo gratis](/es/?utm_campaign=bnv) — y hay una [guía paso a paso](/es/help.html) con capturas de pantalla. Tus dudas son bienvenidas en [support@miatools.tech](mailto:support@miatools.tech).
 

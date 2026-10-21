@@ -72,7 +72,7 @@ Eso es todo, en serio. La parte difícil es la primera juntada. Después de eso,
 
 ## Unas palabras honestas
 
-MIA Toolkit te ayuda a organizar y llevar tus propias imágenes médicas — o las de tu familiar. No es un dispositivo médico. No lee, interpreta ni diagnostica nada en los estudios, y no sustituye a un radiólogo ni a ningún doctor. Viene sin garantía. Piensa en ella como una ayudante de archivo, cuidadosa y respetuosa, para imágenes que ya son tuyas y de tu familia.
+MIA Toolkit te ayuda a organizar y llevar tus propias imágenes médicas — o las de tu familiar. Es una herramienta de gestión de archivos: no lee ni interpreta los estudios ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento, y no sustituye a un radiólogo ni a ningún doctor. Viene sin garantía. Piensa en ella como una ayudante de archivo, cuidadosa y respetuosa, para imágenes que ya son tuyas y de tu familia.
 
 Si esto te quitaría un peso de encima, puedes [descargarla gratis](/es/?utm_campaign=bcg) — y hay una [guía paso a paso](/es/help.html) con capturas de pantalla. Las dudas son bienvenidas en [support@miatools.tech](mailto:support@miatools.tech).
 
@@ -87,4 +87,4 @@ Sí. Los discos sí tienen que llegar a una computadora que puedas usar — por 
 Está pensado para personas que no son técnicas. Tú básicamente metes los discos uno por uno y sigues pasos sencillos en la pantalla. La herramienta hace por ti el manejo complicado del formato médico, así que no tienes que entender nada de eso.
 
 **¿Esto me va a decir qué tienen mal los estudios?**
-No. MIA Toolkit solo organiza y entrega las imágenes — no las lee ni las interpreta y no es un dispositivo médico. Solo un radiólogo o un doctor puede interpretar un estudio. La herramienta simplemente se asegura de que las imágenes correctas lleguen a las personas correctas, en una forma que puedan abrir.
+No. MIA Toolkit solo organiza y entrega las imágenes — no las lee ni las interpreta: es una herramienta de gestión de archivos, no destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento. Solo un radiólogo o un doctor puede interpretar un estudio. La herramienta simplemente se asegura de que las imágenes correctas lleguen a las personas correctas, en una forma que puedan abrir.

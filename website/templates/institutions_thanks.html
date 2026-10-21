@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{INST_LOCALE}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{PAGE_TITLE}}</title>
+  <!-- Where the forms Worker sends a no-JS pilot request. Not indexed, not in
+       the sitemap or the hreflang cluster. -->
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="{{CANONICAL}}">
+{{FAVICONS}}
+  <link rel="preload" href="/fonts/IBMPlexSans-Regular-Latin1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/track.js" defer></script>
+  <script src="/inst.js" defer></script>
+</head>
+<body class="inst">
+  <a class="i-skip" href="#main">{{instp.skip}}</a>
+{{INST_SHELL}}
+
+  <main id="main">
+    <section class="i-hero">
+      <div class="i-container i-thanks">
+        <h1>{{instp.thanks_h1}}</h1>
+        <p class="i-lead">{{instp.thanks_p}}</p>
+        <p><a class="i-btn i-btn-ghost" href="{{BACK_URL}}">{{instp.thanks_back}}</a></p>
+      </div>
+    </section>
+  </main>
+
+{{INST_FOOTER}}
+</body>
+</html>

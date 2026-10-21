@@ -73,7 +73,7 @@ MIA Toolkit es gratis y de código abierto, y siempre será gratis de usar. No h
 
 ## Una nota corta, pero importante
 
-MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. No es un dispositivo médico, y no interpreta ni diagnostica nada en tus imágenes. No sustituye a un radiólogo ni a un doctor calificado, que es la persona indicada para leer tus estudios y responder dudas médicas. El programa se ofrece sin ninguna garantía. Para cualquier cosa sobre tu salud, confía siempre en tu equipo de atención.
+MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. Es una herramienta de gestión de archivos: no interpreta tus imágenes ni está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento. No sustituye a un radiólogo ni a un doctor calificado, que es la persona indicada para leer tus estudios y responder dudas médicas. El programa se ofrece sin ninguna garantía. Para cualquier cosa sobre tu salud, confía siempre en tu equipo de atención.
 
 ## Empieza ya
 

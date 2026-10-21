@@ -1,0 +1,12 @@
+{
+  "name": "mia-forms-worker",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker + D1 backend for the MIA Tools institutional forms",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "engines": { "node": ">=20" }
+}

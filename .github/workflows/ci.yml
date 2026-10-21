@@ -1,7 +1,8 @@
 name: CI
 
 # Runs the test suite on Linux, macOS, and Windows for every push/PR, plus a
-# lint gate (ruff) and a dependency vulnerability audit (pip-audit).
+# lint gate (ruff), a dependency vulnerability audit (pip-audit) and the
+# forms Worker unit tests (node:test).
 on:
   push:
     branches: [main]
@@ -60,3 +61,15 @@ jobs:
       # editable and is not on PyPI, so it is skipped (its deps are audited).
       - run: pip install -e ".[dev]" -r website/requirements.txt pip-audit
       - run: pip-audit --skip-editable
+
+  worker:
+    name: Forms Worker unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+      # Plain node:test, no dependencies and no network.
+      - run: node --test test/*.test.js
+        working-directory: workers/forms

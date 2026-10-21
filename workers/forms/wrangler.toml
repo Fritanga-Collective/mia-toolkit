@@ -1,0 +1,39 @@
+# Cloudflare Worker for the MIA Tools institutional forms. See README.md.
+name = "mia-forms"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# PLACEHOLDER — your Cloudflare account id (dashboard → Workers & Pages →
+# right sidebar), or delete this line and let `wrangler login` pick it.
+account_id = "cb3e127f02ff24cbed7502b7274a8069"
+
+# Custom domain (miatools.tech is on this Cloudflare account). Must stay a
+# top-level key, i.e. above any [table] header, or TOML nests it.
+routes = [{ pattern = "forms.miatools.tech", custom_domain = true }]
+
+# Keep request logs off: Workers Logs would record request metadata (incl.
+# client IPs). The Worker itself never logs IPs or field values.
+[observability]
+enabled = false
+
+[vars]
+# Comma-separated origins allowed to POST (CORS + Origin check).
+ALLOWED_ORIGINS = "https://miatools.tech,https://bridge.miatools.tech"
+# MIA Bridge site (form=bridge_partner): no-JS posts land on its /gracias/
+# (es) or /en/thanks/ (en); error pages link back to / or /en/.
+BRIDGE_ORIGIN = "https://bridge.miatools.tech"
+# Base for the thank-you redirects and the "back" links.
+SITE_ORIGIN = "https://miatools.tech"
+# Optional notification email. Leave EMAIL_PROVIDER empty to skip it.
+# "zeptomail" (Zoho ZeptoMail) or "resend". The API key is a SECRET:
+#   npx wrangler secret put EMAIL_API_KEY
+EMAIL_PROVIDER = ""
+NOTIFY_TO = "support@miatools.tech"
+NOTIFY_FROM = ""   # a sender address verified with the provider
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mia-forms"
+# PLACEHOLDER — paste the id printed by `npx wrangler d1 create mia-forms`.
+database_id = "60ffaec7-9784-4a73-bd71-b48b796ca427"
+

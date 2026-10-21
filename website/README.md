@@ -5,7 +5,7 @@ Static, fast, multilingual, **no frameworks, no tracking**. Pages are
 
 ```
 website/
-├── templates/      index.html · support.html · privacy.html · blog_*.html  ({{key}} placeholders)
+├── templates/      index.html (chooser) · patients.html · help/support/privacy/stats.html · blog_*.html · institutions*.html  ({{key}} placeholders)
 ├── i18n/           en.json · es.json · zh.json · ms.json · ta.json · de.json · fr.json
 ├── content/blog/   <lang>/<slug>.md  (front-matter + Markdown blog posts)
 ├── build.py        generator → _site/ (gitignored); stdlib + `markdown` (build-time)
@@ -14,6 +14,10 @@ website/
 ├── lang.js         browser-language auto-select + remembered manual choice
 ├── download.js     OS detection + download config (CI-synced on release)
 ├── support.js      donation tiers + Lemon Squeezy checkout config
+├── home.js         chooser: region select → market page (progressive enhancement)
+├── inst.js         institutional pages: market menu, request form + modal
+├── track.js        miaTrack(name): name-only funnel events (see below)
+├── kit/            procurement-kit PDFs + manifest.json (scripts/build_procurement_pdfs.py)
 ├── robots.txt · CNAME · img/
 ```
 
@@ -36,6 +40,55 @@ language dropdown, canonical + hreflang clusters, Open Graph blocks, JSON-LD,
 `sitemap.xml`, the `/blog` (see below), and redirect stubs for the pre-2026 flat
 URLs (`es.html`, `soporte.html`, …). CI (`.github/workflows/pages.yml`) installs
 the build dep, runs the build, and deploys `_site/`.
+
+## Site structure: chooser + patient page
+
+- `/` and `/<lang>/` are a **use-case chooser** (`templates/index.html`, i18n
+  `home.*`): hero image, two cards — *For you or your family* (one-click OS
+  download via `download.js` + "How it works →" `/patients/`) and *For clinics
+  & hospitals* ("Select your region" → `/es/institutions/mx/`,
+  `/institutions/us/`, `/institutions/sg/`) — and a trust strip. JSON-LD:
+  Organization + WebSite. The region control is a GET form to the
+  `/institutions/` hub plus a `<noscript>` list of the three links, so it works
+  without JS; `home.js` sends the visitor straight to the chosen market page.
+- `/patients/` and `/<lang>/patients/` are the **patient homepage**
+  (`templates/patients.html`, i18n keys still `index.*`), with the
+  SoftwareApplication JSON-LD. Both page types are in the sitemap with their
+  own hreflang clusters. Internal "home" links go to `/patients/`; the brand
+  goes to the chooser. `lang.js` knows `patients` is a directory page
+  (`DIR_PAGES`), so `/patients/` auto-routes to `/<lang>/patients/`.
+- Patient pages link "For clinics & hospitals" in the nav (`{{INSTITUTIONS}}`:
+  `/es/institutions/mx/` for Spanish, the hub otherwise).
+
+## Funnel events (privacy-first)
+
+`track.js` exposes `miaTrack(name)`, which forwards **one event name** to the
+cookieless analytics chosen by `ANALYTICS_PROVIDER` in `build.py`
+(`"goatcounter"` today via `goatcounter.count({path, title, event: true})`;
+`"umami"` → `umami.track(name)`; `"plausible"` → `plausible(name)`; `""` → no-op).
+The build bakes the provider into `track.js` and emits its script tag. Names
+are limited to `[A-Za-z0-9_:-]`, 64 chars; **never** field values, emails,
+names, URLs or IDs. If the provider script is blocked, nothing happens.
+
+| Event | Fired when |
+|---|---|
+| `region_select:<market>` | chooser "See solutions" (mx / us / sg) |
+| `cta_click:<type>:<market>` | a request CTA is clicked (JS) |
+| `form_open:<type>:<market>` | the request modal opens |
+| `form_start:<type>:<market>` | first focus in any field, once per open / page view |
+| `submit_attempt:<type>:<market>` | the form is submitted (after browser validation) |
+| `submit_success:<type>:<market>` | the Worker accepted it (fetch). No-JS success = a page view of `/institutions/thanks/` or `/es/institutions/mx/gracias/` |
+| `close_without_submit:<type>:<market>` | the modal closes without a successful submit |
+| `kit_download:<doc>` | a procurement-kit PDF link (security / it-guide / license-terms / certificate) |
+
+`<type>` is the form's `request_type`: `pilot`, `pricing_clinic`,
+`pricing_hospital`, `pricing_network`, `pricing_public`, `kit` — so the pilot
+funnel reads `cta_click:pilot:sg` → `form_open:pilot:sg` → `form_start:pilot:sg`
+→ `submit_attempt:pilot:sg` → `submit_success:pilot:sg`. Drop-off = the gap
+between consecutive steps in the GoatCounter dashboard (events appear as paths).
+The privacy policy's GoatCounter sentence (`privacy.site_li1_gc`, swapped in
+automatically when analytics is on) says "aggregate page and button-click
+counts" in every language; keep it true if you add events.
 
 ## Add a language
 
@@ -60,6 +113,51 @@ everyone. The download is always free and one click away.
 - To use a **dedicated product** for a tier (e.g. a real monthly *subscription* —
   a URL param can't make PWYW recurring), set that tier's `url` in `CONFIG.tiers`
   to override the preset link.
+
+## Institutions (`/institutions/`)
+
+The institutional storefront: `templates/institutions.html` (market pages) +
+`templates/institutions_hub.html` (English hub with a market picker) ×
+`markets/{mx,us,sg}.json`. Shared copy is in the `instp.*` keys of
+`i18n/<lang>.json`; market copy (`m.*` strings, use cases, compliance rows,
+trust assets) is in the market file under `pages.<lang>`. Output:
+`/institutions/`, `/institutions/us/`, `/institutions/sg/` (en) and
+`/es/institutions/mx/` (es-MX), one hreflang cluster with the hub as
+x-default. Pages use the Carbon-style layer in `styles.css` (scoped to
+`body.inst`) with IBM Plex self-hosted from `fonts/` (OFL, `fonts/OFL.txt`);
+patient pages load no web fonts.
+
+- **One language per market:** MX = es-MX, US = en-US, SG = en-SG. The build
+  refuses a market file with more than one `pages` entry. The header has a
+  single market menu (`<details>` of links, works without JS) — no language
+  switcher.
+- **Brand:** `INST_BRAND` in `build.py` (one line per language) sets the
+  header brand, `<title>` suffix, `og:site_name` and the JSON-LD Brand.
+- **One request form, many entry points:** the pilot CTA, every pricing button
+  and the kit's "Request the full package" open the same form in an
+  accessible `<dialog>` (`inst.js`: showModal, focus in/out, Esc, backdrop
+  click, inert page), set to that `request_type` with its own heading, context
+  line ("Request: Hospital license — US$499/year") and submit label (i18n
+  `instp.req_{title,ctx,submit}_<type>`). Without JS each CTA is a real link to
+  a prefilled, noindex page: `/institutions/<m>/pilot/` (es `…/piloto/`) and
+  `/institutions/<m>/request/<clinic|hospital|network|public|kit>/` (es
+  `…/solicitud/…`). Types: `INST_REQUEST_TYPES` (keep in sync with the Worker).
+- **Procurement kit PDFs:** listed from `kit/manifest.json` (title, language,
+  pages, size; EN pages → EN PDFs, MX → ES PDFs) and served from `/kit/` (not in
+  the sitemap). Regenerate with `scripts/build_procurement_pdfs.py`; the build
+  fails if the manifest names a missing PDF.
+- **Pilot form:** posts to `FORM_ENDPOINT` in `build.py` — the Cloudflare
+  Worker in `workers/forms/` (see its README). Empty (default) = the form
+  renders with its button disabled plus a mailto fallback. Set it only after
+  the Worker is deployed **and** the privacy-policy update (R4) has shipped.
+  No-JS posts land on `/institutions/thanks/` or `/es/institutions/mx/gracias/`
+  (`INST_THANKS`, noindex). `inst.js` (first-party, no storage) fills the
+  hidden `utm_campaign` and shows inline success/error.
+- **Windows signing:** flip `WINDOWS_SIGNED` in `build.py` once a signed
+  release ships; the compliance row switches in every language.
+- **Trust assets** (SBOM, HECVAT, VPAT…) render only when `"ready": true`.
+- With `FORM_ENDPOINT` empty, the form's mailto fallback uses the subject for
+  the request type that opened it.
 
 ## Write a blog post (`/blog`)
 
@@ -117,11 +215,11 @@ schedule.
 For a translation produced with machine assistance (not a native-speaker
 original), add `translation: machine` to its front-matter. The build appends a
 small italic footer note inviting corrections at `support@miatools.tech`
-(localized via the optional `blog.mt_note` i18n key, English fallback). Omit the
+(localized via the optional `blog.tr_note` i18n key, English fallback). Omit the
 field for native originals (en, the es originals, zh).
 
 ## Privacy-respecting stats (optional)
 
-If you ever want counts, add a cookieless GoatCounter or Plausible tag in the
-`<head>` of both pages. Do **not** add Google Analytics — it conflicts with the
+Counts come from cookieless GoatCounter (`GOATCOUNTER` / `ANALYTICS_PROVIDER`
+in `build.py`; see *Funnel events* above). Do **not** add Google Analytics — it conflicts with the
 project's no-tracking promise.

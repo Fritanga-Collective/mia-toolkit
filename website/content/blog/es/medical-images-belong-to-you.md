@@ -52,7 +52,7 @@ El último paso es el más sencillo: carga contigo tu USB con todo junto. Doctor
 
 ## Una nota sobre lo que hace esta herramienta
 
-MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. No lee ni interpreta imágenes, no es un dispositivo médico y no sustituye la revisión de un radiólogo o doctor calificado. Viene sin garantía. Para cualquier cosa sobre diagnóstico o tratamiento, confía en tus profesionales de la salud.
+MIA Toolkit te ayuda a organizar y entregar tus propias imágenes médicas. Es una herramienta de gestión de archivos: no lee ni interpreta imágenes, no está destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento y no sustituye la revisión de un radiólogo o doctor calificado. Viene sin garantía. Para cualquier cosa sobre diagnóstico o tratamiento, confía en tus profesionales de la salud.
 
 Si te gustaría juntar tus propias imágenes en un solo lugar, puedes [descargar MIA Toolkit gratis](/es/?utm_campaign=bmi). ¿Dudas? Escríbenos a [support@miatools.tech](mailto:support@miatools.tech).
 
@@ -68,4 +68,4 @@ DICOM es el formato completo y original que usan los visores de imágenes de los
 Sí. Funciona completamente sin conexión, en tu propia computadora. No hay cuenta, no se sube nada a la nube y no hay rastreo. Tus imágenes y tu información nunca salen de tu equipo.
 
 **¿Me dice qué muestra mi estudio?**
-No. Solo te ayuda a copiar, organizar y entregar tus imágenes. No las interpreta y no es un dispositivo médico. Para cualquier lectura o diagnóstico, confía siempre en un doctor o radiólogo calificado.
+No. Solo te ayuda a copiar, organizar y entregar tus imágenes. No las interpreta: es una herramienta de gestión de archivos, no destinada a fines de diagnóstico, prevención, monitoreo ni tratamiento. Para cualquier lectura o diagnóstico, confía siempre en un doctor o radiólogo calificado.
