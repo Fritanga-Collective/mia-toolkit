@@ -3,9 +3,12 @@ title: Cómo pedir mis estudios de imagen en México: expediente clínico y dere
 slug: request-imaging-records-mexico
 date: 2026-10-27
 summary: ¿Cómo pedir mis estudios de imagen? Qué dicen la NOM-004 del expediente clínico y las nuevas leyes de datos personales de 2025 sobre tus derechos ARCO, los plazos y los costos, con un formato de solicitud listo para usar.
+og_title: Cómo pedir tus estudios de imagen en México
+og_description: Lo que dicen la NOM-004 y las leyes de datos de 2025 sobre tus derechos ARCO, plazos y costos, con un formato de solicitud listo para usar.
 languages: [es, en]
 status: published
 tags: [guides, rights, mexico]
+image: /img/blog/request-imaging-records-mexico.jpg
 ---
 
 *Read in English: [How to request your imaging records in Mexico](/blog/request-imaging-records-mexico/).*

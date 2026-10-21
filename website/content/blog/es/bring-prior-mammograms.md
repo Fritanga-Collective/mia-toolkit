@@ -3,9 +3,12 @@ title: Llevar mastografías anteriores a tu cita: por qué comparar importa
 slug: bring-prior-mammograms
 date: 2026-10-22
 summary: ¿Conviene llevar mastografías anteriores a tu cita? Sí. Te contamos por qué el radiólogo las compara y cómo juntar tus mastografías de varios discos en una sola USB, en Mac o en Windows.
+og_title: Lleva tus mastografías anteriores: por qué comparar importa
+og_description: El radiólogo compara cada mastografía con las anteriores. Por qué importa y cómo juntar tus mastografías de varios discos en una sola USB.
 languages: [en, es]
 status: published
 tags: [guides, mammography, breast-cancer-awareness]
+image: /img/blog/bring-prior-mammograms.jpg
 ---
 
 *Read in English: [Bring previous mammograms to your appointment](/blog/bring-prior-mammograms/).*

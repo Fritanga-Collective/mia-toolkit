@@ -3,9 +3,12 @@ title: Resonancia de próstata de seguimiento: por qué importan tus estudios pr
 slug: prostate-mri-prior-scans
 date: 2026-11-03
 summary: ¿Te toca una resonancia de próstata de seguimiento? El radiólogo compara cada resonancia nueva con las anteriores. Te contamos por qué y cómo juntar tus resonancias previas de varios discos en una sola USB, en Mac o en Windows.
+og_title: Resonancia de próstata: por qué importan tus estudios previos
+og_description: El radiólogo compara cada resonancia nueva con las anteriores. Por qué importa y cómo juntar tus resonancias previas en una sola USB.
 languages: [en, es, de, fr]
 status: published
 tags: [guides, prostate, movember]
+image: /img/blog/prostate-mri-prior-scans.jpg
 ---
 
 *Read in English: [Prostate MRI follow-up: why radiologists compare your previous scans](/blog/prostate-mri-prior-scans/).*

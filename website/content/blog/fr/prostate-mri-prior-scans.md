@@ -3,9 +3,12 @@ title: IRM de la prostate de suivi : pourquoi le radiologue compare avec vos exa
 slug: prostate-mri-prior-scans
 date: 2026-11-03
 summary: Vous avez une IRM de la prostate de suivi ? Le radiologue compare chaque nouvelle IRM avec les précédentes. Voici pourquoi cette comparaison compte, et comment réunir vos anciennes IRM de plusieurs CD sur une seule clé USB, sur Mac ou Windows.
+og_title: IRM de la prostate : pourquoi vos examens précédents comptent
+og_description: Le radiologue compare chaque nouvelle IRM aux précédentes. Pourquoi c'est important, et comment réunir vos anciennes IRM sur une seule clé USB.
 languages: [en, es, de, fr]
 status: published
 tags: [guides, prostate, movember]
+image: /img/blog/prostate-mri-prior-scans.jpg
 translation: machine
 ---
 

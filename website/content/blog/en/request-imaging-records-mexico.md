@@ -3,9 +3,12 @@ title: How to Request Your Imaging Records in Mexico (Medical Records and ARCO R
 slug: request-imaging-records-mexico
 date: 2026-10-27
 summary: How to request imaging records in Mexico: what NOM-004 on the clinical record and the 2025 data-protection laws say about your ARCO access rights, deadlines and costs, with a ready-to-use request in Spanish.
+og_title: How to request your imaging records in Mexico
+og_description: What NOM-004 and the 2025 data-protection laws say about your ARCO rights, deadlines and costs, with a ready-to-use request in Spanish.
 languages: [es, en]
 status: published
 tags: [guides, rights, mexico]
+image: /img/blog/request-imaging-records-mexico.jpg
 ---
 
 *Leer en español: [Cómo pedir mis estudios de imagen en México](/es/blog/request-imaging-records-mexico/).*

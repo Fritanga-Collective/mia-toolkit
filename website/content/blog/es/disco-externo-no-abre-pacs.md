@@ -3,10 +3,12 @@ title: Cuando un disco de estudios no abre en su PACS: rutina de recepción en 5
 slug: disco-externo-no-abre-pacs
 date: 2026-10-29
 summary: ¿El disco de estudios no abre o no se importa a su PACS? Una rutina de recepción de discos externos en 5 pasos para centros de imagen, con pasos para macOS y Windows y una forma sencilla de medir cuánto tiempo le cuesta.
+og_title: ¿El disco externo no abre en su PACS? 5 pasos
+og_description: Una rutina de recepción de discos externos en 5 pasos, con pasos para macOS y Windows y una forma sencilla de medir cuánto tiempo le cuesta.
 languages: [es, en]
 status: published
 tags: [institutions, intake, mexico]
-image: /img/inst/network-to-pacs-beam-1600.jpg
+image: /img/blog/disco-externo-no-abre-pacs.jpg
 ---
 
 *Read in English: [When an outside disc won't import into your PACS](/blog/disco-externo-no-abre-pacs/).*

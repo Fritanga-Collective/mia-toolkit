@@ -3,9 +3,12 @@ title: Bring Previous Mammograms to Your Appointment: Why Comparison Matters
 slug: bring-prior-mammograms
 date: 2026-10-22
 summary: Should you bring previous mammograms to a new breast imaging center? Yes. Here is why radiologists compare them, and how to gather your old mammograms from discs onto one USB, on a Mac or Windows PC.
+og_title: Bring your previous mammograms: why comparison matters
+og_description: Radiologists compare each mammogram with earlier ones. Why it matters, and how to put your old mammograms from discs onto one USB.
 languages: [en, es]
 status: published
 tags: [guides, mammography, breast-cancer-awareness]
+image: /img/blog/bring-prior-mammograms.jpg
 ---
 
 *Leer en español: [Lleva tus mastografías anteriores](/es/blog/bring-prior-mammograms/).*

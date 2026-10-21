@@ -3,10 +3,12 @@ title: Outside Imaging CD Import Workflow: The Hidden Staff Cost, and a 2-Week W
 slug: outside-cd-intake-cost
 date: 2026-11-05
 summary: Your outside imaging CD import workflow costs staff time that never shows up as a line item. Here is where that cost hides, what published studies report, and a 2-week method to measure it with your own numbers.
+og_title: The hidden staff cost of outside imaging CDs
+og_description: Outside-CD import costs staff time that never shows up as a line item. Where it hides, what studies report, and a 2-week way to measure it.
 languages: [en, es]
 status: published
 tags: [institutions, intake, united-states]
-image: /img/inst/disc-to-usb-real-1600.jpg
+image: /img/blog/outside-cd-intake-cost.jpg
 ---
 
 *Leer en español: [El costo oculto de los discos externos](/es/blog/outside-cd-intake-cost/).*

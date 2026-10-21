@@ -3,9 +3,12 @@ title: Prostate MRI Follow-Up: Why Radiologists Compare Your Previous Scans
 slug: prostate-mri-prior-scans
 date: 2026-11-03
 summary: Having a prostate MRI follow-up? Radiologists compare each new MRI with your earlier ones. Here is why that comparison matters, and how to gather your previous prostate MRIs from discs onto one USB, on a Mac or Windows PC.
+og_title: Prostate MRI follow-up: why your previous scans matter
+og_description: Radiologists compare each new prostate MRI with earlier ones. Why that matters, and how to put your previous MRIs from discs onto one USB.
 languages: [en, es, de, fr]
 status: published
 tags: [guides, prostate, movember]
+image: /img/blog/prostate-mri-prior-scans.jpg
 ---
 
 *Leer en español: [Resonancia de próstata: por qué importan tus estudios previos](/es/blog/prostate-mri-prior-scans/).*

@@ -3,10 +3,12 @@ title: Outside CD Won't Import into PACS? A 5-Step Intake Routine
 slug: disco-externo-no-abre-pacs
 date: 2026-10-29
 summary: Outside CD won't import into PACS? A 5-step intake routine for imaging centers and hospitals, with macOS and Windows steps, an identity check before import, and a simple way to measure what outside discs cost you.
+og_title: Outside CD won't import into PACS? A 5-step routine
+og_description: A 5-step intake routine for outside discs: macOS and Windows steps, an identity check before import, and a simple way to measure the cost.
 languages: [es, en]
 status: published
 tags: [institutions, intake]
-image: /img/inst/network-to-pacs-beam-1600.jpg
+image: /img/blog/disco-externo-no-abre-pacs.jpg
 ---
 
 *Leer en español: [Cuando un disco de estudios no abre en su PACS](/es/blog/disco-externo-no-abre-pacs/).*

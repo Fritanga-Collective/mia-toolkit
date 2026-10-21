@@ -3,9 +3,12 @@ title: Prostata-MRT zur Verlaufskontrolle: Warum Radiologen Ihre Voraufnahmen ve
 slug: prostate-mri-prior-scans
 date: 2026-11-03
 summary: Steht eine Prostata-MRT zur Verlaufskontrolle an? Radiologen vergleichen jede neue MRT mit den früheren. Hier erfahren Sie, warum dieser Vergleich wichtig ist und wie Sie Ihre früheren Prostata-MRTs von CDs auf einen USB-Stick bringen, am Mac oder unter Windows.
+og_title: Prostata-MRT: Warum Ihre Voraufnahmen zählen
+og_description: Radiologen vergleichen jede neue Prostata-MRT mit früheren. Warum das wichtig ist und wie Ihre alten MRTs von CDs auf einen USB-Stick kommen.
 languages: [en, es, de, fr]
 status: published
 tags: [guides, prostate, movember]
+image: /img/blog/prostate-mri-prior-scans.jpg
 translation: machine
 ---
 

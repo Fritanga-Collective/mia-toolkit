@@ -3,10 +3,12 @@ title: El costo oculto de los discos externos: cómo medir su flujo de importaci
 slug: outside-cd-intake-cost
 date: 2026-11-05
 summary: Importar los discos de estudios externos que traen los pacientes cuesta tiempo de personal que nunca aparece en el presupuesto. Dónde se esconde ese costo, qué reportan los estudios publicados y un método de 2 semanas para medirlo con sus propias cifras.
+og_title: El costo oculto de los discos de imagen externos
+og_description: Importar discos externos cuesta tiempo de personal que no aparece en el presupuesto. Dónde se esconde y cómo medirlo en 2 semanas.
 languages: [en, es]
 status: published
 tags: [institutions, intake, united-states]
-image: /img/inst/disc-to-usb-real-1600.jpg
+image: /img/blog/outside-cd-intake-cost.jpg
 ---
 
 *Read in English: [Outside imaging CD import workflow: the hidden staff cost](/blog/outside-cd-intake-cost/).*
