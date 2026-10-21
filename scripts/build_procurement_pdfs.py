@@ -91,8 +91,8 @@ UI = {
         "by_market": "By market",
     },
     "es": {
-        "kit": "Documentos para Compras y TI",
-        "eyebrow": "MIA Toolkit · Documentos para Compras y TI",
+        "kit": "Kit de Cumplimiento para IT",
+        "eyebrow": "MIA Toolkit · Kit de Cumplimiento para IT",
         "lang_name": "Español (México)",
         "control": ["Documento", "Versión", "Fecha", "Idioma", "Páginas"],
         "page": "Página", "of": "de",

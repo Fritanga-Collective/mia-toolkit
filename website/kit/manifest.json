@@ -7,7 +7,7 @@
   },
   "kit_name": {
     "en": "Procurement kit",
-    "es": "Documentos para Compras y TI"
+    "es": "Kit de Cumplimiento para IT"
   },
   "base_path": "/kit/",
   "documents": [
@@ -26,8 +26,8 @@
       "title": "Ficha de seguridad",
       "filename": "es/mia-ficha-seguridad-es.pdf",
       "pages": 1,
-      "bytes": 32298,
-      "sha256": "85a85d266b5980390bf252bda7a7a723aee0f58da30eb71eb1c0424e32358e4f"
+      "bytes": 32305,
+      "sha256": "610ca18357cb46e38b9ee2880d750391aaf313898e76f55b20d9d10e9c85a86e"
     },
     {
       "lang": "en",
@@ -44,8 +44,8 @@
       "title": "Guía de instalación para TI",
       "filename": "es/mia-guia-instalacion-ti-es.pdf",
       "pages": 4,
-      "bytes": 60810,
-      "sha256": "a65dc5ad9cf2668975d4e3774d09df9b507d8693aa4709a5eb3d785f0dba6543"
+      "bytes": 60814,
+      "sha256": "dfd75f9ac238e6e0da43711dc2f92acd0167c9986b08bf34d22af68a559f7fe3"
     },
     {
       "lang": "en",
@@ -62,8 +62,8 @@
       "title": "Términos de la licencia institucional",
       "filename": "es/mia-terminos-licencia-es.pdf",
       "pages": 2,
-      "bytes": 31462,
-      "sha256": "b76a89851d715af6f3ddf6ec05b477f2b0db1896efd73571bef9e7e6b0dc4ae8"
+      "bytes": 31396,
+      "sha256": "b01ffccef77d321d5e1246dfeb0ff7e0f90a142c235f00a50a6a9188f6d6455d"
     },
     {
       "lang": "en",
@@ -80,8 +80,8 @@
       "title": "Certificado de licencia (muestra)",
       "filename": "es/mia-certificado-muestra-es.pdf",
       "pages": 1,
-      "bytes": 24820,
-      "sha256": "8b627ad31b16edd476b626c8e88989ca8a8dd7bba052d8afe1b506bc7e5745c3"
+      "bytes": 24771,
+      "sha256": "e0e839f958fef4885117f5f332fab83f625ab8b47c9817b86ab1d87355eabdb2"
     }
   ]
 }
