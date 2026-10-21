@@ -1399,6 +1399,39 @@ def inst_pilot_block(s: dict, lang: str, market: str) -> str:
         '        </dialog>')
 
 
+# Illustrations on the institution pages (img/inst/<slug>-<w>.<ext>): WebP at
+# 800w and 1600w plus a 1600w JPEG fallback, all 16:9 (1600x900). The width/
+# height attributes reserve the box (no layout shift); CSS may crop to 21:9.
+INST_IMG_W, INST_IMG_H = 1600, 900
+
+
+def inst_picture(slug: str, alt: str, cls: str, sizes: str,
+                 eager: bool = False) -> str:
+    base = f"/img/inst/{slug}"
+    load = ('loading="eager" fetchpriority="high"' if eager
+            else 'loading="lazy"')
+    return (f'<picture class="{cls}">'
+            f'<source type="image/webp" srcset="{base}-800.webp 800w, '
+            f'{base}-1600.webp 1600w" sizes="{sizes}">'
+            f'<img src="{base}-1600.jpg" alt="{html.escape(alt)}" '
+            f'width="{INST_IMG_W}" height="{INST_IMG_H}" {load} '
+            f'decoding="async"></picture>')
+
+
+def inst_images(s: dict) -> dict:
+    """Computed {{IMG_*}} blocks shared by the hub and the market pages."""
+    hero_sizes = "(max-width: 800px) calc(100vw - 32px), 400px"
+    card_sizes = "(max-width: 800px) calc(100vw - 32px), 600px"
+    return {
+        "IMG_HERO": inst_picture("disc-to-usb-real", s["instp.img_hero_alt"],
+                                 "i-hero-img", hero_sizes, eager=True),
+        "IMG_TK": inst_picture("disc-to-usb-abstract", s["instp.img_tk_alt"],
+                               "i-card-img", card_sizes),
+        "IMG_BR": inst_picture("network-to-pacs-beam", s["instp.img_br_alt"],
+                               "i-card-img i-img-server", card_sizes),
+    }
+
+
 def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
                      pages, cluster, template: str, kit: dict) -> str:
     s = dict(langs[lang])
@@ -1438,6 +1471,7 @@ def render_inst_page(langs: dict, market: str, lang: str, pdata: dict,
         "REQ_NETWORK": inst_request_attrs(s, lang, market, "pricing_network"),
         "REQ_PUBLIC": inst_request_attrs(s, lang, market, "pricing_public"),
         "REQ_KIT": inst_request_attrs(s, lang, market, "kit"),
+        **inst_images(s),
     }
     return render(template, s, computed)
 
@@ -1467,6 +1501,7 @@ def render_inst_hub(langs: dict, pages, cluster, template: str) -> str:
         "INST_SHELL": inst_shell(langs, "en", None, pages),
         "INST_FOOTER": inst_footer("en", s["instp.hub_contact_hours"]),
         "INST_HUB_CARDS": "\n".join(cards),
+        **inst_images(s),
     }
     return render(template, s, computed)
 
