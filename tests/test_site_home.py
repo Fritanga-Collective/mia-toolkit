@@ -343,7 +343,7 @@ def test_tracking_calls_never_carry_personal_data():
     for used in re.findall(r'fieldValue\(form, "(\w+)"\)', inst):
         assert used in ("request_type", "market"), used
     # Kit links carry only the document key.
-    assert set(re.findall(r'data-track="([^"]+)"', open(BUILD_PY).read())) <= {
+    assert set(re.findall(r'data-track="([^"]+)"', open(BUILD_PY, encoding="utf-8").read())) <= {
         "kit_download:{key}"}
 
 
