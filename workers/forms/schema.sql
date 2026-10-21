@@ -32,3 +32,19 @@ CREATE TABLE IF NOT EXISTS submissions (
   timeline         TEXT                          -- now | 1-3m | 3-6m | exploring
 );
 CREATE INDEX IF NOT EXISTS submissions_created_at ON submissions (created_at);
+
+-- Go links (https://go.miatools.tech/<code>): one row per institutional
+-- outreach code (bucket `k` in the private UTM legend). Deliberately NO
+-- institution name, IP, user agent or cookie: the code→institution key lives
+-- only in the private CRM, which upserts rows with scripts/crm_sync.py
+-- push-links. clicks counts redirects followed by a person (HEAD, prefetch and
+-- preview bots excluded); last_click is a UTC date (YYYY-MM-DD), no time.
+-- Added 2026-10-20; on an existing database just re-run this file (IF NOT EXISTS).
+CREATE TABLE IF NOT EXISTS links (
+  code        TEXT    PRIMARY KEY,               -- ^k[a-z2-7]{3}$
+  market      TEXT,                              -- "mx" | "us" | "sg"
+  lang        TEXT,                              -- site language code (es, en, …)
+  active      INTEGER DEFAULT 1,                 -- 0 = closed institution → neutral hub
+  clicks      INTEGER DEFAULT 0,
+  last_click  TEXT                               -- UTC date only
+);

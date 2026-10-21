@@ -35,6 +35,8 @@ NULL. No-JS posts 303 to `BRIDGE_ORIGIN` + `/gracias/` (es) or `/en/thanks/`
 | `POST /submit` | `application/x-www-form-urlencoded` (no-JS form) or JSON (fetch). Origin must be in `ALLOWED_ORIGINS` (default `https://miatools.tech,https://bridge.miatools.tech`), else 403. Validates and size-limits every field (body ≤ 16 KB). Honeypot `website` filled → pretends success, stores nothing. In-memory per-isolate rate limit (5 per 10 min per client; salted hash in memory only, never persisted). Stores the row in D1, then **303 → thank-you page** (no JS) or `{"ok": true}` (when `Accept: application/json`). |
 | `OPTIONS /submit` | CORS preflight, allowed origins only. |
 | `GET /export` | CSV of all rows. Needs `Authorization: Bearer $EXPORT_TOKEN`; returns 404 if no token is configured. Cells starting with `= + - @` are prefixed with `'` (spreadsheet formula injection). |
+| `GET /export-links` | CSV `code,market,lang,active,clicks,last_click` of the go-link table. Same bearer token and 404/401 rules as `/export`. |
+| `GET\|HEAD /go/<code>` (any host) · `/<code>` and `/` on `go.miatools.tech` | Institutional go links, see below. |
 | `GET /health` | `ok` |
 
 Thank-you pages (built by `website/build.py`, `INST_THANKS`): MX →
@@ -43,6 +45,17 @@ Thank-you pages (built by `website/build.py`, `INST_THANKS`): MX →
 Columns: `id, created_at, form, market, campaign, name, email, organisation,
 role, discs_per_month, pacs, message` (`schema.sql`). No IP, user agent or
 cookie columns, deliberately.
+
+## Go links (`go.miatools.tech/<code>`)
+
+Outreach emails to institutions carry one opaque code per **organisation** (never per person): `https://go.miatools.tech/k7q2`. The Worker looks the code up in the D1 `links` table and answers **302** to the market page with `?utm_source=o&utm_campaign=<code>` (mx → `/es/institutions/mx/`, us → `/institutions/us/`, sg → `/institutions/sg/`); an unknown, malformed (`^k[a-z2-7]{3}$`) or inactive code, or the bare `go.miatools.tech/`, goes to the neutral `/institutions/` hub with no utm. The same link also works as `forms.miatools.tech/go/<code>`.
+
+Each redirect followed by a person adds 1 to `clicks` and sets `last_click` to the UTC date, in one `UPDATE … RETURNING`. HEAD requests, browser prefetch/prerender (`Sec-Purpose`/`Purpose`) and known link-preview bots and mail scanners are redirected but not counted; the user agent is matched in memory only. The table holds **no institution name, IP, user agent or cookie** — the code→institution key lives only in the private CRM, which fills the table with `scripts/crm_sync.py push-links` (and reads counts back with `pull`). Responses are `Cache-Control: no-store`, `Referrer-Policy: no-referrer`.
+
+```sh
+curl -sI https://go.miatools.tech/<code> | grep -i '^location'
+curl -fsS -H "Authorization: Bearer $EXPORT_TOKEN" https://forms.miatools.tech/export-links
+```
 
 ## Deploy (Luis)
 
@@ -58,7 +71,7 @@ npx wrangler login
 #    (replace REPLACE_WITH_D1_DATABASE_ID). Optionally set account_id too.
 npx wrangler d1 create mia-forms
 
-# 3. Create the table.
+# 3. Create the tables (idempotent; re-run after schema.sql gains a table).
 npx wrangler d1 execute mia-forms --remote --file=schema.sql
 
 # 4. Secrets.
