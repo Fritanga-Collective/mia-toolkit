@@ -55,3 +55,10 @@ extend-exclude = ["website/_site"]
 
 [tool.ruff.lint]
 select = ["E9", "F"]
+
+[tool.mypy]
+# Type check for mia_core (PRODUCTION-READINESS G10). Warn-only in CI for now
+# (continue-on-error in ci.yml); flip to gating once it reports zero errors.
+python_version = "3.9"
+files = ["mia_core"]
+ignore_missing_imports = true
