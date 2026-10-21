@@ -1,27 +1,31 @@
 """Frozen-app entry point. PyInstaller bundles this; it starts the GUI.
 
-`--selftest` imports the heavy dependencies and core modules, then exits — a
-headless way to confirm the bundle is complete (no GUI window needed).
+Headless flags (no GUI window, no network) for installed-artifact checks:
+
+- ``--selftest`` / ``--self-test`` — imports the bundle's dependencies, core
+  modules and the GUI module, builds a DICOMDIR from a tiny synthetic DICOM
+  study in a temp folder, prints the result and exits 0/1 (``mia/selftest.py``).
+- ``--version`` — prints the app version and exits 0.
 """
 
 import sys
 
 
-def _selftest() -> int:
-    import openpyxl
-    import pydicom
-
-    from mia_core import common, deliver, dicomdir, inventory, ripper  # noqa: F401
+def _gui_imports() -> None:
+    # Import (don't start) the GUI so a bundle missing Tk or a GUI module fails.
     from mia.gui import app  # noqa: F401
 
-    print(f"selftest OK: pydicom {pydicom.__version__}, "
-          f"openpyxl {openpyxl.__version__}")
-    return 0
 
+def main(argv=None) -> int:
+    argv = sys.argv if argv is None else argv
+    from mia import selftest
 
-def main() -> int:
-    if "--selftest" in sys.argv:
-        return _selftest()
+    if selftest.wants_selftest(argv):
+        return selftest.run(extra_imports=_gui_imports)
+    if "--version" in argv[1:]:
+        from mia import __version__
+        print(f"MIA Toolkit {__version__}")
+        return 0
     from mia.gui.app import main as gui_main
     return gui_main()
 
