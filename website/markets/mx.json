@@ -12,7 +12,7 @@
         "m.uc_lead": "Para centros de imagen independientes, cadenas de diagnóstico y hospitales privados. Primera ciudad piloto: Monterrey.",
         "m.currency_note": "Precios en dólares estadounidenses (USD). Si necesita una cotización en pesos, escríbanos.",
         "m.procurement_note": "Sitios pequeños: pago con tarjeta en línea (próximamente). Cadenas y hospitales: por cotización. ¿Requiere CFDI? Escríbanos antes de comprar para confirmar las opciones disponibles.",
-        "m.contact_hours": "Soporte por correo · primera respuesta en un plazo objetivo de 2 días hábiles"
+        "m.contact_hours": "Soporte por correo"
       },
       "use_cases": [
         {"title": "Recepción de discos externos", "text": "Lea en recepción los CD que traen los pacientes y entregue a su equipo un solo conjunto de estudios organizado, en lugar de una pila de discos."},
