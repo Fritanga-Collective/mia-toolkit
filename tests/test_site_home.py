@@ -356,6 +356,19 @@ def test_privacy_text_mentions_button_clicks(site):
         assert "GoatCounter" in _read(site, f"{_root(code)}privacy.html")
 
 
+def test_privacy_has_deletion_path_in_every_language(site):
+    # PRODUCTION-READINESS G6: the policy names the deletion path (support@,
+    # confirmed within 30 days) and the business-contact record, in every
+    # language, with no unfilled placeholder.
+    langs = build.load_langs()
+    for code in build.LANG_ORDER:
+        html = _read(site, f"{_root(code)}privacy.html")
+        assert "{{" not in html, code
+        assert langs[code]["privacy.rights_h2"] in html, code
+        assert html.count('href="mailto:support@miatools.tech"') >= 2, code
+        assert "30" in langs[code]["privacy.rights_p"], code
+
+
 # ──────────────────────────── kit PDFs ────────────────────────────
 
 def test_kit_pdf_links_resolve(site):
