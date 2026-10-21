@@ -12,7 +12,7 @@
         "m.uc_lead": "For private specialist and imaging clinics, hospital international-patient centres, and hospitals in Johor that care for patients from Singapore.",
         "m.currency_note": "Prices are in US dollars (USD). Ask us if you need a quote in SGD.",
         "m.procurement_note": "Pay by card online (opening soon) or ask us for an invoice. Responding to a public-sector tender? Email us.",
-        "m.contact_hours": "Email support · target first reply within 2 business days"
+        "m.contact_hours": "Email support"
       },
       "use_cases": [
         {"title": "Foreign-disc intake", "text": "Patients arrive with CDs from hospitals across the region. Read each disc at the front desk and hand your team one organized set of studies instead of a pile of discs."},

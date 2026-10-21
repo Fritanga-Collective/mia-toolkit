@@ -12,7 +12,7 @@
         "m.uc_lead": "For critical-access hospitals, orthopedic, neurology and oncology practices, second-opinion programs, teleradiology groups and independent imaging centers.",
         "m.currency_note": "Prices are in US dollars (USD).",
         "m.procurement_note": "Small purchases: card or P-card through online checkout (opening soon). Need a quote, a purchase-order process or vendor onboarding? Email us with what your purchasing team requires and we'll work it out with you.",
-        "m.contact_hours": "Email support · target first reply within 2 business days"
+        "m.contact_hours": "Email support"
       },
       "use_cases": [
         {"title": "Outside-study import", "text": "At the film library or medical-records desk: read the outside CD, organize its studies and hand standard DICOM to your existing import step."},
