@@ -308,7 +308,7 @@
   "instp.form_message": "Anything else we should know?",
   "instp.form_optional": "optional",
   "instp.form_hp": "Leave this field empty",
-  "instp.form_privacy": "We use what you send only to reply to you and to run your pilot. No tracking, no mailing lists. If you followed a link we sent you, its short reference code is included. Please don't include patient data. <a href=\"{privacy}\">Privacy policy</a>.",
+  "instp.form_privacy": "We use what you send only to reply to you and to run your pilot. No tracking, no mailing lists. Please don't include patient data. <a href=\"{privacy}\">Privacy policy</a>.",
   "instp.form_pending": "Online requests open soon. Until then, please email us:",
   "instp.form_pending_link": "send your request by email",
   "instp.form_sending": "Sending…",
