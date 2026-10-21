@@ -61,7 +61,24 @@ def test_build_writes_readme(dataset_dir, tmp_path):
     result = dicomdir.build_fileset(root, str(out))
     readme = dicomdir.write_readme(str(out), result, root)
     assert os.path.exists(readme)
-    assert "DICOM Archive" in open(readme).read()
+    text = open(readme).read()
+    # Human-first entry point: leads with how to open, names viewers + DICOMDIR.
+    assert "HOW TO OPEN THESE MEDICAL IMAGES" in text
+    assert "Horos" in text and "DICOMDIR" in text
+
+
+def test_build_emits_write_phase_progress(dataset_dir, tmp_path):
+    # The final FileSet.write() is the slow phase; it must not be a silent black
+    # box. Collect progress and assert we announce the write phase + finish it,
+    # so the UI can't sit frozen at 100% with no heartbeat.
+    root, _ = dataset_dir
+    events = []
+    dicomdir.build_fileset(root, str(tmp_path / "Archive"),
+                           progress=lambda p: events.append(p))
+    phases = [getattr(e, "phase", None) for e in events]
+    assert "write" in phases
+    notes = " ".join(getattr(e, "note", "") or "" for e in events)
+    assert "Archive written." in notes
 
 
 def test_build_empty_source_returns_none(tmp_path):

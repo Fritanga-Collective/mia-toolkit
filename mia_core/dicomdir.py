@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -182,6 +183,7 @@ def build_fileset(
     fs = FileSet()
 
     added = 0
+    indexed_bytes = 0
     duplicates = 0
     errors = 0
     skipped_no_uid = 0
@@ -220,6 +222,10 @@ def build_fileset(
                 try:
                     fs.add(ds)
                     added += 1
+                    try:
+                        indexed_bytes += os.path.getsize(path)
+                    except OSError:
+                        pass
                     if repaired_tags:
                         tags_repaired_total += len(repaired_tags)
                         files_repaired += 1
@@ -260,14 +266,61 @@ def build_fileset(
     summary = f"Indexed {added} instances into the file-set."
     emit(progress, Progress(total, total, kind="info", note=summary))
 
-    # Write the file-set: copies files into standard structure + creates DICOMDIR
-    emit(progress, Progress(total, total, kind="info", phase="write",
+    # Write the file-set: copies files into standard structure + creates DICOMDIR.
+    # pydicom's FileSet.write() is a single blocking call with no progress hook,
+    # and it's the slowest phase — so a monitor thread polls the output directory
+    # size and emits byte-based progress while it runs, otherwise the UI looks
+    # frozen at 100%. The worker thread is blocked inside fs.write() for the whole
+    # window, so only the monitor emits during it (no callback race).
+    emit(progress, Progress(0, indexed_bytes, kind="info", phase="write",
                             note=(f"Writing {len(studies_info)} studies "
-                                  f"({added} images) to the archive — this is "
-                                  "the slow part")))
+                                  f"({added} images) to the archive — "
+                                  "this is the slow part")))
 
     os.makedirs(output, exist_ok=True)
-    fs.write(output)
+
+    def _dir_bytes(path: str) -> int:
+        total_b = 0
+        for dp, _dn, fns in os.walk(path):
+            for fn in fns:
+                try:
+                    total_b += os.path.getsize(os.path.join(dp, fn))
+                except OSError:
+                    pass
+        return total_b
+
+    stop = threading.Event()
+    write_start = time.time()
+
+    def _monitor() -> None:
+        # Emit a heartbeat every ~1s: written bytes vs the ~expected total, with
+        # a live rate/ETA so the user can see it's progressing, not stalled.
+        while not stop.wait(1.0):
+            elapsed = time.time() - write_start
+            written = _dir_bytes(output)
+            rate = written / elapsed if elapsed > 0 else 0
+            done = min(written, indexed_bytes) if indexed_bytes else written
+            eta = (indexed_bytes - done) / rate if (rate > 0 and indexed_bytes) else 0
+            emit(progress, Progress(done, indexed_bytes or 0, elapsed=elapsed,
+                                    rate=rate, eta=eta, phase="write",
+                                    kind="info",
+                                    note=(f"Writing archive: {format_bytes(written)}"
+                                          + (f" of ~{format_bytes(indexed_bytes)}"
+                                             if indexed_bytes else "")
+                                          + (f" ({format_bytes(int(rate))}/s)"
+                                             if rate > 0 else ""))))
+
+    monitor = threading.Thread(target=_monitor, name="dicomdir-write-monitor",
+                               daemon=True)
+    monitor.start()
+    try:
+        fs.write(output)
+    finally:
+        stop.set()
+        monitor.join(timeout=2.0)
+
+    emit(progress, Progress(indexed_bytes or 1, indexed_bytes or 1, kind="info",
+                            phase="write", note="Archive written."))
 
     # Tally what we actually produced
     total_size = 0
@@ -298,13 +351,34 @@ def write_readme(output_path: str, result: DicomdirResult, source: str) -> str:
     """Human-readable README in the archive root. Returns its path."""
     readme = os.path.join(output_path, "README.txt")
     with open(readme, "w") as f:
-        f.write("DICOM Archive\n")
-        f.write("=============\n\n")
+        f.write("HOW TO OPEN THESE MEDICAL IMAGES\n")
+        f.write("================================\n\n")
+        f.write("Your medical images are on this drive. Open them with any\n")
+        f.write("free DICOM viewer by pointing it at the file named DICOMDIR\n")
+        f.write("(no file extension) in this top folder.\n\n")
+        f.write("Step by step, by viewer:\n\n")
+        f.write("  Mac -- Horos or OsiriX:\n")
+        f.write("    1. Open Horos (or OsiriX).\n")
+        f.write("    2. Menu: File > Import > Import Files...\n")
+        f.write("    3. Select the DICOMDIR file in this folder, click Import.\n")
+        f.write("    4. The studies appear in your library; double-click to view.\n\n")
+        f.write("  Windows -- MicroDicom:\n")
+        f.write("    1. Open MicroDicom DICOM Viewer.\n")
+        f.write("    2. Menu: File > Open DICOMDIR... (or Scan for DICOM files).\n")
+        f.write("    3. Select the DICOMDIR file in this folder.\n\n")
+        f.write("  Any platform -- Weasis (free, weasis.org):\n")
+        f.write("    1. Open Weasis.\n")
+        f.write("    2. File > Open > Import DICOMDIR, then pick DICOMDIR here.\n\n")
+        f.write("Don't have a viewer? Free options: Horos (Mac, horosproject.org),\n")
+        f.write("MicroDicom (Windows, microdicom.com), Weasis (any, weasis.org).\n\n")
+        f.write("Tip: give this whole drive to your doctor -- everything they\n")
+        f.write("need is here. There is a list of every study below.\n\n")
+        f.write("--------------------------------------------------------------\n")
+        f.write("Technical: this is a standards-compliant DICOM file-set\n")
+        f.write("(DICOM PS3.10 Media Storage); point any PACS or viewer at the\n")
+        f.write("DICOMDIR at the root.\n\n")
         f.write(f"Built : {datetime.now().isoformat(timespec='seconds')}\n")
         f.write(f"From  : {source}\n\n")
-        f.write("This archive is a standards-compliant DICOM file-set\n")
-        f.write("(DICOM PS3.10 Media Storage). To use it, point any PACS\n")
-        f.write("or DICOM viewer at the DICOMDIR file at the root.\n\n")
         f.write("Summary\n")
         f.write("-------\n")
         f.write(f"Studies      : {result.studies}\n")

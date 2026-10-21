@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from datetime import datetime
 from typing import List, Optional
 
 import pydicom
@@ -21,6 +22,10 @@ from .common import is_dicom_file
 
 # Encapsulated PDF Storage SOP Class (DICOM PS3.6).
 ENCAPSULATED_PDF_SOP_CLASS = "1.2.840.10008.5.1.4.1.1.104.1"
+# Fallback PatientID for a document with no patient identity — a DICOMDIR
+# PATIENT record requires a non-empty (0010,0020) (DICOM PS3.3 F.5). All such
+# standalone docs group under this one synthetic patient.
+STANDALONE_DOC_PATIENT_ID = "MIA-DOC"
 # Series number for the document series we add (high, to sort after images).
 DOC_SERIES_NUMBER = 901
 
@@ -115,31 +120,22 @@ def _copy_tag(dst: Dataset, src: Dataset, name: str, default: str = "") -> None:
     setattr(dst, name, getattr(src, name, default) or default)
 
 
-def encapsulate_pdf(pdf_path: str, study: StudyRef, dest_dir: str) -> str:
-    """Wrap ``pdf_path`` as an Encapsulated PDF DICOM tied to ``study`` and
-    write it under ``dest_dir``. Returns the written file path."""
+def _write_encapsulated_pdf(pdf_path: str, dest_dir: str, ds: Dataset) -> str:
+    """Read ``pdf_path``, attach it to ``ds`` (which already carries patient/study
+    identity), and write a Part-10 Encapsulated-PDF file under ``dest_dir``."""
     with open(pdf_path, "rb") as f:
         pdf = f.read()
     if len(pdf) % 2:                      # DICOM OB values must be even-length
         pdf += b"\x00"
 
-    src = pydicom.dcmread(study.sample_path, stop_before_pixels=True,
-                          force=True)
     sop_uid = generate_uid()
-
     meta = FileMetaDataset()
     meta.MediaStorageSOPClassUID = ENCAPSULATED_PDF_SOP_CLASS
     meta.MediaStorageSOPInstanceUID = sop_uid
     meta.TransferSyntaxUID = ExplicitVRLittleEndian
 
-    ds = Dataset()
     ds.file_meta = meta
     ds.SpecificCharacterSet = "ISO_IR 192"  # UTF-8 (names/titles)
-    # Patient + Study identity from a real instance → correct PACS association.
-    for tag in ("PatientName", "PatientID", "PatientBirthDate", "PatientSex",
-                "StudyInstanceUID", "StudyDate", "StudyTime", "StudyID",
-                "AccessionNumber"):
-        _copy_tag(ds, src, tag)
     ds.SOPClassUID = ENCAPSULATED_PDF_SOP_CLASS
     ds.SOPInstanceUID = sop_uid
     ds.SeriesInstanceUID = generate_uid()
@@ -159,3 +155,47 @@ def encapsulate_pdf(pdf_path: str, study: StudyRef, dest_dir: str) -> str:
     # Part-10 file. (Avoids the deprecated is_little_endian/write_like_original.)
     ds.save_as(out, enforce_file_format=True)
     return out
+
+
+def encapsulate_pdf(pdf_path: str, study: StudyRef, dest_dir: str) -> str:
+    """Wrap ``pdf_path`` as an Encapsulated PDF DICOM tied to ``study`` and
+    write it under ``dest_dir``. Returns the written file path."""
+    src = pydicom.dcmread(study.sample_path, stop_before_pixels=True,
+                          force=True)
+    ds = Dataset()
+    # Patient + Study identity from a real instance → correct PACS association.
+    for tag in ("PatientName", "PatientID", "PatientBirthDate", "PatientSex",
+                "StudyInstanceUID", "StudyDate", "StudyTime", "StudyID",
+                "AccessionNumber"):
+        _copy_tag(ds, src, tag)
+    return _write_encapsulated_pdf(pdf_path, dest_dir, ds)
+
+
+def encapsulate_standalone_pdf(pdf_path: str, dest_dir: str, *,
+                               patient_name: str = "",
+                               patient_id: str = "",
+                               study_description: str = "",
+                               study_date: Optional[str] = None) -> str:
+    """Wrap ``pdf_path`` as an Encapsulated PDF DICOM in its **own synthetic
+    study** — for a report/lab PDF that has no parent DICOM study to attach to
+    (e.g. a USB of only PDFs). Freshly generated Study/Series/SOP UIDs; patient
+    identity is caller-supplied (may be blank — the receiving PACS/viewer can
+    still ingest it). ``study_date`` (``YYYYMMDD``) stamps the record; defaults
+    to today (a scanned report rarely carries its own study date, and the
+    DICOMDIR STUDY record requires a non-empty date — PS3.3 F.5). Returns the
+    written file path. This is what lets a document-only archive still build a
+    DICOMDIR / ride into a PACS."""
+    now = datetime.now()
+    ds = Dataset()
+    ds.PatientName = patient_name or ""
+    # PatientID + StudyDate must be non-empty for the DICOMDIR records (PS3.3 F.5).
+    ds.PatientID = patient_id or STANDALONE_DOC_PATIENT_ID
+    ds.StudyInstanceUID = generate_uid()
+    ds.StudyID = ""
+    ds.StudyDate = study_date or now.strftime("%Y%m%d")
+    ds.StudyTime = now.strftime("%H%M%S")
+    ds.ContentDate = ds.StudyDate
+    ds.ContentTime = ds.StudyTime
+    if study_description:
+        ds.StudyDescription = study_description
+    return _write_encapsulated_pdf(pdf_path, dest_dir, ds)

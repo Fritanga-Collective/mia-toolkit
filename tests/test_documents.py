@@ -88,6 +88,37 @@ def test_encapsulate_pdf_roundtrip(tmp_path):
     assert len(body) % 2 == 0  # even-length OB
 
 
+def test_encapsulate_standalone_pdf_no_parent_study(tmp_path):
+    # A report PDF with NO parent DICOM study must still get a home: its own
+    # synthetic study, so a document-only USB can build an archive.
+    pdf = tmp_path / "labs.pdf"
+    pdf.write_bytes(b"%PDF-1.4 blood work")
+    out = documents.encapsulate_standalone_pdf(
+        str(pdf), str(tmp_path / "staged"), patient_name="DOE^JANE")
+    ds = pydicom.dcmread(out)
+    assert ds.SOPClassUID == documents.ENCAPSULATED_PDF_SOP_CLASS
+    assert ds.Modality == "DOC"
+    assert str(ds.PatientName) == "DOE^JANE"
+    assert ds.StudyInstanceUID  # a fresh, valid UID was generated
+    assert bytes(ds.EncapsulatedDocument).startswith(b"%PDF-1.4 blood work")
+
+
+def test_standalone_pdf_builds_document_only_archive(tmp_path):
+    # The key gap: a folder of only PDFs (no DICOM) should still produce a
+    # DICOMDIR file-set once the PDFs are encapsulated as their own studies.
+    raw = tmp_path / "raw_discs"
+    staged = raw / "_documents"
+    for i in range(2):
+        p = tmp_path / f"report{i}.pdf"
+        p.write_bytes(b"%PDF-1.4 report " + str(i).encode())
+        documents.encapsulate_standalone_pdf(str(p), str(staged),
+                                             patient_name="DOE^JANE")
+    res = dicomdir.build_fileset(str(raw), str(tmp_path / "Archive"))
+    assert res is not None          # not None despite zero real images
+    assert res.added == 2           # both encapsulated docs
+    assert res.studies == 2         # each PDF is its own synthetic study
+
+
 def test_encapsulated_doc_rides_in_dicomdir(tmp_path):
     disc, suid = _make_disc(tmp_path)
     pdf = disc / "report.pdf"
