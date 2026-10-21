@@ -485,7 +485,50 @@ def blog_json_ld(post: dict, cluster: list[dict]) -> str:
                       "url": "https://fritanga.co"},
         "mainEntityOfPage": {"@type": "WebPage", "@id": url},
     }
-    return _ld_script(data)
+    out = _ld_script(data)
+    faq = blog_faq(post["body"])
+    if faq:
+        out += "\n" + _ld_script({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "inLanguage": HREFLANG.get(post["lang"], post["lang"]),
+            "mainEntity": [
+                {"@type": "Question", "name": q,
+                 "acceptedAnswer": {"@type": "Answer", "text": a}}
+                for q, a in faq
+            ],
+        })
+    return out
+
+
+# The FAQ section of a post is its LAST `## ` heading when that heading is one
+# of these (one per blog language). Each Q&A is a paragraph whose first line is
+# a bold question (`**…**`) and whose remaining lines are the answer.
+BLOG_FAQ_HEADINGS = frozenset({
+    "FAQ", "Preguntas frecuentes", "Häufige Fragen", "Questions fréquentes",
+    "Soalan Lazim", "அடிக்கடி கேட்கப்படும் கேள்விகள்", "常见问题",
+})
+_FAQ_Q_RE = re.compile(r"^\*\*(.+?)\*\*\s*$")
+_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def blog_faq(body_md: str) -> list[tuple[str, str]]:
+    """(question, plain-text answer) pairs from a post's FAQ section, for the
+    FAQPage JSON-LD. Empty when the post has no FAQ section (or < 1 pair)."""
+    heads = list(re.finditer(r"(?m)^## +(.+?)\s*$", body_md))
+    if not heads or heads[-1].group(1).strip() not in BLOG_FAQ_HEADINGS:
+        return []
+    section = body_md[heads[-1].end():]
+    pairs = []
+    for para in re.split(r"\n\s*\n", section.strip()):
+        first, _, rest = para.strip().partition("\n")
+        m = _FAQ_Q_RE.match(first.strip())
+        if not m or not rest.strip():
+            continue
+        answer = markdown.markdown(rest.strip())
+        answer = html.unescape(_TAG_RE.sub("", answer))
+        pairs.append((m.group(1).strip(), " ".join(answer.split())))
+    return pairs
 
 
 def _blog_langsel(langs: dict, current_lang: str, target: dict) -> str:

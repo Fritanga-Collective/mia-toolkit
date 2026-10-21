@@ -214,3 +214,39 @@ def test_sitemap_static_pages_carry_no_lastmod():
     out = build.sitemap(langs, None, None)
     assert "<loc>https://miatools.tech/</loc>" in out
     assert "<lastmod>" not in out
+
+
+def test_blog_faq_extracts_last_faq_section():
+    body = (
+        "Intro.\n\n## Steps\n\n**Not a FAQ**\nIgnored, not in the FAQ section.\n\n"
+        "## Preguntas frecuentes\n\n"
+        "**¿Primera pregunta?**\nRespuesta con un [enlace](/es/) y *énfasis*.\n\n"
+        "**Second question?**\nLine one\nline two.\n"
+    )
+    assert build.blog_faq(body) == [
+        ("¿Primera pregunta?", "Respuesta con un enlace y énfasis."),
+        ("Second question?", "Line one line two."),
+    ]
+    # The FAQ must be the LAST H2 section; otherwise no FAQPage.
+    assert build.blog_faq("## FAQ\n\n**Q?**\nA.\n\n## After\n\nText.") == []
+    assert build.blog_faq("No headings at all.") == []
+
+
+def test_blog_json_ld_emits_valid_faqpage():
+    import json
+    import re
+
+    post = {"lang": "en", "slug": "s", "title": "T", "date": "2026-10-22",
+            "summary": "S", "image": "",
+            "body": "Text.\n\n## FAQ\n\n**Is it free?**\nYes, \"always\".\n"}
+    out = build.blog_json_ld(post, [post])
+    blocks = re.findall(
+        r'<script type="application/ld\+json">\n(.*?)\n  </script>', out, re.S)
+    data = [json.loads(b) for b in blocks]          # raises if invalid JSON
+    assert [d["@type"] for d in data] == ["BlogPosting", "FAQPage"]
+    q = data[1]["mainEntity"][0]
+    assert q["name"] == "Is it free?"
+    assert q["acceptedAnswer"]["text"] == 'Yes, "always".'
+    # A post without a FAQ keeps only the BlogPosting block.
+    post["body"] = "No FAQ here."
+    assert build.blog_json_ld(post, [post]).count("application/ld+json") == 1
