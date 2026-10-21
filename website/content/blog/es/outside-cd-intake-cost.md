@@ -62,7 +62,7 @@ Al cabo de dos semanas, saque cuatro números de su hoja:
 
 Y luego:
 
-- **Horas de personal al año** ≈ D × 52 × (M + F × R) ÷ 60
+- **Horas de personal al año** ≈ total de minutos de trabajo efectivo del personal durante las dos semanas × 26 ÷ 60. Incluya el manejo inicial y el retrabajo, contando cada minuto una sola vez.
 - **Costo de personal al año** ≈ horas al año × su costo por hora (con prestaciones) de los puestos involucrados
 
 Use su propio costo por hora. Compare su M y su F con las cifras publicadas de arriba: si está cerca de una mediana de 10 minutos y de una tasa de fallas de entre 22 y 30%, está en el rango que describe la literatura. Si está lejos, también vale la pena saberlo.
