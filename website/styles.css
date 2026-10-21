@@ -530,6 +530,10 @@ body.inst .i-tag { display: inline-block; font-family: var(--i-mono);
 body.inst .i-tag-ok { background: var(--i-ok-bg); color: var(--i-ok-text); }
 body.inst .i-tag-design { background: var(--i-design-bg);
   color: var(--i-design-text); }
+/* Cards in a tile grid share a row height; stack their content and pin the
+   CTA line to the bottom so links align across cards with different text. */
+body.inst .i-tiles > .i-card { display: flex; flex-direction: column; }
+body.inst .i-tiles > .i-card > .i-card-links { margin-top: auto; padding-top: 8px; }
 body.inst .i-card-links a { display: inline-block; margin: 0 16px 0 0;
   padding: 4px 0; }
 body.inst .i-markets-pick > li { padding: 0; }

@@ -384,7 +384,7 @@ def test_kit_pdf_links_resolve(site):
 def test_bridge_status_label(site):
     us = _read(site, "institutions/us/index.html")
     mx = _read(site, "es/institutions/mx/index.html")
-    assert ">Pilot partners wanted</span>" in us and "In design" not in us
+    assert ">Apply to our Pilot Program</span>" in us and "In design" not in us
     assert ">Aplica para el programa piloto</span>" in mx and "En diseño" not in mx
     assert 'href="https://bridge.miatools.tech/en/">' in us
     assert 'href="https://bridge.miatools.tech/">' in mx
