@@ -1622,11 +1622,7 @@ def render_inst_thanks(langs: dict, lang: str, market: str | None, pages,
         "PAGE_TITLE": html.escape(inst_title(s["instp.thanks_title"], lang)),
         "CANONICAL": url,
         "FAVICONS": "\n".join(_favicon_lines() + og_meta(
-            s["instp.thanks_title"],
-            langs["en"].get("instp.hub_og_desc", langs["en"]["instp.hub_meta"])
-            if lang == "en" else s.get("instp.hub_og_desc",
-                                       s.get("instp.hub_meta", "")),
-            url, OG_IMAGE["institutions"], inst_brand(lang))),
+            s["instp.thanks_title"], s["instp.form_ok"], url, OG_IMAGE["institutions"], inst_brand(lang))),
         "INST_SHELL": inst_shell(langs, lang, market, pages, here=False),
         "INST_FOOTER": inst_footer(lang, hours),
         "BACK_URL": back,

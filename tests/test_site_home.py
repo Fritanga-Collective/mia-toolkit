@@ -413,3 +413,16 @@ def test_no_hypothetical_bridge_copy_anywhere(site):
             low = text.lower()
             for phrase in BRIDGE_BANNED:
                 assert phrase not in low, (os.path.join(root, f), phrase)
+
+
+def test_no_page_has_an_empty_social_description(site):
+    """Every og/twitter description and title carries text (e.g. the Spanish
+    institution thank-you page once emitted content="")."""
+    empty = re.compile(r'<meta (?:property|name)="(?:og|twitter):'
+                       r'(?:title|description)" content="\s*"')
+    for root, _dirs, files in os.walk(site):
+        for f in files:
+            if f.endswith(".html"):
+                path = os.path.join(root, f)
+                with open(path, encoding="utf-8") as fh:
+                    assert not empty.search(fh.read()), path
