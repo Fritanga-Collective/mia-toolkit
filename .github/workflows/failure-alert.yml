@@ -1,0 +1,65 @@
+name: Failure alert
+
+# PRODUCTION-READINESS G18: when a scheduled or release workflow fails, open
+# (or comment on) one GitHub issue per workflow, so the failure reaches the
+# maintainer through GitHub's normal issue notifications (email/mobile) even
+# when Actions failure emails are off. Watches the daily metrics snapshot, the
+# Pages deploy (daily rebuild publishes scheduled blog posts), tag releases
+# and CI on main. Pull-request CI failures are ignored (the PR shows them).
+# No third-party action and no external service: the built-in gh CLI and the
+# repo's own issue tracker only.
+#
+# The issues are public, like the Actions run logs they link to; they carry
+# only the workflow name, run link, branch and commit.
+#
+# Test it: Actions → "Failure alert" → Run workflow (workflow_dispatch) opens
+# or updates the "[alert] test" issue; close it after.
+
+on:
+  workflow_run:
+    workflows: ["Metrics snapshot", "Deploy website to GitHub Pages", "Release", "CI"]
+    types: [completed]
+  workflow_dispatch:   # test run: opens/updates "[alert] test"
+
+permissions:
+  issues: write
+
+concurrency:
+  group: failure-alert
+  cancel-in-progress: false
+
+jobs:
+  alert:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (contains(fromJSON('["failure", "timed_out", "startup_failure"]'), github.event.workflow_run.conclusion) &&
+       github.event.workflow_run.event != 'pull_request' &&
+       (github.event.workflow_run.name != 'CI' || github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open or update the alert issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          # Passed through env (never interpolated into the script) so a
+          # branch or workflow name can't inject shell.
+          WF_NAME: ${{ github.event.workflow_run.name || 'test' }}
+          WF_URL: ${{ github.event.workflow_run.html_url || format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id) }}
+          WF_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'test' }}
+          WF_EVENT: ${{ github.event.workflow_run.event || 'workflow_dispatch' }}
+          WF_BRANCH: ${{ github.event.workflow_run.head_branch || github.ref_name }}
+          WF_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          title="[alert] ${WF_NAME} failed"
+          [ "${WF_NAME}" = "test" ] && title="[alert] test"
+          body=$(printf '%s\n\n- Run: %s\n- Conclusion: `%s`\n- Trigger: `%s` on `%s` (`%s`)\n\nFix and re-run the workflow (for a bad release, follow the release-rollback runbook). Close this issue once fixed; the next failure opens a new one.' \
+            "**${WF_NAME}** did not succeed." "${WF_URL}" "${WF_CONCLUSION}" "${WF_EVENT}" "${WF_BRANCH}" "${WF_SHA:0:7}")
+          existing=$(gh issue list --state open --limit 100 --json number,title \
+            | jq -r --arg t "${title}" 'map(select(.title == $t)) | .[0].number // empty')
+          if [ -n "${existing}" ]; then
+            gh issue comment "${existing}" --body "${body}"
+            echo "commented on #${existing}"
+          else
+            gh issue create --title "${title}" --body "${body}"
+          fi

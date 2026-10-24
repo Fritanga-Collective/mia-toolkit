@@ -43,7 +43,9 @@ Our manifesto says: *"We sign and notarize the apps so they open without scary w
 
 As of v0.1.5, the Mac app is **signed and notarized by Apple**. Download it, double-click it, and it just opens — no "unidentified developer" warning, no right-click ritual, no asking your grandson to override a security dialog. For a tool whose whole point is being trustworthy with your most personal data, this matters more than any feature: your computer itself now vouches for what you're running.
 
-(Windows friends: your turn is coming — the equivalent signing for Windows is in its final approval stage. Until then it's the familiar "More info → Run anyway," one time.)
+(Windows friends: your turn is coming. Until then it's the familiar "More info → Run anyway," one time.)
+
+*Update, October 2026: the Windows signing route we were waiting on in June did not come through, so the Windows installer is still not code-signed. We are setting up a different certificate; until it is live, SmartScreen's "More info → Run anyway" is still needed once. The Mac app remains signed and notarized.*
 
 ## What's next
 
