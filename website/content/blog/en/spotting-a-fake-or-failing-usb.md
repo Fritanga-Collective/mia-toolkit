@@ -3,9 +3,12 @@ title: Is Your USB Drive Fake or Failing? How to Test It Before You Trust It Wit
 slug: spotting-a-fake-or-failing-usb
 date: 2026-07-21
 summary: Cheap and counterfeit USB sticks fail silently — here's how to test a drive for speed and real capacity in minutes, before you trust it with your medical scans.
+og_title: Is Your USB Drive Fake or Failing? How to Test It
+og_description: Cheap and counterfeit USB sticks fail silently — here's how to test a drive's speed and real capacity in minutes, before you trust it with your scans.
 languages: [en, es]
 status: published
 tags: [guides, usb]
+image: /img/blog/spotting-a-fake-or-failing-usb.jpg
 ---
 
 You plug in a USB stick to copy your medical scans onto it, start the copy, and… it crawls. Minutes pass. Then more minutes. A transfer that should take a couple of minutes is still going an hour later, and you have no idea whether it is working or stuck. Or worse: it finishes, you hand the drive to your doctor, and half the files won't open.

@@ -3,6 +3,8 @@ title: ¿Tu memoria USB es falsa o está fallando? Cómo probarla antes de confi
 slug: spotting-a-fake-or-failing-usb
 date: 2026-07-21
 summary: Las memorias USB baratas y falsificadas fallan en silencio — aquí te decimos cómo probar una memoria, su velocidad y su capacidad real en minutos, antes de confiarle tus estudios médicos.
+og_title: ¿Tu memoria USB es falsa o está fallando? Cómo probarla
+og_description: Las memorias USB baratas y falsificadas fallan en silencio — cómo probar su velocidad y su capacidad real en minutos, antes de confiarle tus estudios.
 languages: [en, es]
 status: published
 tags: [guides, usb]

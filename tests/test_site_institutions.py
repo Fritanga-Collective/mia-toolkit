@@ -170,10 +170,14 @@ def test_one_language_per_market():
 
 
 def test_no_other_language_variants(site):
-    for rel in ("institutions/mx/index.html", "zh/institutions/sg/index.html",
+    for rel in ("zh/institutions/sg/index.html",
                 "ms/institutions/sg/index.html", "ta/institutions/sg/index.html",
                 "es/institutions/us/index.html"):
         assert not os.path.exists(os.path.join(site, rel)), rel
+    # The guessable English MX path is only a redirect to the Spanish page.
+    stub = _read(site, "institutions/mx/index.html")
+    assert 'http-equiv="refresh" content="0; url=/es/institutions/mx/"' in stub
+    assert "<body>\n  <p>This page has moved" in stub
     for rel in INST_PAGES:
         page = _read(site, rel)
         for hl in ("zh-SG", "ms-SG", "ta-SG", "zh-Hans"):

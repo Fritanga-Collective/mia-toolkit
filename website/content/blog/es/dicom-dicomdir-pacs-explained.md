@@ -3,6 +3,7 @@ title: DICOM, DICOMDIR y PACS — explicados para pacientes
 slug: dicom-dicomdir-pacs-explained
 date: 2026-07-09
 summary: DICOM, DICOMDIR y PACS explicados con palabras sencillas — para que entiendas por qué una USB bien armada simplemente funciona en el consultorio del radiólogo, y por qué una mal hecha a veces no.
+og_description: DICOM, DICOMDIR y PACS con palabras sencillas — por qué una USB bien armada simplemente funciona con el radiólogo, y por qué una mal hecha a veces no.
 languages: [en, es]
 status: published
 tags: [explainer, dicom]

@@ -3,6 +3,8 @@ title: So teilen Sie Ihre Aufnahmen auf einem einzigen USB-Stick mit Ihrem Arzt 
 slug: share-scans-one-usb
 date: 2026-07-02
 summary: Eine Anleitung in klaren Worten, wie Sie all Ihre Aufnahmen auf einen einzigen USB-Stick bringen, den ein Arzt öffnen kann — was darauf gehört, wie ein Radiologe ihn liest und was Sie dazu sagen.
+og_title: Aufnahmen auf einem USB-Stick mit Ihrem Arzt teilen
+og_description: So bringen Sie all Ihre Aufnahmen auf einen USB-Stick, den ein Arzt öffnen kann — was darauf gehört, wie ein Radiologe ihn liest und was Sie dazu sagen.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]

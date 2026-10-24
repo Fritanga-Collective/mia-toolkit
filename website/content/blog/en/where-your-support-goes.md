@@ -3,9 +3,11 @@ title: Where Your Support Goes (and Why This Tool Is Free)
 slug: where-your-support-goes
 date: 2026-07-28
 summary: MIA Toolkit is free and always will be — here's an honest look at what voluntary support actually pays for, and the cross-subsidy that keeps it open for everyone.
+og_description: MIA Toolkit is free and always will be — an honest look at what voluntary support actually pays for, and the cross-subsidy that keeps it open for everyone.
 languages: [en, es]
 status: published
 tags: [transparency]
+image: /img/blog/where-your-support-goes.jpg
 ---
 
 If you have ever left a hospital with a stack of imaging CDs, you know the small panic that comes later. Where is that disc? Will the next doctor be able to open it? MIA Toolkit takes that worry off your plate. It copies your hospital imaging CDs, builds a simple inventory, and assembles one clean, standards-compliant DICOMDIR archive on a USB drive that almost any radiologist's PACS or viewer can open.

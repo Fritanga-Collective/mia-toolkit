@@ -197,6 +197,7 @@
   "stats.col_count": "Count",
   "blog.index_title": "The MIA Toolkit Blog",
   "blog.meta_desc": "Practical, plain-language guides on organizing your medical imaging — how to open hospital CDs, build one USB for your doctor, and take charge of your own scans.",
+  "blog.og_desc": "Plain-language guides to your medical imaging: open hospital CDs, build one USB for your doctor, and take charge of your own scans.",
   "blog.published": "Published",
   "blog.back": "← Back to the blog",
   "blog.read_more": "Read more →",

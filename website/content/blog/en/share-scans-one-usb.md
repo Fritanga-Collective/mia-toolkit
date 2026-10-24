@@ -3,9 +3,12 @@ title: How to Share Your Scans on One USB With Your Doctor or Radiologist
 slug: share-scans-one-usb
 date: 2026-07-02
 summary: A plain-language walkthrough of putting all your imaging on a single USB a doctor can open — what belongs on it, how a radiologist reads it, and what to say.
+og_title: How to Share Your Scans on One USB With Your Doctor
+og_description: A plain-language walkthrough of putting all your imaging on one USB a doctor can open — what belongs on it, how a radiologist reads it, and what to say.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]
+image: /img/blog/share-scans-one-usb.jpg
 ---
 
 If you have an appointment or a second opinion coming up, you may be wondering how to bring all your imaging with you. Maybe you have a stack of CDs from different hospitals. Maybe some are scratched, mislabeled, or you are not even sure what is on them. The good news: you can put everything on a single USB drive that a doctor or radiologist can open and review.

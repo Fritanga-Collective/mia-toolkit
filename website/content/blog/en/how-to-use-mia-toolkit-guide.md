@@ -3,9 +3,12 @@ title: How to Put a Drawer of Hospital Imaging CDs Onto One USB for Your Doctor
 slug: how-to-use-mia-toolkit-guide
 date: 2026-07-23
 summary: A start-to-finish walkthrough of turning a drawer of hospital imaging CDs into one organized USB any radiologist can open — copy, review, add reports, deliver.
+og_title: How to Put Hospital Imaging CDs Onto One USB for Your Doctor
+og_description: A start-to-finish walkthrough of turning a drawer of hospital imaging CDs into one organized USB any radiologist can open: copy, review, add reports.
 languages: [en, es]
 status: published
 tags: [guides]
+image: /img/blog/how-to-use-mia-toolkit-guide.jpg
 ---
 
 If you've ever helped a family member through a serious illness, you know the drawer. The one that fills up with CDs and DVDs from every scan — an MRI here, a CT there, an X-ray from the hospital across town. Each disc is its own little island: its own clunky viewer, its own folder structure, slowly degrading in a drawer. And every time you see a new doctor, you carry the whole stack and hope the one disc that matters actually opens in the room.

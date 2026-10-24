@@ -3,6 +3,8 @@ title: Comment partager vos examens sur une seule clé USB avec votre médecin o
 slug: share-scans-one-usb
 date: 2026-07-02
 summary: Un guide en langage clair pour réunir toutes vos images sur une seule clé USB qu'un médecin peut ouvrir — ce qu'elle doit contenir, comment un radiologue la lit, et quoi dire.
+og_title: Partager vos examens sur une clé USB avec votre médecin
+og_description: Un guide clair pour réunir vos images sur une clé USB qu'un médecin peut ouvrir — ce qu'elle doit contenir, comment un radiologue la lit, et quoi dire.
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]
