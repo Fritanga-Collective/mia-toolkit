@@ -88,7 +88,7 @@ def help_img_lang(lang: str) -> str:
     return lang if os.path.isdir(d) else "en"
 
 ASSETS = ["styles.css", "lang.js", "download.js", "support.js", "inst.js",
-          "home.js", "track.js",
+          "particles.js", "home.js", "track.js",
           "robots.txt",
           "fonts", "kit",
           "CNAME", "img", "version.json", "favicon.ico"]
@@ -1506,11 +1506,14 @@ INST_IMG_W, INST_IMG_H = 1600, 900
 
 
 def inst_picture(slug: str, alt: str, cls: str, sizes: str,
-                 eager: bool = False) -> str:
+                 eager: bool = False, particles: str = "") -> str:
+    """particles: a scene name in /particles.js; it animates a canvas over
+    the image (decorative, skipped with reduced motion)."""
     base = f"/img/inst/{slug}"
+    anim = f' data-particles="{particles}"' if particles else ""
     load = ('loading="eager" fetchpriority="high"' if eager
             else 'loading="lazy"')
-    return (f'<picture class="{cls}">'
+    return (f'<picture class="{cls}"{anim}>'
             f'<source type="image/webp" srcset="{base}-800.webp 800w, '
             f'{base}-1600.webp 1600w" sizes="{sizes}">'
             f'<img src="{base}-1600.jpg" alt="{html.escape(alt)}" '
@@ -1524,11 +1527,13 @@ def inst_images(s: dict) -> dict:
     card_sizes = "(max-width: 800px) calc(100vw - 32px), 600px"
     return {
         "IMG_HERO": inst_picture("disc-to-usb-real", s["instp.img_hero_alt"],
-                                 "i-hero-img", hero_sizes, eager=True),
+                                 "i-hero-img", hero_sizes, eager=True,
+                                 particles="stream"),
         "IMG_TK": inst_picture("disc-to-usb-real", s["instp.img_tk_alt"],
-                               "i-card-img", card_sizes),
+                               "i-card-img", card_sizes, particles="stream"),
         "IMG_BR": inst_picture("network-to-pacs-beam", s["instp.img_br_alt"],
-                               "i-card-img i-img-server", card_sizes),
+                               "i-card-img i-img-server", card_sizes,
+                               particles="network"),
     }
 
 

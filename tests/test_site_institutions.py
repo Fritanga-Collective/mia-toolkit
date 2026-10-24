@@ -366,10 +366,11 @@ def test_thank_you_pages(site):
 
 
 def test_inst_js_is_first_party_and_storage_free(site):
-    js = _read(site, "inst.js")
-    for banned in ("localStorage", "sessionStorage", "document.cookie",
-                   "http://", "https://"):
-        assert banned not in js, banned
+    for name in ("inst.js", "particles.js"):
+        js = _read(site, name)
+        for banned in ("localStorage", "sessionStorage", "document.cookie",
+                       "http://", "https://"):
+            assert banned not in js, (name, banned)
     for rel in list(INST_PAGES) + ["institutions/thanks/index.html",
                                    "institutions/us/pilot/index.html",
                                    "es/institutions/mx/piloto/index.html"]:
@@ -381,6 +382,7 @@ def test_inst_js_is_first_party_and_storage_free(site):
             head = chunk[:chunk.index(">")]
             assert ("application/ld+json" in head or 'src="/inst.js"' in head
                     or 'src="/track.js"' in head
+                    or 'src="/particles.js"' in head
                     or "goatcounter" in head), head
 
 
@@ -405,7 +407,7 @@ def test_institution_pages_have_responsive_illustrations(site):
         assert "i-glance" not in page, rel
         assert "At a glance" not in page and "En resumen" not in page, rel
         # Hero: disc-to-usb-real, eager + high priority, sized (no CLS).
-        assert '<picture class="i-hero-img">' in page, rel
+        assert '<picture class="i-hero-img" data-particles="stream">' in page, rel
         assert ('srcset="/img/inst/disc-to-usb-real-800.webp 800w, '
                 '/img/inst/disc-to-usb-real-1600.webp 1600w"') in page, rel
         assert 'src="/img/inst/disc-to-usb-real-1600.jpg"' in page, rel
@@ -432,3 +434,19 @@ def test_institution_image_files_exist_and_are_small(site):
             path = os.path.join(site, "img", "inst", name)
             assert os.path.isfile(path), name
             assert os.path.getsize(path) <= 180 * 1024, name
+
+
+def test_particle_motion_is_decorative_enhancement(site):
+    """/particles.js animates a canvas over the illustrations: shipped,
+    loaded deferred on every institutions page, the still image stays in the
+    HTML, and the script bails out under prefers-reduced-motion."""
+    js = _read(site, "particles.js")
+    assert "prefers-reduced-motion: reduce" in js
+    assert "IntersectionObserver" in js and "visibilitychange" in js
+    assert "fetch(" not in js and "XMLHttpRequest" not in js
+    for rel in INST_PAGES:
+        page = _read(site, rel)
+        assert '<script src="/particles.js" defer></script>' in page, rel
+        assert '<picture class="i-hero-img" data-particles="stream">' in page, rel
+        if rel != "institutions/index.html":
+            assert 'data-particles="network"' in page, rel
