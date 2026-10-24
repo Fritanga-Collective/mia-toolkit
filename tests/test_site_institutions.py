@@ -80,8 +80,13 @@ def test_market_hard_rules(site):
     us = _read(site, "institutions/us/index.html")
     assert "FD&amp;C §520(o)(1)(D)" in us or "FD&C §520(o)(1)(D)" in us
     assert "No BAA needed: we never receive or access PHI (HHS HIPAA FAQ 256)" in us
+    # HIPAA wording heads the US page only; never "HIPAA compliant".
+    assert "Supports your HIPAA program: no BAA needed" in us
+    assert "hipaa compliant" not in us.lower()
     sg = _read(site, "institutions/sg/index.html")
     assert "HSA GL-04-R4 (Dec 2025)" in sg
+    assert "HIPAA program" not in sg
+    assert "HIPAA program" not in _read(site, "institutions/index.html")
     assert "medical tourism" not in sg.lower()
     mx = _read(site, "es/institutions/mx/index.html")
     assert "No está destinado a fines de diagnóstico" in mx
