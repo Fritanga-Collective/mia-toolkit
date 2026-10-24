@@ -7,7 +7,7 @@ og_description: DICOM, DICOMDIR, and PACS in plain language — why a well-built
 languages: [en, es]
 status: published
 tags: [explainer, dicom]
-image: /img/blog/disco-externo-no-abre-pacs.jpg
+image: /img/blog/dicom-dicomdir-pacs-explained.jpg
 ---
 
 If you've ever picked up a CD or DVD of your medical images, you may have seen some strange words on the disc: DICOM, DICOMDIR, PACS. They look like secret codes, but they're just the everyday words hospitals use for how medical pictures are saved, organized, and viewed. This post explains each one in plain language, so you'll see why a well-built USB drive "just works" when you hand it to a radiologist, and why a messy one sometimes doesn't.

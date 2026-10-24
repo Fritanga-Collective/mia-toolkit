@@ -8,7 +8,7 @@ og_description: A start-to-finish walkthrough of turning a drawer of hospital im
 languages: [en, es]
 status: published
 tags: [guides]
-image: /img/blog/drawer-of-hospital-cds.jpg
+image: /img/blog/how-to-use-mia-toolkit-guide.jpg
 ---
 
 If you've ever helped a family member through a serious illness, you know the drawer. The one that fills up with CDs and DVDs from every scan — an MRI here, a CT there, an X-ray from the hospital across town. Each disc is its own little island: its own clunky viewer, its own folder structure, slowly degrading in a drawer. And every time you see a new doctor, you carry the whole stack and hope the one disc that matters actually opens in the room.

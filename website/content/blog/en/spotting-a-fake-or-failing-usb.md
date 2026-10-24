@@ -8,7 +8,7 @@ og_description: Cheap and counterfeit USB sticks fail silently — here's how to
 languages: [en, es]
 status: published
 tags: [guides, usb]
-image: /img/inst/disc-to-usb-real-1600.jpg
+image: /img/blog/spotting-a-fake-or-failing-usb.jpg
 ---
 
 You plug in a USB stick to copy your medical scans onto it, start the copy, and… it crawls. Minutes pass. Then more minutes. A transfer that should take a couple of minutes is still going an hour later, and you have no idea whether it is working or stuck. Or worse: it finishes, you hand the drive to your doctor, and half the files won't open.

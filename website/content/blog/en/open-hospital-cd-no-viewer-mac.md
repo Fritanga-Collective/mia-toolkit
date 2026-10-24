@@ -7,7 +7,7 @@ og_title: How to Open a Hospital Imaging CD With No Viewer or on a Mac
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, mac]
-image: /img/blog/after-usb-transfer.jpg
+image: /img/blog/open-hospital-cd-no-viewer-mac.jpg
 ---
 
 You got home from the hospital with a CD of your scan. You slide it into your computer, and... nothing. Maybe a window pops up and freezes. Maybe it asks you to install something that never works. Maybe you're on a Mac and the disc seems to do absolutely nothing at all.

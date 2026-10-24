@@ -7,7 +7,7 @@ og_description: Free DICOM viewers for Windows and Mac compared — plus a simpl
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, dicom, viewers]
-image: /img/blog/format-usb-drive.jpg
+image: /img/blog/free-portable-dicom-viewers.jpg
 ---
 
 If you have gathered your medical imaging onto a USB drive, you may be wondering how anyone is supposed to open it. Hospital images are not like photos from your phone. They come in a special format called DICOM, and your computer usually cannot show them with a double-click. To see them, you need a small program called a DICOM viewer.

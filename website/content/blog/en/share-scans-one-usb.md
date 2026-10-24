@@ -8,7 +8,7 @@ og_description: A plain-language walkthrough of putting all your imaging on one 
 languages: [en, es, zh, ms, ta, de, fr]
 status: published
 tags: [guides, usb, sharing]
-image: /img/blog/medical-images-belong-to-you.jpg
+image: /img/blog/share-scans-one-usb.jpg
 ---
 
 If you have an appointment or a second opinion coming up, you may be wondering how to bring all your imaging with you. Maybe you have a stack of CDs from different hospitals. Maybe some are scratched, mislabeled, or you are not even sure what is on them. The good news: you can put everything on a single USB drive that a doctor or radiologist can open and review.

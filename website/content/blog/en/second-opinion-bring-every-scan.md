@@ -7,7 +7,7 @@ og_title: Second Opinion? Bring Every Scan, Not Just the Latest
 languages: [en, es]
 status: published
 tags: [stories, second-opinion]
-image: /img/blog/bring-prior-mammograms.jpg
+image: /img/blog/second-opinion-bring-every-scan.jpg
 ---
 
 If you are reading this, you may be facing news you never wanted to hear. And now you are doing something brave and smart: you are getting a second opinion.

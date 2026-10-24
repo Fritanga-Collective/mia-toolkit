@@ -7,7 +7,7 @@ og_description: A calm, non-technical plan for gathering a parent's scattered im
 languages: [en, es]
 status: published
 tags: [stories, caregivers]
-image: /img/blog/hospital-usb-or-zip.jpg
+image: /img/blog/help-aging-parent-organize-scans.jpg
 ---
 
 If you are reading this, you are probably the person in your family who keeps track of things. The appointments. The phone numbers. The growing pile of medical CDs that your mom or dad has collected over the years.
