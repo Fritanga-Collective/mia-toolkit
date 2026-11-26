@@ -1043,6 +1043,12 @@
    "total": 119,
    "views14": 0,
    "uniques14": 0
+  },
+  {
+   "date": "2026-11-26",
+   "total": 120,
+   "views14": 0,
+   "uniques14": 0
   }
  ],
  "releases": [
@@ -1133,7 +1139,7 @@
     },
     {
      "name": "MIA-Toolkit-Setup-0.1.7.exe",
-     "count": 4
+     "count": 5
     }
    ]
   },
@@ -1230,5 +1236,5 @@
   }
  ],
  "referrers": [],
- "updated": "2026-11-25"
+ "updated": "2026-11-26"
 }
